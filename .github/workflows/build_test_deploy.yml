@@ -43,3 +43,11 @@ jobs:
       - name: Test
         run: |
           npm run test -- --browsers=ChromeHeadless --watch=false
+      - name: Deploy
+        uses: SamKirkland/FTP-Deploy-Action@4.3.2
+        if: github.ref == 'refs/heads/master'
+        with:
+          server: ftp.cluster010.hosting.ovh.net
+          username: janofnxr-client
+          password: ${{ secrets.FTPCLIENT_PASSWORD }}
+          local-dir: ./dist/
