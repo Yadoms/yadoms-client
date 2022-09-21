@@ -51,3 +51,5 @@ jobs:
           username: janofnxr-client
           password: ${{ secrets.FTPCLIENT_PASSWORD }}
           local-dir: ./dist/
+          dangerous-clean-slate: true
+          
