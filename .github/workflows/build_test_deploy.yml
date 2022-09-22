@@ -50,4 +50,6 @@ jobs:
           server: ftp.cluster010.hosting.ovh.net
           username: janofnxr-client
           password: ${{ secrets.FTPCLIENT_PASSWORD }}
-          local-dir: ./dist/
+          local-dir: ./dist/yadoms/
+          dangerous-clean-slate: true
+          
