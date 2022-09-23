@@ -16,6 +16,8 @@ import { TranslateService } from '@ngx-translate/core';
 export class HomeComponent implements OnInit, OnDestroy {
   public pages: Pages | undefined;
 
+  public today: number = Date.now();
+
   public mobileQuery: MediaQueryList;
   private _mobileQueryListener: () => void;
 

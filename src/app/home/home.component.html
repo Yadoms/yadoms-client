@@ -3,7 +3,7 @@
   <mat-toolbar color="primary" class="yadoms-toolbar">
     <button mat-icon-button (click)="snav.toggle()"><mat-icon>menu</mat-icon></button>
     <img class="yadoms-logo" src="/assets/img/logo.png" />
-    <h1 class="yadoms-app-name">Yadoms</h1>
+    <h1 class="yadoms-app-name">Yadoms {{ today | date:'fullDate' }}</h1>
   </mat-toolbar>
 
   <mat-sidenav-container class="yadoms-sidenav-container" [style.marginTop.px]="mobileQuery.matches ? 56 : 0">

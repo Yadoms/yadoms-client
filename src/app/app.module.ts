@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { LOCALE_ID, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -52,6 +52,7 @@ import {TranslateModule, TranslateLoader} from '@ngx-translate/core';
 import {HttpClientModule, HttpClient} from '@angular/common/http';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import { CoreModule } from './core';
+import { LocaleService } from './local.service';
 
 
 
@@ -86,9 +87,18 @@ import { CoreModule } from './core';
     
   ],
   providers: [
+    LocaleService,
     AppState,
+    {
+      provide: LOCALE_ID,
+      useFactory: (localeService: LocaleService) => {
+        console.log('locale ID', localeService.getLanguage());
+        return localeService.getLanguage();
+      },
+      deps: [LocaleService]
+    },
     {provide: DateAdapter, useValue: AppDateAdapter, deps: [MAT_DATE_LOCALE]},
-    {provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS}    
+    {provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS},    
   ],
   bootstrap: [AppComponent]
 })
