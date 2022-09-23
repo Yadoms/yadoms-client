@@ -1,0 +1,15 @@
+{
+    "sidenav" : {
+        "dashboard" : "Tableau de bord",
+        "customize" : "Personnaliser",
+        "administration" : "Administration",
+        "system": "Système",
+        "plugins" : "Plugins",
+        "devices": "Equipements",
+        "automation" : "Automatisation",
+        "recipients" : "Destinataires",
+        "update" : "Mises à jour",
+        "maintenance" : "Maintenance",
+        "about" : "A propos"
+    }
+}

@@ -1,0 +1,15 @@
+{
+    "sidenav" : {
+        "dashboard" : "Dashboard",
+        "customize" : "Customize",
+        "administration" : "Administration",
+        "configuration": "System",
+        "plugins" : "Plugins",
+        "devices": "Devices",
+        "automation" : "Automation centre",
+        "recipients" : "Recipients",
+        "update" : "Install & Updates",
+        "maintenance" : "Maintenance",
+        "about" : "About"
+    }
+}

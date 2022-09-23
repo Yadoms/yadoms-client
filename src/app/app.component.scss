@@ -1,4 +1,14 @@
-.example-spacer {
+.toolbar-spacer {
     flex: 1 1 auto;
   }
   
+
+footer {                                                         
+    height: auto;                                          
+    border-top-width: 1px;                                 
+    position: fixed;                                       
+    bottom: 0;                                             
+    left: 0px;                                             
+    right: 0px;                                            
+    text-align: right;                                    
+}

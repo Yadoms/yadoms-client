@@ -1,0 +1,68 @@
+{
+  "instances": [
+    {
+      "Id": 1,
+      "DisplayName": "System",
+      "Type": "System",
+      "Configuration": null,
+      "AutoStart": true,
+      "Category": "System"
+    },
+    {
+      "Id": 2,
+      "DisplayName": "My fakePlugin instance",
+      "Type": "dev-fakePlugin",
+      "Configuration": {
+        "StringParameter": "",
+        "BoolParameter": "false",
+        "IntParameter": "258",
+        "DecimalParameter": "25.3",
+        "EnumParameter": "EnumValue2",
+        "MySection": {
+          "content": {
+            "SubIntParameter": "65535",
+            "SubStringParameter": ""
+          }
+        },
+        "ConditionalParameter": ""
+      },
+      "AutoStart": true,
+      "Category": "User"
+    },
+    {
+      "Id": 3,
+      "DisplayName": "Plugin 1",
+      "Type": "PluginType1",
+      "Configuration": null,
+      "AutoStart": true,
+      "Category": "User"
+    },
+    {
+      "Id": 4,
+      "DisplayName": "Plugin 2",
+      "Type": "PluginType1",
+      "Configuration": null,
+      "AutoStart": true,
+      "Category": "User"
+    }
+  ],
+  "plugins": [
+    {
+      "type": "dev-emptyPlugin",
+      "version": "1.0.0",
+      "author": "Your name here"
+    },
+    {
+      "type": "dev-fakePlugin",
+      "version": "1.0.0",
+      "author": "Sébastien GALLOU",
+      "url": "https://github.com/Yadoms/yadoms/wiki/FakePlugin"
+    },
+    {
+      "type": "enOcean",
+      "version": "1.1.2",
+      "author": "Sébastien Gallou",
+      "url": "https://github.com/Yadoms/yadoms/wiki/EnOcean"
+    }
+  ]
+}
