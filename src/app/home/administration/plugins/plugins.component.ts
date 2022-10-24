@@ -76,7 +76,8 @@ export class PluginsComponent implements OnInit {
     };
   }
 
-  applyFilter(filterValue: string | null ) {
+  applyFilter(filterValue: string) {
+    console.log(filterValue);
     if(filterValue != null)
       this.pluginInstances.filter = filterValue;
     else

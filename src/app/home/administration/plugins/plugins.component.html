@@ -1,7 +1,7 @@
 <yd-admin-page-header title="Plugins"></yd-admin-page-header>
 
 <mat-form-field>
-  <!-- <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtrer..."> -->
+    <input matInput #txtFilter (keyup)="applyFilter(txtFilter.value)" placeholder="Filtrer..."> 
 </mat-form-field>
 
 <table mat-table [dataSource]="pluginInstances" multiTemplateDataRows class="mat-elevation-z8"

@@ -153,10 +153,12 @@ router.get('/plugin/instanceWithState', function (req, res) {
   });
 });
 
-
 yd.use('/plugins/:plugintype/icon.png', function (req, res) {
+  console.log("Icon request : " + req.params.plugintype );
   res.sendFile(__dirname + '/data/plugins/' + req.params.plugintype + '/icon.png');
 });
+
+
 yd.use('/rest', router);
 
 const server = yd.listen(8080, function () {
