@@ -53,6 +53,8 @@ import {HttpClientModule, HttpClient} from '@angular/common/http';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import { CoreModule } from './core';
 import { LocaleService } from './local.service';
+import { environment } from '../environments/environment';
+import { FeaturesPluginsModule, PluginsEnvironnement } from '@features/plugins';
 
 
 
@@ -68,7 +70,7 @@ import { LocaleService } from './local.service';
   declarations: [
     AppComponent,
     NoContentComponent,
-    CheckServerComponent    
+    CheckServerComponent
   ],
   imports: [
     BrowserModule,
@@ -81,10 +83,11 @@ import { LocaleService } from './local.service';
     MatSidenavModule,
     HttpClientModule,
     TranslateModule.forRoot({loader: {provide: TranslateLoader, useFactory: (createTranslateLoader), deps: [HttpClient]}}),
-    CoreModule.forRoot()
+    CoreModule.forRoot(),
+    FeaturesPluginsModule.forRoot(environment as PluginsEnvironnement),
   ],
   exports: [
-    
+
   ],
   providers: [
     LocaleService,
@@ -98,7 +101,7 @@ import { LocaleService } from './local.service';
       deps: [LocaleService]
     },
     {provide: DateAdapter, useValue: AppDateAdapter, deps: [MAT_DATE_LOCALE]},
-    {provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS},    
+    {provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS},
   ],
   bootstrap: [AppComponent]
 })

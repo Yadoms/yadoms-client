@@ -1,6 +1,9 @@
 {
   "version": 2,
   "projects": {
+    "core": "libs/core",
+    "features-plugins": "libs/features/plugins",
+    "shared": "libs/shared",
     "yadoms": "apps/yadoms"
   }
 }

@@ -1,4 +1,5 @@
 {
+  "name": "yadoms",
   "projectType": "application",
   "generators": {
     "@schematics/angular:component": {
@@ -20,19 +21,13 @@
         "polyfills": "apps/yadoms/src/polyfills.ts",
         "tsConfig": "apps/yadoms/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
-        "assets": [
-          "apps/yadoms/src/favicon.ico",
-          "apps/yadoms/src/assets"
-        ],
+        "assets": ["apps/yadoms/src/favicon.ico", "apps/yadoms/src/assets"],
         "styles": [
           "./node_modules/@angular/material/prebuilt-themes/purple-green.css",
           "apps/yadoms/src/styles.scss"
         ],
         "scripts": [],
-        "allowedCommonJsDependencies": [
-          "lodash",
-          "moment"
-        ]
+        "allowedCommonJsDependencies": ["lodash", "moment"]
       },
       "configurations": {
         "production": {
@@ -97,10 +92,7 @@
         "tsConfig": "apps/yadoms/tsconfig.spec.json",
         "karmaConfig": "apps/yadoms/karma.conf.js",
         "inlineStyleLanguage": "scss",
-        "assets": [
-          "apps/yadoms/src/favicon.ico",
-          "apps/yadoms/src/assets"
-        ],
+        "assets": ["apps/yadoms/src/favicon.ico", "apps/yadoms/src/assets"],
         "styles": [
           "./node_modules/@angular/material/prebuilt-themes/purple-green.css",
           "apps/yadoms/src/styles.scss"
