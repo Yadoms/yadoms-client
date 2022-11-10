@@ -14,7 +14,7 @@ export class PluginService {
 
   public getAvailablePluginsInformation(fields: string[] | undefined): Promise<AvailablePlugins> {
     //TODO l'envoi d'un PUT est reçu en tant qu'OPTIONS par le serveur
-    return this.restServerService.put<AvailablePlugins>('plugin', {'fields': fields});
+    return this.restServerService.get<AvailablePlugins>('plugins', {'fields': fields});
   }
 
   public getAllPluginsInstance(): Promise<PluginInstances> {
@@ -30,8 +30,9 @@ export class PluginService {
 
   public getAllPluginsInstanceWithState(): Promise<PluginInstancesWithState> {
     return new Promise<PluginInstancesWithState>((resolve) => {
-      this.restServerService.get<PluginInstanceWithState[]>('plugin/instanceWithState')
+      this.restServerService.get<PluginInstanceWithState[]>('plugins-instances')
         .then((data) => {
+          debugger;
           const pi = new PluginInstancesWithState();
           pi.instances = data;
           resolve(pi);

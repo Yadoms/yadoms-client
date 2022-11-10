@@ -1,49 +1,54 @@
 {
   "instances": [
     {
-      "Id": 1,
-      "DisplayName": "System",
-      "Type": "System",
-      "Configuration": null,
-      "AutoStart": true,
-      "Category": "System"
+      "id": 1,
+      "display_name": "System",
+      "type": "System",
+      "configuration": {},
+      "auto_start": true,
+      "category": "System",
+      "state": "Running",
+      "full_state": {
+        "state": "Running",
+        "messageId": "",
+        "messageData": ""
+      }
     },
     {
-      "Id": 2,
-      "DisplayName": "My fakePlugin instance",
-      "Type": "dev-fakePlugin",
-      "Configuration": {
+      "id": 2,
+      "display_name": "Faux Plugin",
+      "type": "dev-fakePlugin",
+      "configuration": {
         "StringParameter": "",
-        "BoolParameter": "false",
-        "IntParameter": "258",
-        "DecimalParameter": "25.3",
+        "BoolParameter": false,
+        "IntParameter": 258,
+        "DecimalParameter": 25.3,
         "EnumParameter": "EnumValue2",
         "MySection": {
           "content": {
-            "SubIntParameter": "65535",
+            "SubIntParameter": 65535,
             "SubStringParameter": ""
           }
         },
-        "ConditionalParameter": ""
+        "ConditionalParameter": "",
+        "SystemData": {
+          "content": {
+            "SerialPort": "\\\\.\\COM10",
+            "UsbDevices": "\\\\?\\usb#vid_413c&pid_2010#d&1ab3202&0&1#{a5dcbf10-6530-11d2-901f-00c04fb951ed}",
+            "NetworkInterfaces": "Loopback Pseudo-Interface 1",
+            "NetworkInterfacesWithoutLoopback": "VirtualBox Host-Only Network",
+            "SupportedTimezones": "Africa/Abidjan"
+          }
+        }
       },
-      "AutoStart": true,
-      "Category": "User"
-    },
-    {
-      "Id": 3,
-      "DisplayName": "Plugin 1",
-      "Type": "PluginType1",
-      "Configuration": null,
-      "AutoStart": true,
-      "Category": "User"
-    },
-    {
-      "Id": 4,
-      "DisplayName": "Plugin 2",
-      "Type": "PluginType1",
-      "Configuration": null,
-      "AutoStart": true,
-      "Category": "User"
+      "auto_start": true,
+      "category": "User",
+      "state": "Running",
+      "full_state": {
+        "state": "Running",
+        "messageId": "",
+        "messageData": "{}"
+      }
     }
   ],
   "plugins": [

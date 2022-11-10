@@ -119,7 +119,7 @@ export class RestServerService {
       }
 
       //const part = RestServerService.concatenateUrl_(this.baseUrl, 'rest');
-      const fullUrlToUse = RestServerService.concatenateUrl_('rest', url);
+      const fullUrlToUse = RestServerService.concatenateUrl_('rest/v2', url);
 
       const requestOptions: any = options || {};
       if (data) {

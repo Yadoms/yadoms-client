@@ -85,7 +85,7 @@ router.get('/widget', function (req, res) {
 });
 
 
-router.put('/plugin', function (req, res) {
+router.get('/plugins', function (req, res) {
   fs.readFile(__dirname + '/data/plugins.json', 'utf-8', function (err, data) {
     const d = JSON.parse(data);
     const result = {};
@@ -105,7 +105,7 @@ router.put('/plugin', function (req, res) {
 });
 
 
-router.get('/plugin/instance', function (req, res) {
+router.get('/plugins-instances', function (req, res) {
   fs.readFile(__dirname + '/data/plugins.json', 'utf-8', function (err, data) {
     const d = JSON.parse(data);
     res.json(generateSuccess(d.instances));
@@ -159,7 +159,7 @@ yd.use('/plugins/:plugintype/icon.png', function (req, res) {
 });
 
 
-yd.use('/rest', router);
+yd.use('/rest/v2', router);
 
 const server = yd.listen(8080, function () {
   const host = server.address().address === '::' ? 'localhost' : server.address().address;

@@ -46,7 +46,7 @@ export class PluginsComponent implements OnInit {
         this.availablePlugins = value[1].plugins;
 
         this.startStopButtonEnabled = {};
-        for (const pi of this.pluginInstances.data) {
+        for (const pi of value[0].instances) {
           this.startStopButtonEnabled[pi.instance.Id] = true;
         }
         this.configureSort();
@@ -57,9 +57,9 @@ export class PluginsComponent implements OnInit {
     // Make sort insensitive to case
     this.pluginInstances.sortingDataAccessor = ((item: PluginInstanceWithState, sortHeaderId: string) => {
       switch (sortHeaderId) {
-        case 'DisplayName':
+        case 'displayName':
           return item.instance.DisplayName.toLocaleLowerCase();
-        case 'Type':
+        case 'type':
           return item.instance.Type.toLocaleLowerCase();
         default:
           return item.instance.Id.toString().toLocaleLowerCase();
