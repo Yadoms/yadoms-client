@@ -1,8 +1,8 @@
-import {Injectable} from '@angular/core';
-import {RestServerService} from './restserver.service';
-import {AvailablePlugins, PluginCategory} from './models/available-plugin';
-import {PluginInstance, PluginInstances, PluginInstancesWithState, PluginInstanceWithState} from './models/pluginInstances';
-import {Resolve} from '@angular/router';
+import { Injectable } from '@angular/core';
+import { RestServerService } from './restserver.service';
+import { AvailablePlugins, PluginCategory } from './models/available-plugin';
+import { PluginInstance, PluginInstances, PluginInstancesWithState, PluginInstanceWithState } from './models/pluginInstances';
+import { Resolve } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +14,7 @@ export class PluginService {
 
   public getAvailablePluginsInformation(fields: string[] | undefined): Promise<AvailablePlugins> {
     //TODO l'envoi d'un PUT est reçu en tant qu'OPTIONS par le serveur
-    return this.restServerService.get<AvailablePlugins>('plugins', {'fields': fields});
+    return this.restServerService.get<AvailablePlugins>('plugins', { 'fields': fields });
   }
 
   public getAllPluginsInstance(): Promise<PluginInstances> {
@@ -34,7 +34,7 @@ export class PluginService {
         .then((data) => {
           debugger;
           const pi = new PluginInstancesWithState();
-          pi.instances = data;
+          pi.instances = data as PluginInstanceWithState[];
           resolve(pi);
         });
     });

@@ -42,11 +42,12 @@ export class PluginsComponent implements OnInit {
       this.pluginService.getAvailablePluginsInformation(undefined /*TODO*/) // TODO vraiment utile ?
     ])
       .then(value => {
+        debugger;
         this.pluginInstances = new MatTableDataSource(value[0].instances);
         this.availablePlugins = value[1].plugins;
 
         this.startStopButtonEnabled = {};
-        for (const pi of value[0].instances) {
+        for (const pi of this.pluginInstances.data) {
           this.startStopButtonEnabled[pi.instance.Id] = true;
         }
         this.configureSort();
