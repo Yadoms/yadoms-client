@@ -3,14 +3,14 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "nx",
+    "start:yadoms": "nx serve yadoms",
+    "start:yadoms:inmemory": "npx nx serve yadoms --proxy-config tools/proxy/proxy-server-in-memory.config.js --configuration=inmemory",
     "start": "nx serve",
     "build": "nx build",
     "watch": "nx build --watch --configuration development",
     "test": "nx test",
-    "backend": "node-dev backend-mockup/server.js",
     "build:stats": "nx build --stats-json",
-    "analyze": "webpack-bundle-analyzer dist/yadoms/stats.json",
-    "postinstall": "node ./decorate-angular-cli.js"
+    "analyze": "webpack-bundle-analyzer dist/yadoms/stats.json"
   },
   "private": true,
   "dependencies": {
