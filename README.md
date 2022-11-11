@@ -10,6 +10,8 @@
 
 ![](./documentation-assets/single-quotes.png)
 
+4. Use `Nx Console` plugin
+
 # Nx Generation command
 
 ## Generate a library 
@@ -24,4 +26,10 @@ npx nx generate @nrwl/angular:library --name=core --style=scss --importPath=@yad
 ```
 npx nx generate @nrwl/angular:library --name=features/plugins --style=scss --importPath=@yadoms/features/plugins --dry-run
 portPath=@yadoms/features/plugins
+```
+
+## Generate a components into a feature module
+
+```
+npx nx generate @nrwl/angular:component --name=plugins-page --export --path=libs/features/plugins/src/lib/components
 ```
