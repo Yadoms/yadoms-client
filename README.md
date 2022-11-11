@@ -1,27 +1,27 @@
-# Yadoms
+# Recommandations : 
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 14.2.3.
+1. Use `Intellij` IDE
+2. If `Intellij` IDE used, please install `Prettier plugin` and activate it by opening `package.json` file
 
-## Development server
+![](./documentation-assets/prettier.png)
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+3. Edit typescript config to use single quote when applying `import optimization`
+  On preferences 
 
-## Code scaffolding
+![](./documentation-assets/single-quotes.png)
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+# Nx Generation command
 
-## Build
+## Generate a library 
+```
+npx nx generate @nrwl/angular:library --name=core --style=scss --importPath=@yadoms/core
+```
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+⚠️ It's possible to run all commands using debug mode to see the path of generated/edited files, this functionality could be performed by adding `--dry-run` at the end of any command
 
-## Running unit tests
+## Generate a feature library
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+```
+npx nx generate @nrwl/angular:library --name=features/plugins --style=scss --importPath=@yadoms/features/plugins --dry-run
+portPath=@yadoms/features/plugins
+```
