@@ -1,6 +1,7 @@
+import { HttpClientModule } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { PluginsPageComponent } from './plugins-page.component';
+import { PLUGINS_ENVIRONNEMENT } from '../../features-plugins.module';
+import { PluginsPageComponent } from '../plugins-page/plugins-page.component';
 
 describe('PluginsPageComponent', () => {
   let component: PluginsPageComponent;
@@ -9,6 +10,13 @@ describe('PluginsPageComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [PluginsPageComponent],
+      imports: [HttpClientModule],
+      providers: [
+        {
+          provide: PLUGINS_ENVIRONNEMENT,
+          useValue: '',
+        },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(PluginsPageComponent);

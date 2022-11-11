@@ -7,7 +7,7 @@ export interface PluginsEnvironnement {
 }
 
 export const PLUGINS_ENVIRONNEMENT = new InjectionToken<PluginsEnvironnement>(
-  'PLUGIN_ENVIRONNEMENT'
+  'PLUGINS_ENVIRONNEMENT'
 );
 
 @NgModule({
