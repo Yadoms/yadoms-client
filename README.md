@@ -33,3 +33,9 @@ portPath=@yadoms/features/plugins
 ```
 npx nx generate @nrwl/angular:component --name=plugins-page --export --path=libs/features/plugins/src/lib/components
 ```
+
+## Generate NGRX state
+
+```
+npx nx generate @nrwl/angular:ngrx --name=information --module=libs/features/plugins/src/lib/features-plugins.module.ts --directory=+state/system/information --barrels
+```

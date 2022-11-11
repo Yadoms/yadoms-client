@@ -6,6 +6,7 @@ const PROXY_CONFIG = {
     changeOrigin: true,
     bypass: function (req, res, proxyOptions) {
       let isInMemory = true;
+      console.log(req.url);
       switch (req.url) {
         case '/rest/v2/system/information':
           res.end(require('../mocks/system/information'));

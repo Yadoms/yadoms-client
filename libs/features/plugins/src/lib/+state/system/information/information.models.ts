@@ -1,3 +1,6 @@
+/**
+ * Interface for the 'Information' data
+ */
 export interface SystemInformationEntity {
   runningPlatform: string;
   yadoms: {
