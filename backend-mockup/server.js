@@ -6,24 +6,21 @@ const _ = require('lodash');
 const router = express.Router({});
 const bodyParser = require('body-parser');
 
-
 router.use(bodyParser.json());
-
 
 function generateSuccess(data) {
   return {
     result: true,
     data: data,
-    message: ''
+    message: '',
   };
 }
-
 
 function generateError(message, data) {
   return {
     result: false,
     data: data,
-    message: message
+    message: message,
   };
 }
 
@@ -31,7 +28,7 @@ router.get('/system/information', function (req, res) {
   const result = {
     runningPlatform: 'Unknown platform (backend-mockup)',
     yadoms: {
-      version: '1.2.3'
+      version: '1.2.3',
     },
     startupTime: '2018-11-13T23:03:14+00:00',
     executablePath: 'executable (backend-mockup)',
@@ -59,7 +56,6 @@ router.get('/page/:pageid', function (req, res) {
   });
 });
 
-
 router.get('/page/:pageid/widget', function (req, res) {
   fs.readFile(__dirname + '/data/widgets.json', 'utf-8', function (err, data) {
     const d = JSON.parse(data);
@@ -68,14 +64,12 @@ router.get('/page/:pageid/widget', function (req, res) {
   });
 });
 
-
 router.get('/widget/package', function (req, res) {
   fs.readFile(__dirname + '/data/widgets.json', 'utf-8', function (err, data) {
     const d = JSON.parse(data);
     res.json(generateSuccess(d.package));
   });
 });
-
 
 router.get('/widget', function (req, res) {
   fs.readFile(__dirname + '/data/widgets.json', 'utf-8', function (err, data) {
@@ -84,14 +78,12 @@ router.get('/widget', function (req, res) {
   });
 });
 
-
 router.get('/plugins', function (req, res) {
   fs.readFile(__dirname + '/data/plugins.json', 'utf-8', function (err, data) {
     const d = JSON.parse(data);
     const result = {};
-    result.plugins = d.plugins.map(plugin => {
-      if (!req.body || !req.body.fields)
-        return d.plugins;
+    result.plugins = d.plugins.map((plugin) => {
+      if (!req.body || !req.body.fields) return d.plugins;
 
       // Filter by field
       const pluginResult = {};
@@ -104,7 +96,6 @@ router.get('/plugins', function (req, res) {
   });
 });
 
-
 router.get('/plugins-instances', function (req, res) {
   fs.readFile(__dirname + '/data/plugins.json', 'utf-8', function (err, data) {
     const d = JSON.parse(data);
@@ -112,23 +103,22 @@ router.get('/plugins-instances', function (req, res) {
   });
 });
 
-
 router.put('/plugin/:pluginInstanceId/start', function (req, res) {
-  console.log("Plugin " + req.params.pluginInstanceId + " started");
+  console.log('Plugin ' + req.params.pluginInstanceId + ' started');
   res.json(generateSuccess());
 });
 router.put('/plugin/:pluginInstanceId/stop', function (req, res) {
-  console.log("Plugin " + req.params.pluginInstanceId + " stopped");
+  console.log('Plugin ' + req.params.pluginInstanceId + ' stopped');
   res.json(generateSuccess());
 });
 
 const PluginInstanceState = Object.freeze({
-  "Unknown": 0,
-  "Error": 1,
-  "Stopped": 2,
-  "Running": 3,
-  "Custom": 4,
-  "WaitDebugger": 5
+  Unknown: 0,
+  Error: 1,
+  Stopped: 2,
+  Running: 3,
+  Custom: 4,
+  WaitDebugger: 5,
 });
 
 router.get('/plugin/instanceWithState', function (req, res) {
@@ -137,32 +127,34 @@ router.get('/plugin/instanceWithState', function (req, res) {
     let instancesWithState = [];
     for (let instance of d.instances) {
       let instanceWithState = {
-        'instance': instance
+        instance: instance,
       };
       instancesWithState.push(instanceWithState);
     }
-    instancesWithState[0]['state'] = {state: PluginInstanceState.Running};
-    instancesWithState[1]['state'] = {state: PluginInstanceState.Stopped};
+    instancesWithState[0]['state'] = { state: PluginInstanceState.Running };
+    instancesWithState[1]['state'] = { state: PluginInstanceState.Stopped };
     instancesWithState[2]['state'] = {
       state: PluginInstanceState.Custom,
       messageId: 'connecting',
-      messageData: 'TODO à gérer'
-    }
-    instancesWithState[3]['state'] = {state: PluginInstanceState.Error};
+      messageData: 'TODO à gérer',
+    };
+    instancesWithState[3]['state'] = { state: PluginInstanceState.Error };
     res.json(generateSuccess(instancesWithState));
   });
 });
 
 yd.use('/plugins/:plugintype/icon.png', function (req, res) {
-  console.log("Icon request : " + req.params.plugintype );
-  res.sendFile(__dirname + '/data/plugins/' + req.params.plugintype + '/icon.png');
+  console.log('Icon request : ' + req.params.plugintype);
+  res.sendFile(
+    __dirname + '/data/plugins/' + req.params.plugintype + '/icon.png'
+  );
 });
-
 
 yd.use('/rest/v2', router);
 
 const server = yd.listen(8080, function () {
-  const host = server.address().address === '::' ? 'localhost' : server.address().address;
+  const host =
+    server.address().address === '::' ? 'localhost' : server.address().address;
   const port = server.address().port;
 
   console.log('Yadoms Mockup Server started : http://%s:%s', host, port);

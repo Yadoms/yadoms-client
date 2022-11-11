@@ -7,9 +7,8 @@ import { Injectable } from '@angular/core';
 import { WidgetDefinition } from './models/widget.defition';
 import { delay } from 'rxjs/operators';
 
-
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class WidgetFactoryService {
   /**
@@ -30,7 +29,10 @@ export class WidgetFactoryService {
   /**
    * The widget factories already loaded (avoid multiple loading)
    */
-  private loadedComponentFactories: Map<string, AngularCore.ComponentFactory<any>> = new Map<string, AngularCore.ComponentFactory<any>>();
+  private loadedComponentFactories: Map<
+    string,
+    AngularCore.ComponentFactory<any>
+  > = new Map<string, AngularCore.ComponentFactory<any>>();
 
   /**
    * Constructr
@@ -47,8 +49,10 @@ export class WidgetFactoryService {
    * @param widgetDefinition The definition
    * @param componentHostView The view where component will be placed
    */
-  public async load(widgetDefinition: WidgetDefinition, componentHostView: ViewContainerRef): Promise<AngularCore.ComponentRef<any>> {
-
+  public async load(
+    widgetDefinition: WidgetDefinition,
+    componentHostView: ViewContainerRef
+  ): Promise<AngularCore.ComponentRef<any>> {
     // get the mutex
     while (this.mutexLocked) {
       await delay(10);
@@ -63,7 +67,8 @@ export class WidgetFactoryService {
         componentHostView.clear();
 
         // instanciate the component
-        const componentRef = componentHostView.createComponent(componentFactory);
+        const componentRef =
+          componentHostView.createComponent(componentFactory);
 
         // release mutex
         this.mutexLocked = false;
@@ -76,40 +81,54 @@ export class WidgetFactoryService {
       this.mutexLocked = false;
       throw error;
     }
-
   }
 
   /**
    * Get the component factory for the widget to load
    * @param widgetDefinition The definition
    */
-  private async getComponentFactory(widgetDefinition: WidgetDefinition): Promise<AngularCore.ComponentFactory<any> | undefined> {
+  private async getComponentFactory(
+    widgetDefinition: WidgetDefinition
+  ): Promise<AngularCore.ComponentFactory<any> | undefined> {
     if (this.loadedComponentFactories.has(widgetDefinition.name)) {
       return this.loadedComponentFactories.get(widgetDefinition.name);
     } else {
-      const href = this.widgetBasePath + widgetDefinition.name + '/' + widgetDefinition.name + '.js';
+      const href =
+        this.widgetBasePath +
+        widgetDefinition.name +
+        '/' +
+        widgetDefinition.name +
+        '.js';
 
       const response = await fetch(href);
       const source = await response.text();
 
-      const exports : any = {}; // this will hold module exports
-      const modules : any = {   // this is the list of modules accessible by plugin
+      const exports: any = {}; // this will hold module exports
+      const modules: any = {
+        // this is the list of modules accessible by plugin
         '@angular/core': AngularCore,
-        '@angular/common': AngularCommon
+        '@angular/common': AngularCommon,
       };
 
-      const require : any = (module:any) => {
+      const require: any = (module: any) => {
         return modules[module];
       }; // shim 'require'
 
       // eval is mandatory here, just disable linting for this line
       // tslint:disable-next-line:no-eval
       eval(source); // interpret the plugin source
-      const mwcf = this.compiler.compileModuleAndAllComponentsSync(exports[widgetDefinition.module]);
+      const mwcf = this.compiler.compileModuleAndAllComponentsSync(
+        exports[widgetDefinition.module]
+      );
 
-      const componentFactory = mwcf.componentFactories.find(e => e.selector === widgetDefinition.componentSelector); // find the entry component
+      const componentFactory = mwcf.componentFactories.find(
+        (e) => e.selector === widgetDefinition.componentSelector
+      ); // find the entry component
       if (componentFactory) {
-        this.loadedComponentFactories.set(widgetDefinition.name, componentFactory);
+        this.loadedComponentFactories.set(
+          widgetDefinition.name,
+          componentFactory
+        );
         return componentFactory;
       } else {
         throw new Error('cannot find factory for app-plugin-component');

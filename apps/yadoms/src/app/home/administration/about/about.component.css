@@ -1,19 +1,18 @@
-
 .yadoms-uses .mat-list-item {
   display: inline-block;
 }
 
 .yadoms-uses .dependency-icon {
   display: block;
-  max-width:48px;
-  max-height:48px;
+  max-width: 48px;
+  max-height: 48px;
   width: auto;
   height: auto;
   margin: 5px;
 }
 
 .subModuleType {
-font-size: 1em;
+  font-size: 1em;
   margin: 5px;
 }
 

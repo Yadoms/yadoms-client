@@ -1,14 +1,13 @@
 import { Injectable } from '@angular/core';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class LocaleService {
-
-  constructor() { }
+  constructor() {}
 
   getLanguage() {
-    return navigator.language ;//|| navigator..userLanguage
+    return navigator.language; //|| navigator..userLanguage
     //return 'fr-FR';
   }
 }

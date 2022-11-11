@@ -21,7 +21,7 @@ export class AppState {
    * already return a clone of the current state
    */
   public get state() {
-    return this._state = this._clone(this._state);
+    return (this._state = this._clone(this._state));
   }
   /**
    * never allow mutation
@@ -47,7 +47,7 @@ export class AppState {
    */
   public set(prop: string, value: any) {
     // internally mutate our state
-    return this._state[prop] = value;
+    return (this._state[prop] = value);
   }
   /**
    * Clone an object

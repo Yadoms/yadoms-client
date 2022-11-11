@@ -10,8 +10,8 @@ import { TranslateService } from '@ngx-translate/core';
 @Component({
   selector: 'yd-home',
   providers: [],
-  styleUrls: [ './home.component.css' ],
-  templateUrl: './home.component.html'
+  styleUrls: ['./home.component.css'],
+  templateUrl: './home.component.html',
 })
 export class HomeComponent implements OnInit, OnDestroy {
   public pages: Pages | undefined;
@@ -21,9 +21,15 @@ export class HomeComponent implements OnInit, OnDestroy {
   public mobileQuery: MediaQueryList;
   private _mobileQueryListener: () => void;
 
-  constructor(public appState: AppState, public translate: TranslateService, private router: Router, private restServerService: RestServerService,
+  constructor(
+    public appState: AppState,
+    public translate: TranslateService,
+    private router: Router,
+    private restServerService: RestServerService,
     private pageService: PageService,
-    changeDetectorRef: ChangeDetectorRef, media: MediaMatcher) {
+    changeDetectorRef: ChangeDetectorRef,
+    media: MediaMatcher
+  ) {
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
     this.mobileQuery.addListener(this._mobileQueryListener);
@@ -32,8 +38,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   public ngOnInit() {
     console.log('home component loaded');
 
-    this.pageService.getAll()
-    .then( (pages: Pages) => {
+    this.pageService.getAll().then((pages: Pages) => {
       this.pages = pages;
     });
   }
@@ -41,5 +46,4 @@ export class HomeComponent implements OnInit, OnDestroy {
   public ngOnDestroy(): void {
     this.mobileQuery.removeListener(this._mobileQueryListener);
   }
-
 }

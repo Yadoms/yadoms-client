@@ -1,15 +1,20 @@
-import {Inject, Injectable} from '@angular/core';
-import {Router} from '@angular/router';
-import {HttpClient} from '@angular/common/http';
-import {RestResult} from './rest-result';
-import {ErrorService} from './error.service';
-import {Location} from '@angular/common';
+import { Inject, Injectable } from '@angular/core';
+import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+import { RestResult } from './rest-result';
+import { ErrorService } from './error.service';
+import { Location } from '@angular/common';
 import { firstValueFrom } from 'rxjs';
 
 @Injectable()
 export class RestServerService {
-  constructor(@Inject('baseUrl') private baseUrl: string, private http: HttpClient, private router: Router, private location: Location, private errorService: ErrorService) {
-  }
+  constructor(
+    @Inject('baseUrl') private baseUrl: string,
+    private http: HttpClient,
+    private router: Router,
+    private location: Location,
+    private errorService: ErrorService
+  ) {}
 
   /**
    * Concatenate to url parts
@@ -20,8 +25,12 @@ export class RestServerService {
    */
   private static concatenateUrl_(url1: string, url2: string): string {
     // on ajoute le "/" s'il n'y est pas a la fin de l'url
-    if (url1 !== undefined && url1.length > 0 && url2 !== undefined && url2.length > 0) {
-
+    if (
+      url1 !== undefined &&
+      url1.length > 0 &&
+      url2 !== undefined &&
+      url2.length > 0
+    ) {
       // cas : aucun slash présent
       // si url1 ne se termine pas par "/" et que url2 ne commence par par "/" alors on ajoute un "/" entre les deux
       if (url1[url1.length - 1] !== '/' && url2[0] !== '/') {
@@ -55,8 +64,8 @@ export class RestServerService {
    * @param {JSON} data The $.ajax options (dataType will be overwritten by 'script')
    * @return a promise
    */
-  public getScript(url: string, data?: any): Promise<string | undefined>  {
-    return this.http.get(url, {responseType: 'text'}).toPromise();
+  public getScript(url: string, data?: any): Promise<string | undefined> {
+    return this.http.get(url, { responseType: 'text' }).toPromise();
   }
 
   /**
@@ -66,7 +75,7 @@ export class RestServerService {
    * @return a promise
    */
   public getHtml(url: string, data?: any): Promise<string> {
-    return firstValueFrom(this.http.get(url, {responseType: 'text'}));
+    return firstValueFrom(this.http.get(url, { responseType: 'text' }));
   }
 
   /**
@@ -107,36 +116,47 @@ export class RestServerService {
    * @param options
    * @return a promise
    */
-  private restCall<T>(type: string, url: string, data?: any, options?: any): Promise<T> {
-    return new Promise<T>((resolve: (value: T | PromiseLike<T>) => void, reject: (reason?: any) => void) => {
-      if (!type) {
-        reject('request TYPE must be defined');
-        return;
-      }
-      if (!url) {
-        reject('request URL must be defined');
-        return;
-      }
+  private restCall<T>(
+    type: string,
+    url: string,
+    data?: any,
+    options?: any
+  ): Promise<T> {
+    return new Promise<T>(
+      (
+        resolve: (value: T | PromiseLike<T>) => void,
+        reject: (reason?: any) => void
+      ) => {
+        if (!type) {
+          reject('request TYPE must be defined');
+          return;
+        }
+        if (!url) {
+          reject('request URL must be defined');
+          return;
+        }
 
-      //const part = RestServerService.concatenateUrl_(this.baseUrl, 'rest');
-      const fullUrlToUse = RestServerService.concatenateUrl_('rest/v2', url);
+        //const part = RestServerService.concatenateUrl_(this.baseUrl, 'rest');
+        const fullUrlToUse = RestServerService.concatenateUrl_('rest/v2', url);
 
-      const requestOptions: any = options || {};
-      if (data) {
-        requestOptions.body = data;
+        const requestOptions: any = options || {};
+        if (data) {
+          requestOptions.body = data;
+        }
+
+        this.http
+          .request<RestResult>(type, fullUrlToUse, requestOptions)
+          .subscribe((res: any) => {
+            if (res && res.result === true) {
+              resolve(res.data);
+            } else {
+              this.errorService
+                .createRestErrorMessage(res)
+                .then(reject)
+                .catch(reject);
+            }
+          }, reject);
       }
-
-      this.http
-        .request<RestResult>(type, fullUrlToUse, requestOptions)
-        .subscribe((res: any) => {
-          if (res && res.result === true) {
-            resolve(res.data);
-          } else {
-            this.errorService.createRestErrorMessage(res)
-              .then(reject)
-              .catch(reject);
-          }
-        }, reject);
-    });
+    );
   }
 }

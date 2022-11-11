@@ -1,24 +1,22 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
-import {Component} from '@angular/core';
-import {CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { Component } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
-import {AboutComponent} from './about.component';
-import {PluginService} from '../../../core/plugin.service';
-import {WidgetService} from '../../../core/widget.service';
-import {WidgetPackages} from '../../../core/models/widget.packages';
-import {AvailablePlugins} from '../../../core/models/available-plugin';
+import { AboutComponent } from './about.component';
+import { PluginService } from '../../../core/plugin.service';
+import { WidgetService } from '../../../core/widget.service';
+import { WidgetPackages } from '../../../core/models/widget.packages';
+import { AvailablePlugins } from '../../../core/models/available-plugin';
 
-@Component({selector: 'yd-admin-page-header', template: ''})
-class YdAdminPageMockComponent {
-}
+@Component({ selector: 'yd-admin-page-header', template: '' })
+class YdAdminPageMockComponent {}
 
 class MockWidgetService extends WidgetService {
   constructor() {
     super(null);
   }
   public getAllPackages(): Promise<WidgetPackages> {
-    return new Promise<WidgetPackages>(() => {
-    });
+    return new Promise<WidgetPackages>(() => {});
   }
 }
 
@@ -27,9 +25,10 @@ class MockPluginService extends PluginService {
     super(null);
   }
 
-  public getAvailablePluginsInformation(fields: string[]): Promise<AvailablePlugins> {
-    return new Promise<AvailablePlugins>(() => {
-    });
+  public getAvailablePluginsInformation(
+    fields: string[]
+  ): Promise<AvailablePlugins> {
+    return new Promise<AvailablePlugins>(() => {});
   }
 }
 
@@ -42,11 +41,10 @@ describe('AboutComponent', () => {
       declarations: [AboutComponent, YdAdminPageMockComponent],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       providers: [
-        {provide: WidgetService, useClass: MockWidgetService},
-        {provide: PluginService, useClass: MockPluginService}
-      ]
-    })
-      .compileComponents();
+        { provide: WidgetService, useClass: MockWidgetService },
+        { provide: PluginService, useClass: MockPluginService },
+      ],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -61,12 +59,16 @@ describe('AboutComponent', () => {
 
   it('should display header first', () => {
     const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelectorAll('*')[0].tagName.toLowerCase()).toEqual('yd-admin-page-header');
+    expect(compiled.querySelectorAll('*')[0].tagName.toLowerCase()).toEqual(
+      'yd-admin-page-header'
+    );
   });
 
   it('should display useful links', () => {
     const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('.useful-links h2').textContent).toEqual('Useful links');
+    expect(compiled.querySelector('.useful-links h2').textContent).toEqual(
+      'Useful links'
+    );
     const linksList = compiled.querySelectorAll('.useful-links div a');
     expect(Object.keys(linksList).length).toEqual(4);
 
@@ -74,7 +76,9 @@ describe('AboutComponent', () => {
     expect(linksList[0].target).toEqual('_blank');
     expect(linksList[0].textContent).toEqual('Yadoms web site');
 
-    expect(linksList[1].href).toEqual('https://github.com/Yadoms/yadoms/issues/');
+    expect(linksList[1].href).toEqual(
+      'https://github.com/Yadoms/yadoms/issues/'
+    );
     expect(linksList[1].target).toEqual('_blank');
     expect(linksList[1].textContent).toEqual('Report an issue');
 
@@ -89,7 +93,9 @@ describe('AboutComponent', () => {
 
   it('should display Yadoms dependencies', () => {
     const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('.yadoms-uses h2').textContent).toEqual('Yadoms uses...');
+    expect(compiled.querySelector('.yadoms-uses h2').textContent).toEqual(
+      'Yadoms uses...'
+    );
     const dependencyItems = compiled.querySelectorAll('mat-nav-list a');
     expect(Object.keys(dependencyItems).length).toEqual(5);
   });

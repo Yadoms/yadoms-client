@@ -64,7 +64,6 @@ tr.pi-row:not(.pi-expanded-row):active {
   line-height: normal;
 }
 
-
 .mat-row .mat-cell {
   border-bottom: 1px solid transparent;
   border-top: 1px solid transparent;
@@ -74,4 +73,3 @@ tr.pi-row:not(.pi-expanded-row):active {
 .mat-row:hover .mat-cell {
   border-color: currentColor;
 }
-

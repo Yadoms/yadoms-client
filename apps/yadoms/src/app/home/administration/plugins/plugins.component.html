@@ -1,20 +1,34 @@
 <yd-admin-page-header title="Plugins"></yd-admin-page-header>
 
 <mat-form-field>
-    <input matInput #txtFilter (keyup)="applyFilter(txtFilter.value)" placeholder="Filtrer..."> 
+  <input
+    matInput
+    #txtFilter
+    (keyup)="applyFilter(txtFilter.value)"
+    placeholder="Filtrer..."
+  />
 </mat-form-field>
 
-<table mat-table [dataSource]="pluginInstances" multiTemplateDataRows class="mat-elevation-z8"
-       matSort matSortActive="DisplayName" matSortDirection="asc" matSortDisableClear>
-
+<table
+  mat-table
+  [dataSource]="pluginInstances"
+  multiTemplateDataRows
+  class="mat-elevation-z8"
+  matSort
+  matSortActive="DisplayName"
+  matSortDirection="asc"
+  matSortDisableClear
+>
   <ng-container matColumnDef="State">
     <th mat-header-cell *matHeaderCellDef>State</th>
-    <td mat-cell *matCellDef="let pi"><mat-icon>{{getStateIcon(pi.state.state)}}</mat-icon></td>
+    <td mat-cell *matCellDef="let pi">
+      <mat-icon>{{ getStateIcon(pi.state.state) }}</mat-icon>
+    </td>
   </ng-container>
 
   <ng-container matColumnDef="DisplayName">
     <th mat-header-cell *matHeaderCellDef mat-sort-header>Plugin</th>
-    <td mat-cell *matCellDef="let pi">{{pi.display_name}}</td>
+    <td mat-cell *matCellDef="let pi">{{ pi.display_name }}</td>
   </ng-container>
 
   <ng-container matColumnDef="Type">
@@ -22,9 +36,9 @@
     <td mat-cell *matCellDef="let pi">
       <div class="plugin-type-cell">
         <div>
-          <img class="plugin-icon" src="plugins/{{pi.type}}/icon.png">
+          <img class="plugin-icon" src="plugins/{{ pi.type }}/icon.png" />
         </div>
-        <div class="plugin-type-label">{{pi.type}}</div>
+        <div class="plugin-type-label">{{ pi.type }}</div>
       </div>
     </td>
   </ng-container>
@@ -32,29 +46,46 @@
   <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
   <ng-container matColumnDef="expandedDetail">
     <td mat-cell *matCellDef="let pi" [attr.colspan]="displayedColumns.length">
-      <div class="pi-detail" [@detailExpand]="pi == expandedPluginInstance ? 'expanded' : 'collapsed'">
+      <div
+        class="pi-detail"
+        [@detailExpand]="
+          pi == expandedPluginInstance ? 'expanded' : 'collapsed'
+        "
+      >
         <div>
-          <img class="pi-detail-icon" src="plugins/{{pi.type}}/icon.png">
-          <button mat-icon-button [disabled]="!isStartStopButtonEnabled(pi)" (click)="startStop(pi)">
+          <img class="pi-detail-icon" src="plugins/{{ pi.type }}/icon.png" />
+          <button
+            mat-icon-button
+            [disabled]="!isStartStopButtonEnabled(pi)"
+            (click)="startStop(pi)"
+          >
             <mat-icon *ngIf="isRunning(pi.state)">pause_circle_ouline</mat-icon>
             <mat-icon *ngIf="!isRunning(pi.state)">play_arrow</mat-icon>
           </button>
         </div>
         <div class="pi-detail-description">
-          <div class="pi-detail-name">{{pi.DisplayName}}</div>
-          <div class="pi-detail-type">{{pi.type}}</div>
-          <br>
-          <div class="pi-detail-state">Etat : {{getStateLabel(pi.state)}}</div>
+          <div class="pi-detail-name">{{ pi.DisplayName }}</div>
+          <div class="pi-detail-type">{{ pi.type }}</div>
+          <br />
+          <div class="pi-detail-state">
+            Etat : {{ getStateLabel(pi.state) }}
+          </div>
         </div>
       </div>
     </td>
   </ng-container>
 
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-row *matRowDef="let pi; columns: displayedColumns;"
-      class="pi-row"
-      [class.pi-expanded-row]="expandedPluginInstance === pi"
-      (click)="expandedPluginInstance = expandedPluginInstance === pi ? null : pi">
-  </tr>
-  <tr mat-row *matRowDef="let pi; columns: ['expandedDetail']" class="pi-detail-row"></tr>
+  <tr
+    mat-row
+    *matRowDef="let pi; columns: displayedColumns"
+    class="pi-row"
+    [class.pi-expanded-row]="expandedPluginInstance === pi"
+    (click)="expandedPluginInstance = expandedPluginInstance === pi ? null : pi"
+  ></tr>
+  <tr
+    mat-row
+    *matRowDef="let pi; columns: ['expandedDetail']"
+    class="pi-detail-row"
+  ></tr>
 </table>

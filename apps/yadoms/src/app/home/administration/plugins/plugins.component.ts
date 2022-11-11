@@ -1,12 +1,23 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {PluginService} from '../../../core/plugin.service';
-import {PluginInstance, PluginInstanceWithState, PluginInstanceFullState, PluginInstanceState} from '../../../core/models/pluginInstances';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { PluginService } from '../../../core/plugin.service';
+import {
+  PluginInstance,
+  PluginInstanceWithState,
+  PluginInstanceFullState,
+  PluginInstanceState,
+} from '../../../core/models/pluginInstances';
 //import {MatSort, MatTableDataSource} from '@angular/material';
 
-import {MatTableDataSource} from '@angular/material/table';
-import {MatSort} from '@angular/material/sort';
-import {animate, state, style, transition, trigger} from '@angular/animations';
-import {AvailablePlugin} from '../../../core/models/available-plugin';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatSort } from '@angular/material/sort';
+import {
+  animate,
+  state,
+  style,
+  transition,
+  trigger,
+} from '@angular/animations';
+import { AvailablePlugin } from '../../../core/models/available-plugin';
 
 @Component({
   selector: 'yd-plugins',
@@ -14,20 +25,25 @@ import {AvailablePlugin} from '../../../core/models/available-plugin';
   styleUrls: ['./plugins.component.css'],
   animations: [
     trigger('detailExpand', [
-      state('collapsed', style({height: '0px', minHeight: '0', display: 'none'})),
-      state('expanded', style({height: '*'})),
-      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+      state(
+        'collapsed',
+        style({ height: '0px', minHeight: '0', display: 'none' })
+      ),
+      state('expanded', style({ height: '*' })),
+      transition(
+        'expanded <=> collapsed',
+        animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')
+      ),
     ]),
   ],
 })
-
 export class PluginsComponent implements OnInit {
-
-  pluginInstances: MatTableDataSource<PluginInstanceWithState> = new MatTableDataSource<PluginInstanceWithState>();
+  pluginInstances: MatTableDataSource<PluginInstanceWithState> =
+    new MatTableDataSource<PluginInstanceWithState>();
   availablePlugins: AvailablePlugin[] = [];
   displayedColumns = ['State', 'DisplayName', 'Type'];
-  expandedPluginInstance: PluginInstance = new PluginInstance;
-  @ViewChild(MatSort) sort: MatSort = new MatSort;
+  expandedPluginInstance: PluginInstance = new PluginInstance();
+  @ViewChild(MatSort) sort: MatSort = new MatSort();
 
   private pluginService: PluginService;
   startStopButtonEnabled: any = {};
@@ -39,24 +55,26 @@ export class PluginsComponent implements OnInit {
   ngOnInit() {
     Promise.all([
       this.pluginService.getAllPluginsInstanceWithState(),
-      this.pluginService.getAvailablePluginsInformation(undefined /*TODO*/) // TODO vraiment utile ?
-    ])
-      .then(value => {
-        debugger;
-        this.pluginInstances = new MatTableDataSource(value[0].instances);
-        this.availablePlugins = value[1].plugins;
+      this.pluginService.getAvailablePluginsInformation(undefined /*TODO*/), // TODO vraiment utile ?
+    ]).then((value) => {
+      debugger;
+      this.pluginInstances = new MatTableDataSource(value[0].instances);
+      this.availablePlugins = value[1].plugins;
 
-        this.startStopButtonEnabled = {};
-        for (const pi of this.pluginInstances.data) {
-          this.startStopButtonEnabled[pi.instance.Id] = true;
-        }
-        this.configureSort();
-      });
+      this.startStopButtonEnabled = {};
+      for (const pi of this.pluginInstances.data) {
+        this.startStopButtonEnabled[pi.instance.Id] = true;
+      }
+      this.configureSort();
+    });
   }
 
   private configureSort() {
     // Make sort insensitive to case
-    this.pluginInstances.sortingDataAccessor = ((item: PluginInstanceWithState, sortHeaderId: string) => {
+    this.pluginInstances.sortingDataAccessor = (
+      item: PluginInstanceWithState,
+      sortHeaderId: string
+    ) => {
       switch (sortHeaderId) {
         case 'displayName':
           return item.instance.DisplayName.toLocaleLowerCase();
@@ -65,24 +83,27 @@ export class PluginsComponent implements OnInit {
         default:
           return item.instance.Id.toString().toLocaleLowerCase();
       }
-    });
+    };
 
     // Apply sort to data
     this.pluginInstances.sort = this.sort;
 
-    this.pluginInstances.filterPredicate = (data: PluginInstanceWithState, filterValue: string) => {
+    this.pluginInstances.filterPredicate = (
+      data: PluginInstanceWithState,
+      filterValue: string
+    ) => {
       filterValue = filterValue.trim().toLocaleLowerCase();
-      return data.instance.DisplayName.indexOf(filterValue) !== -1 ||
-        data.instance.Type.indexOf(filterValue) !== -1;
+      return (
+        data.instance.DisplayName.indexOf(filterValue) !== -1 ||
+        data.instance.Type.indexOf(filterValue) !== -1
+      );
     };
   }
 
   applyFilter(filterValue: string) {
     console.log(filterValue);
-    if(filterValue != null)
-      this.pluginInstances.filter = filterValue;
-    else
-      this.pluginInstances.filter = "";
+    if (filterValue != null) this.pluginInstances.filter = filterValue;
+    else this.pluginInstances.filter = '';
   }
 
   getStateIcon(piState: PluginInstanceState) {
@@ -138,9 +159,12 @@ export class PluginsComponent implements OnInit {
 
   startStop(pi: PluginInstanceWithState) {
     this.startStopButtonEnabled[pi.instance.Id] = false;
-    this.pluginService.startStop(pi.instance, !this.isRunning(pi.state))
+    this.pluginService
+      .startStop(pi.instance, !this.isRunning(pi.state))
       .then(() => {
-        pi.state.state = this.isRunning(pi.state) ? PluginInstanceState.Stopped : PluginInstanceState.Running;//TODO c'est pas bon, pour test. En principe, il faut attendre la prochaine mise à jour 
+        pi.state.state = this.isRunning(pi.state)
+          ? PluginInstanceState.Stopped
+          : PluginInstanceState.Running; //TODO c'est pas bon, pour test. En principe, il faut attendre la prochaine mise à jour
         this.startStopButtonEnabled[pi.instance.Id] = true;
       })
       .catch(() => {

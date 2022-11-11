@@ -1,9 +1,9 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
-import {CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
-import {AdminPageHeaderComponent} from './admin-page-header.component';
-import {SystemService} from '../../../core/system.service';
-import {SystemInformation} from '../../../core/models/systemInformation';
+import { AdminPageHeaderComponent } from './admin-page-header.component';
+import { SystemService } from '../../../core/system.service';
+import { SystemInformation } from '../../../core/models/systemInformation';
 
 class MockSystemService extends SystemService {
   systemInformation = new SystemInformation();
@@ -12,7 +12,7 @@ class MockSystemService extends SystemService {
     super(null);
 
     this.systemInformation.runningPlatform = 'testPlatform';
-    this.systemInformation.yadoms = {version: '1.0-test.1'};
+    this.systemInformation.yadoms = { version: '1.0-test.1' };
     this.systemInformation.startupTime = new Date(2018, 11, 27, 23, 21, 55);
     this.systemInformation.executablePath = 'executable/path';
     this.systemInformation.serverReady = true;
@@ -40,11 +40,8 @@ describe('AdminPageHeaderComponent', () => {
     TestBed.configureTestingModule({
       declarations: [AdminPageHeaderComponent],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
-      providers: [
-        {provide: SystemService, useValue: mockSystemService}
-      ]
-    })
-      .compileComponents();
+      providers: [{ provide: SystemService, useValue: mockSystemService }],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -73,8 +70,12 @@ describe('AdminPageHeaderComponent', () => {
 
   it('should have horizontal bar above title', () => {
     const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelectorAll('*')[0].tagName.toLowerCase()).toEqual('h1');
-    expect(compiled.querySelectorAll('*')[1].tagName.toLowerCase()).toEqual('mat-divider');
+    expect(compiled.querySelectorAll('*')[0].tagName.toLowerCase()).toEqual(
+      'h1'
+    );
+    expect(compiled.querySelectorAll('*')[1].tagName.toLowerCase()).toEqual(
+      'mat-divider'
+    );
   });
 
   it('should not display advertisement when developer mode not initialized', () => {

@@ -1,12 +1,11 @@
-import {Injectable} from '@angular/core';
-import {RestServerService} from './restserver.service';
-import {Widgets} from './models/widgets';
-import {WidgetPackages} from './models/widget.packages';
+import { Injectable } from '@angular/core';
+import { RestServerService } from './restserver.service';
+import { Widgets } from './models/widgets';
+import { WidgetPackages } from './models/widget.packages';
 
 @Injectable()
 export class WidgetService {
-  constructor(private restServerService: RestServerService) {
-  }
+  constructor(private restServerService: RestServerService) {}
 
   public getAll(): Promise<Widgets> {
     // TODO filtrer les 'dev-' si pas en mode développeur

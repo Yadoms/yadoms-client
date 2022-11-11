@@ -11,7 +11,7 @@ It can be done manually and using nvm:node version manager (recommanded)
 1. Install https://github.com/coreybutler/nvm-windows/releases
 
 2. Setup proxy (if needed)
-From a command prompt, type:
+   From a command prompt, type:
 
 ```bash
 nvm proxy http://monproxy.aaaa.fr:8080
@@ -24,7 +24,7 @@ nvm install latest
 ```
 
 4. Use latest version
-From elevated command prompt
+   From elevated command prompt
 
 ```bash
 nvm use latest
@@ -40,7 +40,6 @@ npm -v
 ## Angular CLI
 
 The Angular CLI is a command-line interface tool that you use to initialize, develop, scaffold, and maintain Angular applications directly from a command shell.
-
 
 ```bash
 # install in global (aka system wide installation, with "-g")

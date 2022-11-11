@@ -1,11 +1,14 @@
 {
-    "page": [{
-        "id": "1",
-        "name": "Accueil",
-        "pageOrder": "0"
-    }, {
-        "id": "2",
-        "name": "Etage",
-        "pageOrder": "1"
-    }]
+  "page": [
+    {
+      "id": "1",
+      "name": "Accueil",
+      "pageOrder": "0"
+    },
+    {
+      "id": "2",
+      "name": "Etage",
+      "pageOrder": "1"
+    }
+  ]
 }

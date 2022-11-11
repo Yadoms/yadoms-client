@@ -3,13 +3,10 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'yd-maintenance',
   templateUrl: './maintenance.component.html',
-  styleUrls: ['./maintenance.component.css']
+  styleUrls: ['./maintenance.component.css'],
 })
 export class MaintenanceComponent implements OnInit {
+  constructor() {}
 
-  constructor() { }
-
-  ngOnInit() {
-  }
-
+  ngOnInit() {}
 }

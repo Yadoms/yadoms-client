@@ -1,9 +1,8 @@
 import { Directive, ViewContainerRef } from '@angular/core';
 
 @Directive({
-  selector: '[ydPluginHost]'
+  selector: '[ydPluginHost]',
 })
 export class PluginHostDirective {
-  constructor(public viewContainerRef: ViewContainerRef) {
-  }
+  constructor(public viewContainerRef: ViewContainerRef) {}
 }

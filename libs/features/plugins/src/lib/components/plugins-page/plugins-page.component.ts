@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { SystemService } from "../../services/system.service";
-import { SystemInformationEntity } from "../../+state/system/system-information.models";
-import { Observable, of } from "rxjs";
+import { SystemService } from '../../services/system.service';
+import { SystemInformationEntity } from '../../+state/system/system-information.models';
+import { Observable, of } from 'rxjs';
 
 @Component({
   selector: 'app-plugins-page',

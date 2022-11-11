@@ -256,11 +256,7 @@
             "content": {
               "source": {
                 "type": "keyword",
-                "expectedKeywordType": [
-                  "numeric",
-                  "bool",
-                  "Enum"
-                ],
+                "expectedKeywordType": ["numeric", "bool", "Enum"],
                 "expectedKeywordAccess": "get"
               },
               "color": {

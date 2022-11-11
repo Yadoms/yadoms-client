@@ -1,24 +1,39 @@
-import {async, ComponentFixture, fakeAsync, TestBed} from '@angular/core/testing';
-import {Component, CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
-
-import {PluginsComponent} from './plugins.component';
-import {PluginService} from '../../../core/plugin.service';
-import {FormsModule} from '@angular/forms';
-import {SharedModule} from '../../../shared';
 import {
-  PluginInstance, PluginInstanceFullState,
+  async,
+  ComponentFixture,
+  fakeAsync,
+  TestBed,
+} from '@angular/core/testing';
+import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+
+import { PluginsComponent } from './plugins.component';
+import { PluginService } from '../../../core/plugin.service';
+import { FormsModule } from '@angular/forms';
+import { SharedModule } from '../../../shared';
+import {
+  PluginInstance,
+  PluginInstanceFullState,
   PluginInstances,
   PluginInstanceState,
   PluginInstancesWithState,
-  PluginInstanceWithState
+  PluginInstanceWithState,
 } from '../../../core/models/pluginInstances';
-import {AvailablePlugins, PluginCategory} from '../../../core/models/available-plugin';
-import {MatInputModule, MatSortModule, MatTableModule} from '@angular/material';
-import {BrowserAnimationsModule, NoopAnimationsModule} from '@angular/platform-browser/animations';
+import {
+  AvailablePlugins,
+  PluginCategory,
+} from '../../../core/models/available-plugin';
+import {
+  MatInputModule,
+  MatSortModule,
+  MatTableModule,
+} from '@angular/material';
+import {
+  BrowserAnimationsModule,
+  NoopAnimationsModule,
+} from '@angular/platform-browser/animations';
 
-@Component({selector: 'yd-admin-page-header', template: ''})
-class YdAdminPageMockComponent {
-}
+@Component({ selector: 'yd-admin-page-header', template: '' })
+class YdAdminPageMockComponent {}
 
 class MockPluginService extends PluginService {
   pluginInstances = new PluginInstances();
@@ -41,18 +56,18 @@ class MockPluginService extends PluginService {
     pi1.DisplayName = 'My fakePlugin instance';
     pi1.Type = 'dev-fakePlugin';
     pi1.Configuration = {
-      'StringParameter': '',
-      'BoolParameter': false,
-      'IntParameter': 258,
-      'DecimalParameter': 25.3,
-      'EnumParameter': 'EnumValue2',
-      'MySection': {
-        'content': {
-          'SubIntParameter': 65535,
-          'SubStringParameter': ''
-        }
+      StringParameter: '',
+      BoolParameter: false,
+      IntParameter: 258,
+      DecimalParameter: 25.3,
+      EnumParameter: 'EnumValue2',
+      MySection: {
+        content: {
+          SubIntParameter: 65535,
+          SubStringParameter: '',
+        },
       },
-      'ConditionalParameter': ''
+      ConditionalParameter: '',
     };
     pi1.AutoStart = true;
     pi1.Category = PluginCategory.User;
@@ -78,25 +93,39 @@ class MockPluginService extends PluginService {
     this.pluginInstancesWithState.instances = [];
     const pifs0 = new PluginInstanceFullState();
     pifs0.state = PluginInstanceState.Running;
-    this.pluginInstancesWithState.instances.push({instance: pi0, state: pifs0});
+    this.pluginInstancesWithState.instances.push({
+      instance: pi0,
+      state: pifs0,
+    });
     const pifs1 = new PluginInstanceFullState();
     pifs1.state = PluginInstanceState.Stopped;
-    this.pluginInstancesWithState.instances.push({instance: pi1, state: pifs1});
+    this.pluginInstancesWithState.instances.push({
+      instance: pi1,
+      state: pifs1,
+    });
     const pifs2 = new PluginInstanceFullState();
     pifs2.state = PluginInstanceState.Custom;
     pifs2.messageId = 'connecting';
     pifs2.messageData = 'TODO à gérer';
-    this.pluginInstancesWithState.instances.push({instance: pi2, state: pifs2});
+    this.pluginInstancesWithState.instances.push({
+      instance: pi2,
+      state: pifs2,
+    });
     const pifs3 = new PluginInstanceFullState();
     pifs3.state = PluginInstanceState.Error;
-    this.pluginInstancesWithState.instances.push({instance: pi3, state: pifs3});
+    this.pluginInstancesWithState.instances.push({
+      instance: pi3,
+      state: pifs3,
+    });
   }
 
   public getAllPluginsInstance(): Promise<PluginInstances> {
     return Promise.resolve(this.pluginInstances);
   }
 
-  public getAvailablePluginsInformation(fields: string[]): Promise<AvailablePlugins> {
+  public getAvailablePluginsInformation(
+    fields: string[]
+  ): Promise<AvailablePlugins> {
     return Promise.resolve(this.availablePlugins);
   }
 
@@ -113,32 +142,51 @@ describe('PluginsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [FormsModule, SharedModule, MatTableModule, MatInputModule, MatSortModule, BrowserAnimationsModule, NoopAnimationsModule],
+      imports: [
+        FormsModule,
+        SharedModule,
+        MatTableModule,
+        MatInputModule,
+        MatSortModule,
+        BrowserAnimationsModule,
+        NoopAnimationsModule,
+      ],
       declarations: [PluginsComponent, YdAdminPageMockComponent],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
-      providers: [{provide: PluginService, useClass: MockPluginService}]
+      providers: [{ provide: PluginService, useClass: MockPluginService }],
     })
-      .compileComponents().then(() => {
-      fixture = TestBed.createComponent(PluginsComponent);
-      component = fixture.componentInstance;
-      mainElement = fixture.debugElement.nativeElement;
-      component.ngOnInit();
-    });
+      .compileComponents()
+      .then(() => {
+        fixture = TestBed.createComponent(PluginsComponent);
+        component = fixture.componentInstance;
+        mainElement = fixture.debugElement.nativeElement;
+        component.ngOnInit();
+      });
   }));
 
   beforeEach(() => {
     mockPluginService = new MockPluginService();
   });
 
-  function expectPluginInstancesDisplayed(displayedPluginInstances: PluginInstance[]) {
+  function expectPluginInstancesDisplayed(
+    displayedPluginInstances: PluginInstance[]
+  ) {
     const lines = mainElement.querySelectorAll('tr.mat-row.pi-row');
     expect(lines.length).toEqual(displayedPluginInstances.length);
 
-    for (let piIndex = 0; piIndex < displayedPluginInstances.length; ++piIndex) {
+    for (
+      let piIndex = 0;
+      piIndex < displayedPluginInstances.length;
+      ++piIndex
+    ) {
       const columns = lines[piIndex].querySelectorAll('td.mat-cell');
       expect(columns.length).toEqual(3);
-      expect(columns[1].textContent).toEqual(displayedPluginInstances[piIndex].DisplayName);
-      expect(columns[2].textContent).toEqual(displayedPluginInstances[piIndex].Type);
+      expect(columns[1].textContent).toEqual(
+        displayedPluginInstances[piIndex].DisplayName
+      );
+      expect(columns[2].textContent).toEqual(
+        displayedPluginInstances[piIndex].Type
+      );
     }
   }
 
@@ -147,7 +195,9 @@ describe('PluginsComponent', () => {
   });
 
   it('should display header first', () => {
-    expect(mainElement.querySelectorAll('*')[0].tagName.toLowerCase()).toEqual('yd-admin-page-header');
+    expect(mainElement.querySelectorAll('*')[0].tagName.toLowerCase()).toEqual(
+      'yd-admin-page-header'
+    );
   });
 
   it('should display plugin instances', fakeAsync(() => {
@@ -156,7 +206,7 @@ describe('PluginsComponent', () => {
       mockPluginService.pluginInstances.plugins[1],
       mockPluginService.pluginInstances.plugins[2],
       mockPluginService.pluginInstances.plugins[3],
-      mockPluginService.pluginInstances.plugins[0]
+      mockPluginService.pluginInstances.plugins[0],
     ]);
   }));
 
@@ -165,7 +215,7 @@ describe('PluginsComponent', () => {
     fixture.detectChanges();
     expectPluginInstancesDisplayed([
       mockPluginService.pluginInstances.plugins[1],
-      mockPluginService.pluginInstances.plugins[0]
+      mockPluginService.pluginInstances.plugins[0],
     ]);
   }));
 
@@ -173,7 +223,7 @@ describe('PluginsComponent', () => {
     component.pluginInstances.filter = 'sta';
     fixture.detectChanges();
     expectPluginInstancesDisplayed([
-      mockPluginService.pluginInstances.plugins[1]
+      mockPluginService.pluginInstances.plugins[1],
     ]);
   }));
 
@@ -190,12 +240,11 @@ describe('PluginsComponent', () => {
       mockPluginService.pluginInstances.plugins[1],
       mockPluginService.pluginInstances.plugins[2],
       mockPluginService.pluginInstances.plugins[3],
-      mockPluginService.pluginInstances.plugins[0]
+      mockPluginService.pluginInstances.plugins[0],
     ]);
 
     // const piNameHeader = mainElement.querySelector('th[class$=DisplayName]');
     const piNameHeader = mainElement.querySelector('th.mat-column-DisplayName');
-
 
     // Click on sort by instance name
     piNameHeader.click();
@@ -206,7 +255,7 @@ describe('PluginsComponent', () => {
       mockPluginService.pluginInstances.plugins[0],
       mockPluginService.pluginInstances.plugins[3],
       mockPluginService.pluginInstances.plugins[2],
-      mockPluginService.pluginInstances.plugins[1]
+      mockPluginService.pluginInstances.plugins[1],
     ]);
 
     // Click on sort by instance name
@@ -218,8 +267,7 @@ describe('PluginsComponent', () => {
       mockPluginService.pluginInstances.plugins[1],
       mockPluginService.pluginInstances.plugins[2],
       mockPluginService.pluginInstances.plugins[3],
-      mockPluginService.pluginInstances.plugins[0]
+      mockPluginService.pluginInstances.plugins[0],
     ]);
   }));
 });
-

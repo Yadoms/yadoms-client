@@ -10,15 +10,16 @@ import { MaintenanceComponent } from './maintenance/maintenance.component';
 import { AboutComponent } from './about/about.component';
 
 const routes: Routes = [
-    { path: '', pathMatch:'full', redirectTo: 'AboutComponent' },
-    { path: 'system', component: SystemComponent },
-    { path: 'plugins', component: PluginsComponent },
-    { path: 'devices', component: DevicesComponent },
-    { path: 'automation', component: AutomationComponent },
-    { path: 'recipients', component: RecipientsComponent },
-    { path: 'update', component: UpdateComponent },
-    { path: 'maintenance', component: MaintenanceComponent },
-    { path: 'about', component: AboutComponent }
+  { path: '', pathMatch: 'full', redirectTo: 'AboutComponent' },
+  { path: 'system', component: SystemComponent },
+  { path: 'plugins', component: PluginsComponent },
+  { path: 'devices', component: DevicesComponent },
+  { path: 'automation', component: AutomationComponent },
+  { path: 'recipients', component: RecipientsComponent },
+  { path: 'update', component: UpdateComponent },
+  { path: 'maintenance', component: MaintenanceComponent },
+  { path: 'about', component: AboutComponent },
 ];
 
-export const administrationRoutes: ModuleWithProviders<RouterModule> = RouterModule.forChild(routes);
+export const administrationRoutes: ModuleWithProviders<RouterModule> =
+  RouterModule.forChild(routes);

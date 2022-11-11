@@ -3,13 +3,10 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'yd-automation',
   templateUrl: './automation.component.html',
-  styleUrls: ['./automation.component.css']
+  styleUrls: ['./automation.component.css'],
 })
 export class AutomationComponent implements OnInit {
+  constructor() {}
 
-  constructor() { }
-
-  ngOnInit() {
-  }
-
+  ngOnInit() {}
 }
