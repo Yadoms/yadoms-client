@@ -10,7 +10,6 @@ import * as moment from 'moment';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'Yadoms';
 
 /**
    * Application name
@@ -30,7 +29,7 @@ export class AppComponent {
      // the lang to use, if the lang isn't available
      translate.use(translate.getBrowserLang() ?? "en");
      // define app language
-   
+
     //TODO : add moment
      moment.locale(translate.getBrowserLang() || window.navigator.language || 'en');
 
@@ -47,5 +46,5 @@ export class AppComponent {
  public ngOnInit() {
    // log initial appState
    console.log('Initial App State', this.appState.state);
- }  
+ }
 }
