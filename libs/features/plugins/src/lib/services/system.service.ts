@@ -3,7 +3,7 @@ import { Inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { PLUGINS_ENVIRONNEMENT, PluginsEnvironnement } from "../features-plugins.module";
-import { SystemInformationEntity } from '../+state/system/information/information.models';
+import { PluginEntity } from '../+state/plugins/plugin.models';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +16,7 @@ export class SystemService {
     private environnement: PluginsEnvironnement
   ) { }
 
-  getInformation(): Observable<SystemInformationEntity[]> {
-    return this.http.get<SystemInformationEntity[]>(this.environnement.systemInformationUrl);
+  getPlugins(): Observable<PluginEntity[]> {
+    return this.http.get<PluginEntity[]>(this.environnement.pluginsUrl);
   }
 }

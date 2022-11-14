@@ -1,12 +1,12 @@
-import * as InformationActions from './lib/+state/system/information/information.actions';
+import * as PluginActions from './lib/+state/plugins/plugin.actions';
 
-import * as InformationFeature from './lib/+state/system/information/information.reducer';
+import * as PluginFeature from './lib/+state/plugins/plugin.reducer';
 
-import * as InformationSelectors from './lib/+state/system/information/information.selectors';
+import * as PluginSelectors from './lib/+state/plugins/plugin.selectors';
 
-export * from './lib/+state/system/information/information.models';
+export * from './lib/+state/plugins/plugin.models';
 
-export { InformationActions, InformationFeature, InformationSelectors };
+export { PluginActions as InformationActions, PluginFeature as InformationFeature, PluginSelectors };
 export * from './lib/features-plugins.module';
 
 export * from './lib/components/plugins-page/plugins-page.component';

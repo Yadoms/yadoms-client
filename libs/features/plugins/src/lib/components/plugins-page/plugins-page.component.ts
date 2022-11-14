@@ -1,9 +1,9 @@
 import { Component, OnInit } from "@angular/core";
-import { SystemInformationEntity } from "../../+state/system/information/information.models";
+import { PluginEntity } from "../../+state/plugins/plugin.models";
 import { Observable, of } from "rxjs";
 import { Store } from "@ngrx/store";
-import * as InformationSelectors from "../../+state/system/information/information.selectors";
-import * as InformationActions from "../../+state/system/information/information.actions";
+import * as PluginSelectors from "../../+state/plugins/plugin.selectors";
+import * as PluginActions from "../../+state/plugins/plugin.actions";
 
 @Component({
   selector: "yadoms-plugins-page",
@@ -12,13 +12,13 @@ import * as InformationActions from "../../+state/system/information/information
 })
 export class PluginsPageComponent implements OnInit {
 
-  systemInformation$: Observable<SystemInformationEntity[]> = of([]);
+  plugins$: Observable<PluginEntity[]> = of([]);
 
   constructor(private store: Store) {
   }
 
   ngOnInit(): void {
-    this.store.dispatch(InformationActions.initInformation());
-    this.systemInformation$ = this.store.select(InformationSelectors.getAllInformation);
+    this.store.dispatch(PluginActions.initPlugins());
+    this.plugins$ = this.store.select(PluginSelectors.getAllPlugins);
   }
 }

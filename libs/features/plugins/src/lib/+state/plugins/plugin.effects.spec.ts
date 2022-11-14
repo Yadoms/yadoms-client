@@ -5,32 +5,32 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { hot } from 'jasmine-marbles';
 import { Observable } from 'rxjs';
 
-import * as InformationActions from './information.actions';
-import { InformationEffects } from './information.effects';
+import * as PluginActions from './plugin.actions';
+import { PluginEffects } from './plugin.effects';
 
-describe('InformationEffects', () => {
+describe('PluginEffects', () => {
   let actions: Observable<Action>;
-  let effects: InformationEffects;
+  let effects: PluginEffects;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [],
       providers: [
-        InformationEffects,
+        PluginEffects,
         provideMockActions(() => actions),
         provideMockStore(),
       ],
     });
 
-    effects = TestBed.inject(InformationEffects);
+    effects = TestBed.inject(PluginEffects);
   });
 
   describe('init$', () => {
     it('should work', () => {
-      actions = hot('-a-|', { a: InformationActions.initInformation() });
+      actions = hot('-a-|', { a: PluginActions.initPlugins() });
 
       const expected = hot('-a-|', {
-        a: InformationActions.loadInformationSuccess({ information: [] }),
+        a: PluginActions.loadPluginsSuccess({ plugins: [] }),
       });
 
       expect(effects.init$).toBeObservable(expected);
