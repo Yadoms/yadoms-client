@@ -1,4 +1,4 @@
-# Recommandations : 
+# Recommandations :
 
 1. Use `Intellij` IDE
 2. If `Intellij` IDE used, please install `Prettier plugin` and activate it by opening `package.json` file
@@ -6,7 +6,7 @@
 ![](./documentation-assets/prettier.png)
 
 3. Edit typescript config to use single quote when applying `import optimization`
-  On preferences 
+   On preferences
 
 ![](./documentation-assets/single-quotes.png)
 
@@ -14,7 +14,8 @@
 
 # Nx Generation command
 
-## Generate a library 
+## Generate a library
+
 ```
 npx nx generate @nrwl/angular:library --name=core --style=scss --importPath=@yadoms/core
 ```

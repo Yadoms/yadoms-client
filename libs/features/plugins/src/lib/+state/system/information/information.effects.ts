@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { createEffect, Actions, ofType } from '@ngrx/effects';
 import { fetch } from '@nrwl/angular';
 
@@ -9,14 +9,19 @@ import { map } from 'rxjs';
 
 @Injectable()
 export class InformationEffects {
+  private systemService = inject(SystemService);
+
   init$ = createEffect(() =>
     this.actions$.pipe(
       ofType(InformationActions.initInformation),
       fetch({
         run: (action) => {
-          return this.systemService.getInformation()
+          return this.systemService
+            .getInformation()
             .pipe(
-              map(information => InformationActions.loadInformationSuccess({ information }))
+              map((information) =>
+                InformationActions.loadInformationSuccess({ information })
+              )
             );
         },
         onError: (action, error) => {
@@ -27,5 +32,5 @@ export class InformationEffects {
     )
   );
 
-  constructor(private readonly actions$: Actions, private systemService: SystemService) {}
+  constructor(private readonly actions$: Actions) {}
 }
