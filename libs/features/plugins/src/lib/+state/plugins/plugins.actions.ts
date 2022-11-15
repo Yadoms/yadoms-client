@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { PluginEntity } from './plugin.models';
+import { PluginEntity } from './plugins.models';
 
 export const initPlugins = createAction('[Plugin Page] Init');
 

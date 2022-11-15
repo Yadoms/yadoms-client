@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { PluginEntity } from '../../+state/plugins/plugin.models';
+import { PluginEntity } from '../../+state/plugins/plugins.models';
 import { Observable, of } from 'rxjs';
 import { Store } from '@ngrx/store';
-import * as PluginSelectors from '../../+state/plugins/plugin.selectors';
-import * as PluginActions from '../../+state/plugins/plugin.actions';
+import * as PluginsSelectors from '../../+state/plugins/plugins.selectors';
+import * as PluginsActions from '../../+state/plugins/plugins.actions';
 
 @Component({
   selector: 'yadoms-plugins-page',
@@ -16,7 +16,7 @@ export class PluginsPageComponent implements OnInit {
   constructor(private store: Store) {}
 
   ngOnInit(): void {
-    this.store.dispatch(PluginActions.initPlugins());
-    this.plugins$ = this.store.select(PluginSelectors.getAllPlugins);
+    this.store.dispatch(PluginsActions.initPlugins());
+    this.plugins$ = this.store.select(PluginsSelectors.getAllPlugins);
   }
 }

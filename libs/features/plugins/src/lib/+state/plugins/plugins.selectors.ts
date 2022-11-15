@@ -1,27 +1,27 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import {
   PLUGIN_FEATURE_KEY,
-  pluginState,
+  pluginsState,
   pluginAdapter,
-} from './plugin.reducer';
+} from './plugins.reducer';
 
 // Lookup the 'Plugin' feature state managed by NgRx
 export const getPluginState =
-  createFeatureSelector<pluginState>(PLUGIN_FEATURE_KEY);
+  createFeatureSelector<pluginsState>(PLUGIN_FEATURE_KEY);
 
 const { selectAll } = pluginAdapter.getSelectors();
 
 export const getPluginLoaded = createSelector(
   getPluginState,
-  (state: pluginState) => state.loaded
+  (state: pluginsState) => state.loaded
 );
 
 export const getPluginError = createSelector(
   getPluginState,
-  (state: pluginState) => state.error
+  (state: pluginsState) => state.error
 );
 
 export const getAllPlugins = createSelector(
   getPluginState,
-  (state: pluginState) => selectAll(state)
+  (state: pluginsState) => selectAll(state)
 );

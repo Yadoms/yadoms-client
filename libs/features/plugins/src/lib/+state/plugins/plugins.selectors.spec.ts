@@ -1,10 +1,10 @@
-import { PluginEntity } from './plugin.models';
+import { PluginEntity } from './plugins.models';
 import {
   pluginAdapter,
   PluginPartialState,
   initialPluginState,
-} from './plugin.reducer';
-import * as PluginSelectors from './plugin.selectors';
+} from './plugins.reducer';
+import * as PluginsSelectors from './plugins.selectors';
 
 describe('Plugin Selectors', () => {
   const ERROR_MSG = 'No Error Available';
@@ -28,7 +28,7 @@ describe('Plugin Selectors', () => {
 
   beforeEach(() => {
     state = {
-      plugin: pluginAdapter.setAll(
+      plugins: pluginAdapter.setAll(
         [
           createPluginEntity('RFXCom'),
           createPluginEntity('EnOcean', '4.5.6', 'me'),
@@ -45,7 +45,7 @@ describe('Plugin Selectors', () => {
 
   describe('Plugin Selectors', () => {
     it('getAllPlugin() should return the list of Plugins', () => {
-      const results = PluginSelectors.getAllPlugins(state);
+      const results = PluginsSelectors.getAllPlugins(state);
       const selType = getPluginType(results[1]);
 
       expect(results.length).toBe(3);
@@ -53,13 +53,13 @@ describe('Plugin Selectors', () => {
     });
 
     it('getPluginLoaded() should return the current "loaded" status', () => {
-      const result = PluginSelectors.getPluginLoaded(state);
+      const result = PluginsSelectors.getPluginLoaded(state);
 
       expect(result).toBe(true);
     });
 
     it('getPluginError() should return the current "error" state', () => {
-      const result = PluginSelectors.getPluginError(state);
+      const result = PluginsSelectors.getPluginError(state);
 
       expect(result).toBe(ERROR_MSG);
     });

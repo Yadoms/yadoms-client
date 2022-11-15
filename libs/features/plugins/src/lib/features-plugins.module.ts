@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 import { PluginsPageComponent } from './components/plugins-page/plugins-page.component';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
-import * as fromPlugin from './+state/plugins/plugin.reducer';
-import { PluginEffects } from './+state/plugins/plugin.effects';
+import * as fromPlugin from './+state/plugins/plugins.reducer';
+import { PluginsEffects } from './+state/plugins/plugins.effects';
 import { HttpClientModule } from '@angular/common/http';
 
 export interface PluginsEnvironnement {
@@ -22,9 +22,9 @@ export const PLUGINS_ENVIRONNEMENT = new InjectionToken<PluginsEnvironnement>(
     CommonModule,
     StoreModule.forFeature(
       fromPlugin.PLUGIN_FEATURE_KEY,
-      fromPlugin.pluginReducer
+      fromPlugin.pluginsReducer
     ),
-    EffectsModule.forFeature([PluginEffects]),
+    EffectsModule.forFeature([PluginsEffects]),
   ],
   declarations: [PluginsPageComponent],
 })

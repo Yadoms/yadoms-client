@@ -1,12 +1,12 @@
 import { Action } from '@ngrx/store';
 
-import * as PluginActions from './plugin.actions';
-import { PluginEntity } from './plugin.models';
+import * as PluginActions from './plugins.actions';
+import { PluginEntity } from './plugins.models';
 import {
-  pluginState,
+  pluginsState,
   initialPluginState,
-  pluginReducer,
-} from './plugin.reducer';
+  pluginsReducer,
+} from './plugins.reducer';
 
 describe('Plugin Reducer', () => {
   const createPluginEntity = (
@@ -31,7 +31,7 @@ describe('Plugin Reducer', () => {
       ];
       const action = PluginActions.loadPluginsSuccess({ plugins });
 
-      const result: pluginState = pluginReducer(initialPluginState, action);
+      const result: pluginsState = pluginsReducer(initialPluginState, action);
 
       expect(result.loaded).toBe(true);
       expect(result.ids.length).toBe(2);
@@ -42,7 +42,7 @@ describe('Plugin Reducer', () => {
     it('should return the previous state', () => {
       const action = {} as Action;
 
-      const result = pluginReducer(initialPluginState, action);
+      const result = pluginsReducer(initialPluginState, action);
 
       expect(result).toBe(initialPluginState);
     });

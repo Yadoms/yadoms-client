@@ -2,12 +2,12 @@ import { inject, Injectable } from '@angular/core';
 import { createEffect, Actions, ofType } from '@ngrx/effects';
 import { fetch } from '@nrwl/angular';
 
-import * as PluginActions from './plugin.actions';
+import * as PluginActions from './plugins.actions';
 import { SystemService } from '../../services/system.service';
 import { map } from 'rxjs';
 
 @Injectable()
-export class PluginEffects {
+export class PluginsEffects {
   private systemService = inject(SystemService);
 
   init$ = createEffect(() =>

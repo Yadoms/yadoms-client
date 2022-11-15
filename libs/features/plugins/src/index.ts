@@ -1,10 +1,10 @@
-import * as PluginActions from './lib/+state/plugins/plugin.actions';
+import * as PluginActions from './lib/+state/plugins/plugins.actions';
 
-import * as PluginFeature from './lib/+state/plugins/plugin.reducer';
+import * as PluginFeature from './lib/+state/plugins/plugins.reducer';
 
-import * as PluginSelectors from './lib/+state/plugins/plugin.selectors';
+import * as PluginSelectors from './lib/+state/plugins/plugins.selectors';
 
-export * from './lib/+state/plugins/plugin.models';
+export * from './lib/+state/plugins/plugins.models';
 
 export { PluginActions, PluginFeature, PluginSelectors };
 export * from './lib/features-plugins.module';

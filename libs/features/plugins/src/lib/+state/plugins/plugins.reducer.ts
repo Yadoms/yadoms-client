@@ -1,45 +1,45 @@
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import { createReducer, on, Action } from '@ngrx/store';
 
-import * as PluginActions from './plugin.actions';
-import { PluginEntity } from './plugin.models';
+import * as PluginsActions from './plugins.actions';
+import { PluginEntity } from './plugins.models';
 
 export const PLUGIN_FEATURE_KEY = 'plugins';
 
-export interface pluginState extends EntityState<PluginEntity> {
+export interface pluginsState extends EntityState<PluginEntity> {
   selectedType?: string; // which Plugin record has been selected
   loaded: boolean; // has the Plugin list been loaded
   error?: string | null; // last known error (if any)
 }
 
 export interface PluginPartialState {
-  readonly [PLUGIN_FEATURE_KEY]: pluginState;
+  readonly [PLUGIN_FEATURE_KEY]: pluginsState;
 }
 
 export const pluginAdapter: EntityAdapter<PluginEntity> =
   createEntityAdapter<PluginEntity>();
 
-export const initialPluginState: pluginState = pluginAdapter.getInitialState({
+export const initialPluginState: pluginsState = pluginAdapter.getInitialState({
   // set initial required properties
   loaded: false,
 });
 
 const reducer = createReducer(
   initialPluginState,
-  on(PluginActions.initPlugins, (state) => ({
+  on(PluginsActions.initPlugins, (state) => ({
     ...state,
     loaded: false,
     error: null,
   })),
-  on(PluginActions.loadPluginsSuccess, (state, { plugins }) =>
+  on(PluginsActions.loadPluginsSuccess, (state, { plugins }) =>
     pluginAdapter.setAll(plugins, { ...state, loaded: true })
   ),
-  on(PluginActions.loadPluginsFailure, (state, { error }) => ({
+  on(PluginsActions.loadPluginsFailure, (state, { error }) => ({
     ...state,
     error,
   }))
 );
 
-export function pluginReducer(state: pluginState | undefined, action: Action) {
+export function pluginsReducer(state: pluginsState | undefined, action: Action) {
   return reducer(state, action);
 }

@@ -5,24 +5,24 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { hot } from 'jasmine-marbles';
 import { Observable } from 'rxjs';
 
-import * as PluginActions from './plugin.actions';
-import { PluginEffects } from './plugin.effects';
+import * as PluginActions from './plugins.actions';
+import { PluginsEffects } from './plugins.effects';
 
-describe('PluginEffects', () => {
+describe('PluginsEffects', () => {
   let actions: Observable<Action>;
-  let effects: PluginEffects;
+  let effects: PluginsEffects;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [],
       providers: [
-        PluginEffects,
+        PluginsEffects,
         provideMockActions(() => actions),
         provideMockStore(),
       ],
     });
 
-    effects = TestBed.inject(PluginEffects);
+    effects = TestBed.inject(PluginsEffects);
   });
 
   describe('init$', () => {
