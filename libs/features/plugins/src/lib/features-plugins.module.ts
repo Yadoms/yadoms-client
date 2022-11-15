@@ -10,6 +10,7 @@ import { HttpClientModule } from '@angular/common/http';
 export interface PluginsEnvironnement {
   production: boolean;
   pluginsUrl: string;
+  pluginsInstancesUrl: string;
 }
 
 export const PLUGINS_ENVIRONNEMENT = new InjectionToken<PluginsEnvironnement>(

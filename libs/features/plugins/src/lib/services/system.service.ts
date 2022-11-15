@@ -6,7 +6,7 @@ import {
   PLUGINS_ENVIRONNEMENT,
   PluginsEnvironnement,
 } from '../features-plugins.module';
-import { PluginEntity } from '../+state/plugins/plugins.models';
+import { PluginEntity, PluginInstanceEntity } from '../+state/plugins/plugins.models';
 
 @Injectable({
   providedIn: 'root',
@@ -24,7 +24,17 @@ export class SystemService {
       .get<{ plugins: PluginEntity[] }>(this.environnement.pluginsUrl)
       .pipe(
         tap(console.debug),
-        map((pluginsAnswer) => pluginsAnswer.plugins)
+        map((answer) => answer.plugins)
+      );
+  }
+
+  getPluginsInstances(): Observable<PluginInstanceEntity[]> {
+    console.log(this.environnement.pluginsInstancesUrl);
+    return this.http
+      .get<{ instances: PluginInstanceEntity[] }>(this.environnement.pluginsInstancesUrl)
+      .pipe(
+        tap(console.debug),
+        map((answer) => answer.instances)
       );
   }
 }
