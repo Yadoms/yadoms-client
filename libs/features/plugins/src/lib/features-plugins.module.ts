@@ -5,6 +5,7 @@ import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import * as fromInformation from './+state/plugins/plugin.reducer';
 import { PluginEffects } from './+state/plugins/plugin.effects';
+import { HttpClientModule } from '@angular/common/http';
 
 export interface PluginsEnvironnement {
   pluginsUrl: string;
@@ -16,6 +17,7 @@ export const PLUGINS_ENVIRONNEMENT = new InjectionToken<PluginsEnvironnement>(
 
 @NgModule({
   imports: [
+    HttpClientModule,
     CommonModule,
     StoreModule.forFeature(
       fromInformation.PLUGIN_FEATURE_KEY,

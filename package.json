@@ -5,8 +5,8 @@
   "scripts": {
     "ng": "nx",
     "postinstall": "node ./decorate-angular-cli.js",
-    "start:yadoms": "nx serve yadoms-cs",
-    "start:yadoms:inmemory": "npx nx serve yadoms-cs --proxy-config tools/proxy/proxy-server-in-memory.config.js --configuration=inmemory",
+    "start:yadoms-cs": "nx serve yadoms-cs",
+    "start:yadoms-cs:inmemory": "nx serve yadoms-cs --proxy-config tools/proxy/proxy-server-in-memory.config.js --configuration=inmemory",
     "build": "nx build",
     "test": "nx test"
   },

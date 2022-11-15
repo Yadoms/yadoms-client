@@ -1,0 +1,85 @@
+{
+  "version": 1,
+  "projects": {
+    "yadoms-cs": {
+      "projectType": "application",
+      "root": "apps/yadoms-cs",
+      "sourceRoot": "apps/yadoms-cs/src",
+      "prefix": "yd",
+      "architect": {
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "configurations": {
+            "production": {
+              "browserTarget": "yadoms-cs:build:production"
+            },
+            "development": {
+              "browserTarget": "yadoms-cs:build:development"
+            },
+            "inmemory": {
+              "browserTarget": "yadoms-cs:build:inmemory"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/apps/yadoms-cs",
+            "index": "apps/yadoms-cs/src/index.html",
+            "main": "apps/yadoms-cs/src/main.ts",
+            "polyfills": "apps/yadoms-cs/src/polyfills.ts",
+            "tsConfig": "apps/yadoms-cs/tsconfig.app.json",
+            "assets": [
+              "apps/yadoms-cs/src/favicon.ico",
+              "apps/yadoms-cs/src/assets"
+            ]
+          },
+          "configurations": {
+            "production": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kb",
+                  "maximumError": "1mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kb",
+                  "maximumError": "4kb"
+                }
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "apps/yadoms-cs/src/environments/environment.ts",
+                  "with": "apps/yadoms-cs/src/environments/environment.prod.ts"
+                }
+              ],
+              "outputHashing": "all"
+            },
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
+            },
+            "inmemory": {
+              "fileReplacements": [
+                {
+                  "replace": "apps/yadoms-cs/src/environments/environment.ts",
+                  "with": "apps/yadoms-cs/src/environments/environment.inmemory.ts"
+                }
+              ],
+              "sourceMap": true
+            }
+          },
+          "defaultConfiguration": "production"
+        }
+      },
+      "tags": []
+    }
+  }
+}

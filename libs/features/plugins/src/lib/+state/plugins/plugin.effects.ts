@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { createEffect, Actions, ofType } from '@ngrx/effects';
 import { fetch } from '@nrwl/angular';
 
@@ -8,12 +8,15 @@ import { map } from 'rxjs';
 
 @Injectable()
 export class PluginEffects {
+  private systemService = inject(SystemService);
+
   init$ = createEffect(() =>
     this.actions$.pipe(
       ofType(PluginActions.initPlugins),
       fetch({
         run: (action) => {
-          return this.systemService.getPlugins()
+          return this.systemService
+            .getPlugins()
             .pipe(
               map(plugins => PluginActions.loadPluginsSuccess({ plugins }))
             );
@@ -26,5 +29,5 @@ export class PluginEffects {
     )
   );
 
-  constructor(private readonly actions$: Actions, private systemService: SystemService) {}
+  constructor(private readonly actions$: Actions) {}
 }
