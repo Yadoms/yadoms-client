@@ -6,7 +6,8 @@ import {
   PLUGINS_ENVIRONNEMENT,
   PluginsEnvironnement,
 } from '../features-plugins.module';
-import { PluginEntity, PluginInstanceEntity } from '../+state/plugins/plugins.models';
+import { PluginEntity } from '../+state/plugins/plugins.models';
+import { PluginInstanceEntity } from '../+state/plugins-instances/plugins-instances.models';
 
 @Injectable({
   providedIn: 'root',

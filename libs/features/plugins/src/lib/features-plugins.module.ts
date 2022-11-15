@@ -6,6 +6,8 @@ import { EffectsModule } from '@ngrx/effects';
 import * as fromPlugin from './+state/plugins/plugins.reducer';
 import { PluginsEffects } from './+state/plugins/plugins.effects';
 import { HttpClientModule } from '@angular/common/http';
+import * as fromPluginsInstances from './+state/plugins-instances/plugins-instances.reducer';
+import { PluginsInstancesEffects } from './+state/plugins-instances/plugins-instances.effects';
 
 export interface PluginsEnvironnement {
   production: boolean;
@@ -26,6 +28,11 @@ export const PLUGINS_ENVIRONNEMENT = new InjectionToken<PluginsEnvironnement>(
       fromPlugin.pluginsReducer
     ),
     EffectsModule.forFeature([PluginsEffects]),
+    StoreModule.forFeature(
+      fromPluginsInstances.PLUGINS_INSTANCES_FEATURE_KEY,
+      fromPluginsInstances.pluginsInstancesReducer
+    ),
+    EffectsModule.forFeature([PluginsInstancesEffects]),
   ],
   declarations: [PluginsPageComponent],
 })
