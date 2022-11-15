@@ -17,7 +17,9 @@ export interface PluginPartialState {
 }
 
 export const pluginAdapter: EntityAdapter<PluginEntity> =
-  createEntityAdapter<PluginEntity>();
+  createEntityAdapter<PluginEntity>({
+    selectId: (plugin: PluginEntity) => plugin.type
+  });
 
 export const initialPluginState: pluginsState = pluginAdapter.getInitialState({
   // set initial required properties
