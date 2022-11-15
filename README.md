@@ -40,5 +40,5 @@ npx nx generate @nrwl/angular:component --name=plugins-page --export --path=libs
 ### Generate NGRX state
 
 ```bash
-npx nx generate @nrwl/angular:ngrx --name=information --module=libs/features/plugins/src/lib/features-plugins.module.ts --directory=+state/system/information --barrels
+npx nx generate @nrwl/angular:ngrx --name=information --module=libs/features/plugins/src/lib/features-plugins.module.ts --directory=+state/plugins --barrels
 ```

@@ -20,8 +20,8 @@ export class SystemService {
 
   getPlugins(): Observable<PluginEntity[]> {
     console.log(this.environnement.pluginsUrl);
-    return this.http.get<SystemInformationEntity[]>(
-      this.environnement.systemInformationUrl
+    return this.http.get<PluginEntity[]>(
+      this.environnement.pluginsUrl
     );
   }
 }

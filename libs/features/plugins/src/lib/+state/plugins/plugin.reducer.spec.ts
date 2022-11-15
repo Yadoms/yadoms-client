@@ -8,7 +8,7 @@ import {
   pluginReducer,
 } from './plugin.reducer';
 
-describe('Information Reducer', () => {
+describe('Plugin Reducer', () => {
   const createPluginEntity = (
     type: string,
     version = '1.2.3',

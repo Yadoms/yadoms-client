@@ -8,8 +8,8 @@ const PROXY_CONFIG = {
       let isInMemory = true;
       console.log(req.url);
       switch (req.url) {
-        case '/rest/v2/system/information':
-          res.end(require('../mocks/system/information'));
+        case '/rest/v2/plugins':
+          res.end(require('../mocks/plugins'));
           break;
         default:
           isInMemory = null;

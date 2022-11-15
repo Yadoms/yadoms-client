@@ -5,7 +5,7 @@ const apiUrl = '/rest/v2';
 
 export const environment = {
   production: false,
-  systemInformationUrl: `${apiUrl}/system/information`,
+  pluginsUrl: `${apiUrl}/plugins`,
 };
 
 /*
