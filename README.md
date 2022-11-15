@@ -8,7 +8,7 @@
    ![missing image](./documentation-assets/prettier.png)
 
 3. Edit typescript config to use single quote when applying `import optimization`
-  On preferences
+   On preferences
 
    ![missing image](./documentation-assets/single-quotes.png)
 

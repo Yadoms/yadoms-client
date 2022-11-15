@@ -8,8 +8,8 @@ import { PluginEffects } from './+state/plugins/plugin.effects';
 import { HttpClientModule } from '@angular/common/http';
 
 export interface PluginsEnvironnement {
-  production: boolean
-  pluginsUrl: string
+  production: boolean;
+  pluginsUrl: string;
 }
 
 export const PLUGINS_ENVIRONNEMENT = new InjectionToken<PluginsEnvironnement>(

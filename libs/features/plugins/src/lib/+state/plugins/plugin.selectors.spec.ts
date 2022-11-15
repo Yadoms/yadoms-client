@@ -36,7 +36,6 @@ describe('Plugin Selectors', () => {
         ],
         {
           ...initialPluginState,
-          selectedId: 'EnOcean',
           error: ERROR_MSG,
           loaded: true,
         }
@@ -51,13 +50,6 @@ describe('Plugin Selectors', () => {
 
       expect(results.length).toBe(3);
       expect(selType).toBe('RFXCom');
-    });
-
-    it('getSelected() should return the selected Entity', () => {
-      const result = PluginSelectors.getSelected(state) as PluginEntity;
-      const selType = getPluginType(result);
-
-      expect(selType).toBe('EnOcean');
     });
 
     it('getPluginLoaded() should return the current "loaded" status', () => {
