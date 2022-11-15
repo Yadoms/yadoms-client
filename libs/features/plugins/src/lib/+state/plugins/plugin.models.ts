@@ -8,5 +8,5 @@ export interface PluginEntity {
   url: string;
   supportManuallyCreatedDevice: boolean,
   supportDeviceRemovedNotification: boolean,
-  package: Object
+  package: object
 }
