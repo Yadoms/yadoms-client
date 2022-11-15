@@ -19,11 +19,10 @@ export interface PluginPartialState {
 export const pluginAdapter: EntityAdapter<PluginEntity> =
   createEntityAdapter<PluginEntity>();
 
-export const initialPluginState: pluginState =
-  pluginAdapter.getInitialState({
-    // set initial required properties
-    loaded: false,
-  });
+export const initialPluginState: pluginState = pluginAdapter.getInitialState({
+  // set initial required properties
+  loaded: false,
+});
 
 const reducer = createReducer(
   initialPluginState,
@@ -41,9 +40,6 @@ const reducer = createReducer(
   }))
 );
 
-export function pluginReducer(
-  state: pluginState | undefined,
-  action: Action
-) {
+export function pluginReducer(state: pluginState | undefined, action: Action) {
   return reducer(state, action);
 }

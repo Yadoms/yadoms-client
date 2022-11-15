@@ -13,15 +13,16 @@ describe('Plugin Selectors', () => {
     type: string,
     version = '1.2.3',
     author = 'author'
-  ) => ({
-    type,
-    version,
-    author,
-    url: '',
-    supportManuallyCreatedDevice: false,
-    supportDeviceRemovedNotification: false,
-    package: {}
-  } as PluginEntity);
+  ) =>
+    ({
+      type,
+      version,
+      author,
+      url: '',
+      supportManuallyCreatedDevice: false,
+      supportDeviceRemovedNotification: false,
+      package: {},
+    } as PluginEntity);
 
   let state: PluginPartialState;
 
@@ -31,7 +32,7 @@ describe('Plugin Selectors', () => {
         [
           createPluginEntity('RFXCom'),
           createPluginEntity('EnOcean', '4.5.6', 'me'),
-          createPluginEntity('LaMetricTime', '0.0.7', 'James')
+          createPluginEntity('LaMetricTime', '0.0.7', 'James'),
         ],
         {
           ...initialPluginState,
@@ -53,9 +54,7 @@ describe('Plugin Selectors', () => {
     });
 
     it('getSelected() should return the selected Entity', () => {
-      const result = PluginSelectors.getSelected(
-        state
-      ) as PluginEntity;
+      const result = PluginSelectors.getSelected(state) as PluginEntity;
       const selType = getPluginType(result);
 
       expect(selType).toBe('EnOcean');

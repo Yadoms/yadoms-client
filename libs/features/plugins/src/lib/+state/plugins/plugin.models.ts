@@ -6,7 +6,7 @@ export interface PluginEntity {
   version: string;
   author: string;
   url: string;
-  supportManuallyCreatedDevice: boolean,
-  supportDeviceRemovedNotification: boolean,
-  package: object
+  supportManuallyCreatedDevice: boolean;
+  supportDeviceRemovedNotification: boolean;
+  package: object;
 }

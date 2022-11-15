@@ -20,7 +20,7 @@ describe('Plugin Reducer', () => {
     url: '',
     supportManuallyCreatedDevice: false,
     supportDeviceRemovedNotification: false,
-    package: {}
+    package: {},
   });
 
   describe('valid Plugin actions', () => {
@@ -31,10 +31,7 @@ describe('Plugin Reducer', () => {
       ];
       const action = PluginActions.loadPluginsSuccess({ plugins });
 
-      const result: pluginState = pluginReducer(
-        initialPluginState,
-        action
-      );
+      const result: pluginState = pluginReducer(initialPluginState, action);
 
       expect(result.loaded).toBe(true);
       expect(result.ids.length).toBe(2);

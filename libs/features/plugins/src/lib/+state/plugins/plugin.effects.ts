@@ -18,7 +18,7 @@ export class PluginEffects {
           return this.systemService
             .getPlugins()
             .pipe(
-              map(plugins => PluginActions.loadPluginsSuccess({ plugins }))
+              map((plugins) => PluginActions.loadPluginsSuccess({ plugins }))
             );
         },
         onError: (action, error) => {

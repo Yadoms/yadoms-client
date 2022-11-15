@@ -16,15 +16,15 @@ export class SystemService {
     private http: HttpClient,
     @Inject(PLUGINS_ENVIRONNEMENT)
     private environnement: PluginsEnvironnement
-  ) { }
+  ) {}
 
   getPlugins(): Observable<PluginEntity[]> {
     console.log(this.environnement.pluginsUrl);
-    return this.http.get<{ plugins: PluginEntity[] }>(
-      this.environnement.pluginsUrl
-    ).pipe(
-      tap(console.debug),
-      map(pluginsAnswer => pluginsAnswer.plugins)
-    );
+    return this.http
+      .get<{ plugins: PluginEntity[] }>(this.environnement.pluginsUrl)
+      .pipe(
+        tap(console.debug),
+        map((pluginsAnswer) => pluginsAnswer.plugins)
+      );
   }
 }
