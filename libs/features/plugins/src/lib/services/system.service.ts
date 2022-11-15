@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@angular/core';
 
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, map, tap } from 'rxjs';
 import {
   PLUGINS_ENVIRONNEMENT,
   PluginsEnvironnement,
@@ -16,12 +16,15 @@ export class SystemService {
     private http: HttpClient,
     @Inject(PLUGINS_ENVIRONNEMENT)
     private environnement: PluginsEnvironnement
-  ) {}
+  ) { }
 
   getPlugins(): Observable<PluginEntity[]> {
     console.log(this.environnement.pluginsUrl);
-    return this.http.get<PluginEntity[]>(
+    return this.http.get<{ plugins: PluginEntity[] }>(
       this.environnement.pluginsUrl
+    ).pipe(
+      tap(console.debug),
+      map(pluginsAnswer => pluginsAnswer.plugins)
     );
   }
 }
