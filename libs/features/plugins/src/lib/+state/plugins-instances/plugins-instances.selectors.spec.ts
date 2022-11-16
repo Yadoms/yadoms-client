@@ -1,4 +1,4 @@
-import { PluginsInstancesEntity } from './plugins-instances.models';
+import { PluginInstanceEntity } from './plugins-instances.models';
 import {
   pluginsInstancesAdapter,
   PluginsInstancesPartialState,
@@ -8,12 +8,22 @@ import * as PluginsInstancesSelectors from './plugins-instances.selectors';
 
 describe('PluginsInstances Selectors', () => {
   const ERROR_MSG = 'No Error Available';
-  const getPluginsInstancesId = (it: PluginsInstancesEntity) => it.id;
-  const createPluginsInstancesEntity = (id: string, name = '') =>
-    ({
-      id,
-      name: name || `name-${id}`,
-    } as PluginsInstancesEntity);
+  const getPluginsInstancesId = (it: PluginInstanceEntity) => it.id;
+  const createPluginsInstancesEntity = (id: number, displayName = '') =>
+  ({
+    id,
+    displayName: displayName || `name-${id}`,
+    type: '',
+    configuration: {},
+    autoStart: false,
+    category: 'System',
+    state: 'Running',
+    fullState: {
+      state: 'Running',
+      messageId: '',
+      messageData: ''
+    }
+  } as PluginInstanceEntity);
 
   let state: PluginsInstancesPartialState;
 
@@ -21,9 +31,9 @@ describe('PluginsInstances Selectors', () => {
     state = {
       pluginsInstances: pluginsInstancesAdapter.setAll(
         [
-          createPluginsInstancesEntity('PRODUCT-AAA'),
-          createPluginsInstancesEntity('PRODUCT-BBB'),
-          createPluginsInstancesEntity('PRODUCT-CCC'),
+          createPluginsInstancesEntity(1, 'aaa'),
+          createPluginsInstancesEntity(2, 'bbb'),
+          createPluginsInstancesEntity(3, 'ccc'),
         ],
         {
           ...initialPluginsInstancesState,
@@ -47,7 +57,7 @@ describe('PluginsInstances Selectors', () => {
     it('getSelected() should return the selected Entity', () => {
       const result = PluginsInstancesSelectors.getSelected(
         state
-      ) as PluginsInstancesEntity;
+      ) as PluginInstanceEntity;
       const selId = getPluginsInstancesId(result);
 
       expect(selId).toBe('PRODUCT-BBB');

@@ -7,7 +7,7 @@ export interface PluginInstanceState {
 
 export interface PluginInstanceEntity {
 
-  id: string;
+  id: number;
   displayName: string;
   type: string;
   configuration: object;
