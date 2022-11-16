@@ -8,7 +8,13 @@
     "start:yadoms-cs": "nx serve yadoms-cs",
     "start:yadoms-cs:inmemory": "nx serve yadoms-cs --proxy-config tools/proxy/proxy-server-in-memory.config.js --configuration=inmemory",
     "build": "nx build",
-    "test": "nx test"
+    "test": "nx test",
+    "lint": "nx workspace-lint",
+    "eslint:fix": "eslint --fix",
+    "pre-commit": "lint-staged",
+    "affected:lint": "nx affected:lint",
+    "format:write": "nx format:write",
+    "format:check": "nx format:check"
   },
   "private": true,
   "dependencies": {
@@ -54,14 +60,29 @@
     "eslint": "~8.15.0",
     "eslint-config-prettier": "8.1.0",
     "eslint-plugin-cypress": "^2.10.3",
+    "husky": "^8.0.2",
     "jasmine-marbles": "~0.9.1",
     "jest": "28.1.1",
     "jest-environment-jsdom": "28.1.1",
     "jest-preset-angular": "~12.2.2",
+    "lint-staged": "^13.0.3",
     "nx": "15.0.13",
     "prettier": "^2.6.2",
     "ts-jest": "28.0.5",
     "ts-node": "10.9.1",
     "typescript": "~4.8.2"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,ts,tsx, jsx}": [
+      "eslint --quiet --fix"
+    ],
+    "*.{json,md,html,js,jsx,ts,tsx}": [
+      "prettier --write"
+    ]
   }
 }

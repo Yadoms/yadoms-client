@@ -18,7 +18,7 @@ export interface PluginPartialState {
 
 export const pluginAdapter: EntityAdapter<PluginEntity> =
   createEntityAdapter<PluginEntity>({
-    selectId: (plugin: PluginEntity) => plugin.type
+    selectId: (plugin: PluginEntity) => plugin.type,
   });
 
 export const initialPluginState: pluginsState = pluginAdapter.getInitialState({
@@ -42,6 +42,9 @@ const reducer = createReducer(
   }))
 );
 
-export function pluginsReducer(state: pluginsState | undefined, action: Action) {
+export function pluginsReducer(
+  state: pluginsState | undefined,
+  action: Action
+) {
   return reducer(state, action);
 }

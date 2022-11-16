@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { createEffect, Actions, ofType } from '@ngrx/effects';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { fetch } from '@nrwl/angular';
 
 import * as PluginActions from './plugins.actions';
@@ -14,7 +14,7 @@ export class PluginsEffects {
     this.actions$.pipe(
       ofType(PluginActions.initPlugins),
       fetch({
-        run: (action) => {
+        run: () => {
           return this.systemService
             .getPlugins()
             .pipe(
