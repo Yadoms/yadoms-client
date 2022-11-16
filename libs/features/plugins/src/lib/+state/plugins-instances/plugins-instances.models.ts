@@ -1,12 +1,10 @@
 export interface PluginInstanceState {
-
   state: string;
   messageId: string;
   messageData: string;
 }
 
 export interface PluginInstanceEntity {
-
   id: number;
   displayName: string;
   type: string;

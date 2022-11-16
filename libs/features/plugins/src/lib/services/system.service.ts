@@ -32,7 +32,9 @@ export class SystemService {
   getPluginsInstances(): Observable<PluginInstanceEntity[]> {
     console.log(this.environnement.pluginsInstancesUrl);
     return this.http
-      .get<{ instances: PluginInstanceEntity[] }>(this.environnement.pluginsInstancesUrl)
+      .get<{ instances: PluginInstanceEntity[] }>(
+        this.environnement.pluginsInstancesUrl
+      )
       .pipe(
         tap(console.debug),
         map((answer) => answer.instances)

@@ -17,6 +17,8 @@ export class PluginsPageComponent implements OnInit {
 
   ngOnInit(): void {
     this.store.dispatch(PluginsInstancesActions.initPluginsInstances());
-    this.pluginsInstances$ = this.store.select(PluginsInstancesSelectors.getAllPluginsInstances);
+    this.pluginsInstances$ = this.store.select(
+      PluginsInstancesSelectors.getAllPluginsInstances
+    );
   }
 }

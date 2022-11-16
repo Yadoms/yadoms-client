@@ -15,11 +15,13 @@ export class PluginsInstancesEffects {
       ofType(PluginsInstancesActions.initPluginsInstances),
       fetch({
         run: (action) => {
-          return this.systemService
-            .getPluginsInstances()
-            .pipe(
-              map((pluginsInstances) => PluginsInstancesActions.loadPluginsInstancesSuccess({ pluginsInstances }))
-            );
+          return this.systemService.getPluginsInstances().pipe(
+            map((pluginsInstances) =>
+              PluginsInstancesActions.loadPluginsInstancesSuccess({
+                pluginsInstances,
+              })
+            )
+          );
         },
         onError: (action, error) => {
           console.error('Error', error);

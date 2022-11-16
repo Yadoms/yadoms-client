@@ -5,8 +5,8 @@ const plugins = JSON.stringify({
       version: '1.0.2',
       author: 'Oussama DAHMAZ',
       url: '',
-      'supportManuallyCreatedDevice': false,
-      'supportDeviceRemovedNotification': false,
+      supportManuallyCreatedDevice: false,
+      supportDeviceRemovedNotification: false,
       package: {
         type: 'LametricTime',
         version: '1.0.2',
@@ -70,8 +70,8 @@ const plugins = JSON.stringify({
       version: '1.2.0',
       author: 'Jean-Michel BERHAULT',
       url: 'https://github.com/Yadoms/yadoms/wiki/SystemInformation',
-      'supportManuallyCreatedDevice': false,
-      'supportDeviceRemovedNotification': false,
+      supportManuallyCreatedDevice: false,
+      supportDeviceRemovedNotification: false,
       package: {
         type: 'SystemInformation',
         version: '1.2.0',
@@ -92,8 +92,8 @@ const plugins = JSON.stringify({
       version: '2.1.0',
       author: 'Sébastien Gallou',
       url: 'https://github.com/Yadoms/yadoms/wiki/EnOcean',
-      'supportManuallyCreatedDevice': false,
-      'supportDeviceRemovedNotification': true,
+      supportManuallyCreatedDevice: false,
+      supportDeviceRemovedNotification: true,
       package: {
         type: 'enOcean',
         version: '2.1.0',
@@ -1980,8 +1980,8 @@ const plugins = JSON.stringify({
       version: '1.3.1',
       author: 'Sébastien GALLOU',
       url: 'https://github.com/Yadoms/yadoms/wiki/Rfxcom',
-      'supportManuallyCreatedDevice': true,
-      'supportDeviceRemovedNotification': false,
+      supportManuallyCreatedDevice: true,
+      supportDeviceRemovedNotification: false,
       package: {
         type: 'rfxcom',
         version: '1.3.1',

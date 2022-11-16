@@ -10,20 +10,20 @@ describe('PluginsInstances Selectors', () => {
   const ERROR_MSG = 'No Error Available';
   const getPluginsInstancesId = (it: PluginInstanceEntity) => it.id;
   const createPluginsInstancesEntity = (id: number, displayName = '') =>
-  ({
-    id,
-    displayName: displayName || `name-${id}`,
-    type: '',
-    configuration: {},
-    autoStart: false,
-    category: 'System',
-    state: 'Running',
-    fullState: {
+    ({
+      id,
+      displayName: displayName || `name-${id}`,
+      type: '',
+      configuration: {},
+      autoStart: false,
+      category: 'System',
       state: 'Running',
-      messageId: '',
-      messageData: ''
-    }
-  } as PluginInstanceEntity);
+      fullState: {
+        state: 'Running',
+        messageId: '',
+        messageData: '',
+      },
+    } as PluginInstanceEntity);
 
   let state: PluginsInstancesPartialState;
 

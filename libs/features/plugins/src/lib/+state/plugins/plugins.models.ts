@@ -1,4 +1,3 @@
-
 export interface PluginEntity {
   type: string;
   version: string;
@@ -8,4 +7,3 @@ export interface PluginEntity {
   supportDeviceRemovedNotification: boolean;
   package: object;
 }
-
