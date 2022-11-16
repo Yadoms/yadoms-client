@@ -1,6 +1,6 @@
 # Yadoms client
 
-## Requirement : 
+## Requirement :
 
 1. Install nx globally
 
@@ -11,7 +11,7 @@ npm install -g nx
 2. Make husky pre-commit executable
 
 ```bash
-chmod ug+x .husky/pre-commit 
+chmod ug+x .husky/pre-commit
 git config core.filemode false
 ```
 

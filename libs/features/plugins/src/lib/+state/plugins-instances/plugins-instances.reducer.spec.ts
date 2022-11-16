@@ -1,7 +1,10 @@
 import { Action } from '@ngrx/store';
 
 import * as PluginsInstancesActions from './plugins-instances.actions';
-import { PluginInstanceEntity, PluginInstanceState } from './plugins-instances.models';
+import {
+  PluginInstanceEntity,
+  PluginInstanceState,
+} from './plugins-instances.models';
 import {
   PluginsInstancesState,
   initialPluginsInstancesState,
@@ -20,7 +23,7 @@ describe('PluginsInstances Reducer', () => {
     autoStart: false,
     category: '',
     state: '',
-    fullState: {} as PluginInstanceState
+    fullState: {} as PluginInstanceState,
   });
 
   describe('valid PluginsInstances actions', () => {

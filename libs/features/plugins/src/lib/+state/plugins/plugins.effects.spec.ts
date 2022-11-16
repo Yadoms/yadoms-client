@@ -18,24 +18,22 @@ describe('PluginsEffects', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientModule
-      ],
+      imports: [HttpClientModule],
       providers: [
         PluginsEffects,
         provideMockActions(() => actions),
         provideMockStore(),
         {
           provide: PLUGINS_ENVIRONNEMENT,
-          useValue: ''
+          useValue: '',
         },
         {
           provide: SystemService,
           useValue: {
-            getPlugins: jest.fn()
-          }
-        }
-      ]
+            getPlugins: jest.fn(),
+          },
+        },
+      ],
     });
     systemService = TestBed.inject(SystemService);
     effects = TestBed.inject(PluginsEffects);
@@ -43,14 +41,12 @@ describe('PluginsEffects', () => {
 
   describe('init$', () => {
     it('should work', () => {
-      jest
-        .spyOn(systemService, 'getPlugins')
-        .mockImplementation(() => of([]));
+      jest.spyOn(systemService, 'getPlugins').mockImplementation(() => of([]));
 
       actions = hot('-a-|', { a: PluginActions.initPlugins() });
 
       const expected = hot('-a-|', {
-        a: PluginActions.loadPluginsSuccess({ plugins: [] })
+        a: PluginActions.loadPluginsSuccess({ plugins: [] }),
       });
 
       expect(effects.init$).toBeObservable(expected);

@@ -13,7 +13,7 @@
     "eslint:fix": "eslint --fix",
     "pre-commit": "lint-staged",
     "affected:lint": "nx affected:lint",
-    "format:write": "nx format:write --base master",
+    "format:write": "nx format:write",
     "format:check": "nx format:check"
   },
   "private": true,

@@ -18,23 +18,21 @@ describe('PluginsInstancesEffects', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientModule
-      ],
+      imports: [HttpClientModule],
       providers: [
         PluginsInstancesEffects,
         provideMockActions(() => actions),
         provideMockStore(),
         {
           provide: PLUGINS_ENVIRONNEMENT,
-          useValue: ''
+          useValue: '',
         },
         {
           provide: SystemService,
           useValue: {
-            getPluginsInstances: jest.fn()
-          }
-        }
+            getPluginsInstances: jest.fn(),
+          },
+        },
       ],
     });
     systemService = TestBed.inject(SystemService);
@@ -43,7 +41,6 @@ describe('PluginsInstancesEffects', () => {
 
   describe('init$', () => {
     it('should work', () => {
-
       jest
         .spyOn(systemService, 'getPluginsInstances')
         .mockImplementation(() => of([]));
