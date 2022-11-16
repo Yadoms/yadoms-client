@@ -49,7 +49,7 @@ describe('Plugin Selectors', () => {
       const selType = getPluginType(results[1]);
 
       expect(results.length).toBe(3);
-      expect(selType).toBe('RFXCom');
+      expect(selType).toBe('EnOcean');
     });
 
     it('getPluginLoaded() should return the current "loaded" status', () => {

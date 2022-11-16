@@ -1,7 +1,7 @@
 import { Action } from '@ngrx/store';
 
 import * as PluginsInstancesActions from './plugins-instances.actions';
-import { PluginInstanceEntity } from './plugins-instances.models';
+import { PluginInstanceEntity, PluginInstanceState } from './plugins-instances.models';
 import {
   PluginsInstancesState,
   initialPluginsInstancesState,
@@ -10,18 +10,24 @@ import {
 
 describe('PluginsInstances Reducer', () => {
   const createPluginsInstancesEntity = (
-    id: string,
-    name = ''
+    id: number,
+    displayName = ''
   ): PluginInstanceEntity => ({
     id,
-    name: name || `name-${id}`,
+    displayName,
+    type: '',
+    configuration: {},
+    autoStart: false,
+    category: '',
+    state: '',
+    fullState: {} as PluginInstanceState
   });
 
   describe('valid PluginsInstances actions', () => {
     it('loadPluginsInstancesSuccess should return the list of known PluginsInstances', () => {
       const pluginsInstances = [
-        createPluginsInstancesEntity('PRODUCT-AAA'),
-        createPluginsInstancesEntity('PRODUCT-zzz'),
+        createPluginsInstancesEntity(1),
+        createPluginsInstancesEntity(2),
       ];
       const action = PluginsInstancesActions.loadPluginsInstancesSuccess({
         pluginsInstances,

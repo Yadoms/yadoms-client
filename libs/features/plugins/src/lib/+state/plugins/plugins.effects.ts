@@ -14,7 +14,7 @@ export class PluginsEffects {
     this.actions$.pipe(
       ofType(PluginActions.initPlugins),
       fetch({
-        run: () => {
+        run: (actions) => {
           return this.systemService
             .getPlugins()
             .pipe(

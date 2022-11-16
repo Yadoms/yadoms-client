@@ -3,34 +3,54 @@ import { provideMockActions } from '@ngrx/effects/testing';
 import { Action } from '@ngrx/store';
 import { provideMockStore } from '@ngrx/store/testing';
 import { hot } from 'jasmine-marbles';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 
 import * as PluginActions from './plugins.actions';
 import { PluginsEffects } from './plugins.effects';
+import { HttpClientModule } from '@angular/common/http';
+import { PLUGINS_ENVIRONNEMENT } from '../../features-plugins.module';
+import { SystemService } from '../../services/system.service';
 
 describe('PluginsEffects', () => {
   let actions: Observable<Action>;
   let effects: PluginsEffects;
+  let systemService: SystemService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [],
+      imports: [
+        HttpClientModule
+      ],
       providers: [
         PluginsEffects,
         provideMockActions(() => actions),
         provideMockStore(),
-      ],
+        {
+          provide: PLUGINS_ENVIRONNEMENT,
+          useValue: ''
+        },
+        {
+          provide: SystemService,
+          useValue: {
+            getPlugins: jest.fn()
+          }
+        }
+      ]
     });
-
+    systemService = TestBed.inject(SystemService);
     effects = TestBed.inject(PluginsEffects);
   });
 
   describe('init$', () => {
     it('should work', () => {
+      jest
+        .spyOn(systemService, 'getPlugins')
+        .mockImplementation(() => of([]));
+
       actions = hot('-a-|', { a: PluginActions.initPlugins() });
 
       const expected = hot('-a-|', {
-        a: PluginActions.loadPluginsSuccess({ plugins: [] }),
+        a: PluginActions.loadPluginsSuccess({ plugins: [] })
       });
 
       expect(effects.init$).toBeObservable(expected);
