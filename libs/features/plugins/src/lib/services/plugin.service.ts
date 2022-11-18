@@ -12,14 +12,14 @@ import { PluginInstanceEntity } from '../+state/plugins-instances/plugins-instan
 @Injectable({
   providedIn: 'root',
 })
-export class SystemService {
+export class PluginService {
   constructor(
     private http: HttpClient,
     @Inject(PLUGINS_ENVIRONNEMENT)
     private environnement: PluginsEnvironnement
   ) {}
 
-  getPlugins(): Observable<PluginEntity[]> {
+  getAll(): Observable<PluginEntity[]> {
     console.log(this.environnement.pluginsUrl);
     return this.http
       .get<{ plugins: PluginEntity[] }>(this.environnement.pluginsUrl)
@@ -29,7 +29,7 @@ export class SystemService {
       );
   }
 
-  getPluginsInstances(): Observable<PluginInstanceEntity[]> {
+  getAllInstances(): Observable<PluginInstanceEntity[]> {
     console.log(this.environnement.pluginsInstancesUrl);
     return this.http
       .get<{ instances: PluginInstanceEntity[] }>(

@@ -15,7 +15,7 @@ chmod ug+x .husky/pre-commit
 git config core.filemode false
 ```
 
-## Recommandations
+## Use Intellij (recommanded)
 
 1. Use `Intellij` IDE
 2. If `Intellij` IDE used, please install `Prettier plugin` and activate it by opening `package.json` file
@@ -28,6 +28,12 @@ git config core.filemode false
    ![missing image](./documentation-assets/single-quotes.png)
 
 4. Use `Nx Console` plugin
+
+## Use VSCode
+
+Using VSCode, some extensions may be useful :
+- [indent-rainbow](https://marketplace.visualstudio.com/items?itemName=oderwat.indent-rainbow)
+- [Nx Console](https://marketplace.visualstudio.com/items?itemName=nrwl.angular-console)
 
 ## Nx Generation command
 

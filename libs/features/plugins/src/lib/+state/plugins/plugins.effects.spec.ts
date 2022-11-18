@@ -9,12 +9,12 @@ import * as PluginActions from './plugins.actions';
 import { PluginsEffects } from './plugins.effects';
 import { HttpClientModule } from '@angular/common/http';
 import { PLUGINS_ENVIRONNEMENT } from '../../features-plugins.module';
-import { SystemService } from '../../services/system.service';
+import { PluginService } from '../../services/plugin.service';
 
 describe('PluginsEffects', () => {
   let actions: Observable<Action>;
   let effects: PluginsEffects;
-  let systemService: SystemService;
+  let systemService: PluginService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -28,14 +28,14 @@ describe('PluginsEffects', () => {
           useValue: '',
         },
         {
-          provide: SystemService,
+          provide: PluginService,
           useValue: {
             getPlugins: jest.fn(),
           },
         },
       ],
     });
-    systemService = TestBed.inject(SystemService);
+    systemService = TestBed.inject(PluginService);
     effects = TestBed.inject(PluginsEffects);
   });
 
