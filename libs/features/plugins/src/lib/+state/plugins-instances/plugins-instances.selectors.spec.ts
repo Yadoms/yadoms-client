@@ -37,7 +37,7 @@ describe('PluginsInstances Selectors', () => {
         ],
         {
           ...initialPluginsInstancesState,
-          selectedId: 'PRODUCT-BBB',
+          selectedId: 2,
           error: ERROR_MSG,
           loaded: true,
         }
@@ -51,7 +51,7 @@ describe('PluginsInstances Selectors', () => {
       const selId = getPluginsInstancesId(results[1]);
 
       expect(results.length).toBe(3);
-      expect(selId).toBe('PRODUCT-BBB');
+      expect(selId).toBe(2);
     });
 
     it('getSelected() should return the selected Entity', () => {
@@ -60,7 +60,7 @@ describe('PluginsInstances Selectors', () => {
       ) as PluginInstanceEntity;
       const selId = getPluginsInstancesId(result);
 
-      expect(selId).toBe('PRODUCT-BBB');
+      expect(selId).toBe(2);
     });
 
     it('getPluginsInstancesLoaded() should return the current "loaded" status', () => {

@@ -5,8 +5,11 @@ const apiUrl = '/rest/v2';
 
 export const environment = {
   production: false,
+  
   pluginsUrl: `${apiUrl}/plugins`,
   pluginsInstancesUrl: `${apiUrl}/plugins-instances`,
+  
+  informationUrl: `${apiUrl}/system/information`,
 };
 
 /*
