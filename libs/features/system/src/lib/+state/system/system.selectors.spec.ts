@@ -1,8 +1,8 @@
 import { SystemEntity } from './system.models';
 import {
   systemAdapter,
-  SystemPartialState,
-  initialSystemState,
+  SystemInformationPartialState,
+  initialSystemInformationState,
 } from './system.reducer';
 import * as SystemSelectors from './system.selectors';
 
@@ -15,7 +15,7 @@ describe('System Selectors', () => {
       name: name || `name-${id}`,
     } as SystemEntity);
 
-  let state: SystemPartialState;
+  let state: SystemInformationPartialState;
 
   beforeEach(() => {
     state = {
@@ -26,7 +26,7 @@ describe('System Selectors', () => {
           createSystemEntity('PRODUCT-CCC'),
         ],
         {
-          ...initialSystemState,
+          ...initialSystemInformationState,
           selectedId: 'PRODUCT-BBB',
           error: ERROR_MSG,
           loaded: true,

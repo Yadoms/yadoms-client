@@ -1,11 +1,9 @@
 import { SplitInterpolation } from "@angular/compiler";
 
 /**
- * Interface for the 'System' data
+ * Interface for the 'SystemInformation' data
  */
 export interface SystemInformationEntity {
-  id: string | number; // Primary ID // TODO virer ?
-
   platform: string;
   platformFamily: string;
   yadomsVersion: string;

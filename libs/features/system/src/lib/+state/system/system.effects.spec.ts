@@ -30,7 +30,7 @@ describe('SystemEffects', () => {
       actions = hot('-a-|', { a: SystemActions.initSystem() });
 
       const expected = hot('-a-|', {
-        a: SystemActions.loadSystemSuccess({ system: [] }),
+        a: SystemActions.loadSystemInformationSuccess({ system: [] }),
       });
 
       expect(effects.init$).toBeObservable(expected);

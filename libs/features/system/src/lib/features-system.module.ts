@@ -19,7 +19,7 @@ export const SYSTEM_ENVIRONNEMENT = new InjectionToken<SystemEnvironnement>(
   imports: [
     CommonModule,
     StoreModule.forFeature(
-      fromSystem.SYSTEM_FEATURE_KEY,
+      fromSystem.SYSTEM_INFORMATION_FEATURE_KEY,
       fromSystem.systemReducer
     ),
     EffectsModule.forFeature([SystemEffects]),

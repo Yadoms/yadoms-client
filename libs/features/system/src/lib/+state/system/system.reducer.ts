@@ -1,45 +1,44 @@
-import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import { createReducer, on, Action } from '@ngrx/store';
 
 import * as SystemActions from './system.actions';
 import { SystemInformationEntity } from './system.models';
 
-export const SYSTEM_FEATURE_KEY = 'information';
+export const SYSTEM_INFORMATION_FEATURE_KEY = 'information';
 
-export interface SystemState extends EntityState<SystemInformationEntity> {
-  selectedId?: string | number; // which System record has been selected
+export interface SystemInformationState {
   loaded: boolean; // has the System list been loaded
   error?: string | null; // last known error (if any)
+  information?:  SystemInformationEntity | null;
 }
 
-export interface SystemPartialState {
-  readonly [SYSTEM_FEATURE_KEY]: SystemState;
+export interface SystemInformationPartialState {
+  readonly [SYSTEM_INFORMATION_FEATURE_KEY]: SystemInformationState;
 }
 
-export const systemAdapter: EntityAdapter<SystemInformationEntity> =
-  createEntityAdapter<SystemInformationEntity>();
-
-export const initialSystemState: SystemState = systemAdapter.getInitialState({
+export const initialSystemInformationState: SystemInformationState = {
   // set initial required properties
-  loaded: false,
-});
+  loaded: false
+};
 
 const reducer = createReducer(
-  initialSystemState,
+  initialSystemInformationState,
   on(SystemActions.initSystem, (state) => ({
     ...state,
     loaded: false,
     error: null,
   })),
-  on(SystemActions.loadSystemSuccess, (state, { information }) =>
-    systemAdapter.setOne(information, { ...state, loaded: true })
-  ),
-  on(SystemActions.loadSystemFailure, (state, { error }) => ({
+  on(SystemActions.loadSystemInformationSuccess, (state, { information }) =>({
+    ...state,
+    information,
+    loaded: true,
+    error: null,
+  })),
+  on(SystemActions.loadSystemInformationFailure, (state, { error }) => ({
     ...state,
     error,
   }))
 );
 
-export function systemReducer(state: SystemState | undefined, action: Action) {
+export function systemReducer(state: SystemInformationState | undefined, action: Action) {
   return reducer(state, action);
 }

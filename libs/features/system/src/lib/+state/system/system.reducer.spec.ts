@@ -3,8 +3,8 @@ import { Action } from '@ngrx/store';
 import * as SystemActions from './system.actions';
 import { SystemEntity } from './system.models';
 import {
-  SystemState,
-  initialSystemState,
+  SystemInformationState,
+  initialSystemInformationState,
   systemReducer,
 } from './system.reducer';
 
@@ -20,9 +20,9 @@ describe('System Reducer', () => {
         createSystemEntity('PRODUCT-AAA'),
         createSystemEntity('PRODUCT-zzz'),
       ];
-      const action = SystemActions.loadSystemSuccess({ system });
+      const action = SystemActions.loadSystemInformationSuccess({ system });
 
-      const result: SystemState = systemReducer(initialSystemState, action);
+      const result: SystemInformationState = systemReducer(initialSystemInformationState, action);
 
       expect(result.loaded).toBe(true);
       expect(result.ids.length).toBe(2);
@@ -33,9 +33,9 @@ describe('System Reducer', () => {
     it('should return the previous state', () => {
       const action = {} as Action;
 
-      const result = systemReducer(initialSystemState, action);
+      const result = systemReducer(initialSystemInformationState, action);
 
-      expect(result).toBe(initialSystemState);
+      expect(result).toBe(initialSystemInformationState);
     });
   });
 });

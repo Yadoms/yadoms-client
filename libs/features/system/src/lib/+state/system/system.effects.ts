@@ -18,12 +18,12 @@ export class SystemEffects {
           return this.systemService
             .getInformation()
             .pipe(
-              map((information) => SystemActions.loadSystemSuccess({ information }))
+              map((information) => SystemActions.loadSystemInformationSuccess({ information }))
             );
         },
         onError: (action, error) => {
           console.error('Error', error);
-          return SystemActions.loadSystemFailure({ error });
+          return SystemActions.loadSystemInformationFailure({ error });
         },
       })
     )
