@@ -42,7 +42,7 @@ describe('PluginsInstancesEffects', () => {
   describe('init$', () => {
     it('should work', () => {
       jest
-        .spyOn(pluginService, 'getPluginsInstances')
+        .spyOn(pluginService, 'getAllInstances')
         .mockImplementation(() => of([]));
 
       actions = hot('-a-|', {

@@ -1,4 +1,3 @@
-import { SplitInterpolation } from "@angular/compiler";
 
 /**
  * Interface for the 'SystemInformation' data

@@ -41,7 +41,7 @@ describe('PluginsEffects', () => {
 
   describe('init$', () => {
     it('should work', () => {
-      jest.spyOn(pluginService, 'getPlugins').mockImplementation(() => of([]));
+      jest.spyOn(pluginService, 'getAll').mockImplementation(() => of([]));
 
       actions = hot('-a-|', { a: PluginActions.initPlugins() });
 

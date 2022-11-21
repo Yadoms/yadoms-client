@@ -1,7 +1,7 @@
 import { Action } from '@ngrx/store';
 
 import * as SystemActions from './system.actions';
-import { SystemEntity } from './system.models';
+import { SystemInformationEntity } from './system.models';
 import {
   SystemInformationState,
   initialSystemInformationState,
@@ -9,23 +9,36 @@ import {
 } from './system.reducer';
 
 describe('System Reducer', () => {
-  const createSystemEntity = (id: string, name = ''): SystemEntity => ({
-    id,
-    name: name || `name-${id}`,
+  const createSystemInformationEntity = (platform: string, yadomsVersion: string): SystemInformationEntity => ({
+    platform: platform,
+    platformFamily: '',
+    yadomsVersion: yadomsVersion,
+    startupTime: new Date(),
+    executablePath: '',
+    serverReady: false,
+    database: {
+      version: '',
+      size: 0,
+    },
+    databaseEngine: {
+      type: '',
+      version: '',
+    },
+    backupSupported: false,
+    developerMode: false
   });
 
   describe('valid System actions', () => {
     it('loadSystemSuccess should return the list of known System', () => {
-      const system = [
-        createSystemEntity('PRODUCT-AAA'),
-        createSystemEntity('PRODUCT-zzz'),
-      ];
-      const action = SystemActions.loadSystemInformationSuccess({ system });
+      const information = createSystemInformationEntity('linux', '3.0');
+      const action = SystemActions.loadSystemInformationSuccess({ information: information });
 
       const result: SystemInformationState = systemReducer(initialSystemInformationState, action);
 
       expect(result.loaded).toBe(true);
-      expect(result.ids.length).toBe(2);
+      expect(result.information).not.toBe(null);
+      expect(result.information?.platform).toBe('linux');
+      expect(result.information?.yadomsVersion).toBe('3.0');
     });
   });
 

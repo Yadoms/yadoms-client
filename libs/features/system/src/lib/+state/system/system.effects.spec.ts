@@ -30,7 +30,26 @@ describe('SystemEffects', () => {
       actions = hot('-a-|', { a: SystemActions.initSystem() });
 
       const expected = hot('-a-|', {
-        a: SystemActions.loadSystemInformationSuccess({ system: [] }),
+        a: SystemActions.loadSystemInformationSuccess({
+          information: {
+            platform: '',
+            platformFamily: '',
+            yadomsVersion: '',
+            startupTime: new Date,
+            executablePath:'',
+            serverReady: false,
+            database: {
+                version: '',
+                size: 0,
+            },
+            databaseEngine: {
+                type: '',
+                version:'',
+            },
+            backupSupported: false,
+            developerMode:  false
+          }
+        }),
       });
 
       expect(effects.init$).toBeObservable(expected);
