@@ -11,14 +11,20 @@ import * as SystemActions from '../../+state/system/system.actions';
   styleUrls: ['./system-page.component.scss'],
 })
 export class SystemPageComponent implements OnInit {
-  information$: Observable<SystemInformationEntity[]> = of([]);
+  // information$: Observable<SystemInformationEntity | undefined> = of();
+  information$: Observable<SystemInformationEntity>;
 
-  constructor(private store: Store) {}
+  constructor(private store: Store<{information:SystemInformationEntity}>) {
+    this.information$ = store.select('information');
+  }
 
   ngOnInit(): void {
     this.store.dispatch(SystemActions.initSystem());
-    this.information$ = this.store.select(
-      SystemSelectors.getAllSystem
-    );
+    // this.information$ = this.store.select(
+    //   SystemSelectors.getSelected
+    // );
+    // this.information$ = this.store.select(
+    //   SystemSelectors.getAllSystem
+    // );
   }
 }

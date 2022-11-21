@@ -4,7 +4,7 @@ import { createReducer, on, Action } from '@ngrx/store';
 import * as SystemActions from './system.actions';
 import { SystemInformationEntity } from './system.models';
 
-export const SYSTEM_FEATURE_KEY = 'system';
+export const SYSTEM_FEATURE_KEY = 'information';
 
 export interface SystemState extends EntityState<SystemInformationEntity> {
   selectedId?: string | number; // which System record has been selected
