@@ -14,7 +14,7 @@ import { PluginService } from '../../services/plugin.service';
 describe('PluginsInstancesEffects', () => {
   let actions: Observable<Action>;
   let effects: PluginsInstancesEffects;
-  let systemService: PluginService;
+  let pluginService: PluginService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -35,14 +35,14 @@ describe('PluginsInstancesEffects', () => {
         },
       ],
     });
-    systemService = TestBed.inject(PluginService);
+    pluginService = TestBed.inject(PluginService);
     effects = TestBed.inject(PluginsInstancesEffects);
   });
 
   describe('init$', () => {
     it('should work', () => {
       jest
-        .spyOn(systemService, 'getPluginsInstances')
+        .spyOn(pluginService, 'getPluginsInstances')
         .mockImplementation(() => of([]));
 
       actions = hot('-a-|', {

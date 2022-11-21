@@ -48,8 +48,7 @@ npx nx generate @nrwl/angular:library --name=core --style=scss --importPath=@yad
 ### Generate a feature library
 
 ```bash
-npx nx generate @nrwl/angular:library --name=features/plugins --style=scss --importPath=@yadoms/features/plugins --dry-run
-portPath=@yadoms/features/plugins
+npx nx generate @nrwl/angular:library --name=features/plugins --style=scss --importPath=@yadoms/features/plugins
 ```
 
 ### Generate a components into a feature module

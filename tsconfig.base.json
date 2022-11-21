@@ -17,6 +17,7 @@
     "paths": {
       "@yadoms/core": ["libs/core/src/index.ts"],
       "@yadoms/features/plugins": ["libs/features/plugins/src/index.ts"],
+      "@yadoms/features/system": ["libs/features/system/src/index.ts"],
       "@yadoms/shared": ["libs/shared/src/index.ts"]
     }
   },
