@@ -36,7 +36,25 @@ describe('SystemEffects', () => {
 
   describe('init$', () => {
     it('should work', () => {
-      jest.spyOn(systemService, 'getInformation').mockImplementation(() => of());
+      jest.spyOn(systemService, 'getInformation').mockImplementation(() => of(
+         {
+          platform: '',
+          platformFamily: '',
+          yadomsVersion: '',
+          startupTime: new Date,
+          executablePath:'',
+          serverReady: false,
+          database: {
+            version: '',
+            size: 0,
+          },
+          databaseEngine: {
+            type: '',
+            version:'',
+          },
+          backupSupported: false,
+          developerMode:  false
+        }));
 
       actions = hot('-a-|', { a: SystemActions.initSystem() });
 
