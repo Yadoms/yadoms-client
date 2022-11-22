@@ -30,7 +30,7 @@ describe('PluginsEffects', () => {
         {
           provide: PluginService,
           useValue: {
-            getPlugins: jest.fn(),
+            getAll: jest.fn(),
           },
         },
       ],

@@ -3,30 +3,41 @@ import { provideMockActions } from '@ngrx/effects/testing';
 import { Action } from '@ngrx/store';
 import { provideMockStore } from '@ngrx/store/testing';
 import { hot } from 'jasmine-marbles';
-import { Observable } from 'rxjs';
+import {Observable, of} from 'rxjs';
 
 import * as SystemActions from './system.actions';
 import { SystemEffects } from './system.effects';
+import {HttpClientModule} from "@angular/common/http";
+import {SYSTEM_ENVIRONNEMENT} from '../../features-system.module';
+import { SystemService } from '../../services/system.service';
 
 describe('SystemEffects', () => {
   let actions: Observable<Action>;
   let effects: SystemEffects;
+  let systemService: SystemService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [],
+      imports: [HttpClientModule],
       providers: [
         SystemEffects,
         provideMockActions(() => actions),
         provideMockStore(),
+        {
+          provide: SYSTEM_ENVIRONNEMENT,
+          useValue: '',
+        },
       ],
     });
 
+    systemService = TestBed.inject(SystemService);
     effects = TestBed.inject(SystemEffects);
   });
 
   describe('init$', () => {
     it('should work', () => {
+      jest.spyOn(systemService, 'getInformation').mockImplementation(() => of());
+
       actions = hot('-a-|', { a: SystemActions.initSystem() });
 
       const expected = hot('-a-|', {
