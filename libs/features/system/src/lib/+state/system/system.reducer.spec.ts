@@ -9,7 +9,10 @@ import {
 } from './system.reducer';
 
 describe('System Reducer', () => {
-  const createSystemInformationEntity = (platform: string, yadomsVersion: string): SystemInformationEntity => ({
+  const createSystemInformationEntity = (
+    platform: string,
+    yadomsVersion: string
+  ): SystemInformationEntity => ({
     platform: platform,
     platformFamily: '',
     yadomsVersion: yadomsVersion,
@@ -25,15 +28,20 @@ describe('System Reducer', () => {
       version: '',
     },
     backupSupported: false,
-    developerMode: false
+    developerMode: false,
   });
 
   describe('valid System actions', () => {
     it('loadSystemSuccess should return the list of known System', () => {
       const information = createSystemInformationEntity('linux', '3.0');
-      const action = SystemActions.loadSystemInformationSuccess({ information: information });
+      const action = SystemActions.loadSystemInformationSuccess({
+        information: information,
+      });
 
-      const result: SystemInformationState = systemReducer(initialSystemInformationState, action);
+      const result: SystemInformationState = systemReducer(
+        initialSystemInformationState,
+        action
+      );
 
       expect(result.loaded).toBe(true);
       expect(result.information).not.toBe(null);

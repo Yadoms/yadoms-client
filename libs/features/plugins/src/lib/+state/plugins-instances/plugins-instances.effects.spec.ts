@@ -31,7 +31,7 @@ describe('PluginsInstancesEffects', () => {
           provide: PluginService,
           useValue: {
             getPluginsInstances: jest.fn(),
-            getAllInstances: jest.fn()
+            getAllInstances: jest.fn(),
           },
         },
       ],

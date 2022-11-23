@@ -18,7 +18,9 @@ export class SystemEffects {
           return this.systemService
             .getInformation()
             .pipe(
-              map((information) => SystemActions.loadSystemInformationSuccess({ information }))
+              map((information) =>
+                SystemActions.loadSystemInformationSuccess({ information })
+              )
             );
         },
         onError: (action, error) => {

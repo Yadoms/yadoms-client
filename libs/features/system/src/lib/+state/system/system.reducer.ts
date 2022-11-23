@@ -8,7 +8,7 @@ export const SYSTEM_INFORMATION_FEATURE_KEY = 'information';
 export interface SystemInformationState {
   loaded: boolean; // has the System list been loaded
   error?: string | null; // last known error (if any)
-  information?:  SystemInformationEntity | null;
+  information?: SystemInformationEntity | null;
 }
 
 export interface SystemInformationPartialState {
@@ -17,7 +17,7 @@ export interface SystemInformationPartialState {
 
 export const initialSystemInformationState: SystemInformationState = {
   // set initial required properties
-  loaded: false
+  loaded: false,
 };
 
 const reducer = createReducer(
@@ -27,7 +27,7 @@ const reducer = createReducer(
     loaded: false,
     error: null,
   })),
-  on(SystemActions.loadSystemInformationSuccess, (state, { information }) =>({
+  on(SystemActions.loadSystemInformationSuccess, (state, { information }) => ({
     ...state,
     information,
     loaded: true,
@@ -39,6 +39,9 @@ const reducer = createReducer(
   }))
 );
 
-export function systemReducer(state: SystemInformationState | undefined, action: Action) {
+export function systemReducer(
+  state: SystemInformationState | undefined,
+  action: Action
+) {
   return reducer(state, action);
 }
