@@ -5,6 +5,6 @@ export const environment = {
 
   pluginsUrl: `${apiUrl}/plugins`,
   pluginsInstancesUrl: `${apiUrl}/plugins-instances`,
-  
+
   informationUrl: `${apiUrl}/system/information`,
 };

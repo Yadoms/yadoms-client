@@ -35,4 +35,5 @@ export class FeaturesSystemModule {
       ngModule: FeaturesSystemModule,
       providers: [{ provide: SYSTEM_ENVIRONNEMENT, useValue: environnement }],
     };
-  }}
+  }
+}

@@ -3,12 +3,12 @@ import { provideMockActions } from '@ngrx/effects/testing';
 import { Action } from '@ngrx/store';
 import { provideMockStore } from '@ngrx/store/testing';
 import { hot } from 'jasmine-marbles';
-import {Observable, of} from 'rxjs';
+import { Observable, of } from 'rxjs';
 
 import * as SystemActions from './system.actions';
 import { SystemEffects } from './system.effects';
-import {HttpClientModule} from "@angular/common/http";
-import {SYSTEM_ENVIRONNEMENT} from '../../features-system.module';
+import { HttpClientModule } from '@angular/common/http';
+import { SYSTEM_ENVIRONNEMENT } from '../../features-system.module';
 import { SystemService } from '../../services/system.service';
 
 describe('SystemEffects', () => {
@@ -36,13 +36,15 @@ describe('SystemEffects', () => {
 
   describe('init$', () => {
     it('should work', () => {
-      jest.spyOn(systemService, 'getInformation').mockImplementation(() => of(
-         {
+      const startupTime: Date = new Date();
+
+      jest.spyOn(systemService, 'getInformation').mockImplementation(() =>
+        of({
           platform: '',
           platformFamily: '',
           yadomsVersion: '',
-          startupTime: new Date,
-          executablePath:'',
+          startupTime: startupTime,
+          executablePath: '',
           serverReady: false,
           database: {
             version: '',
@@ -50,11 +52,12 @@ describe('SystemEffects', () => {
           },
           databaseEngine: {
             type: '',
-            version:'',
+            version: '',
           },
           backupSupported: false,
-          developerMode:  false
-        }));
+          developerMode: false,
+        })
+      );
 
       actions = hot('-a-|', { a: SystemActions.initSystem() });
 
@@ -64,20 +67,20 @@ describe('SystemEffects', () => {
             platform: '',
             platformFamily: '',
             yadomsVersion: '',
-            startupTime: new Date,
-            executablePath:'',
+            startupTime: startupTime,
+            executablePath: '',
             serverReady: false,
             database: {
-                version: '',
-                size: 0,
+              version: '',
+              size: 0,
             },
             databaseEngine: {
-                type: '',
-                version:'',
+              type: '',
+              version: '',
             },
             backupSupported: false,
-            developerMode:  false
-          }
+            developerMode: false,
+          },
         }),
       });
 

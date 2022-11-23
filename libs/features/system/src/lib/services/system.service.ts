@@ -9,21 +9,21 @@ import {
 import { SystemInformationEntity } from '../+state/system/system.models';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class SystemService {
-
   constructor(
     private http: HttpClient,
     @Inject(SYSTEM_ENVIRONNEMENT)
-    private environnement: SystemEnvironnement) { }
+    private environnement: SystemEnvironnement
+  ) {}
 
-    getInformation(): Observable<SystemInformationEntity> {
-      console.log(this.environnement.informationUrl);
-      return this.http
-        .get<{ information: SystemInformationEntity }>(this.environnement.informationUrl)
-        .pipe(
-          tap(console.debug)
-        );
-    }
+  getInformation(): Observable<SystemInformationEntity> {
+    console.log(this.environnement.informationUrl);
+    return this.http
+      .get<{ information: SystemInformationEntity }>(
+        this.environnement.informationUrl
+      )
+      .pipe(tap(console.debug));
+  }
 }

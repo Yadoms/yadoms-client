@@ -12,8 +12,7 @@ import * as SystemActions from '../../+state/system/system.actions';
 export class SystemPageComponent implements OnInit {
   information$: Observable<SystemInformationEntity> = of();
 
-  constructor(private store: Store<{ information: SystemInformationEntity }>) {
-  }
+  constructor(private store: Store<{ information: SystemInformationEntity }>) {}
 
   ngOnInit(): void {
     this.information$ = this.store.select('information');

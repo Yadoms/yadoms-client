@@ -1,4 +1,3 @@
-
 /**
  * Interface for the 'SystemInformation' data
  */
@@ -7,16 +6,16 @@ export interface SystemInformationEntity {
   platformFamily: string;
   yadomsVersion: string;
   startupTime: Date;
-  executablePath:string;
+  executablePath: string;
   serverReady: boolean;
   database: {
-      version: string;
-      size: number;
-  },
+    version: string;
+    size: number;
+  };
   databaseEngine: {
-      type: string;
-      version:string;
-  },
+    type: string;
+    version: string;
+  };
   backupSupported: boolean;
-  developerMode:  boolean;
+  developerMode: boolean;
 }

@@ -32,6 +32,7 @@ git config core.filemode false
 ## Use VSCode
 
 Using VSCode, some extensions may be useful :
+
 - [indent-rainbow](https://marketplace.visualstudio.com/items?itemName=oderwat.indent-rainbow)
 - [Nx Console](https://marketplace.visualstudio.com/items?itemName=nrwl.angular-console)
 
