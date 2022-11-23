@@ -14,6 +14,9 @@ const PROXY_CONFIG = {
         case '/rest/v2/plugins-instances':
           res.end(require('../mocks/plugins-instances'));
           break;
+        case '/rest/v2/system/information':
+          res.end(require('../mocks/system/information'));
+          break;
         default:
           isInMemory = null;
           break;
