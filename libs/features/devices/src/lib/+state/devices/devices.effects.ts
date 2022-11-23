@@ -16,7 +16,9 @@ export class DevicesEffects {
       fetch({
         run: (action) => {
           return this.devicesService
-            .getDevices()
+            .getDevices({
+              fromPluginInstance: 1
+            })
             .pipe(
               map((devices) => DevicesActions.loadDevicesSuccess({ devices }))
             );
