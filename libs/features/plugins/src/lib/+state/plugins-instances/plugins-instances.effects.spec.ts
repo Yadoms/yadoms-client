@@ -8,13 +8,13 @@ import { Observable, of } from 'rxjs';
 import * as PluginsInstancesActions from './plugins-instances.actions';
 import { PluginsInstancesEffects } from './plugins-instances.effects';
 import { HttpClientModule } from '@angular/common/http';
-import { PLUGINS_ENVIRONNEMENT } from '../../features-plugins.module';
-import { PluginService } from '../../services/plugin.service';
+import { PLUGINS_ENVIRONMENT } from '../../features-plugins.module';
+import { PluginsService } from '../../services/plugins.service';
 
 describe('PluginsInstancesEffects', () => {
   let actions: Observable<Action>;
   let effects: PluginsInstancesEffects;
-  let pluginService: PluginService;
+  let pluginService: PluginsService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -24,11 +24,11 @@ describe('PluginsInstancesEffects', () => {
         provideMockActions(() => actions),
         provideMockStore(),
         {
-          provide: PLUGINS_ENVIRONNEMENT,
+          provide: PLUGINS_ENVIRONMENT,
           useValue: '',
         },
         {
-          provide: PluginService,
+          provide: PluginsService,
           useValue: {
             getPluginsInstances: jest.fn(),
             getAllInstances: jest.fn(),
@@ -36,7 +36,7 @@ describe('PluginsInstancesEffects', () => {
         },
       ],
     });
-    pluginService = TestBed.inject(PluginService);
+    pluginService = TestBed.inject(PluginsService);
     effects = TestBed.inject(PluginsInstancesEffects);
   });
 

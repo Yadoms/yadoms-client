@@ -8,13 +8,13 @@ import { Observable, of } from 'rxjs';
 import * as PluginActions from './plugins.actions';
 import { PluginsEffects } from './plugins.effects';
 import { HttpClientModule } from '@angular/common/http';
-import { PLUGINS_ENVIRONNEMENT } from '../../features-plugins.module';
-import { PluginService } from '../../services/plugin.service';
+import { PLUGINS_ENVIRONMENT } from '../../features-plugins.module';
+import { PluginsService } from '../../services/plugins.service';
 
 describe('PluginsEffects', () => {
   let actions: Observable<Action>;
   let effects: PluginsEffects;
-  let pluginService: PluginService;
+  let pluginsService: PluginsService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -24,24 +24,24 @@ describe('PluginsEffects', () => {
         provideMockActions(() => actions),
         provideMockStore(),
         {
-          provide: PLUGINS_ENVIRONNEMENT,
+          provide: PLUGINS_ENVIRONMENT,
           useValue: '',
         },
         {
-          provide: PluginService,
+          provide: PluginsService,
           useValue: {
             getAll: jest.fn(),
           },
         },
       ],
     });
-    pluginService = TestBed.inject(PluginService);
+    pluginsService = TestBed.inject(PluginsService);
     effects = TestBed.inject(PluginsEffects);
   });
 
   describe('init$', () => {
     it('should work', () => {
-      jest.spyOn(pluginService, 'getAll').mockImplementation(() => of([]));
+      jest.spyOn(pluginsService, 'getAll').mockImplementation(() => of([]));
 
       actions = hot('-a-|', { a: PluginActions.initPlugins() });
 

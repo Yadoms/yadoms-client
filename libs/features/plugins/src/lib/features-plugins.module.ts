@@ -1,22 +1,22 @@
-import { InjectionToken, ModuleWithProviders, NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { PluginsPageComponent } from './components/plugins-page/plugins-page.component';
-import { StoreModule } from '@ngrx/store';
-import { EffectsModule } from '@ngrx/effects';
+import {InjectionToken, ModuleWithProviders, NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {PluginsPageComponent} from './components/plugins-page/plugins-page.component';
+import {StoreModule} from '@ngrx/store';
+import {EffectsModule} from '@ngrx/effects';
 import * as fromPlugin from './+state/plugins/plugins.reducer';
-import { PluginsEffects } from './+state/plugins/plugins.effects';
-import { HttpClientModule } from '@angular/common/http';
+import {PluginsEffects} from './+state/plugins/plugins.effects';
+import {HttpClientModule} from '@angular/common/http';
 import * as fromPluginsInstances from './+state/plugins-instances/plugins-instances.reducer';
-import { PluginsInstancesEffects } from './+state/plugins-instances/plugins-instances.effects';
+import {PluginsInstancesEffects} from './+state/plugins-instances/plugins-instances.effects';
 
-export interface PluginsEnvironnement {
+export interface PluginsEnvironment {
   production: boolean;
   pluginsUrl: string;
   pluginsInstancesUrl: string;
 }
 
-export const PLUGINS_ENVIRONNEMENT = new InjectionToken<PluginsEnvironnement>(
-  'PLUGINS_ENVIRONNEMENT'
+export const PLUGINS_ENVIRONMENT = new InjectionToken<PluginsEnvironment>(
+  'PLUGINS_ENVIRONMENT'
 );
 
 @NgModule({
@@ -38,11 +38,11 @@ export const PLUGINS_ENVIRONNEMENT = new InjectionToken<PluginsEnvironnement>(
 })
 export class FeaturesPluginsModule {
   static forRoot(
-    environnement: PluginsEnvironnement
+    environment: PluginsEnvironment
   ): ModuleWithProviders<FeaturesPluginsModule> {
     return {
       ngModule: FeaturesPluginsModule,
-      providers: [{ provide: PLUGINS_ENVIRONNEMENT, useValue: environnement }],
+      providers: [{provide: PLUGINS_ENVIRONMENT, useValue: environment}],
     };
   }
 }

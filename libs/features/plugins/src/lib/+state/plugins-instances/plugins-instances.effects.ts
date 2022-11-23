@@ -3,12 +3,12 @@ import { createEffect, Actions, ofType } from '@ngrx/effects';
 import { fetch } from '@nrwl/angular';
 
 import * as PluginsInstancesActions from './plugins-instances.actions';
-import { PluginService } from '../../services/plugin.service';
+import { PluginsService } from '../../services/plugins.service';
 import { map } from 'rxjs';
 
 @Injectable()
 export class PluginsInstancesEffects {
-  private pluginService = inject(PluginService);
+  private pluginService = inject(PluginsService);
 
   init$ = createEffect(() =>
     this.actions$.pipe(

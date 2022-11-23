@@ -8,7 +8,7 @@ import { Observable, of } from 'rxjs';
 import * as SystemActions from './system.actions';
 import { SystemEffects } from './system.effects';
 import { HttpClientModule } from '@angular/common/http';
-import { SYSTEM_ENVIRONNEMENT } from '../../features-system.module';
+import { SYSTEM_ENVIRONMENT } from '../../features-system.module';
 import { SystemService } from '../../services/system.service';
 
 describe('SystemEffects', () => {
@@ -24,7 +24,7 @@ describe('SystemEffects', () => {
         provideMockActions(() => actions),
         provideMockStore(),
         {
-          provide: SYSTEM_ENVIRONNEMENT,
+          provide: SYSTEM_ENVIRONMENT,
           useValue: '',
         },
       ],

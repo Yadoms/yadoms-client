@@ -6,13 +6,13 @@ import { EffectsModule } from '@ngrx/effects';
 import * as fromSystem from './+state/system/system.reducer';
 import { SystemEffects } from './+state/system/system.effects';
 
-export interface SystemEnvironnement {
+export interface SystemEnvironment {
   production: boolean;
   informationUrl: string;
 }
 
-export const SYSTEM_ENVIRONNEMENT = new InjectionToken<SystemEnvironnement>(
-  'SYSTEM_ENVIRONNEMENT'
+export const SYSTEM_ENVIRONMENT = new InjectionToken<SystemEnvironment>(
+  'SYSTEM_ENVIRONMENT'
 );
 
 @NgModule({
@@ -29,11 +29,11 @@ export const SYSTEM_ENVIRONNEMENT = new InjectionToken<SystemEnvironnement>(
 })
 export class FeaturesSystemModule {
   static forRoot(
-    environnement: SystemEnvironnement
+    environment: SystemEnvironment
   ): ModuleWithProviders<FeaturesSystemModule> {
     return {
       ngModule: FeaturesSystemModule,
-      providers: [{ provide: SYSTEM_ENVIRONNEMENT, useValue: environnement }],
+      providers: [{ provide: SYSTEM_ENVIRONMENT, useValue: environment }],
     };
   }
 }

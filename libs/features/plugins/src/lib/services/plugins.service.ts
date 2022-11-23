@@ -3,8 +3,8 @@ import { Inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map, tap } from 'rxjs';
 import {
-  PLUGINS_ENVIRONNEMENT,
-  PluginsEnvironnement,
+  PLUGINS_ENVIRONMENT,
+  PluginsEnvironment,
 } from '../features-plugins.module';
 import { PluginEntity } from '../+state/plugins/plugins.models';
 import { PluginInstanceEntity } from '../+state/plugins-instances/plugins-instances.models';
@@ -12,17 +12,17 @@ import { PluginInstanceEntity } from '../+state/plugins-instances/plugins-instan
 @Injectable({
   providedIn: 'root',
 })
-export class PluginService {
+export class PluginsService {
   constructor(
     private http: HttpClient,
-    @Inject(PLUGINS_ENVIRONNEMENT)
-    private environnement: PluginsEnvironnement
+    @Inject(PLUGINS_ENVIRONMENT)
+    private environment: PluginsEnvironment
   ) {}
 
   getAll(): Observable<PluginEntity[]> {
-    console.log(this.environnement.pluginsUrl);
+    console.log(this.environment.pluginsUrl);
     return this.http
-      .get<{ plugins: PluginEntity[] }>(this.environnement.pluginsUrl)
+      .get<{ plugins: PluginEntity[] }>(this.environment.pluginsUrl)
       .pipe(
         tap(console.debug),
         map((answer) => answer.plugins)
@@ -30,10 +30,10 @@ export class PluginService {
   }
 
   getAllInstances(): Observable<PluginInstanceEntity[]> {
-    console.log(this.environnement.pluginsInstancesUrl);
+    console.log(this.environment.pluginsInstancesUrl);
     return this.http
       .get<{ instances: PluginInstanceEntity[] }>(
-        this.environnement.pluginsInstancesUrl
+        this.environment.pluginsInstancesUrl
       )
       .pipe(
         tap(console.debug),
