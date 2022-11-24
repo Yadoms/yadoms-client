@@ -7,7 +7,7 @@ const PROXY_CONFIG = {
     bypass: function (req, res, proxyOptions) {
       let isInMemory = true;
       console.log(req.url);
-      switch (req.url) {
+      switch (req.url.substring(0, req.url.indexOf('?'))) {
         case '/rest/v2/plugins':
           res.end(require('../mocks/plugins'));
           break;
