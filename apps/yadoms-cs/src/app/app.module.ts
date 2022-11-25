@@ -8,15 +8,15 @@ import { RouterModule } from '@angular/router';
 import { ROUTES } from './app.routes';
 import {
   FeaturesPluginsModule,
-  PluginsEnvironment
+  PluginsEnvironment,
 } from '@yadoms/features/plugins';
 import {
   FeaturesDevicesModule,
-  DevicesEnvironment
+  DevicesEnvironment,
 } from '@yadoms/features/devices';
 import {
   FeaturesSystemModule,
-  SystemEnvironment
+  SystemEnvironment,
 } from '@yadoms/features/system';
 import { environment } from '../environments/environment';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
@@ -33,10 +33,9 @@ import { EffectsModule } from '@ngrx/effects';
     FeaturesSystemModule.forRoot(environment as SystemEnvironment),
     StoreModule.forRoot({}),
     EffectsModule.forRoot([]),
-    !environment.production ? StoreDevtoolsModule.instrument() : []
+    !environment.production ? StoreDevtoolsModule.instrument() : [],
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule {
-}
+export class AppModule {}

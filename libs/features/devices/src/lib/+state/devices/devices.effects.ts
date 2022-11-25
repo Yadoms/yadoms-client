@@ -24,11 +24,10 @@ export class DevicesEffects {
         onError: (action, error) => {
           console.error('Error', error);
           return DevicesActions.loadDevicesFailure({ error });
-        }
+        },
       })
     )
   );
 
-  constructor(private readonly actions$: Actions) {
-  }
+  constructor(private readonly actions$: Actions) {}
 }

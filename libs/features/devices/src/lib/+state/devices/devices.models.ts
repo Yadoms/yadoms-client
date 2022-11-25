@@ -3,7 +3,7 @@
  */
 export interface DeviceEntity {
   id: number; // Primary ID
-  pluginInstance:number;
+  pluginInstance: number;
   friendlyName: string;
   details: object;
   configuration: object;

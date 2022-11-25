@@ -16,9 +16,6 @@ export class DevicesPageComponent implements OnInit {
 
   ngOnInit(): void {
     this.store.dispatch(DevicesActions.initDevices());
-    this.devices = this.store.select(
-      DevicesSelectors.getAllDevices
-    );
-
+    this.devices = this.store.select(DevicesSelectors.getAllDevices);
   }
 }

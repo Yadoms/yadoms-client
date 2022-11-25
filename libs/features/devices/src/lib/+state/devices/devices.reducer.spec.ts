@@ -5,25 +5,28 @@ import { DeviceEntity } from './devices.models';
 import {
   DevicesState,
   initialDevicesState,
-  devicesReducer
+  devicesReducer,
 } from './devices.reducer';
 
 describe('Devices Reducer', () => {
-  const createDevicesEntity = (id: number, friendlyName = ''): DeviceEntity => ({
+  const createDevicesEntity = (
+    id: number,
+    friendlyName = ''
+  ): DeviceEntity => ({
     id,
     pluginInstance: 0,
     friendlyName,
     details: {},
     configuration: {},
     type: '',
-    blacklisted: false
+    blacklisted: false,
   });
 
   describe('valid Devices actions', () => {
     it('loadDevicesSuccess should return the list of known Devices', () => {
       const devices = [
         createDevicesEntity(3, 'first'),
-        createDevicesEntity(5, 'second')
+        createDevicesEntity(5, 'second'),
       ];
       const action = DevicesActions.loadDevicesSuccess({ devices });
 

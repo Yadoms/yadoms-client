@@ -25,15 +25,15 @@ describe('DevicesEffects', () => {
         provideMockStore(),
         {
           provide: DEVICES_ENVIRONMENT,
-          useValue: ''
+          useValue: '',
         },
         {
           provide: DevicesService,
           useValue: {
-            getDevices: jest.fn()
-          }
-        }
-      ]
+            getDevices: jest.fn(),
+          },
+        },
+      ],
     });
 
     devicesService = TestBed.inject(DevicesService);

@@ -3,9 +3,6 @@ import { createReducer, on, Action } from '@ngrx/store';
 
 import * as DevicesActions from './devices.actions';
 import { DeviceEntity } from './devices.models';
-import {
-  pluginsInstancesAdapter
-} from '../../../../../plugins/src/lib/+state/plugins-instances/plugins-instances.reducer';
 
 export const DEVICES_FEATURE_KEY = 'devices';
 
@@ -25,7 +22,7 @@ export const devicesAdapter: EntityAdapter<DeviceEntity> =
 export const initialDevicesState: DevicesState = devicesAdapter.getInitialState(
   {
     // set initial required properties
-    loaded: false
+    loaded: false,
   }
 );
 
@@ -34,17 +31,17 @@ const reducer = createReducer(
   on(DevicesActions.initDevices, (state) => ({
     ...state,
     loaded: false,
-    error: null
+    error: null,
   })),
-  on(DevicesActions.loadDevicesSuccess,
-    (state, { devices }) =>
-      devicesAdapter.setAll(devices, {
-        ...state,
-        loaded: true
-      })),
+  on(DevicesActions.loadDevicesSuccess, (state, { devices }) =>
+    devicesAdapter.setAll(devices, {
+      ...state,
+      loaded: true,
+    })
+  ),
   on(DevicesActions.loadDevicesFailure, (state, { error }) => ({
     ...state,
-    error
+    error,
   }))
 );
 

@@ -1,13 +1,13 @@
-import {InjectionToken, ModuleWithProviders, NgModule} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {PluginsPageComponent} from './components/plugins-page/plugins-page.component';
-import {StoreModule} from '@ngrx/store';
-import {EffectsModule} from '@ngrx/effects';
+import { InjectionToken, ModuleWithProviders, NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { PluginsPageComponent } from './components/plugins-page/plugins-page.component';
+import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
 import * as fromPlugin from './+state/plugins/plugins.reducer';
-import {PluginsEffects} from './+state/plugins/plugins.effects';
-import {HttpClientModule} from '@angular/common/http';
+import { PluginsEffects } from './+state/plugins/plugins.effects';
+import { HttpClientModule } from '@angular/common/http';
 import * as fromPluginsInstances from './+state/plugins-instances/plugins-instances.reducer';
-import {PluginsInstancesEffects} from './+state/plugins-instances/plugins-instances.effects';
+import { PluginsInstancesEffects } from './+state/plugins-instances/plugins-instances.effects';
 
 export interface PluginsEnvironment {
   production: boolean;
@@ -42,7 +42,7 @@ export class FeaturesPluginsModule {
   ): ModuleWithProviders<FeaturesPluginsModule> {
     return {
       ngModule: FeaturesPluginsModule,
-      providers: [{provide: PLUGINS_ENVIRONMENT, useValue: environment}],
+      providers: [{ provide: PLUGINS_ENVIRONMENT, useValue: environment }],
     };
   }
 }

@@ -10,14 +10,17 @@ describe('Devices Selectors', () => {
   const ERROR_MSG = 'No Error Available';
   const getDevicesId = (it: DeviceEntity) => it.id;
   const getDevicesFriendlyName = (it: DeviceEntity) => it.friendlyName;
-  const createDevicesEntity = (id: number, friendlyName = ''): DeviceEntity => ({
+  const createDevicesEntity = (
+    id: number,
+    friendlyName = ''
+  ): DeviceEntity => ({
     id,
     pluginInstance: 0,
     friendlyName,
     details: {},
     configuration: {},
     type: '',
-    blacklisted: false
+    blacklisted: false,
   });
 
   let state: DevicesPartialState;
