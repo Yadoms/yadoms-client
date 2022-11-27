@@ -1,27 +1,71 @@
-# Yadoms
+# Yadoms client
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 14.2.3.
+## Requirement :
 
-## Development server
+1. Install nx globally
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+```bash
+npm install -g nx
+```
 
-## Code scaffolding
+2. Make husky pre-commit executable
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+```bash
+chmod ug+x .husky/pre-commit
+git config core.filemode false
+```
 
-## Build
+## Use Intellij (recommanded)
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+1. Use `Intellij` IDE
+2. If `Intellij` IDE used, please install `Prettier plugin` and activate it by opening `package.json` file
 
-## Running unit tests
+   ![missing image](./documentation-assets/prettier.png)
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+3. Edit typescript config to use single quote when applying `import optimization`
+   On preferences
 
-## Running end-to-end tests
+   ![missing image](./documentation-assets/single-quotes.png)
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+4. Use `Nx Console` plugin
 
-## Further help
+## Use VSCode
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+Using VSCode, some extensions may be useful :
+
+- [indent-rainbow](https://marketplace.visualstudio.com/items?itemName=oderwat.indent-rainbow)
+- [Nx Console](https://marketplace.visualstudio.com/items?itemName=nrwl.angular-console)
+
+## Nx Generation command
+
+### Generate a library
+
+```bash
+npx nx generate @nrwl/angular:library --name=core --style=scss --importPath=@yadoms/core
+```
+
+⚠️ It's possible to run all commands using debug mode to see the path of generated/edited files, this functionality could be performed by adding `--dry-run` at the end of any command
+
+### Generate a feature library
+
+```bash
+npx nx generate @nrwl/angular:library --name=features/plugins --style=scss --importPath=@yadoms/features/plugins
+```
+
+### Generate a components into a feature module
+
+```bash
+npx nx generate @nrwl/angular:component --name=plugins-page --export --path=libs/features/plugins/src/lib/components
+```
+
+### Generate NGRX state
+
+```bash
+npx nx generate @nrwl/angular:ngrx --name=plugins --module=libs/features/plugins/src/lib/features-plugins.module.ts --directory=+state/plugins --barrels
+```
+
+### Generate a service into a feature module
+
+```bash
+npx nx generate @schematics/angular:service plugins --project=features-plugins --path=libs/features/plugins/src/lib/services
+```
