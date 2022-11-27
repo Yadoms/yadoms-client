@@ -14,7 +14,8 @@
     "pre-commit": "lint-staged",
     "affected:lint": "nx affected:lint",
     "format:write": "nx format:write",
-    "format:check": "nx format:check"
+    "format:check": "nx format:check",
+    "prepare": "husky install"
   },
   "private": true,
   "dependencies": {
