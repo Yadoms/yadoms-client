@@ -1,16 +1,18 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import styles from './app.module.css';
+import { AppShell, ColorScheme, ColorSchemeProvider, Header, MantineProvider, Navbar, Text } from "@mantine/core";
+import { NavbarSegmented } from "./nx-welcome";
+import MainAppShell from "./app-shell/main-app-shell";
+import { useState } from "react";
 
-import NxWelcome from './nx-welcome';
+export default function App() {
+  const [colorScheme, setColorScheme] = useState<ColorScheme>("light");
+  const toggleColorScheme = (value?: ColorScheme) =>
+    setColorScheme(value || (colorScheme === "dark" ? "light" : "dark"));
 
-export function App() {
   return (
-    <>
-      <NxWelcome title="yadoms-cs" />
-
-      <div />
-    </>
+    <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
+      <MantineProvider theme={{ colorScheme: "light" }} withGlobalStyles withNormalizeCSS>
+        <MainAppShell />
+      </MantineProvider>
+    </ColorSchemeProvider>
   );
 }
-
-export default App;

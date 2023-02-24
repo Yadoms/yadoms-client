@@ -2,13 +2,22 @@
   "name": "yadoms-cs",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "serve": "nx serve yadoms-cs",
+    "build": "nx build yadoms-cs",
+    "test": "nx test yadoms-cs"
+  },
   "private": true,
   "dependencies": {
+    "@emotion/react": "^11.10.6",
+    "@mantine/core": "^5.10.4",
+    "@mantine/hooks": "^5.10.4",
+    "@tabler/icons-react": "^2.5.0",
     "react": "18.2.0",
     "react-dom": "18.2.0"
   },
   "devDependencies": {
+    "@mantine/ds": "^5.10.4",
     "@nrwl/cypress": "^15.7.2",
     "@nrwl/eslint-plugin-nx": "15.7.2",
     "@nrwl/linter": "15.7.2",
