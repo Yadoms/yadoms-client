@@ -11,7 +11,7 @@ export function User() {
         paddingTop: theme.spacing.sm,
         borderTop: `1px solid ${
           theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[2]
-        }`,
+        }`
       }}
     >
       <UnstyledButton
@@ -24,8 +24,8 @@ export function User() {
 
           '&:hover': {
             backgroundColor:
-              theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.colors.gray[0],
-          },
+              theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.colors.gray[0]
+          }
         }}
       >
         <Group>

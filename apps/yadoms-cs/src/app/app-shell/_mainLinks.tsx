@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   IconAdjustments, IconAt,
   IconDatabase,
@@ -8,8 +8,8 @@ import {
   IconPlugConnectedX,
   IconScript,
   IconSettingsAutomation
-} from "@tabler/icons-react";
-import { Group, Text, ThemeIcon, UnstyledButton } from "@mantine/core";
+} from '@tabler/icons-react';
+import { Group, Text, ThemeIcon, UnstyledButton } from '@mantine/core';
 
 interface MainLinkProps {
   icon: React.ReactNode;
@@ -21,15 +21,15 @@ function MainLink({ icon, color, label }: MainLinkProps) {
   return (
     <UnstyledButton
       sx={(theme) => ({
-        display: "block",
-        width: "100%",
+        display: 'block',
+        width: '100%',
         padding: theme.spacing.xs,
         borderRadius: theme.radius.sm,
-        color: theme.colorScheme === "dark" ? theme.colors.dark[0] : theme.black,
+        color: theme.colorScheme === 'dark' ? theme.colors.dark[0] : theme.black,
 
-        "&:hover": {
+        '&:hover': {
           backgroundColor:
-            theme.colorScheme === "dark" ? theme.colors.dark[6] : theme.colors.gray[0]
+            theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.colors.gray[0]
         }
       })}
     >
@@ -45,16 +45,16 @@ function MainLink({ icon, color, label }: MainLinkProps) {
 }
 
 const data = [
-  { icon: <IconHome2 size={16} />, color: "blue", label: "Accueil" },
-  { icon: <IconListCheck size={16} />, color: "teal", label: "Résumé" },
-  { icon: <IconSettingsAutomation size={16} />, color: "violet", label: "Configuration système" },
-  { icon: <IconPlugConnectedX size={16} />, color: "grape", label: "Plugins" },
-  { icon: <IconDevices2 size={16} />, color: "blue", label: "Equipements" },
-  { icon: <IconScript size={16} />, color: "teal", label: `Centre d'automatisation` },
-  { icon: <IconMailForward size={16} />, color: "violet", label: `Destinataires` },
-  { icon: <IconAdjustments size={16} />, color: "grape", label: `Installation & Mise à jour` },
-  { icon: <IconHomeCog size={16} />, color: "blue", label: `Maintenance` },
-  { icon: <IconAt size={16} />, color: "teal", label: `A propos` }
+  { icon: <IconHome2 size={16} />, color: 'blue', label: 'Accueil' },
+  { icon: <IconListCheck size={16} />, color: 'teal', label: 'Résumé' },
+  { icon: <IconSettingsAutomation size={16} />, color: 'violet', label: 'Configuration système' },
+  { icon: <IconPlugConnectedX size={16} />, color: 'grape', label: 'Plugins' },
+  { icon: <IconDevices2 size={16} />, color: 'blue', label: 'Equipements' },
+  { icon: <IconScript size={16} />, color: 'teal', label: `Centre d'automatisation` },
+  { icon: <IconMailForward size={16} />, color: 'violet', label: `Destinataires` },
+  { icon: <IconAdjustments size={16} />, color: 'grape', label: `Installation & Mise à jour` },
+  { icon: <IconHomeCog size={16} />, color: 'blue', label: `Maintenance` },
+  { icon: <IconAt size={16} />, color: 'teal', label: `A propos` }
 ];
 
 export function MainLinks() {

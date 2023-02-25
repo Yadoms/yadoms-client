@@ -1,5 +1,4 @@
-import { AppShell, ColorScheme, ColorSchemeProvider, Header, MantineProvider, Navbar, Text } from "@mantine/core";
-import { NavbarSegmented } from "./nx-welcome";
+import { ColorScheme, ColorSchemeProvider, MantineProvider } from "@mantine/core";
 import MainAppShell from "./app-shell/main-app-shell";
 import { useState } from "react";
 

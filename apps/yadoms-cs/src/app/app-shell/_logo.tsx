@@ -1,5 +1,5 @@
-import React from "react";
-import { ColorScheme } from "@mantine/core";
+import React from 'react';
+import { ColorScheme } from '@mantine/core';
 
 export function Logo({ colorScheme }: { colorScheme: ColorScheme }) {
   return (
@@ -7,7 +7,7 @@ export function Logo({ colorScheme }: { colorScheme: ColorScheme }) {
       xmlns="http://www.w3.org/2000/svg"
       height="100%"
       viewBox="0 -10 180.742 180.49"
-          >
+    >
       <g transform="translate(-15.535 -60.348)">
         <path
           fill="#428bca"
@@ -52,7 +52,7 @@ export function Logo({ colorScheme }: { colorScheme: ColorScheme }) {
           ry="11.225"
         ></ellipse>
         <text
-          style={{ lineHeight: "1.25" }}
+          style={{ lineHeight: '1.25' }}
           x="69.737"
           y="136.071"
           fill="#fff"
@@ -66,7 +66,7 @@ export function Logo({ colorScheme }: { colorScheme: ColorScheme }) {
           </tspan>
         </text>
         <text
-          style={{ lineHeight: "1.25" }}
+          style={{ lineHeight: '1.25' }}
           x="117.096"
           y="136.318"
           fill="#fff"
