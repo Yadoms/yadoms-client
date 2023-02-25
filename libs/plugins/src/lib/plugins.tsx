@@ -1,33 +1,19 @@
 import {
   ActionIcon,
   Anchor,
-  Badge, Box,
+  Badge,
   Breadcrumbs,
   Button,
   Checkbox,
   Flex,
   Group,
   Image,
-  Input,
-  ScrollArea,
-  Table,
-  Text,
-  Title, Tooltip,
+  Title,
   useMantineTheme
 } from '@mantine/core';
-import {
-  IconDotsVertical, IconEdit,
-  IconHome2,
-  IconHomePlus,
-  IconHomeSearch,
-  IconInfoCircle,
-  IconPencil,
-  IconPower,
-  IconSettings,
-  IconTrash
-} from '@tabler/icons-react';
-import { MantineReactTable, MRT_ColumnDef, MRT_RowSelectionState } from 'mantine-react-table';
-import React, { useEffect, useMemo, useState } from 'react';
+import { IconHome2, IconHomePlus, IconPencil, IconPower, IconTrash } from '@tabler/icons-react';
+import { MantineReactTable, MRT_ColumnDef } from 'mantine-react-table';
+import React, { useMemo, useState } from 'react';
 
 /* eslint-disable-next-line */
 export interface PluginsProps {
@@ -152,31 +138,10 @@ export function Plugins(props: PluginsProps) {
         Gérer, ajouter et supprimer des plugins
       </Title>
 
-      <Flex justify={'space-between'} align={'center'} mt="md" mb="md">
-        <Flex align={'center'}>
-          <Input
-            icon={<IconHomeSearch />}
-            placeholder="chercher un plugin"
-            radius="md"
-            mr="md"
-          />
-          <ActionIcon>
-            <IconSettings size={30} stroke={1.5} />
-          </ActionIcon>
-          <ActionIcon color="red">
-            <IconTrash size={30} stroke={1.5} />
-          </ActionIcon>
-          <ActionIcon>
-            <IconInfoCircle size={30} stroke={1.5} />
-          </ActionIcon>
-          <ActionIcon>
-            <IconDotsVertical size={30} stroke={1.5} />
-          </ActionIcon>
-        </Flex>
+      <Flex justify={'end'} align={'center'} mt="md" mb="md">
         <Button leftIcon={<IconHomePlus />}>
           Créer un plugin
         </Button>
-
       </Flex>
 
       <MantineReactTable
@@ -207,11 +172,6 @@ export function Plugins(props: PluginsProps) {
               <IconTrash size={30} stroke={1.5} />
             </ActionIcon>
           </Group>
-        )}
-        renderTopToolbarCustomActions={() => (
-          <Button leftIcon={<IconHomePlus />}>
-            Créer un plugin
-          </Button>
         )}
       />
     </Flex>

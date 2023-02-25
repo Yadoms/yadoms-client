@@ -13,6 +13,8 @@ import { Home } from '@yadoms/home';
 function MainAppShell() {
 
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
+  const dark = colorScheme === 'dark';
+
   return (
     <AppShell
       padding="md"
@@ -31,7 +33,12 @@ function MainAppShell() {
         <Header height={60}>
           <Group sx={{ height: '100%' }} px={20} position="apart">
             <Logo colorScheme={colorScheme} />
-            <ActionIcon variant="default" onClick={() => toggleColorScheme()} size={30}>
+            <ActionIcon
+              variant="default"
+              color={dark ? 'yellow' : 'blue'}
+              onClick={() => toggleColorScheme()}
+              size={30}
+            >
               {colorScheme === 'dark' ? <IconSun size={16} /> : <IconMoonStars size={16} />}
             </ActionIcon>
           </Group>
