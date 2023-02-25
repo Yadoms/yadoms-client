@@ -9,24 +9,34 @@ import {
   Group,
   Image,
   Title,
-  useMantineTheme
+  useMantineTheme,
 } from '@mantine/core';
-import { IconHome2, IconHomePlus, IconPencil, IconPower, IconTrash } from '@tabler/icons-react';
+import {
+  IconHome2,
+  IconHomePlus,
+  IconPencil,
+  IconPower,
+  IconTrash,
+} from '@tabler/icons-react';
 import { MantineReactTable, MRT_ColumnDef } from 'mantine-react-table';
 import React, { useMemo, useState } from 'react';
 
 /* eslint-disable-next-line */
-export interface PluginsProps {
-}
+export interface PluginsProps {}
 
 interface UsersTableProps {
-  data: { name: string; pluginType: string; automaticStartup: boolean; state: string }[];
+  data: {
+    name: string;
+    pluginType: string;
+    automaticStartup: boolean;
+    state: string;
+  }[];
 }
 
 const stateColors: Record<string, string> = {
   up: 'green',
   stopped: 'red',
-  down: 'pink'
+  down: 'pink',
 };
 
 export type Plugin = {
@@ -34,24 +44,26 @@ export type Plugin = {
   avatar: string;
   name: string;
   automaticStartup: boolean;
-  state: 'up'| 'stopped';
+  state: 'up' | 'stopped';
 };
 
 const data: Plugin[] = [
   {
-    'id': '1',
-    'avatar': 'https://images.unsplash.com/photo-1624298357597-fd92dfbec01d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=250&q=80',
-    'name': 'EnOcean',
-    'automaticStartup': false,
-    'state': 'up'
+    id: '1',
+    avatar:
+      'https://images.unsplash.com/photo-1624298357597-fd92dfbec01d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=250&q=80',
+    name: 'EnOcean',
+    automaticStartup: false,
+    state: 'up',
   },
   {
-    'id': '2',
-    'avatar': 'https://images.unsplash.com/photo-1624298357597-fd92dfbec01d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=250&q=80',
-    'name': 'OneWire',
-    'automaticStartup': true,
-    'state': 'stopped'
-  }
+    id: '2',
+    avatar:
+      'https://images.unsplash.com/photo-1624298357597-fd92dfbec01d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=250&q=80',
+    name: 'OneWire',
+    automaticStartup: true,
+    state: 'stopped',
+  },
 ];
 
 export function Plugins(props: PluginsProps) {
@@ -78,9 +90,12 @@ export function Plugins(props: PluginsProps) {
               width={50}
               height={50}
               fit="fill"
-              src={'https://www.iotone.com/files/vendor/logo_EnOceanLogo4cSolo.jpg'}
+              src={
+                'https://www.iotone.com/files/vendor/logo_EnOceanLogo4cSolo.jpg'
+              }
               alt="With default placeholder"
-              withPlaceholder />
+              withPlaceholder
+            />
           ),
         },
         {
@@ -93,7 +108,11 @@ export function Plugins(props: PluginsProps) {
           columnDefType: 'display', //turns off data column features like sorting, filtering, etc.
           enableColumnOrdering: true, //but you can turn back any of those features on if you want like this
           Cell: ({ row }) => (
-            <Checkbox size="sm" color="dimmed" defaultChecked={row.original.automaticStartup}/>
+            <Checkbox
+              size="sm"
+              color="dimmed"
+              defaultChecked={row.original.automaticStartup}
+            />
           ),
         },
         {
@@ -111,7 +130,7 @@ export function Plugins(props: PluginsProps) {
           ),
         },
       ] as MRT_ColumnDef<(typeof data)[0]>[],
-    [], //end
+    [] //end
   );
 
   //optionally, you can manage the row selection state yourself
@@ -119,7 +138,7 @@ export function Plugins(props: PluginsProps) {
 
   const breadcrumbsItem = [
     { title: 'Yadoms', href: '#' },
-    { title: 'Plugins', href: '#' }
+    { title: 'Plugins', href: '#' },
   ].map((item, index) => (
     <Anchor href={item.href} key={index}>
       {item.title}
@@ -133,15 +152,12 @@ export function Plugins(props: PluginsProps) {
         <Breadcrumbs separator="→">{breadcrumbsItem}</Breadcrumbs>
       </Flex>
 
-
       <Title order={3} size="h3" mt="md">
         Gérer, ajouter et supprimer des plugins
       </Title>
 
       <Flex justify={'end'} align={'center'} mt="md" mb="md">
-        <Button leftIcon={<IconHomePlus />}>
-          Créer un plugin
-        </Button>
+        <Button leftIcon={<IconHomePlus />}>Créer un plugin</Button>
       </Flex>
 
       <MantineReactTable
@@ -175,7 +191,6 @@ export function Plugins(props: PluginsProps) {
         )}
       />
     </Flex>
-
   );
 }
 

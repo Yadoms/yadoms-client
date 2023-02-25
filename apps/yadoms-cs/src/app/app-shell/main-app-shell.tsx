@@ -1,17 +1,20 @@
-import { AppShell, Navbar, Header, ActionIcon, Group, useMantineColorScheme } from '@mantine/core';
+import {
+  AppShell,
+  Navbar,
+  Header,
+  ActionIcon,
+  Group,
+  useMantineColorScheme,
+} from '@mantine/core';
 import { IconMoonStars, IconSun } from '@tabler/icons-react';
 import { MainLinks } from './_mainLinks';
 import { User } from './_user';
 import { Logo } from './_logo';
 import { Plugins } from '@yadoms/plugins';
-import {
-  Routes,
-  Route
-} from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import { Home } from '@yadoms/home';
 
 function MainAppShell() {
-
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   const dark = colorScheme === 'dark';
 
@@ -39,7 +42,11 @@ function MainAppShell() {
               onClick={() => toggleColorScheme()}
               size={30}
             >
-              {colorScheme === 'dark' ? <IconSun size={16} /> : <IconMoonStars size={16} />}
+              {colorScheme === 'dark' ? (
+                <IconSun size={16} />
+              ) : (
+                <IconMoonStars size={16} />
+              )}
             </ActionIcon>
           </Group>
         </Header>
@@ -47,17 +54,18 @@ function MainAppShell() {
       styles={(theme) => ({
         main: {
           backgroundColor:
-            theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.colors.gray[0]
-        }
+            theme.colorScheme === 'dark'
+              ? theme.colors.dark[8]
+              : theme.colors.gray[0],
+        },
       })}
     >
       <Routes>
-        <Route path="/" element={<Home/>}/>
-        <Route path="/plugins" element={<Plugins/>}/>
+        <Route path="/" element={<Home />} />
+        <Route path="/plugins" element={<Plugins />} />
       </Routes>
     </AppShell>
   );
 }
 
 export default MainAppShell;
-
