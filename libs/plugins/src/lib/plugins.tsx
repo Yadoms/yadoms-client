@@ -1,7 +1,7 @@
 import {
   ActionIcon,
   Anchor,
-  Badge,
+  Badge, Box,
   Breadcrumbs,
   Button,
   Checkbox,
@@ -12,11 +12,11 @@ import {
   ScrollArea,
   Table,
   Text,
-  Title,
+  Title, Tooltip,
   useMantineTheme
 } from '@mantine/core';
 import {
-  IconDotsVertical,
+  IconDotsVertical, IconEdit,
   IconHome2,
   IconHomePlus,
   IconHomeSearch,
@@ -26,6 +26,8 @@ import {
   IconSettings,
   IconTrash
 } from '@tabler/icons-react';
+import { MantineReactTable, MRT_ColumnDef, MRT_RowSelectionState } from 'mantine-react-table';
+import React, { useEffect, useMemo, useState } from 'react';
 
 /* eslint-disable-next-line */
 export interface PluginsProps {
@@ -41,14 +43,24 @@ const stateColors: Record<string, string> = {
   down: 'pink'
 };
 
-const data = [
+export type Plugin = {
+  id: string;
+  avatar: string;
+  name: string;
+  automaticStartup: boolean;
+  state: 'up'| 'stopped';
+};
+
+const data: Plugin[] = [
   {
+    'id': '1',
     'avatar': 'https://images.unsplash.com/photo-1624298357597-fd92dfbec01d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=250&q=80',
     'name': 'EnOcean',
     'automaticStartup': false,
     'state': 'up'
   },
   {
+    'id': '2',
     'avatar': 'https://images.unsplash.com/photo-1624298357597-fd92dfbec01d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=250&q=80',
     'name': 'OneWire',
     'automaticStartup': true,
@@ -58,51 +70,66 @@ const data = [
 
 export function Plugins(props: PluginsProps) {
   const theme = useMantineTheme();
-  const rows = data.map((item) => (
-    <tr key={item.name}>
-      <td>
-        <Image
-          width={200}
-          height={50}
-          fit="contain"
-          src={'https://www.iotone.com/files/vendor/logo_EnOceanLogo4cSolo.jpg'}
-          alt="With default placeholder"
-          withPlaceholder />
-      </td>
-      <td>
-        <Text size="sm" weight={500}>
-          {item.name}
-        </Text>
-      </td>
 
-      <td>
-        <Checkbox size="sm" color="dimmed">
-          {item.automaticStartup}
-        </Checkbox>
-      </td>
-      <td>
-        <Badge
-          color={stateColors[item.state.toLowerCase()]}
-          variant={theme.colorScheme === 'dark' ? 'light' : 'outline'}
-        >
-          {item.state}
-        </Badge>
-      </td>
-      <td>
-        <Group spacing={0} position="right">
-          <ActionIcon>
-            <IconPower size={16} stroke={1.5} />
-          </ActionIcon>
-          <ActionIcon>
-            <IconPencil size={16} stroke={1.5} />
-          </ActionIcon>
-          <ActionIcon color="red">
-            <IconTrash size={16} stroke={1.5} />
-          </ActionIcon>
-        </Group>
-      </td>
-    </tr>
-  ));
+  const columns = useMemo<MRT_ColumnDef<Plugin>[]>(
+    () =>
+      [
+        {
+          accessorKey: 'id',
+          header: 'ID',
+          enableColumnOrdering: false,
+          enableEditing: false, //disable editing on this column
+          enableSorting: false,
+          size: 80,
+        },
+        {
+          accessorKey: 'type',
+          header: 'Type',
+          columnDefType: 'display', //turns off data column features like sorting, filtering, etc.
+          enableColumnOrdering: true, //but you can turn back any of those features on if you want like this
+          Cell: ({ row }) => (
+            <Image
+              width={50}
+              height={50}
+              fit="fill"
+              src={'https://www.iotone.com/files/vendor/logo_EnOceanLogo4cSolo.jpg'}
+              alt="With default placeholder"
+              withPlaceholder />
+          ),
+        },
+        {
+          accessorKey: 'name',
+          header: 'Nom',
+        },
+        {
+          accessorKey: 'automaticStartup',
+          header: 'Démarrer automatiquement',
+          columnDefType: 'display', //turns off data column features like sorting, filtering, etc.
+          enableColumnOrdering: true, //but you can turn back any of those features on if you want like this
+          Cell: ({ row }) => (
+            <Checkbox size="sm" color="dimmed" defaultChecked={row.original.automaticStartup}/>
+          ),
+        },
+        {
+          accessorKey: 'state',
+          header: 'Etat',
+          // columnDefType: 'display', //turns off data column features like sorting, filtering, etc.
+          // enableColumnOrdering: false, //but you can turn back any of those features on if you want like this
+          Cell: ({ row }) => (
+            <Badge
+              color={stateColors[row.original.state.toLowerCase()]}
+              variant={theme.colorScheme === 'dark' ? 'light' : 'outline'}
+            >
+              {row.original.state}
+            </Badge>
+          ),
+        },
+      ] as MRT_ColumnDef<(typeof data)[0]>[],
+    [], //end
+  );
+
+  //optionally, you can manage the row selection state yourself
+  const [tableData, setTableData] = useState<Plugin[]>(() => data);
 
   const breadcrumbsItem = [
     { title: 'Yadoms', href: '#' },
@@ -125,7 +152,7 @@ export function Plugins(props: PluginsProps) {
         Gérer, ajouter et supprimer des plugins
       </Title>
 
-      <Flex justify={'space-between'} align={'center'} mt="md">
+      <Flex justify={'space-between'} align={'center'} mt="md" mb="md">
         <Flex align={'center'}>
           <Input
             icon={<IconHomeSearch />}
@@ -151,20 +178,42 @@ export function Plugins(props: PluginsProps) {
         </Button>
 
       </Flex>
-      <ScrollArea mt="md">
-        <Table sx={{ minWidth: 800, background: 'white', borderRadius: 10 }} verticalSpacing="xs" highlightOnHover>
-          <thead>
-          <tr>
-            <th>Type de plugin</th>
-            <th>Nom</th>
-            <th>Démarrer automatiquement</th>
-            <th>Etat</th>
-            <th />
-          </tr>
-          </thead>
-          <tbody>{rows}</tbody>
-        </Table>
-      </ScrollArea>
+
+      <MantineReactTable
+        displayColumnDefOptions={{
+          'mrt-row-actions': {
+            mantineTableHeadCellProps: {
+              align: 'center',
+            },
+            size: 120,
+          },
+        }}
+        columns={columns}
+        data={tableData}
+        editingMode="modal" //default
+        enableRowSelection
+        enableColumnOrdering
+        enableEditing
+        positionActionsColumn="last"
+        renderRowActions={({ row, table }) => (
+          <Group spacing={3} position="center">
+            <ActionIcon>
+              <IconPower size={30} stroke={1.5} />
+            </ActionIcon>
+            <ActionIcon onClick={() => table.setEditingRow(row)}>
+              <IconPencil size={30} stroke={1.5} />
+            </ActionIcon>
+            <ActionIcon color="red">
+              <IconTrash size={30} stroke={1.5} />
+            </ActionIcon>
+          </Group>
+        )}
+        renderTopToolbarCustomActions={() => (
+          <Button leftIcon={<IconHomePlus />}>
+            Créer un plugin
+          </Button>
+        )}
+      />
     </Flex>
 
   );
