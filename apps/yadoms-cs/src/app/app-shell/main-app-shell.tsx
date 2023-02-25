@@ -4,6 +4,11 @@ import { MainLinks } from './_mainLinks';
 import { User } from './_user';
 import { Logo } from './_logo';
 import { Plugins } from '@yadoms/plugins';
+import {
+  Routes,
+  Route
+} from 'react-router-dom';
+import { Home } from '@yadoms/home';
 
 function MainAppShell() {
 
@@ -39,7 +44,10 @@ function MainAppShell() {
         }
       })}
     >
-      <Plugins />
+      <Routes>
+        <Route path="/" element={<Home/>}/>
+        <Route path="/plugins" element={<Plugins/>}/>
+      </Routes>
     </AppShell>
   );
 }

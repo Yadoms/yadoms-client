@@ -15,6 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@yadoms/home": ["libs/home/src/index.ts"],
       "@yadoms/plugins": ["libs/plugins/src/index.ts"]
     }
   },
