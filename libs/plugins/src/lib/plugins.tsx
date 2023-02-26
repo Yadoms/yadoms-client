@@ -123,7 +123,7 @@ export function Plugins(props: PluginsProps) {
           Cell: ({ row }) => (
             <Badge
               color={stateColors[row.original.state.toLowerCase()]}
-              variant={theme.colorScheme === 'dark' ? 'light' : 'outline'}
+              variant={theme.colorScheme === 'dark' ? 'light' : 'dot'}
             >
               {row.original.state}
             </Badge>
@@ -148,8 +148,8 @@ export function Plugins(props: PluginsProps) {
   return (
     <Flex direction="column">
       <Flex align={'flex-end'}>
-        <IconHome2 color={'#1c7ed6'}></IconHome2>
-        <Breadcrumbs separator="→">{breadcrumbsItem}</Breadcrumbs>
+        <IconHome2 color={'#1c7ed6'} ></IconHome2>
+        <Breadcrumbs ml={"xs"} separator="→">{breadcrumbsItem}</Breadcrumbs>
       </Flex>
 
       <Title order={3} size="h3" mt="md">
