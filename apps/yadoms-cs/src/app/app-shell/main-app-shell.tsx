@@ -23,7 +23,7 @@ function MainAppShell() {
       padding="md"
       fixed={false}
       navbar={
-        <Navbar width={{ base: 300 }} height={'93vh'} p="xs">
+        <Navbar width={{ base: 300 }} height={'calc(100vh - 60px)'} p="xs">
           <Navbar.Section grow mt="xs">
             <MainLinks />
           </Navbar.Section>

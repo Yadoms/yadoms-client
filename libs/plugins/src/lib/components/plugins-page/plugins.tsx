@@ -20,6 +20,7 @@ import {
 } from '@tabler/icons-react';
 import { MantineReactTable, MRT_ColumnDef } from 'mantine-react-table';
 import React, { useMemo, useState } from 'react';
+import CreateNewPluginModal from '../create-new-plugin-modal/create-new-plugin-modal';
 
 /* eslint-disable-next-line */
 export interface PluginsProps {}
@@ -50,16 +51,14 @@ export type Plugin = {
 const data: Plugin[] = [
   {
     id: '1',
-    avatar:
-      'https://images.unsplash.com/photo-1624298357597-fd92dfbec01d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=250&q=80',
+    avatar: 'https://via.placeholder.com/150',
     name: 'EnOcean',
     automaticStartup: false,
     state: 'up',
   },
   {
     id: '2',
-    avatar:
-      'https://images.unsplash.com/photo-1624298357597-fd92dfbec01d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=250&q=80',
+    avatar: 'https://via.placeholder.com/150',
     name: 'OneWire',
     automaticStartup: true,
     state: 'stopped',
@@ -68,7 +67,6 @@ const data: Plugin[] = [
 
 export function Plugins(props: PluginsProps) {
   const theme = useMantineTheme();
-
   const columns = useMemo<MRT_ColumnDef<Plugin>[]>(
     () =>
       [
@@ -132,9 +130,16 @@ export function Plugins(props: PluginsProps) {
       ] as MRT_ColumnDef<(typeof data)[0]>[],
     [] //end
   );
-
   //optionally, you can manage the row selection state yourself
   const [tableData, setTableData] = useState<Plugin[]>(() => data);
+
+  const [isCreatePluginModelOpened, setCreatePluginModelOpened] =
+    useState(false);
+
+  function handleModalClose() {
+    setCreatePluginModelOpened(false);
+    // Vous pouvez faire ce que vous voulez après la fermeture de la modal
+  }
 
   const breadcrumbsItem = [
     { title: 'Yadoms', href: '#' },
@@ -148,8 +153,10 @@ export function Plugins(props: PluginsProps) {
   return (
     <Flex direction="column">
       <Flex align={'flex-end'}>
-        <IconHome2 color={'#1c7ed6'} ></IconHome2>
-        <Breadcrumbs ml={"xs"} separator="→">{breadcrumbsItem}</Breadcrumbs>
+        <IconHome2 color={'#1c7ed6'}></IconHome2>
+        <Breadcrumbs ml={'xs'} separator="→">
+          {breadcrumbsItem}
+        </Breadcrumbs>
       </Flex>
 
       <Title order={3} size="h3" mt="md">
@@ -157,8 +164,16 @@ export function Plugins(props: PluginsProps) {
       </Title>
 
       <Flex justify={'end'} align={'center'} mt="md" mb="md">
-        <Button leftIcon={<IconHomePlus />}>Créer un plugin</Button>
+        <Button
+          leftIcon={<IconHomePlus />}
+          onClick={() => setCreatePluginModelOpened(true)}
+        >
+          Create a plugin
+        </Button>
       </Flex>
+      {isCreatePluginModelOpened && (
+        <CreateNewPluginModal opened={true} onClose={handleModalClose} />
+      )}
 
       <MantineReactTable
         displayColumnDefOptions={{

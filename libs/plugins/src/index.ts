@@ -1,1 +1,1 @@
-export * from './lib/plugins';
+export * from './lib/components/plugins-page/plugins';
