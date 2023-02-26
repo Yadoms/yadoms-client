@@ -98,11 +98,11 @@ export function Plugins(props: PluginsProps) {
         },
         {
           accessorKey: 'name',
-          header: 'Nom',
+          header: 'Name',
         },
         {
           accessorKey: 'automaticStartup',
-          header: 'Démarrer automatiquement',
+          header: 'Start automatically',
           columnDefType: 'display', //turns off data column features like sorting, filtering, etc.
           enableColumnOrdering: true, //but you can turn back any of those features on if you want like this
           Cell: ({ row }) => (
@@ -115,7 +115,7 @@ export function Plugins(props: PluginsProps) {
         },
         {
           accessorKey: 'state',
-          header: 'Etat',
+          header: 'State',
           // columnDefType: 'display', //turns off data column features like sorting, filtering, etc.
           // enableColumnOrdering: false, //but you can turn back any of those features on if you want like this
           Cell: ({ row }) => (
@@ -160,7 +160,7 @@ export function Plugins(props: PluginsProps) {
       </Flex>
 
       <Title order={3} size="h3" mt="md">
-        Gérer, ajouter et supprimer des plugins
+        Manage, add and remove plugins
       </Title>
 
       <Flex justify={'end'} align={'center'} mt="md" mb="md">
