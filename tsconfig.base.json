@@ -16,7 +16,8 @@
     "baseUrl": ".",
     "paths": {
       "@yadoms/home": ["libs/home/src/index.ts"],
-      "@yadoms/plugins": ["libs/plugins/src/index.ts"]
+      "@yadoms/plugins": ["libs/plugins/src/index.ts"],
+      "@yadoms/shared": ["libs/shared/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

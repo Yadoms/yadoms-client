@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   IconAdjustments,
   IconAt,
@@ -9,10 +9,10 @@ import {
   IconMailForward,
   IconPlugConnectedX,
   IconRobot,
-  IconSettingsAutomation
-} from "@tabler/icons-react";
-import { Group, Text, ThemeIcon, UnstyledButton } from "@mantine/core";
-import { Link } from "react-router-dom";
+  IconSettingsAutomation,
+} from '@tabler/icons-react';
+import { Group, Text, ThemeIcon, UnstyledButton } from '@mantine/core';
+import { Link } from 'react-router-dom';
 
 interface MainLinkProps {
   icon: React.ReactNode;
@@ -27,19 +27,19 @@ function MainLink({ icon, color, label, route }: MainLinkProps) {
       component={Link}
       to={route}
       sx={(theme) => ({
-        display: "block",
-        width: "100%",
+        display: 'block',
+        width: '100%',
         padding: theme.spacing.xs,
         borderRadius: theme.radius.sm,
         color:
-          theme.colorScheme === "dark" ? theme.colors.dark[0] : theme.black,
+          theme.colorScheme === 'dark' ? theme.colors.dark[0] : theme.black,
 
-        "&:hover": {
+        '&:hover': {
           backgroundColor:
-            theme.colorScheme === "dark"
+            theme.colorScheme === 'dark'
               ? theme.colors.dark[6]
-              : theme.colors.gray[0]
-        }
+              : theme.colors.gray[0],
+        },
       })}
     >
       <Group>
@@ -55,59 +55,59 @@ function MainLink({ icon, color, label, route }: MainLinkProps) {
 const data = [
   {
     icon: <IconHome2 size={16} />,
-    color: "blue",
-    label: "Home",
-    route: "/"
+    color: 'blue',
+    label: 'Home',
+    route: '/',
   },
   {
     icon: <IconListCheck size={16} />,
-    color: "teal",
-    label: "Summary",
-    route: "#"
+    color: 'teal',
+    label: 'Summary',
+    route: '#',
   },
   {
     icon: <IconSettingsAutomation size={16} />,
-    color: "violet",
-    label: "System configuration",
-    route: "#"
+    color: 'violet',
+    label: 'System configuration',
+    route: '#',
   },
   {
     icon: <IconPlugConnectedX size={16} />,
-    color: "grape",
-    label: "Plugins",
-    route: "/plugins"
+    color: 'grape',
+    label: 'Plugins',
+    route: '/plugins',
   },
   {
     icon: <IconDevices2 size={16} />,
-    color: "blue",
-    label: "Equipment",
-    route: "#"
+    color: 'blue',
+    label: 'Equipment',
+    route: '#',
   },
   {
     icon: <IconRobot size={16} />,
-    color: "teal",
+    color: 'teal',
     label: `Automation Center`,
-    route: "#"
+    route: '#',
   },
   {
     icon: <IconMailForward size={16} />,
-    color: "violet",
+    color: 'violet',
     label: `Recipients`,
-    route: "#"
+    route: '#',
   },
   {
     icon: <IconAdjustments size={16} />,
-    color: "grape",
+    color: 'grape',
     label: `Install & Update`,
-    route: "#"
+    route: '#',
   },
   {
     icon: <IconHomeCog size={16} />,
-    color: "blue",
+    color: 'blue',
     label: `Maintenance`,
-    route: "#"
+    route: '#',
   },
-  { icon: <IconAt size={16} />, color: "teal", label: `About`, route: "#" }
+  { icon: <IconAt size={16} />, color: 'teal', label: `About`, route: '#' },
 ];
 
 export function MainLinks() {

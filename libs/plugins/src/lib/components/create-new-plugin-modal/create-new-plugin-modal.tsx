@@ -15,6 +15,7 @@ import {
   useMantineTheme,
 } from '@mantine/core';
 import { useState } from 'react';
+import DynamicForm, { ConfigurationSchema } from './dynamicForm';
 
 /* eslint-disable-next-line */
 export interface CreateNewPluginModalProps {
@@ -22,6 +23,32 @@ export interface CreateNewPluginModalProps {
   onClose: () => void;
 }
 
+const configurationSchema: ConfigurationSchema = {
+  Name: {
+    type: 'string',
+    required: true,
+    description: 'Plugin custom name',
+  },
+  Port: {
+    type: 'int',
+    required: true,
+    defaultValue: 80,
+  },
+  authentication: {
+    type: 'section',
+    enableWithCheckBox: true,
+    checkbox: {
+      defaultValue: true,
+    },
+    content: {
+      Password: {
+        type: 'string',
+        encrypted: true,
+        required: true,
+      },
+    },
+  },
+};
 export function CreateNewPluginModal(props: CreateNewPluginModalProps) {
   const STEPPER_LENGTH = 2;
   const theme = useMantineTheme();
@@ -121,6 +148,7 @@ export function CreateNewPluginModal(props: CreateNewPluginModalProps) {
           </Container>
         </Stepper.Step>
         <Stepper.Step label="Configuration" loading={true}>
+          <DynamicForm configurationSchema={configurationSchema} />
           <TextInput
             label="Name"
             placeholder="Plugin name"

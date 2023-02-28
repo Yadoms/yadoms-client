@@ -6,6 +6,7 @@ import {
 import MainAppShell from './app-shell/main-app-shell';
 import { useState } from 'react';
 import { useColorScheme } from '@mantine/hooks';
+import { ModalsProvider } from '@mantine/modals';
 
 export default function App() {
   const preferredColorScheme = useColorScheme();
@@ -23,7 +24,9 @@ export default function App() {
         withGlobalStyles
         withNormalizeCSS
       >
-        <MainAppShell />
+        <ModalsProvider>
+          <MainAppShell />
+        </ModalsProvider>
       </MantineProvider>
     </ColorSchemeProvider>
   );

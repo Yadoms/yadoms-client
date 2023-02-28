@@ -8,6 +8,7 @@ import {
   Flex,
   Group,
   Image,
+  Text,
   Title,
   useMantineTheme,
 } from '@mantine/core';
@@ -18,9 +19,10 @@ import {
   IconPower,
   IconTrash,
 } from '@tabler/icons-react';
-import { MantineReactTable, MRT_ColumnDef } from 'mantine-react-table';
-import React, { useMemo, useState } from 'react';
+import { MantineReactTable, MRT_ColumnDef, MRT_Row } from 'mantine-react-table';
+import React, { useCallback, useMemo, useState } from 'react';
 import CreateNewPluginModal from '../create-new-plugin-modal/create-new-plugin-modal';
+import { openDeleteModal } from '@yadoms/shared';
 
 /* eslint-disable-next-line */
 export interface PluginsProps {}
@@ -132,6 +134,19 @@ export function Plugins(props: PluginsProps) {
   );
   //optionally, you can manage the row selection state yourself
   const [tableData, setTableData] = useState<Plugin[]>(() => data);
+  const handleDeleteRow = useCallback(
+    async (row: MRT_Row<Plugin>) => {
+      const confirmed = await openDeleteModal();
+      console.log(confirmed);
+      if (!confirmed) {
+        return;
+      }
+      //send api delete request here, then refetch or update local table data for re-render
+      tableData.splice(row.index, 1);
+      setTableData([...tableData]);
+    },
+    [tableData]
+  );
 
   const [isCreatePluginModelOpened, setCreatePluginModelOpened] =
     useState(false);
@@ -199,7 +214,7 @@ export function Plugins(props: PluginsProps) {
             <ActionIcon onClick={() => table.setEditingRow(row)}>
               <IconPencil size={30} stroke={1.5} />
             </ActionIcon>
-            <ActionIcon color="red">
+            <ActionIcon color="red" onClick={() => handleDeleteRow(row)}>
               <IconTrash size={30} stroke={1.5} />
             </ActionIcon>
           </Group>
