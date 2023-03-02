@@ -15,7 +15,9 @@ import {
   useMantineTheme,
 } from '@mantine/core';
 import { useState } from 'react';
-import DynamicForm, { ConfigurationSchema } from './dynamicForm';
+import PluginConfiguration, {
+  ConfigurationSchema,
+} from '../plugin-configuration/plugin-configuration';
 
 /* eslint-disable-next-line */
 export interface CreateNewPluginModalProps {
@@ -23,7 +25,7 @@ export interface CreateNewPluginModalProps {
   onClose: () => void;
 }
 
-const configurationSchema: ConfigurationSchema = {
+export const configurationSchema: ConfigurationSchema = {
   Name: {
     type: 'string',
     required: true,
@@ -148,7 +150,7 @@ export function CreateNewPluginModal(props: CreateNewPluginModalProps) {
           </Container>
         </Stepper.Step>
         <Stepper.Step label="Configuration" loading={true}>
-          <DynamicForm configurationSchema={configurationSchema} />
+          <PluginConfiguration configurationSchema={configurationSchema} />
           <TextInput
             label="Name"
             placeholder="Plugin name"
