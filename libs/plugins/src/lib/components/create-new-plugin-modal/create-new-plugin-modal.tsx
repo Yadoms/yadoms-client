@@ -14,18 +14,15 @@ import {
   TextInput,
   useMantineTheme,
 } from '@mantine/core';
-import { useState } from 'react';
-import PluginConfiguration, {
-  ConfigurationSchema,
-} from '../plugin-configuration/plugin-configuration';
+import React, { useState } from 'react';
+import PluginConfiguration from '../plugin-configuration/plugin-configuration';
 
-/* eslint-disable-next-line */
 export interface CreateNewPluginModalProps {
   opened: boolean;
   onClose: () => void;
 }
 
-export const configurationSchema: ConfigurationSchema = {
+export const configurationSchema = {
   Name: {
     type: 'string',
     required: true,
@@ -70,7 +67,7 @@ export function CreateNewPluginModal(props: CreateNewPluginModalProps) {
     return active !== STEPPER_LENGTH;
   }
 
-  function generatePluginImageGrid() {
+  function generatePluginsGrid() {
     const cols = [];
     for (let i = 0; i < 30; i++) {
       cols.push(
@@ -113,7 +110,6 @@ export function CreateNewPluginModal(props: CreateNewPluginModalProps) {
 
     return cols;
   }
-
   return (
     <Modal
       overlayColor={
@@ -146,7 +142,7 @@ export function CreateNewPluginModal(props: CreateNewPluginModalProps) {
       >
         <Stepper.Step label="Choose your plugin">
           <Container fluid>
-            <Grid justify="center">{generatePluginImageGrid()}</Grid>
+            <Grid justify="center">{generatePluginsGrid()}</Grid>
           </Container>
         </Stepper.Step>
         <Stepper.Step label="Configuration" loading={true}>

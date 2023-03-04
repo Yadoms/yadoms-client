@@ -1,41 +1,60 @@
 import { TextInput } from '@mantine/core';
 
-interface ConfigurationSchemaValue {
-  type: 'string' | 'int' | 'enum' | 'comboSection';
-  required?: boolean;
-  regex?: string;
-  values?: Record<string, string>;
-  content?: Record<string, ConfigurationSchemaValue>;
-  defaultValue?: string;
+// interface ConfigurationSchemaValue {
+//   type: 'string' | 'int' | 'enum' | 'comboSection';
+//   required?: boolean;
+//   regex?: string;
+//   values?: Record<string, string>;
+//   content?: Record<string, ConfigurationSchemaValue>;
+//   defaultValue?: string;
+// }
+//
+// interface PackageConfigurationSchema {
+//   [key: string]: ConfigurationSchemaValue;
+// }
+//
+// interface LocalesConfigSchemaValue {
+//   name?: string;
+//   description?: string;
+//   type?: 'string' | 'int' | 'enum' | 'comboSection';
+//   regexErrorMessage?: string;
+//   customLabels?: Record<string, string>;
+//   content?: Record<string, LocalesConfigSchemaValue>;
+//   defaultValue?: string;
+// }
+//
+// interface LocalesConfigSchema {
+//   [key: string]: LocalesConfigSchemaValue;
+// }
+//
+// interface PluginConfigSchema {
+//   package: PackageConfigurationSchema;
+//   locales: LocalesConfigSchema;
+// }
+// /* eslint-disable-next-line */
+// export interface PluginConfigurationProps {
+//   configurationSchema: PackageConfigurationSchema;
+// }
+
+export interface ConfigurationSchema {
+  [key: string]: {
+    type: 'string' | 'int' | 'section';
+    regex?: string;
+    description?: string;
+    required?: boolean;
+    encrypted?: boolean;
+    defaultValue?: number | boolean | string;
+    enableWithCheckBox?: boolean;
+    checkbox?: {
+      defaultValue: boolean;
+    };
+    content?: ConfigurationSchema;
+  };
 }
 
-interface PackageConfigurationSchema {
-  [key: string]: ConfigurationSchemaValue;
+interface PluginConfigurationProps {
+  configurationSchema: ConfigurationSchema;
 }
-
-interface LocalesConfigSchemaValue {
-  name?: string;
-  description?: string;
-  type?: 'string' | 'int' | 'enum' | 'comboSection';
-  regexErrorMessage?: string;
-  customLabels?: Record<string, string>;
-  content?: Record<string, LocalesConfigSchemaValue>;
-  defaultValue?: string;
-}
-
-interface LocalesConfigSchema {
-  [key: string]: LocalesConfigSchemaValue;
-}
-
-interface PluginConfigSchema {
-  package: PackageConfigurationSchema;
-  locales: LocalesConfigSchema;
-}
-/* eslint-disable-next-line */
-export interface PluginConfigurationProps {
-  configurationSchema: PackageConfigurationSchema;
-}
-
 export function PluginConfiguration(props: PluginConfigurationProps) {
   const renderField = (key: string, field: any) => {
     switch (field.type) {
