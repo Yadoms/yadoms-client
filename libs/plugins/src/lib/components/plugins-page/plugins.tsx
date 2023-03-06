@@ -20,9 +20,16 @@ import {
   IconTrash,
 } from '@tabler/icons-react';
 import { MantineReactTable, MRT_ColumnDef, MRT_Row } from 'mantine-react-table';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import CreateNewPluginModal from '../create-new-plugin-modal/create-new-plugin-modal';
 import { openDeleteModal } from '@yadoms/shared';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  fetchPluginsInstances,
+  getPluginsInstancesLoadingStatus,
+  getPluginsInstancesPaging,
+  selectAllPluginsInstances,
+} from '../../redux/plugins-instances.slice';
 
 /* eslint-disable-next-line */
 export interface PluginsProps {}
@@ -68,6 +75,15 @@ const data: Plugin[] = [
 ];
 
 export function Plugins(props: PluginsProps) {
+  const dispatch = useDispatch();
+  const pluginsInstancesEntities = useSelector(selectAllPluginsInstances);
+  const loadingStatus = useSelector(getPluginsInstancesLoadingStatus);
+  const paging = useSelector(getPluginsInstancesPaging);
+
+  useEffect(() => {
+    dispatch(fetchPluginsInstances({ page: 1, pageSize: 10 }));
+  }, [dispatch]);
+
   const theme = useMantineTheme();
   const columns = useMemo<MRT_ColumnDef<Plugin>[]>(
     () =>

@@ -1,12 +1,20 @@
 import { axiosInstance } from '@yadoms/shared';
-export async function loadPluginsInstances(currentPage = 0, pageSize = 10) {
+import { PluginsInstancesResponse } from '../model/PluginsInstancesResponse';
+
+export async function loadPluginsInstances(
+  currentPage = 0,
+  pageSize = 10
+): Promise<PluginsInstancesResponse> {
   try {
-    const response = await axiosInstance.get(`/plugins-instances`, {
-      params: {
-        page: currentPage,
-        perPage: pageSize,
-      },
-    });
+    const response = await axiosInstance.get<PluginsInstancesResponse>(
+      `/plugins-instances`,
+      {
+        params: {
+          page: currentPage,
+          perPage: pageSize,
+        },
+      }
+    );
     return response.data;
   } catch (error) {
     console.error('Error fetching user data:', error);

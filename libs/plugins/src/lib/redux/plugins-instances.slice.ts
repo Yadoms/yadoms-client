@@ -6,6 +6,11 @@ import {
   EntityState,
   PayloadAction,
 } from '@reduxjs/toolkit';
+import { loadPluginsInstances } from '../api/plugins-api';
+import {
+  Paging,
+  PluginsInstancesResponse,
+} from '../model/PluginsInstancesResponse';
 
 export const PLUGINS_INSTANCES_FEATURE_KEY = 'pluginsInstances';
 
@@ -26,7 +31,8 @@ export interface PluginsInstancesEntity {
 export interface PluginsInstancesState
   extends EntityState<PluginsInstancesEntity> {
   loadingStatus: 'not loaded' | 'loading' | 'loaded' | 'error';
-  error: string;
+  error: string | undefined | null;
+  paging: Paging;
 }
 
 export const pluginsInstancesAdapter =
@@ -51,13 +57,12 @@ export const pluginsInstancesAdapter =
  */
 export const fetchPluginsInstances = createAsyncThunk(
   'pluginsInstances/fetchStatus',
-  async (_, thunkAPI) => {
-    /**
-     * Replace this with your custom fetch call.
-     * For example, `return myApi.getPluginsInstancess()`;
-     * Right now we just return an empty array.
-     */
-    return Promise.resolve([]);
+  async ({ page, pageSize }: { page: number; pageSize: number }, thunkAPI) => {
+    try {
+      return await loadPluginsInstances(page, pageSize);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
   }
 );
 
@@ -65,6 +70,11 @@ export const initialPluginsInstancesState: PluginsInstancesState =
   pluginsInstancesAdapter.getInitialState({
     loadingStatus: 'not loaded',
     error: null,
+    paging: {
+      currentPage: 0,
+      totalPage: 1,
+      pageSize: 10,
+    },
   });
 
 export const pluginsInstancesSlice = createSlice({
@@ -87,10 +97,15 @@ export const pluginsInstancesSlice = createSlice({
         fetchPluginsInstances.fulfilled,
         (
           state: PluginsInstancesState,
-          action: PayloadAction<PluginsInstancesEntity[]>
+          action: PayloadAction<PluginsInstancesResponse>
         ) => {
-          pluginsInstancesAdapter.setAll(state, action.payload);
+          pluginsInstancesAdapter.setAll(state, action.payload.instances);
           state.loadingStatus = 'loaded';
+          state.paging = {
+            currentPage: action.payload.paging.currentPage,
+            totalPage: action.payload.paging.totalPage,
+            pageSize: action.payload.paging.pageSize,
+          };
         }
       )
       .addCase(
@@ -156,4 +171,14 @@ export const selectAllPluginsInstances = createSelector(
 export const selectPluginsInstancesEntities = createSelector(
   getPluginsInstancesState,
   selectEntities
+);
+
+export const getPluginsInstancesLoadingStatus = createSelector(
+  getPluginsInstancesState,
+  (state) => state.loadingStatus
+);
+
+export const getPluginsInstancesPaging = createSelector(
+  getPluginsInstancesState,
+  (state) => state.paging
 );
