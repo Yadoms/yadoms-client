@@ -28,6 +28,7 @@ import {
   fetchPluginsInstances,
   getPluginsInstancesLoadingStatus,
   getPluginsInstancesPaging,
+  PluginsInstancesEntity,
   selectAllPluginsInstances,
 } from '../../redux/plugins-instances.slice';
 
@@ -85,7 +86,7 @@ export function Plugins(props: PluginsProps) {
   }, [dispatch]);
 
   const theme = useMantineTheme();
-  const columns = useMemo<MRT_ColumnDef<Plugin>[]>(
+  const columns = useMemo<MRT_ColumnDef<PluginsInstancesEntity>[]>(
     () =>
       [
         {
@@ -119,7 +120,7 @@ export function Plugins(props: PluginsProps) {
           header: 'Name',
         },
         {
-          accessorKey: 'automaticStartup',
+          accessorKey: 'autoStart',
           header: 'Start automatically',
           columnDefType: 'display', //turns off data column features like sorting, filtering, etc.
           enableColumnOrdering: true, //but you can turn back any of those features on if you want like this
@@ -127,7 +128,7 @@ export function Plugins(props: PluginsProps) {
             <Checkbox
               size="sm"
               color="dimmed"
-              defaultChecked={row.original.automaticStartup}
+              defaultChecked={row.original.autoStart}
             />
           ),
         },
@@ -145,13 +146,15 @@ export function Plugins(props: PluginsProps) {
             </Badge>
           ),
         },
-      ] as MRT_ColumnDef<(typeof data)[0]>[],
+      ] as MRT_ColumnDef<(typeof pluginsInstancesEntities)[0]>[],
     [] //end
   );
   //optionally, you can manage the row selection state yourself
-  const [tableData, setTableData] = useState<Plugin[]>(() => data);
+  const [tableData, setTableData] = useState<PluginsInstancesEntity[]>(
+    () => pluginsInstancesEntities
+  );
   const handleDeleteRow = useCallback(
-    async (row: MRT_Row<Plugin>) => {
+    async (row: MRT_Row<PluginsInstancesEntity>) => {
       const confirmed = await openDeleteModal();
       console.log(confirmed);
       if (!confirmed) {
