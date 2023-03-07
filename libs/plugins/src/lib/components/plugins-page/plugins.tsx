@@ -8,7 +8,7 @@ import {
   Flex,
   Group,
   Image,
-  Text,
+  Skeleton,
   Title,
   useMantineTheme,
 } from '@mantine/core';
@@ -34,15 +34,6 @@ import {
 
 /* eslint-disable-next-line */
 export interface PluginsProps {}
-
-interface UsersTableProps {
-  data: {
-    name: string;
-    pluginType: string;
-    automaticStartup: boolean;
-    state: string;
-  }[];
-}
 
 const stateColors: Record<string, string> = {
   up: 'green',
@@ -81,9 +72,20 @@ export function Plugins(props: PluginsProps) {
   const loadingStatus = useSelector(getPluginsInstancesLoadingStatus);
   const paging = useSelector(getPluginsInstancesPaging);
 
+  //optionally, you can manage the row selection state yourself
+  const [tableData, setTableData] = useState<PluginsInstancesEntity[]>(
+    () => pluginsInstancesEntities
+  );
+
+  const setTableDataMemoized = useCallback(setTableData, [setTableData]);
+
   useEffect(() => {
-    dispatch(fetchPluginsInstances({ page: 1, pageSize: 10 }));
-  }, [dispatch]);
+    dispatch(fetchPluginsInstances({ page: 0, pageSize: 10 }));
+  }, [dispatch, setTableDataMemoized]);
+
+  useEffect(() => {
+    setTableDataMemoized(pluginsInstancesEntities);
+  }, [pluginsInstancesEntities, setTableDataMemoized]);
 
   const theme = useMantineTheme();
   const columns = useMemo<MRT_ColumnDef<PluginsInstancesEntity>[]>(
@@ -104,19 +106,17 @@ export function Plugins(props: PluginsProps) {
           enableColumnOrdering: true, //but you can turn back any of those features on if you want like this
           Cell: ({ row }) => (
             <Image
-              width={50}
+              width={120}
               height={50}
               fit="fill"
-              src={
-                'https://www.iotone.com/files/vendor/logo_EnOceanLogo4cSolo.jpg'
-              }
+              src={`http://localhost:8080/rest/v2/plugins?byType=${row.original.displayName}&prop=icon`}
               alt="With default placeholder"
               withPlaceholder
             />
           ),
         },
         {
-          accessorKey: 'name',
+          accessorKey: 'displayName',
           header: 'Name',
         },
         {
@@ -149,10 +149,7 @@ export function Plugins(props: PluginsProps) {
       ] as MRT_ColumnDef<(typeof pluginsInstancesEntities)[0]>[],
     [] //end
   );
-  //optionally, you can manage the row selection state yourself
-  const [tableData, setTableData] = useState<PluginsInstancesEntity[]>(
-    () => pluginsInstancesEntities
-  );
+
   const handleDeleteRow = useCallback(
     async (row: MRT_Row<PluginsInstancesEntity>) => {
       const confirmed = await openDeleteModal();
@@ -208,37 +205,38 @@ export function Plugins(props: PluginsProps) {
       {isCreatePluginModelOpened && (
         <CreateNewPluginModal opened={true} onClose={handleModalClose} />
       )}
-
-      <MantineReactTable
-        displayColumnDefOptions={{
-          'mrt-row-actions': {
-            mantineTableHeadCellProps: {
-              align: 'center',
+      <Skeleton visible={loadingStatus === 'loading'}>
+        <MantineReactTable
+          displayColumnDefOptions={{
+            'mrt-row-actions': {
+              mantineTableHeadCellProps: {
+                align: 'center',
+              },
+              size: 120,
             },
-            size: 120,
-          },
-        }}
-        columns={columns}
-        data={tableData}
-        editingMode="modal" //default
-        enableRowSelection
-        enableColumnOrdering
-        enableEditing
-        positionActionsColumn="last"
-        renderRowActions={({ row, table }) => (
-          <Group spacing={3} position="center">
-            <ActionIcon>
-              <IconPower size={30} stroke={1.5} />
-            </ActionIcon>
-            <ActionIcon onClick={() => table.setEditingRow(row)}>
-              <IconPencil size={30} stroke={1.5} />
-            </ActionIcon>
-            <ActionIcon color="red" onClick={() => handleDeleteRow(row)}>
-              <IconTrash size={30} stroke={1.5} />
-            </ActionIcon>
-          </Group>
-        )}
-      />
+          }}
+          columns={columns}
+          data={tableData}
+          editingMode="modal" //default
+          enableRowSelection
+          enableColumnOrdering
+          enableEditing
+          positionActionsColumn="last"
+          renderRowActions={({ row, table }) => (
+            <Group spacing={3} position="center">
+              <ActionIcon>
+                <IconPower size={30} stroke={1.5} />
+              </ActionIcon>
+              <ActionIcon onClick={() => table.setEditingRow(row)}>
+                <IconPencil size={30} stroke={1.5} />
+              </ActionIcon>
+              <ActionIcon color="red" onClick={() => handleDeleteRow(row)}>
+                <IconTrash size={30} stroke={1.5} />
+              </ActionIcon>
+            </Group>
+          )}
+        />
+      </Skeleton>
     </Flex>
   );
 }

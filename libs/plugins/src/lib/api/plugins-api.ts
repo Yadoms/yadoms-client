@@ -15,9 +15,19 @@ export async function loadPluginsInstances(
         },
       }
     );
+    if (response.status === 204) {
+      return {
+        instances: [],
+        paging: {
+          currentPage: 1,
+          totalPage: 1,
+          pageSize: 0,
+        },
+      };
+    }
     return response.data;
   } catch (error) {
-    console.error('Error fetching user data:', error);
+    console.error('Error fetching Plugins instances:', error);
     throw error;
   }
 }

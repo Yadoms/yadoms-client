@@ -7,5 +7,5 @@ export interface Paging {
 }
 export interface PluginsInstancesResponse {
   instances: PluginsInstancesEntity[];
-  paging: Paging;
+  paging?: Paging;
 }
