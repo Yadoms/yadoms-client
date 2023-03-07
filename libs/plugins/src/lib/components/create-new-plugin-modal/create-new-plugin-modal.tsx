@@ -21,7 +21,7 @@ import {
   fetchAvailablePlugins,
   getAvailablePluginsState,
   selectAllAvailablePlugins,
-} from '@yadoms/plugins';
+} from '../../redux/available-plugins.slice';
 
 export interface CreateNewPluginModalProps {
   opened: boolean;
@@ -85,6 +85,7 @@ export function CreateNewPluginModal(props: CreateNewPluginModalProps) {
     return availablePluginsEntities.map((availablePluginsEntity) => (
       <Grid.Col span={4} key={`col-${availablePluginsEntity.id}`}>
         <Card
+          sx={{ cursor: 'pointer' }}
           shadow="sm"
           p="xl"
           component="a"
