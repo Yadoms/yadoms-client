@@ -1,5 +1,6 @@
 import { axiosInstance } from '@yadoms/shared';
 import { PluginsInstancesResponse } from '../model/PluginsInstancesResponse';
+import { AvailablePluginsResponse } from '../model/AvailablePluginsResponse';
 
 export async function loadPluginsInstances(
   currentPage = 0,
@@ -25,6 +26,18 @@ export async function loadPluginsInstances(
         },
       };
     }
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching Plugins instances:', error);
+    throw error;
+  }
+}
+
+export async function loadAvailablePlugins(): Promise<AvailablePluginsResponse> {
+  try {
+    const response = await axiosInstance.get<AvailablePluginsResponse>(
+      `/plugins`
+    );
     return response.data;
   } catch (error) {
     console.error('Error fetching Plugins instances:', error);

@@ -10,12 +10,20 @@ import {
   pluginsInstancesReducer,
 } from '@yadoms/plugins';
 
+import {
+  AVAILABLE_PLUGINS_FEATURE_KEY,
+  availablePluginsReducer,
+} from '@yadoms/plugins';
+
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 
 const store = configureStore({
-  reducer: { [PLUGINS_INSTANCES_FEATURE_KEY]: pluginsInstancesReducer },
+  reducer: {
+    [AVAILABLE_PLUGINS_FEATURE_KEY]: availablePluginsReducer,
+    [PLUGINS_INSTANCES_FEATURE_KEY]: pluginsInstancesReducer,
+  },
   // Additional middleware can be passed to this array
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
   devTools: process.env.NODE_ENV !== 'production',

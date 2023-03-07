@@ -14,8 +14,14 @@ import {
   TextInput,
   useMantineTheme,
 } from '@mantine/core';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PluginConfiguration from '../plugin-configuration/plugin-configuration';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  fetchAvailablePlugins,
+  getAvailablePluginsState,
+  selectAllAvailablePlugins,
+} from '@yadoms/plugins';
 
 export interface CreateNewPluginModalProps {
   opened: boolean;
@@ -49,6 +55,14 @@ export const configurationSchema = {
   },
 };
 export function CreateNewPluginModal(props: CreateNewPluginModalProps) {
+  const dispatch = useDispatch();
+  const availablePluginsEntities = useSelector(selectAllAvailablePlugins);
+  const loadingStatus = useSelector(getAvailablePluginsState);
+
+  useEffect(() => {
+    dispatch(fetchAvailablePlugins());
+  }, [dispatch]);
+
   const STEPPER_LENGTH = 2;
   const theme = useMantineTheme();
   const [opened, setOpened] = useState(props.opened);
@@ -66,50 +80,47 @@ export function CreateNewPluginModal(props: CreateNewPluginModalProps) {
   function isLastStep() {
     return active !== STEPPER_LENGTH;
   }
-
   function generatePluginsGrid() {
-    const cols = [];
-    for (let i = 0; i < 30; i++) {
-      cols.push(
-        <Grid.Col span={4} key={`col-${i}`}>
-          <Card
-            shadow="sm"
-            p="xl"
-            component="a"
-            onClick={nextStep}
-            target="_blank"
-          >
-            <Card.Section>
-              <Image
-                src="https://via.placeholder.com/150"
-                height={160}
-                alt="No way!"
-              />
-            </Card.Section>
+    console.log(availablePluginsEntities);
+    return availablePluginsEntities.map((availablePluginsEntity) => (
+      <Grid.Col span={4} key={`col-${availablePluginsEntity.id}`}>
+        <Card
+          shadow="sm"
+          p="xl"
+          component="a"
+          onClick={nextStep}
+          target="_blank"
+        >
+          <Card.Section>
+            <Image
+              src={`http://localhost:8080/rest/v2/plugins?byType=${availablePluginsEntity.type}&prop=icon`}
+              height={160}
+              fit="contain"
+              alt="No way!"
+            />
+          </Card.Section>
 
-            <Group position="apart" mt="md">
-              <Text fw={700}>Plugin name</Text>
-              <Badge color="pink" variant="light">
-                vX.Y.Z
-              </Badge>
-            </Group>
+          <Group position="apart" mt="md">
+            <Text fw={700}>{availablePluginsEntity.type}</Text>
+            <Badge color="pink" variant="light">
+              v{availablePluginsEntity.version}
+            </Badge>
+          </Group>
 
-            <Text mt="xs" color="dimmed" size="sm">
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Placeat,
-              quod.
+          <Text mt="xs" color="dimmed" size="sm">
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Placeat,
+            quod.
+          </Text>
+          <Flex justify={'flex-end'} mt="xs">
+            <Text fz="xs" c="dimmed">
+              by {availablePluginsEntity.author}
             </Text>
-            <Flex justify={'flex-end'} mt="xs">
-              <Text fz="xs" c="dimmed">
-                By John Doe
-              </Text>
-            </Flex>
-          </Card>
-        </Grid.Col>
-      );
-    }
-
-    return cols;
+          </Flex>
+        </Card>
+      </Grid.Col>
+    ));
   }
+
   return (
     <Modal
       overlayColor={
@@ -121,7 +132,7 @@ export function CreateNewPluginModal(props: CreateNewPluginModalProps) {
       overlayBlur={3}
       onClose={props.onClose}
       opened
-      size={'50%'}
+      fullScreen
       overflow="inside"
       title={
         <Group position="left">

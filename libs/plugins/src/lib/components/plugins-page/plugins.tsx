@@ -108,8 +108,8 @@ export function Plugins(props: PluginsProps) {
             <Image
               width={120}
               height={50}
-              fit="fill"
-              src={`http://localhost:8080/rest/v2/plugins?byType=${row.original.displayName}&prop=icon`}
+              fit="contain"
+              src={`http://localhost:8080/rest/v2/plugins?byType=SystemInformation&prop=icon`}
               alt="With default placeholder"
               withPlaceholder
             />
