@@ -11,9 +11,24 @@ import { AvailablePluginsResponse } from '../model/AvailablePluginsResponse';
 
 export const AVAILABLE_PLUGINS_FEATURE_KEY = 'availablePlugins';
 
-/*
- * Update these interfaces according to your requirements.
- */
+interface Locales {
+  description: string;
+  name: string;
+  customLabels: any;
+  configurationSchema: any;
+  deviceConfiguration: any;
+}
+
+interface Package {
+  type: string;
+  version: string;
+  author: string;
+  url: string;
+  credits: string;
+  supportedPlatforms: string;
+  supportManuallyDeviceCreation: boolean;
+  supportDeviceRemovedNotification: boolean;
+}
 export interface AvailablePluginsEntity {
   id: number;
   type: string;
@@ -22,6 +37,8 @@ export interface AvailablePluginsEntity {
   url: string;
   supportManuallyCreatedDevice: boolean;
   supportDeviceRemovedNotification: boolean;
+  locales: Locales;
+  package: Package;
 }
 
 export interface AvailablePluginsState

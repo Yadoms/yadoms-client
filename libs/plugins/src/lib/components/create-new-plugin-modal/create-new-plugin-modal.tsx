@@ -81,40 +81,40 @@ export function CreateNewPluginModal(props: CreateNewPluginModalProps) {
     return active !== STEPPER_LENGTH;
   }
   function generatePluginsGrid() {
-    console.log(availablePluginsEntities);
     return availablePluginsEntities.map((availablePluginsEntity) => (
-      <Grid.Col span={4} key={`col-${availablePluginsEntity.id}`}>
+      <Grid.Col span={3} key={`col-${availablePluginsEntity.type}`}>
         <Card
-          sx={{ cursor: 'pointer' }}
+          sx={{ display: 'flex', flexDirection: 'column' }}
           shadow="sm"
           p="xl"
           component="a"
-          onClick={nextStep}
           target="_blank"
+          withBorder
+          h={'100%'}
         >
           <Card.Section>
             <Image
-              src={`http://localhost:8080/rest/v2/plugins?byType=${availablePluginsEntity.type}&prop=icon`}
+              sx={{ cursor: 'pointer' }}
+              src={`http://localhost:8080/rest/v2/plugins?byType=${availablePluginsEntity.package.type}&prop=icon`}
               height={160}
+              onClick={nextStep}
               fit="contain"
-              alt="No way!"
+              alt={availablePluginsEntity.package.type}
             />
           </Card.Section>
 
           <Group position="apart" mt="md">
-            <Text fw={700}>{availablePluginsEntity.type}</Text>
+            <Text fw={700}>{availablePluginsEntity.package.type}</Text>
             <Badge color="pink" variant="light">
-              v{availablePluginsEntity.version}
+              v{availablePluginsEntity.package.version}
             </Badge>
           </Group>
-
-          <Text mt="xs" color="dimmed" size="sm">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Placeat,
-            quod.
+          <Text mt="xs" color="dimmed" size="sm" sx={{ flex: '1 0 auto' }}>
+            {availablePluginsEntity.locales.description}
           </Text>
           <Flex justify={'flex-end'} mt="xs">
             <Text fz="xs" c="dimmed">
-              by {availablePluginsEntity.author}
+              by {availablePluginsEntity.package.author}
             </Text>
           </Flex>
         </Card>
@@ -154,7 +154,7 @@ export function CreateNewPluginModal(props: CreateNewPluginModalProps) {
       >
         <Stepper.Step label="Choose your plugin">
           <Container fluid>
-            <Grid justify="center">{generatePluginsGrid()}</Grid>
+            <Grid grow>{generatePluginsGrid()}</Grid>
           </Container>
         </Stepper.Step>
         <Stepper.Step label="Configuration" loading={true}>
