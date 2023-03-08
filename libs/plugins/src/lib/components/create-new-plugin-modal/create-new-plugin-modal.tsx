@@ -22,6 +22,7 @@ import {
   getAvailablePluginsState,
   selectAllAvailablePlugins,
 } from '../../redux/available-plugins.slice';
+import { IconSearch } from '@tabler/icons-react';
 
 export interface CreateNewPluginModalProps {
   opened: boolean;
@@ -56,6 +57,7 @@ export const configurationSchema = {
 };
 export function CreateNewPluginModal(props: CreateNewPluginModalProps) {
   const dispatch = useDispatch();
+  const [searchQuery, setSearchQuery] = useState('');
   const availablePluginsEntities = useSelector(selectAllAvailablePlugins);
   const loadingStatus = useSelector(getAvailablePluginsState);
 
@@ -81,7 +83,11 @@ export function CreateNewPluginModal(props: CreateNewPluginModalProps) {
     return active !== STEPPER_LENGTH;
   }
   function generatePluginsGrid() {
-    return availablePluginsEntities.map((availablePluginsEntity) => (
+    const filteredPlugins = availablePluginsEntities.filter((plugin) =>
+      plugin.package.type.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
+    return filteredPlugins.map((availablePluginsEntity) => (
       <Grid.Col span={3} key={`col-${availablePluginsEntity.type}`}>
         <Card
           sx={{ display: 'flex', flexDirection: 'column' }}
@@ -153,6 +159,13 @@ export function CreateNewPluginModal(props: CreateNewPluginModalProps) {
         px={'10px'}
       >
         <Stepper.Step label="Choose your plugin">
+          <TextInput
+            placeholder="Search a plugin"
+            p="lg"
+            icon={<IconSearch size="0.9rem" stroke={1.5} />}
+            value={searchQuery}
+            onChange={(event) => setSearchQuery(event.target.value)}
+          />
           <Container fluid>
             <Grid grow>{generatePluginsGrid()}</Grid>
           </Container>
