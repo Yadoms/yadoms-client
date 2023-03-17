@@ -21,7 +21,7 @@ import {
 } from '@tabler/icons-react';
 import { MantineReactTable, MRT_ColumnDef, MRT_Row } from 'mantine-react-table';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import CreateNewPluginModal from '../create-new-plugin-modal/create-new-plugin-modal';
+import CreateNewPlugin from '../create-new-plugin/create-new-plugin';
 import { openDeleteModal } from '@yadoms/shared';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -203,7 +203,10 @@ export function Plugins(props: PluginsProps) {
         </Button>
       </Flex>
       {isCreatePluginModelOpened && (
-        <CreateNewPluginModal opened={true} onClose={handleModalClose} />
+        <CreateNewPlugin
+          opened={isCreatePluginModelOpened}
+          onClose={handleModalClose}
+        />
       )}
       <Skeleton visible={loadingStatus === 'loading'}>
         <MantineReactTable

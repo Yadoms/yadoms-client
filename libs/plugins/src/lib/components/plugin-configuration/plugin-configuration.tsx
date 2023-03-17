@@ -55,7 +55,7 @@ export interface ConfigurationSchema {
 interface PluginConfigurationProps {
   configurationSchema: ConfigurationSchema;
 }
-export function PluginConfiguration(props: PluginConfigurationProps) {
+export function PluginConfiguration(props: ConfigurationSchema) {
   const renderField = (key: string, field: any) => {
     switch (field.type) {
       case 'string':

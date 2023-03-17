@@ -30,7 +30,7 @@ interface Package {
   supportDeviceRemovedNotification: boolean;
 }
 export interface AvailablePluginsEntity {
-  id: number;
+  id: number | string;
   type: string;
   version: string;
   author: string;
