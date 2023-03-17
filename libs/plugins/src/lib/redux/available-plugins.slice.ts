@@ -8,7 +8,6 @@ import {
 } from '@reduxjs/toolkit';
 import { loadAvailablePlugins } from '../api/plugins-api';
 import { AvailablePluginsResponse } from '../model/AvailablePluginsResponse';
-
 export const AVAILABLE_PLUGINS_FEATURE_KEY = 'availablePlugins';
 
 interface Locales {
@@ -28,9 +27,9 @@ interface Package {
   supportedPlatforms: string;
   supportManuallyDeviceCreation: boolean;
   supportDeviceRemovedNotification: boolean;
+  configurationSchema: any;
 }
 export interface AvailablePluginsEntity {
-  id: number | string;
   type: string;
   version: string;
   author: string;
@@ -161,7 +160,8 @@ export const availablePluginsActions = availablePluginsSlice.actions;
  *
  * See: https://react-redux.js.org/next/api/hooks#useselector
  */
-const { selectAll, selectEntities } = availablePluginsAdapter.getSelectors();
+const { selectAll, selectEntities, selectById } =
+  availablePluginsAdapter.getSelectors();
 
 export const getAvailablePluginsState = (
   rootState: unknown
@@ -176,3 +176,35 @@ export const selectAvailablePluginsEntities = createSelector(
   getAvailablePluginsState,
   selectEntities
 );
+
+export const selectAvailablePluginEntityByType = (pluginType: string) => {
+  return createSelector(getAvailablePluginsState, (state) =>
+    selectById(state, pluginType)
+  );
+};
+
+export const getAvailablePluginConfigurationSchema = (pluginType: string) => {
+  return createSelector(
+    selectAvailablePluginEntityByType(pluginType),
+    (availablePluginEntity) => {
+      const mergedConfigSchema = {
+        ...availablePluginEntity?.package.configurationSchema,
+      };
+
+      if (availablePluginEntity?.locales.configurationSchema) {
+        Object.keys(availablePluginEntity.locales.configurationSchema).forEach(
+          (key) => {
+            if (mergedConfigSchema[key]) {
+              mergedConfigSchema[key] = {
+                ...mergedConfigSchema[key],
+                ...availablePluginEntity.locales.configurationSchema[key],
+              };
+            }
+          }
+        );
+      }
+
+      return mergedConfigSchema;
+    }
+  );
+};

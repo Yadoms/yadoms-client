@@ -18,7 +18,7 @@ import {
   fetchAvailablePlugins,
   getAvailablePluginsState,
   selectAllAvailablePlugins,
-} from '@yadoms/plugins';
+} from '../../redux/available-plugins.slice';
 
 export interface ChoosePluginModalProps {
   opened: boolean;

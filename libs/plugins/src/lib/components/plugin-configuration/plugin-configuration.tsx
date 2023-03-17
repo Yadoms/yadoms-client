@@ -38,7 +38,14 @@ import { TextInput } from '@mantine/core';
 
 export interface ConfigurationSchema {
   [key: string]: {
-    type: 'string' | 'int' | 'section';
+    type:
+      | 'string'
+      | 'int'
+      | 'bool'
+      | 'section'
+      | 'comboSection'
+      | 'radioSection'
+      | 'enum';
     regex?: string;
     description?: string;
     required?: boolean;
