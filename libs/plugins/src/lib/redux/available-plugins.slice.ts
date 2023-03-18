@@ -177,6 +177,11 @@ export const selectAvailablePluginsEntities = createSelector(
   selectEntities
 );
 
+export const selectAvailablePluginsLoading = createSelector(
+  getAvailablePluginsState,
+  (state) => state.loadingStatus === 'loading'
+);
+
 export const selectAvailablePluginEntityByType = (pluginType: string) => {
   return createSelector(getAvailablePluginsState, (state) =>
     selectById(state, pluginType)

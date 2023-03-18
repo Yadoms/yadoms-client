@@ -63,6 +63,7 @@ export interface PluginConfigurationSchema {
 
 interface PluginConfigurationProps {
   configurationSchema: PluginConfigurationSchema;
+  selectedPluginType: string;
 }
 export function PluginConfiguration(props: PluginConfigurationProps) {
   const renderField = (key: string, field: any) => {
@@ -71,7 +72,7 @@ export function PluginConfiguration(props: PluginConfigurationProps) {
         return (
           <TextInput
             label={field.name}
-            placeholder="Plugin name"
+            placeholder={field.name}
             description={field.description}
             inputWrapperOrder={['label', 'error', 'input', 'description']}
             withAsterisk={!!field.required}
@@ -82,7 +83,7 @@ export function PluginConfiguration(props: PluginConfigurationProps) {
           <NumberInput
             label={field.name}
             description={field.description}
-            placeholder="Your age"
+            placeholder={field.name}
             defaultValue={field.defaultValue}
             inputWrapperOrder={['label', 'error', 'input', 'description']}
             withAsterisk={!!field.required}
@@ -111,6 +112,7 @@ export function PluginConfiguration(props: PluginConfigurationProps) {
       <TextInput
         label="Name"
         placeholder="Plugin name"
+        defaultValue={props.selectedPluginType}
         description="custom plugin Name"
         inputWrapperOrder={['label', 'error', 'input', 'description']}
         withAsterisk

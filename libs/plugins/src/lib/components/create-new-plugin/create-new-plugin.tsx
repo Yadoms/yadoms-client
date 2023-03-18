@@ -59,6 +59,7 @@ export function CreateNewPlugin(props: CreateNewPluginProps) {
       <PluginConfigurationModal
         opened={openedPluginConfigurationModal}
         onClose={() => closePluginConfigurationModal()}
+        selectedPluginType={selectedPluginType}
         selectedPluginConfigurationSchema={selectedPluginConfigurationSchema}
       ></PluginConfigurationModal>
     </>

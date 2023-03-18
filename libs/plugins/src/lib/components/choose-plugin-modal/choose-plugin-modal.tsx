@@ -6,6 +6,7 @@ import {
   Grid,
   Group,
   Image,
+  LoadingOverlay,
   Modal,
   Text,
   TextInput,
@@ -16,8 +17,8 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   fetchAvailablePlugins,
-  getAvailablePluginsState,
   selectAllAvailablePlugins,
+  selectAvailablePluginsLoading,
 } from '../../redux/available-plugins.slice';
 
 export interface ChoosePluginModalProps {
@@ -33,7 +34,7 @@ export function ChoosePluginModal(props: ChoosePluginModalProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const availablePluginsEntities = useSelector(selectAllAvailablePlugins);
 
-  const loadingStatus = useSelector(getAvailablePluginsState);
+  const loadingStatus = useSelector(selectAvailablePluginsLoading);
 
   useEffect(() => {
     dispatch(fetchAvailablePlugins());
@@ -100,6 +101,7 @@ export function ChoosePluginModal(props: ChoosePluginModalProps) {
       size="95%"
       styles={{ header: { zIndex: 1 } }}
     >
+      <LoadingOverlay visible={loadingStatus} overlayBlur={2} />
       <TextInput
         sx={{ position: 'sticky', top: '65px', zIndex: 1 }}
         placeholder="Search a plugin"

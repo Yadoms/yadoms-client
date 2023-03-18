@@ -7,34 +7,9 @@ export interface PluginConfigurationModalProps {
   opened: boolean;
   onClose: () => void;
   selectedPluginConfigurationSchema: PluginConfigurationSchema;
+  selectedPluginType: string;
 }
 
-export const configurationSchema: PluginConfigurationSchema = {
-  Name: {
-    type: 'string',
-    required: true,
-    description: 'Plugin custom name',
-  },
-  Port: {
-    type: 'int',
-    required: true,
-    defaultValue: 80,
-  },
-  authentication: {
-    type: 'section',
-    enableWithCheckBox: true,
-    checkbox: {
-      defaultValue: true,
-    },
-    content: {
-      Password: {
-        type: 'string',
-        encrypted: true,
-        required: true,
-      },
-    },
-  },
-};
 export function PluginConfigurationModal(props: PluginConfigurationModalProps) {
   const theme = useMantineTheme();
 
@@ -54,6 +29,7 @@ export function PluginConfigurationModal(props: PluginConfigurationModalProps) {
     >
       <PluginConfiguration
         configurationSchema={props.selectedPluginConfigurationSchema}
+        selectedPluginType={props.selectedPluginType}
       />
     </Modal>
   );
