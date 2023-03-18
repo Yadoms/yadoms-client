@@ -13,6 +13,7 @@ import { Logo } from './_logo';
 import { Plugins } from '@yadoms/plugins';
 import { Routes, Route } from 'react-router-dom';
 import { Home } from '@yadoms/home';
+import { Summary } from '@yadoms/summary';
 
 function MainAppShell() {
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
@@ -62,6 +63,7 @@ function MainAppShell() {
     >
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/summary" element={<Summary />} />
         <Route path="/plugins" element={<Plugins />} />
       </Routes>
     </AppShell>

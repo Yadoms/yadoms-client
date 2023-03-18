@@ -8,9 +8,6 @@ import { Provider } from 'react-redux';
 import {
   PLUGINS_INSTANCES_FEATURE_KEY,
   pluginsInstancesReducer,
-} from '@yadoms/plugins';
-
-import {
   AVAILABLE_PLUGINS_FEATURE_KEY,
   availablePluginsReducer,
 } from '@yadoms/plugins';
@@ -30,13 +27,20 @@ const store = configureStore({
   // Optional Redux store enhancers
   enhancers: [],
 });
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { ReactQueryDevtools } from 'react-query/devtools';
+
+const queryClient = new QueryClient();
 
 root.render(
   <Provider store={store}>
-    <BrowserRouter>
-      <StrictMode>
-        <App />
-      </StrictMode>
-    </BrowserRouter>
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <StrictMode>
+          <App />
+        </StrictMode>
+      </BrowserRouter>
+      <ReactQueryDevtools initialIsOpen={false} />
+    </QueryClientProvider>
   </Provider>
 );

@@ -23,7 +23,7 @@ interface MainLinkProps {
 }
 
 function MainLink({ icon, color, label, route }: MainLinkProps) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   return (
     <UnstyledButton
       component={Link}
@@ -65,7 +65,7 @@ const data = [
     icon: <IconListCheck size={16} />,
     color: 'teal',
     label: 'summary',
-    route: '#',
+    route: '/summary',
   },
   {
     icon: <IconSettingsAutomation size={16} />,

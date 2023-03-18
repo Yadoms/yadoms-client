@@ -56,7 +56,7 @@ export function Plugins(props: PluginsProps) {
   const loadingStatus = useSelector(getPluginsInstancesLoadingStatus);
   const paging = useSelector(getPluginsInstancesPaging);
 
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   //optionally, you can manage the row selection state yourself
   const [tableData, setTableData] = useState<PluginsInstancesEntity[]>(

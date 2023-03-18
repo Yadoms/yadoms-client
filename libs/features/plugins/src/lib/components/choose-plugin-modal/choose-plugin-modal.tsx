@@ -34,7 +34,7 @@ export function ChoosePluginModal(props: ChoosePluginModalProps) {
   const dispatch = useDispatch();
   const [searchQuery, setSearchQuery] = useState('');
 
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   const availablePluginsEntities = useSelector(selectAllAvailablePlugins);
   const loadingStatus = useSelector(selectAvailablePluginsLoading);

@@ -15,9 +15,10 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@yadoms/home": ["libs/home/src/index.ts"],
-      "@yadoms/plugins": ["libs/plugins/src/index.ts"],
-      "@yadoms/shared": ["libs/shared/src/index.ts"]
+      "@yadoms/home": ["libs/features/home/src/index.ts"],
+      "@yadoms/plugins": ["libs/features/plugins/src/index.ts"],
+      "@yadoms/shared": ["libs/shared/src/index.ts"],
+      "@yadoms/summary": ["libs/features/summary/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

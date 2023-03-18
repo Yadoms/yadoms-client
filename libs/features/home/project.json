@@ -1,7 +1,7 @@
 {
   "name": "home",
-  "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/home/src",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "src",
   "projectType": "library",
   "tags": [],
   "targets": {
@@ -9,7 +9,7 @@
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["libs/home/**/*.{ts,tsx,js,jsx}"]
+        "lintFilePatterns": ["libs/features/home/**/*.{ts,tsx,js,jsx}"]
       }
     },
     "build": {
@@ -17,7 +17,7 @@
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
       "options": {
-        "outputPath": "dist/libs/home"
+        "outputPath": "dist/libs/features/home"
       },
       "configurations": {
         "development": {
@@ -30,10 +30,10 @@
     },
     "test": {
       "executor": "@nrwl/vite:test",
-      "outputs": ["coverage/libs/home"],
+      "outputs": ["coverage/libs/features/home"],
       "options": {
         "passWithNoTests": true,
-        "reportsDirectory": "../../coverage/libs/home"
+        "reportsDirectory": "../../coverage/libs/features/home"
       }
     }
   }

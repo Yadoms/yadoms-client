@@ -11,6 +11,11 @@
     "maintenance": "Maintenance",
     "about": "A propos"
   },
+  "summary": {
+    "home": {
+      "description": "Information système"
+    }
+  },
   "plugins": {
     "home": {
       "description": "Gérer, ajouter et supprimer des plugins",
