@@ -22,7 +22,7 @@ import {
 import { MantineReactTable, MRT_ColumnDef, MRT_Row } from 'mantine-react-table';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import CreateNewPlugin from '../create-new-plugin/create-new-plugin';
-import { openDeleteModal } from '@yadoms/shared';
+import { BreadCrumbs, openDeleteModal } from '@yadoms/shared';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   fetchPluginsInstances,
@@ -161,20 +161,11 @@ export function Plugins(props: PluginsProps) {
   const breadcrumbsItem = [
     { title: 'Yadoms', href: '#' },
     { title: 'Plugins', href: '#' },
-  ].map((item, index) => (
-    <Anchor href={item.href} key={index}>
-      {item.title}
-    </Anchor>
-  ));
+  ];
 
   return (
     <Flex direction="column">
-      <Flex align={'flex-end'}>
-        <IconHome2 color={'#1c7ed6'}></IconHome2>
-        <Breadcrumbs ml={'xs'} separator="→">
-          {breadcrumbsItem}
-        </Breadcrumbs>
-      </Flex>
+      <BreadCrumbs breadcrumbsItems={breadcrumbsItem} />
 
       <Title order={3} size="h3" mt="md">
         {t('plugins.home.description')}
