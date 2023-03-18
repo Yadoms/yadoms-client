@@ -1,12 +1,15 @@
 import { Modal, useMantineTheme } from '@mantine/core';
-import PluginConfiguration from '../plugin-configuration/plugin-configuration';
+import PluginConfiguration, {
+  PluginConfigurationSchema,
+} from '../plugin-configuration/plugin-configuration';
 
 export interface PluginConfigurationModalProps {
   opened: boolean;
   onClose: () => void;
+  selectedPluginConfigurationSchema: PluginConfigurationSchema;
 }
 
-export const configurationSchema = {
+export const configurationSchema: PluginConfigurationSchema = {
   Name: {
     type: 'string',
     required: true,
@@ -49,7 +52,9 @@ export function PluginConfigurationModal(props: PluginConfigurationModalProps) {
       opened={props.opened}
       size="95%"
     >
-      <PluginConfiguration configurationSchema={configurationSchema} />
+      <PluginConfiguration
+        configurationSchema={props.selectedPluginConfigurationSchema}
+      />
     </Modal>
   );
 }

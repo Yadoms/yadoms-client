@@ -3,7 +3,7 @@ import { useDisclosure } from '@mantine/hooks';
 import PluginConfigurationModal from '../plugin-configuration-modal/plugin-configuration-modal';
 import ChoosePluginModal from '../choose-plugin-modal/choose-plugin-modal';
 import { useSelector } from 'react-redux';
-import { getAvailablePluginConfigurationSchema } from '@yadoms/plugins';
+import { getAvailablePluginConfigurationSchema } from '../../redux/available-plugins.slice';
 
 export interface CreateNewPluginProps {
   opened: boolean;
@@ -16,7 +16,7 @@ export function CreateNewPlugin(props: CreateNewPluginProps) {
     useDisclosure(false);
   const [selectedPluginType, setSelectedPluginType] = useState('');
 
-  const availablePlugin = useSelector(
+  const selectedPluginConfigurationSchema = useSelector(
     getAvailablePluginConfigurationSchema(selectedPluginType)
   );
 
@@ -26,8 +26,8 @@ export function CreateNewPlugin(props: CreateNewPluginProps) {
 
   useEffect(() => {
     console.log(selectedPluginType);
-    console.log(availablePlugin);
-  }, [selectedPluginType, availablePlugin]);
+    console.log(selectedPluginConfigurationSchema);
+  }, [selectedPluginType, selectedPluginConfigurationSchema]);
 
   const handlePluginSelect = (selectedPluginType: string) => {
     console.log('Selected plugin id:', selectedPluginType);
@@ -59,6 +59,7 @@ export function CreateNewPlugin(props: CreateNewPluginProps) {
       <PluginConfigurationModal
         opened={openedPluginConfigurationModal}
         onClose={() => closePluginConfigurationModal()}
+        selectedPluginConfigurationSchema={selectedPluginConfigurationSchema}
       ></PluginConfigurationModal>
     </>
   );

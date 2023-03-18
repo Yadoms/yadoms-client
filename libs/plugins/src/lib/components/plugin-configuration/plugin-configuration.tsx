@@ -1,4 +1,4 @@
-import { TextInput } from '@mantine/core';
+import { NumberInput, TextInput } from '@mantine/core';
 
 // interface ConfigurationSchemaValue {
 //   type: 'string' | 'int' | 'enum' | 'comboSection';
@@ -36,9 +36,9 @@ import { TextInput } from '@mantine/core';
 //   configurationSchema: PackageConfigurationSchema;
 // }
 
-export interface ConfigurationSchema {
+export interface PluginConfigurationSchema {
   [key: string]: {
-    type:
+    type?:
       | 'string'
       | 'int'
       | 'bool'
@@ -47,40 +47,47 @@ export interface ConfigurationSchema {
       | 'radioSection'
       | 'enum';
     regex?: string;
+    regexErrorMessage?: string;
     description?: string;
-    required?: boolean;
+    name?: string;
+    required?: boolean | string;
     encrypted?: boolean;
     defaultValue?: number | boolean | string;
     enableWithCheckBox?: boolean;
     checkbox?: {
       defaultValue: boolean;
     };
-    content?: ConfigurationSchema;
+    content?: PluginConfigurationSchema;
   };
 }
 
 interface PluginConfigurationProps {
-  configurationSchema: ConfigurationSchema;
+  configurationSchema: PluginConfigurationSchema;
 }
-export function PluginConfiguration(props: ConfigurationSchema) {
+export function PluginConfiguration(props: PluginConfigurationProps) {
   const renderField = (key: string, field: any) => {
     switch (field.type) {
       case 'string':
         return (
           <TextInput
-            label={key}
+            label={field.name}
             placeholder="Plugin name"
             description={field.description}
             inputWrapperOrder={['label', 'error', 'input', 'description']}
-            withAsterisk
+            withAsterisk={!!field.required}
           />
         );
       case 'int':
         return (
-          <div key={key}>
-            <label>{key}</label>
-            <input type="number" />
-          </div>
+          <NumberInput
+            label={field.name}
+            description={field.description}
+            placeholder="Your age"
+            defaultValue={field.defaultValue}
+            inputWrapperOrder={['label', 'error', 'input', 'description']}
+            withAsterisk={!!field.required}
+            min={0}
+          />
         );
       case 'section':
         return (
@@ -101,6 +108,13 @@ export function PluginConfiguration(props: ConfigurationSchema) {
 
   return (
     <div>
+      <TextInput
+        label="Name"
+        placeholder="Plugin name"
+        description="custom plugin Name"
+        inputWrapperOrder={['label', 'error', 'input', 'description']}
+        withAsterisk
+      />
       {Object.entries(props.configurationSchema).map(([key, value]) =>
         renderField(key, value)
       )}
