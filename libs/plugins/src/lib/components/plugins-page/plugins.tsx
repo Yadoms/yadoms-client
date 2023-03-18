@@ -31,6 +31,7 @@ import {
   PluginsInstancesEntity,
   selectAllPluginsInstances,
 } from '../../redux/plugins-instances.slice';
+import { useTranslation } from 'react-i18next';
 
 /* eslint-disable-next-line */
 export interface PluginsProps {}
@@ -49,28 +50,13 @@ export type Plugin = {
   state: 'up' | 'stopped';
 };
 
-const data: Plugin[] = [
-  {
-    id: '1',
-    avatar: 'https://via.placeholder.com/150',
-    name: 'EnOcean',
-    automaticStartup: false,
-    state: 'up',
-  },
-  {
-    id: '2',
-    avatar: 'https://via.placeholder.com/150',
-    name: 'OneWire',
-    automaticStartup: true,
-    state: 'stopped',
-  },
-];
-
 export function Plugins(props: PluginsProps) {
   const dispatch = useDispatch();
   const pluginsInstancesEntities = useSelector(selectAllPluginsInstances);
   const loadingStatus = useSelector(getPluginsInstancesLoadingStatus);
   const paging = useSelector(getPluginsInstancesPaging);
+
+  const { t, i18n } = useTranslation();
 
   //optionally, you can manage the row selection state yourself
   const [tableData, setTableData] = useState<PluginsInstancesEntity[]>(
@@ -191,7 +177,7 @@ export function Plugins(props: PluginsProps) {
       </Flex>
 
       <Title order={3} size="h3" mt="md">
-        Manage, add and remove plugins
+        {t('plugins.home.description')}
       </Title>
 
       <Flex justify={'end'} align={'center'} mt="md" mb="md">
@@ -199,7 +185,7 @@ export function Plugins(props: PluginsProps) {
           leftIcon={<IconHomePlus />}
           onClick={() => setCreatePluginModelOpened(true)}
         >
-          Create a plugin
+          {t('plugins.home.create-new-plugin-btn')}
         </Button>
       </Flex>
       {isCreatePluginModelOpened && (

@@ -20,7 +20,7 @@ export default function App() {
       toggleColorScheme={toggleColorScheme}
     >
       <MantineProvider
-        theme={{ colorScheme }}
+        theme={{ loader: 'bars', colorScheme }}
         withGlobalStyles
         withNormalizeCSS
       >

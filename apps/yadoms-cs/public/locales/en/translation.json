@@ -1,0 +1,26 @@
+{
+  "side-bar": {
+    "home": "Home",
+    "summary": "Summary",
+    "system-configuration": "System configuration",
+    "plugins": "Plugins",
+    "devices": "Devices",
+    "automation-center": "Automation center",
+    "recipients": "Recipients",
+    "install-and-update": "Install & Update",
+    "maintenance": "Maintenance",
+    "about": "About"
+  },
+  "plugins": {
+    "home": {
+      "description": "Manage, add and remove plugins",
+      "create-new-plugin-btn": "Create a plugin"
+    },
+    "modal": {
+      "choose-plugin": {
+        "title": "Choose your plugin",
+        "search": "Search a plugin"
+      }
+    }
+  }
+}

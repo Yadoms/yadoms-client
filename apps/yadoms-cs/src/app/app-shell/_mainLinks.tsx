@@ -13,6 +13,7 @@ import {
 } from '@tabler/icons-react';
 import { Group, Text, ThemeIcon, UnstyledButton } from '@mantine/core';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 interface MainLinkProps {
   icon: React.ReactNode;
@@ -22,6 +23,7 @@ interface MainLinkProps {
 }
 
 function MainLink({ icon, color, label, route }: MainLinkProps) {
+  const { t, i18n } = useTranslation();
   return (
     <UnstyledButton
       component={Link}
@@ -46,7 +48,7 @@ function MainLink({ icon, color, label, route }: MainLinkProps) {
         <ThemeIcon color={color} variant="light">
           {icon}
         </ThemeIcon>
-        <Text size="sm">{label}</Text>
+        <Text size="sm">{t(`side-bar.${label}`)}</Text>
       </Group>
     </UnstyledButton>
   );
@@ -56,58 +58,63 @@ const data = [
   {
     icon: <IconHome2 size={16} />,
     color: 'blue',
-    label: 'Home',
+    label: 'home',
     route: '/',
   },
   {
     icon: <IconListCheck size={16} />,
     color: 'teal',
-    label: 'Summary',
+    label: 'summary',
     route: '#',
   },
   {
     icon: <IconSettingsAutomation size={16} />,
     color: 'violet',
-    label: 'System configuration',
+    label: 'system-configuration',
     route: '#',
   },
   {
     icon: <IconPlugConnectedX size={16} />,
     color: 'grape',
-    label: 'Plugins',
+    label: 'plugins',
     route: '/plugins',
   },
   {
     icon: <IconDevices2 size={16} />,
     color: 'blue',
-    label: 'Equipment',
+    label: 'devices',
     route: '#',
   },
   {
     icon: <IconRobot size={16} />,
     color: 'teal',
-    label: `Automation Center`,
+    label: `automation-center`,
     route: '#',
   },
   {
     icon: <IconMailForward size={16} />,
     color: 'violet',
-    label: `Recipients`,
+    label: `recipients`,
     route: '#',
   },
   {
     icon: <IconAdjustments size={16} />,
     color: 'grape',
-    label: `Install & Update`,
+    label: `install-and-update`,
     route: '#',
   },
   {
     icon: <IconHomeCog size={16} />,
     color: 'blue',
-    label: `Maintenance`,
+    label: `maintenance`,
     route: '#',
   },
-  { icon: <IconAt size={16} />, color: 'teal', label: `About`, route: '#' },
+  {
+    icon: <IconAt size={16} />,
+    color: 'teal',
+    label: `about`,
+    route: '#',
+  },
 ];
 
 export function MainLinks() {

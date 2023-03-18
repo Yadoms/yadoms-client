@@ -1,0 +1,26 @@
+{
+  "side-bar": {
+    "home": "Accueil",
+    "summary": "Résumé",
+    "system-configuration": "Configuration système",
+    "plugins": "Plugins",
+    "devices": "Equipements",
+    "automation-center": "Centre d'automatisation",
+    "recipients": "Destinataires",
+    "install-and-update": "Installation & Mise à jour",
+    "maintenance": "Maintenance",
+    "about": "A propos"
+  },
+  "plugins": {
+    "home": {
+      "description": "Gérer, ajouter et supprimer des plugins",
+      "create-new-plugin-btn": "Créer un plugin"
+    },
+    "modal": {
+      "choose-plugin": {
+        "title": "Choisissez votre plugin",
+        "search": "Chercher un plugin"
+      }
+    }
+  }
+}

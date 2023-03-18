@@ -20,6 +20,7 @@ import {
   selectAllAvailablePlugins,
   selectAvailablePluginsLoading,
 } from '../../redux/available-plugins.slice';
+import { useTranslation } from 'react-i18next';
 
 export interface ChoosePluginModalProps {
   opened: boolean;
@@ -32,8 +33,10 @@ export function ChoosePluginModal(props: ChoosePluginModalProps) {
   const theme = useMantineTheme();
   const dispatch = useDispatch();
   const [searchQuery, setSearchQuery] = useState('');
-  const availablePluginsEntities = useSelector(selectAllAvailablePlugins);
 
+  const { t, i18n } = useTranslation();
+
+  const availablePluginsEntities = useSelector(selectAllAvailablePlugins);
   const loadingStatus = useSelector(selectAvailablePluginsLoading);
 
   useEffect(() => {
@@ -95,7 +98,7 @@ export function ChoosePluginModal(props: ChoosePluginModalProps) {
         opacity: 0.55,
         blur: 3,
       }}
-      title="Choose your Plugin"
+      title={t('plugins.modal.choose-plugin.title')}
       onClose={props.onClose}
       opened={props.opened}
       size="95%"
@@ -104,7 +107,7 @@ export function ChoosePluginModal(props: ChoosePluginModalProps) {
       <LoadingOverlay visible={loadingStatus} overlayBlur={2} />
       <TextInput
         sx={{ position: 'sticky', top: '65px', zIndex: 1 }}
-        placeholder="Search a plugin"
+        placeholder={t('plugins.modal.choose-plugin.search')}
         p="lg"
         icon={<IconSearch size="0.9rem" stroke={1.5} />}
         value={searchQuery}
