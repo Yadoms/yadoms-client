@@ -42,15 +42,15 @@ export function User() {
       >
         <Group>
           <Avatar
-            src="https://avatars.githubusercontent.com/u/6855339?v=4"
+            src="https://avatars.githubusercontent.com/u/22369027?s=400&u=b4106c8f78dc4ffc5e2bddf2a76e3288fdf3c218&v=4"
             radius="xl"
           />
           <Box sx={{ flex: 1 }}>
             <Text size="sm" weight={500}>
-              Sébastien Gallou
+              Oussama DAHMAZ
             </Text>
             <Text color="dimmed" size="xs">
-              sebastien.gallou@gmail.com
+              oussama.dahmaz@gmail.com
             </Text>
           </Box>
 
