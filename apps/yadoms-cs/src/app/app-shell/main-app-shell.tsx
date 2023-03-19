@@ -121,7 +121,7 @@ function MainAppShell() {
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   const dark = colorScheme === 'dark';
 
-  const [active, setActive] = useState(2);
+  const [active, setActive] = useState(0);
 
   const links = linksData.map((link, index) => (
     <NavbarLink

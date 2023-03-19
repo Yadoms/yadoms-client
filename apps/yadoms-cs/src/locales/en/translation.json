@@ -14,6 +14,15 @@
   "summary": {
     "home": {
       "description": "System information"
+    },
+    "informations": {
+      "platform": "Platform",
+      "software-version": "Software Version",
+      "database-version": "Database Version",
+      "started-from": "Started from",
+      "database-engine": "Database engine",
+      "version-database-engine": "Version of database engine",
+      "database-size": "Database size"
     }
   },
   "plugins": {
