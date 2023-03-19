@@ -159,8 +159,8 @@ export function Plugins(props: PluginsProps) {
   }
 
   const breadcrumbsItem = [
-    { title: 'Yadoms', href: '#' },
-    { title: 'Plugins', href: '#' },
+    { title: 'home', href: '#' },
+    { title: 'plugins', href: '#' },
   ];
 
   return (

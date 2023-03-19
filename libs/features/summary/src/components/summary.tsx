@@ -13,8 +13,8 @@ export function Summary() {
   );
 
   const breadcrumbsItem = [
-    { title: 'Yadoms', href: '#' },
-    { title: 'Summary', href: '#' },
+    { title: 'home', href: '#' },
+    { title: 'summary', href: '#' },
   ];
 
   return (

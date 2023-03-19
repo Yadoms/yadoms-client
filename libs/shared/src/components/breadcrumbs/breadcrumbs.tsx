@@ -1,6 +1,7 @@
 import { Anchor, Flex, Breadcrumbs } from '@mantine/core';
 import { IconHome2 } from '@tabler/icons-react';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 export interface Breadcrumbs {
   title: string;
@@ -11,9 +12,10 @@ export interface BreadcrumbsProps {
 }
 
 export function BreadCrumbs(props: BreadcrumbsProps) {
+  const { t } = useTranslation();
   const breadcrumbsItem = props.breadcrumbsItems.map((item, index) => (
     <Anchor href={item.href} key={index}>
-      {item.title}
+      {t(`side-bar.${item.title}`)}
     </Anchor>
   ));
 
