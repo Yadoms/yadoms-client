@@ -1,39 +1,61 @@
 import { useQuery } from 'react-query';
 import { loadSystemInformations } from '../api/summary-api';
-import { Flex, Paper, Title, Text, Box, LoadingOverlay } from '@mantine/core';
-import React from 'react';
+import {
+  Flex,
+  Paper,
+  Title,
+  Text,
+  Box,
+  LoadingOverlay,
+  List,
+  Drawer,
+} from '@mantine/core';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { BreadCrumbs } from '@yadoms/shared';
+import {
+  IconBox,
+  IconDashboard,
+  IconSettings,
+  IconShoppingCart,
+  IconUsers,
+} from '@tabler/icons-react';
+import { ListItem } from '@mantine/core/lib/List/ListItem/ListItem';
 
 export function Summary() {
-  const { t } = useTranslation();
+  const [collapsed, setCollapsed] = useState(false);
 
-  const { isLoading, data } = useQuery('system-informations', () =>
-    loadSystemInformations()
-  );
+  const toggleCollapsed = () => {
+    setCollapsed(!collapsed);
+  };
 
-  const breadcrumbsItem = [
-    { title: 'home', href: '#' },
-    { title: 'summary', href: '#' },
+  const items = [
+    { icon: <IconDashboard size={20} />, label: 'Dashboard' },
+    { icon: <IconShoppingCart size={20} />, label: 'Orders' },
+    { icon: <IconUsers size={20} />, label: 'Customers' },
+    { icon: <IconBox size={20} />, label: 'Products' },
+    { icon: <IconSettings size={20} />, label: 'Settings' },
   ];
 
   return (
-    <Flex direction="column">
-      <BreadCrumbs breadcrumbsItems={breadcrumbsItem} />
-      <Title order={3} size="h3" mt="md">
-        {t('summary.home.description')}
-      </Title>
-      <Box maw={'100%'} pos="relative">
-        <LoadingOverlay visible={isLoading} overlayBlur={2} />
-        <Paper shadow="xs" p="md">
-          <Text>Paper is the most basic ui component</Text>
-          <Text>
-            Use it to create cards, dropdowns, modals and other components that
-            require background with shadow
-          </Text>
-        </Paper>
-      </Box>
-    </Flex>
+    <Drawer opened={!collapsed} onClose={toggleCollapsed}>
+      <List>
+        {items.map((item, index) => (
+          <List.Item key={index} onClick={toggleCollapsed}>
+            {collapsed ? (
+              item.icon
+            ) : (
+              <>
+                {item.icon}
+                <Text weight={700} style={{ marginLeft: 8 }}>
+                  {item.label}
+                </Text>
+              </>
+            )}
+          </List.Item>
+        ))}
+      </List>
+    </Drawer>
   );
 }
 

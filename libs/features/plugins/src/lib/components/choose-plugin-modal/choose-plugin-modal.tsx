@@ -102,6 +102,7 @@ export function ChoosePluginModal(props: ChoosePluginModalProps) {
       onClose={props.onClose}
       opened={props.opened}
       size="95%"
+      zIndex={1000}
       styles={{ header: { zIndex: 1 } }}
     >
       <LoadingOverlay visible={loadingStatus} overlayBlur={2} />
