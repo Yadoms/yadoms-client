@@ -1,8 +1,7 @@
 import {
   ActionIcon,
-  Anchor,
   Badge,
-  Breadcrumbs,
+  Box,
   Button,
   Checkbox,
   Flex,
@@ -13,14 +12,28 @@ import {
   useMantineTheme,
 } from '@mantine/core';
 import {
-  IconHome2,
   IconHomePlus,
+  IconHomeSearch,
   IconPencil,
   IconPower,
   IconTrash,
 } from '@tabler/icons-react';
-import { MantineReactTable, MRT_ColumnDef, MRT_Row } from 'mantine-react-table';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import {
+  MantineReactTable,
+  MRT_ColumnDef,
+  MRT_GlobalFilterTextInput,
+  MRT_Row,
+  MRT_TableInstance,
+  MRT_VisibilityState,
+} from 'mantine-react-table';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useReducer,
+  useRef,
+  useState,
+} from 'react';
 import CreateNewPlugin from '../create-new-plugin/create-new-plugin';
 import { BreadCrumbs, openDeleteModal } from '@yadoms/shared';
 import { useDispatch, useSelector } from 'react-redux';
@@ -56,6 +69,17 @@ export function Plugins(props: PluginsProps) {
   const loadingStatus = useSelector(getPluginsInstancesLoadingStatus);
   const paging = useSelector(getPluginsInstancesPaging);
 
+  //we need a table instance ref to pass as a prop to the MRT Toolbar buttons
+  const tableInstanceRef = useRef<MRT_TableInstance<Plugin>>(null);
+
+  //we will also need some weird re-render hacks to force the MRT_ components to re-render since ref changes do not trigger a re-render
+  const rerender = useReducer(() => ({}), {})[1];
+
+  //we need to manage the state that should trigger the MRT_ components in our custom toolbar to re-render
+  const [columnVisibility, setColumnVisibility] = useState<MRT_VisibilityState>(
+    {}
+  );
+
   const { t } = useTranslation();
 
   //optionally, you can manage the row selection state yourself
@@ -78,17 +102,8 @@ export function Plugins(props: PluginsProps) {
     () =>
       [
         {
-          accessorKey: 'id',
-          header: 'ID',
-          enableColumnOrdering: false,
-          enableEditing: false, //disable editing on this column
-          enableSorting: false,
-          size: 80,
-        },
-        {
           accessorKey: 'type',
           header: 'Type',
-          columnDefType: 'display', //turns off data column features like sorting, filtering, etc.
           enableColumnOrdering: true, //but you can turn back any of those features on if you want like this
           Cell: ({ row }) => (
             <Image
@@ -108,7 +123,7 @@ export function Plugins(props: PluginsProps) {
         {
           accessorKey: 'autoStart',
           header: 'Start automatically',
-          columnDefType: 'display', //turns off data column features like sorting, filtering, etc.
+          //columnDefType: 'display', //turns off data column features like sorting, filtering, etc.
           enableColumnOrdering: true, //but you can turn back any of those features on if you want like this
           Cell: ({ row }) => (
             <Checkbox
@@ -167,24 +182,43 @@ export function Plugins(props: PluginsProps) {
     <Flex direction="column">
       <BreadCrumbs breadcrumbsItems={breadcrumbsItem} />
 
-      <Title order={3} size="h3" mt="md">
+      <Title order={3} size="h3" m="md">
         {t('plugins.home.description')}
       </Title>
 
-      <Flex justify={'end'} align={'center'} mt="md" mb="md">
-        <Button
-          leftIcon={<IconHomePlus />}
-          onClick={() => setCreatePluginModelOpened(true)}
-        >
-          {t('plugins.home.create-new-plugin-btn')}
-        </Button>
-      </Flex>
       {isCreatePluginModelOpened && (
         <CreateNewPlugin
           opened={isCreatePluginModelOpened}
           onClose={handleModalClose}
         />
       )}
+
+      {tableInstanceRef.current && (
+        <Flex
+          sx={(theme) => ({
+            backgroundColor: theme.fn.rgba(theme.colors.blue[3], 0.2),
+            borderRadius: '4px',
+            flexDirection: 'row',
+            gap: '16px',
+            justifyContent: 'space-between',
+            padding: '24px 16px',
+            '@media max-width: 768px': {
+              flexDirection: 'column',
+            },
+          })}
+        >
+          <MRT_GlobalFilterTextInput table={tableInstanceRef.current} />
+          <Box>
+            <Button
+              leftIcon={<IconHomePlus />}
+              onClick={() => setCreatePluginModelOpened(true)}
+            >
+              {t('plugins.home.create-new-plugin-btn')}
+            </Button>
+          </Box>
+        </Flex>
+      )}
+
       <Skeleton visible={loadingStatus === 'loading'}>
         <MantineReactTable
           displayColumnDefOptions={{
@@ -202,6 +236,12 @@ export function Plugins(props: PluginsProps) {
           enableColumnOrdering
           enableEditing
           positionActionsColumn="last"
+          enableTopToolbar={false}
+          initialState={{ showGlobalFilter: true }}
+          tableInstanceRef={tableInstanceRef}
+          icons={{
+            IconSearch: () => <IconHomeSearch />,
+          }}
           renderRowActions={({ row, table }) => (
             <Group spacing={3} position="center">
               <ActionIcon>

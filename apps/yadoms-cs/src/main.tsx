@@ -11,6 +11,8 @@ import {
   AVAILABLE_PLUGINS_FEATURE_KEY,
   availablePluginsReducer,
 } from '@yadoms/plugins';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { ReactQueryDevtools } from 'react-query/devtools';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -27,8 +29,6 @@ const store = configureStore({
   // Optional Redux store enhancers
   enhancers: [],
 });
-import { QueryClient, QueryClientProvider } from 'react-query';
-import { ReactQueryDevtools } from 'react-query/devtools';
 
 const queryClient = new QueryClient();
 
