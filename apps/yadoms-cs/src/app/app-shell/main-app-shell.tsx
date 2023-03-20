@@ -164,7 +164,7 @@ function MainAppShell() {
               : theme.colors.gray[0],
         })}
       >
-        <Header height={60}>
+        <Header height={60} zIndex={-1}>
           <Group sx={{ height: '100%' }} px={20} position="right">
             <ActionIcon
               variant="default"

@@ -25,7 +25,7 @@ export function PluginConfigurationModal(props: PluginConfigurationModalProps) {
       }}
       onClose={props.onClose}
       opened={props.opened}
-      zIndex={1000}
+      zIndex={1001}
       size="95%"
     >
       <PluginConfiguration
