@@ -9,7 +9,8 @@
     "recipients": "Recipients",
     "install-and-update": "Install & Update",
     "maintenance": "Maintenance",
-    "about": "About"
+    "about": "About",
+    "logout": "Logout"
   },
   "summary": {
     "home": {

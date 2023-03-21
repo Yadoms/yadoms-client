@@ -150,7 +150,7 @@ function MainAppShell() {
         </Navbar.Section>
         <Navbar.Section>
           <Stack justify="center" spacing={0}>
-            <NavbarLink icon={IconLogout} label="Logout" route={'/'} />
+            <NavbarLink icon={IconLogout} label="logout" route={'/'} />
           </Stack>
         </Navbar.Section>
       </Navbar>
