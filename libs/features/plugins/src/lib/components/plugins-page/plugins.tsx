@@ -55,7 +55,7 @@ const stateColors: Record<string, string> = {
   stopped: 'blue',
   running: 'green',
   custom: 'yellow',
-  waitdebugger: 'yellow',
+  waitDebugger: 'yellow',
 };
 
 export type Plugin = {
