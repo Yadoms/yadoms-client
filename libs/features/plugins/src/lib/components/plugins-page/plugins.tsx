@@ -50,9 +50,12 @@ import { useTranslation } from 'react-i18next';
 export interface PluginsProps {}
 
 const stateColors: Record<string, string> = {
-  up: 'green',
-  stopped: 'red',
-  down: 'pink',
+  unknown: 'yellow',
+  error: 'red',
+  stopped: 'blue',
+  running: 'green',
+  custom: 'yellow',
+  waitdebugger: 'yellow',
 };
 
 export type Plugin = {
@@ -60,7 +63,7 @@ export type Plugin = {
   avatar: string;
   name: string;
   automaticStartup: boolean;
-  state: 'up' | 'stopped';
+  state: 'stopped';
 };
 
 export function Plugins(props: PluginsProps) {
