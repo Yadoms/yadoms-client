@@ -98,25 +98,25 @@ export function ChoosePluginModal(props: ChoosePluginModalProps) {
         opacity: 0.55,
         blur: 3,
       }}
-      title={t('plugins.modal.choose-plugin.title')}
+      title={<Text>{t('plugins.modal.choose-plugin.title')}</Text>}
       onClose={props.onClose}
       opened={props.opened}
       size="95%"
       zIndex={1000}
+      scrollAreaComponent={Modal.NativeScrollArea}
       styles={{ header: { zIndex: 1 } }}
     >
       <LoadingOverlay visible={loadingStatus} overlayBlur={2} />
       <TextInput
-        sx={{ position: 'sticky', top: '65px', zIndex: 1 }}
+        sx={{ position: 'sticky', top: '65px', zIndex: 2000 }}
+        data-autofocus
         placeholder={t('plugins.modal.choose-plugin.search')}
         p="lg"
         icon={<IconSearch size="0.9rem" stroke={1.5} />}
         value={searchQuery}
         onChange={(event) => setSearchQuery(event.target.value)}
       />
-      <Container fluid>
-        <Grid grow>{generatePluginsGrid()}</Grid>
-      </Container>
+      <Grid grow>{generatePluginsGrid()}</Grid>
     </Modal>
   );
 }
