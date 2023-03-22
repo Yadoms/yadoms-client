@@ -55,7 +55,7 @@ const stateColors: Record<string, string> = {
   stopped: 'blue',
   running: 'green',
   custom: 'yellow',
-  waitDebugger: 'yellow',
+  waitdebugger: 'yellow',
 };
 
 export type Plugin = {
@@ -239,7 +239,6 @@ export function Plugins(props: PluginsProps) {
           columns={columns}
           data={tableData}
           editingMode="modal" //default
-          enableRowSelection
           enableColumnOrdering
           enableEditing
           positionActionsColumn="last"
