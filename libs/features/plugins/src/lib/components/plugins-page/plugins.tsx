@@ -47,7 +47,7 @@ import {
 import { useTranslation } from 'react-i18next';
 
 /* eslint-disable-next-line */
-export interface PluginsProps { }
+export interface PluginsProps {}
 
 const stateColors: Record<string, string> = {
   unknown: 'yellow',
@@ -113,7 +113,11 @@ export function Plugins(props: PluginsProps) {
               width={120}
               height={50}
               fit="contain"
-              src={"http://localhost:8080/rest/v2/plugins?byType=" + row.original.type + "&prop=icon"}
+              src={
+                'http://localhost:8080/rest/v2/plugins?byType=' +
+                row.original.type +
+                '&prop=icon'
+              }
               alt="With default placeholder"
               withPlaceholder
             />

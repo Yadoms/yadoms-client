@@ -37,3 +37,6 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+
+# ignore package-lock if generated (project uses yarn, not npm)
+package-lock.json
