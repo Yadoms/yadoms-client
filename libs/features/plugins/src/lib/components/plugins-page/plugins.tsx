@@ -235,12 +235,21 @@ export function Plugins(props: PluginsProps) {
               },
               size: 120,
             },
+            'mrt-row-expand':{
+              mantineTableHeadCellProps: {
+                align: 'right',
+              },
+              mantineTableBodyCellProps: {
+                align: 'right',
+              },
+            }
           }}
           columns={columns}
           data={tableData}
           editingMode="modal" //default
           enableColumnOrdering
           enableEditing
+          positionExpandColumn="first"
           positionActionsColumn="last"
           enableTopToolbar={false}
           initialState={{ showGlobalFilter: true }}
@@ -248,6 +257,19 @@ export function Plugins(props: PluginsProps) {
           icons={{
             IconSearch: () => <IconHomeSearch />,
           }}
+          renderDetailPanel={({ row }) => (
+            <Box
+              sx={{
+                display: 'grid',
+                margin: 'auto',
+                gridTemplateColumns: '1fr 1fr',
+                width: '100%',
+              }}
+            >
+              <text>Name: {row.original.displayName}</text>
+              <text>State: {row.original.state}</text>
+            </Box>
+          )}
           renderRowActions={({ row, table }) => (
             <Group spacing={3} position="center">
               <ActionIcon>
