@@ -104,7 +104,6 @@ export function ChoosePluginModal(props: ChoosePluginModalProps) {
       size="95%"
       zIndex={1000}
       scrollAreaComponent={Modal.NativeScrollArea}
-      styles={{ header: { zIndex: 1 } }}
     >
       <LoadingOverlay visible={loadingStatus} overlayBlur={2} />
       <TextInput
