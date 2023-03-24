@@ -10,6 +10,7 @@ import {
   Modal,
   Text,
   TextInput,
+  Divider,
   useMantineTheme,
 } from '@mantine/core';
 import { IconSearch } from '@tabler/icons-react';
@@ -98,7 +99,19 @@ export function ChoosePluginModal(props: ChoosePluginModalProps) {
         opacity: 0.55,
         blur: 3,
       }}
-      title={<Text>{t('plugins.modal.choose-plugin.title')}</Text>}
+      title={
+        <Flex align={'center'}>
+          <Text>{t('plugins.modal.choose-plugin.title')}</Text>
+          <Divider size="sm" orientation="vertical" mx={10} />
+          <TextInput
+            data-autofocus
+            placeholder={t('plugins.modal.choose-plugin.search')}
+            icon={<IconSearch size="0.9rem" stroke={1.5} />}
+            value={searchQuery}
+            onChange={(event) => setSearchQuery(event.target.value)}
+          />
+        </Flex>
+      }
       onClose={props.onClose}
       opened={props.opened}
       size="95%"
@@ -106,15 +119,6 @@ export function ChoosePluginModal(props: ChoosePluginModalProps) {
       scrollAreaComponent={Modal.NativeScrollArea}
     >
       <LoadingOverlay visible={loadingStatus} overlayBlur={2} />
-      <TextInput
-        sx={{ position: 'sticky', top: '65px', zIndex: 2000 }}
-        data-autofocus
-        placeholder={t('plugins.modal.choose-plugin.search')}
-        p="lg"
-        icon={<IconSearch size="0.9rem" stroke={1.5} />}
-        value={searchQuery}
-        onChange={(event) => setSearchQuery(event.target.value)}
-      />
       <Grid grow>{generatePluginsGrid()}</Grid>
     </Modal>
   );
