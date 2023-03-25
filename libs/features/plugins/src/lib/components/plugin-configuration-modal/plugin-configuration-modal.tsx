@@ -1,4 +1,4 @@
-import { Button, Flex, Group, Modal, useMantineTheme } from '@mantine/core';
+import { Button, Flex, Modal, useMantineTheme } from '@mantine/core';
 import PluginConfiguration, {
   PluginConfigurationSchema,
 } from '../plugin-configuration/plugin-configuration';
