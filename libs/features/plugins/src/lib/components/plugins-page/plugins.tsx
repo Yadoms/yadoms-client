@@ -235,14 +235,14 @@ export function Plugins(props: PluginsProps) {
               },
               size: 120,
             },
-            'mrt-row-expand':{
+            'mrt-row-expand': {
               mantineTableHeadCellProps: {
                 align: 'right',
               },
               mantineTableBodyCellProps: {
                 align: 'right',
               },
-            }
+            },
           }}
           columns={columns}
           data={tableData}

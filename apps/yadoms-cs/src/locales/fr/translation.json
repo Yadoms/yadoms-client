@@ -35,6 +35,11 @@
       "choose-plugin": {
         "title": "Choisissez votre plugin",
         "search": "Chercher un plugin"
+      },
+      "plugin-configuration": {
+        "title": "Remplissez votre configuration",
+        "back": "Retour",
+        "create": "Créer"
       }
     }
   }

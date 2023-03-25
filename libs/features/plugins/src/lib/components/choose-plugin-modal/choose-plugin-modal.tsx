@@ -1,7 +1,7 @@
 import {
   Badge,
   Card,
-  Container,
+  Button,
   Flex,
   Grid,
   Group,
@@ -89,38 +89,42 @@ export function ChoosePluginModal(props: ChoosePluginModalProps) {
       </Grid.Col>
     ));
   }
+
   return (
-    <Modal
-      overlayProps={{
-        color:
-          theme.colorScheme === 'dark'
-            ? theme.colors.dark[9]
-            : theme.colors.gray[2],
-        opacity: 0.55,
-        blur: 3,
-      }}
-      title={
-        <Flex align={'center'}>
-          <Text>{t('plugins.modal.choose-plugin.title')}</Text>
-          <Divider size="sm" orientation="vertical" mx={10} />
-          <TextInput
-            data-autofocus
-            placeholder={t('plugins.modal.choose-plugin.search')}
-            icon={<IconSearch size="0.9rem" stroke={1.5} />}
-            value={searchQuery}
-            onChange={(event) => setSearchQuery(event.target.value)}
-          />
-        </Flex>
-      }
+    <Modal.Root
       onClose={props.onClose}
       opened={props.opened}
       size="95%"
       zIndex={1000}
       scrollAreaComponent={Modal.NativeScrollArea}
     >
-      <LoadingOverlay visible={loadingStatus} overlayBlur={2} />
-      <Grid grow>{generatePluginsGrid()}</Grid>
-    </Modal>
+      <Modal.Overlay opacity={0.55} blur={3} />
+      <Modal.Content>
+        <Modal.Header>
+          <Modal.Title>
+            {
+              <Flex align={'center'}>
+                <Text>{t('plugins.modal.choose-plugin.title')}</Text>
+                <Divider size="sm" orientation="vertical" mx={10} />
+                <TextInput
+                  data-autofocus
+                  placeholder={t('plugins.modal.choose-plugin.search')}
+                  icon={<IconSearch size="0.9rem" stroke={1.5} />}
+                  value={searchQuery}
+                  onChange={(event) => setSearchQuery(event.target.value)}
+                />
+              </Flex>
+            }
+          </Modal.Title>
+
+          <Modal.CloseButton />
+        </Modal.Header>
+        <Modal.Body>
+          <LoadingOverlay visible={loadingStatus} overlayBlur={2} />
+          <Grid grow>{generatePluginsGrid()}</Grid>
+        </Modal.Body>
+      </Modal.Content>
+    </Modal.Root>
   );
 }
 
