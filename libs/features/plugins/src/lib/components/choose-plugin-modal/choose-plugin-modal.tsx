@@ -1,7 +1,6 @@
 import {
   Badge,
   Card,
-  Button,
   Flex,
   Grid,
   Group,
@@ -11,7 +10,6 @@ import {
   Text,
   TextInput,
   Divider,
-  useMantineTheme,
 } from '@mantine/core';
 import { IconSearch } from '@tabler/icons-react';
 import React, { useEffect, useState } from 'react';
@@ -31,7 +29,6 @@ export interface ChoosePluginModalProps {
 }
 
 export function ChoosePluginModal(props: ChoosePluginModalProps) {
-  const theme = useMantineTheme();
   const dispatch = useDispatch();
   const [searchQuery, setSearchQuery] = useState('');
 

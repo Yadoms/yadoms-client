@@ -1,11 +1,11 @@
 import React from 'react';
-import { IconChevronRight, IconChevronLeft } from '@tabler/icons-react';
+import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
 import {
-  UnstyledButton,
-  Group,
   Avatar,
-  Text,
   Box,
+  Group,
+  Text,
+  UnstyledButton,
   useMantineTheme,
 } from '@mantine/core';
 
