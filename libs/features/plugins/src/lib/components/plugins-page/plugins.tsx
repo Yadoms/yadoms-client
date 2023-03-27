@@ -129,7 +129,7 @@ export function Plugins(props: PluginsProps) {
         },
         {
           accessorKey: 'autoStart',
-          header:  t('plugins.home.start-automatically'),
+          header: t('plugins.home.start-automatically'),
           //columnDefType: 'display', //turns off data column features like sorting, filtering, etc.
           enableColumnOrdering: true, //but you can turn back any of those features on if you want like this
           Cell: ({ row }) => (
@@ -235,14 +235,14 @@ export function Plugins(props: PluginsProps) {
               },
               size: 120,
             },
-            'mrt-row-expand':{
+            'mrt-row-expand': {
               mantineTableHeadCellProps: {
                 align: 'right',
               },
               mantineTableBodyCellProps: {
                 align: 'right',
               },
-            }
+            },
           }}
           columns={columns}
           data={tableData}
