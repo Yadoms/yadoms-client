@@ -28,8 +28,12 @@
   },
   "plugins": {
     "home": {
+      "state": "Etat",
+      "type": "Type",
+      "name": "Nom",
       "description": "Gérer, ajouter et supprimer des plugins",
-      "create-new-plugin-btn": "Créer un plugin"
+      "create-new-plugin-btn": "Créer un plugin",
+      "start-automatically": "Démarrer automatiquement"
     },
     "modal": {
       "choose-plugin": {

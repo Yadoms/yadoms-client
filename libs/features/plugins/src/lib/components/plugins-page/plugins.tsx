@@ -49,7 +49,7 @@ import { useTranslation } from 'react-i18next';
 /* eslint-disable-next-line */
 export interface PluginsProps {}
 
-const stateColors: Record<string, string> = {
+export const stateColors: Record<string, string> = {
   unknown: 'yellow',
   error: 'red',
   stopped: 'blue',
@@ -106,7 +106,7 @@ export function Plugins(props: PluginsProps) {
       [
         {
           accessorKey: 'type',
-          header: 'Type',
+          header: t('plugins.home.type'),
           enableColumnOrdering: true, //but you can turn back any of those features on if you want like this
           Cell: ({ row }) => (
             <Image
@@ -125,11 +125,11 @@ export function Plugins(props: PluginsProps) {
         },
         {
           accessorKey: 'displayName',
-          header: 'Name',
+          header: t('plugins.home.name'),
         },
         {
           accessorKey: 'autoStart',
-          header: 'Start automatically',
+          header:  t('plugins.home.start-automatically'),
           //columnDefType: 'display', //turns off data column features like sorting, filtering, etc.
           enableColumnOrdering: true, //but you can turn back any of those features on if you want like this
           Cell: ({ row }) => (
@@ -142,7 +142,7 @@ export function Plugins(props: PluginsProps) {
         },
         {
           accessorKey: 'state',
-          header: 'State',
+          header: t('plugins.home.state'),
           // columnDefType: 'display', //turns off data column features like sorting, filtering, etc.
           // enableColumnOrdering: false, //but you can turn back any of those features on if you want like this
           Cell: ({ row }) => (
@@ -247,9 +247,8 @@ export function Plugins(props: PluginsProps) {
           columns={columns}
           data={tableData}
           editingMode="modal" //default
-          enableColumnOrdering
           enableEditing
-          positionExpandColumn="first"
+          enableColumnOrdering
           positionActionsColumn="last"
           enableTopToolbar={false}
           initialState={{ showGlobalFilter: true }}
@@ -257,19 +256,6 @@ export function Plugins(props: PluginsProps) {
           icons={{
             IconSearch: () => <IconHomeSearch />,
           }}
-          renderDetailPanel={({ row }) => (
-            <Box
-              sx={{
-                display: 'grid',
-                margin: 'auto',
-                gridTemplateColumns: '1fr 1fr',
-                width: '100%',
-              }}
-            >
-              <text>Name: {row.original.displayName}</text>
-              <text>State: {row.original.state}</text>
-            </Box>
-          )}
           renderRowActions={({ row, table }) => (
             <Group spacing={3} position="center">
               <ActionIcon>
