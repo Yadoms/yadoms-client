@@ -6,10 +6,10 @@ import './i18n';
 import { configureStore } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
 import {
-  PLUGINS_INSTANCES_FEATURE_KEY,
-  pluginsInstancesReducer,
   AVAILABLE_PLUGINS_FEATURE_KEY,
   availablePluginsReducer,
+  PLUGINS_INSTANCES_FEATURE_KEY,
+  pluginsInstancesReducer,
 } from '@yadoms/plugins';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';

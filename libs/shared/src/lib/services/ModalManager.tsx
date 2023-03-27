@@ -1,5 +1,6 @@
 import { Text } from '@mantine/core';
 import { openConfirmModal } from '@mantine/modals';
+
 export const openDeleteModal = () => {
   return new Promise((resolve) => {
     openConfirmModal({
