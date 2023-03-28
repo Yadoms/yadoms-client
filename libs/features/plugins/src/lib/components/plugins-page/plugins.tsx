@@ -106,7 +106,12 @@ export function Plugins(props: PluginsProps) {
       row: MRT_Row<PluginsInstancesEntity>,
       event: React.ChangeEvent<HTMLInputElement>
     ) => {
-      dispatch(updatePluginsInstance({id: row.original.id, data:{ autoStart: event.target.checked }}));
+      dispatch(
+        updatePluginsInstance({
+          id: row.original.id,
+          data: { autoStart: event.target.checked },
+        })
+      );
     },
     [tableData]
   );
