@@ -165,7 +165,6 @@ export function Plugins(props: PluginsProps) {
       row: MRT_Row<PluginsInstancesEntity>,
       event: React.ChangeEvent<HTMLInputElement>
     ) => {
-      console.log('row.original.autoStart = ' + event.target.checked);
       savePluginsInstance(row.original.id, { autoStart: event.target.checked }); //TODO refactorer pour utiliser splice
     },
     [tableData]
