@@ -43,9 +43,9 @@ import {
   getPluginsInstancesPaging,
   PluginsInstancesEntity,
   selectAllPluginsInstances,
+  updatePluginsInstance,
 } from '../../redux/plugins-instances.slice';
 import { useTranslation } from 'react-i18next';
-import { savePluginsInstance } from '../../api/plugins-api'; //TODO moche ? Devrait passer par slice ?
 
 /* eslint-disable-next-line */
 export interface PluginsProps {}
@@ -100,6 +100,16 @@ export function Plugins(props: PluginsProps) {
   useEffect(() => {
     setTableDataMemoized(pluginsInstancesEntities);
   }, [pluginsInstancesEntities, setTableDataMemoized]);
+
+  const handleAutostartCheckboxChange = useCallback(
+    async (
+      row: MRT_Row<PluginsInstancesEntity>,
+      event: React.ChangeEvent<HTMLInputElement>
+    ) => {
+      dispatch(updatePluginsInstance({id: row.original.id, data:{ autoStart: event.target.checked }}));
+    },
+    [tableData]
+  );
 
   const theme = useMantineTheme();
   const columns = useMemo<MRT_ColumnDef<PluginsInstancesEntity>[]>(
@@ -158,16 +168,6 @@ export function Plugins(props: PluginsProps) {
         },
       ] as MRT_ColumnDef<(typeof pluginsInstancesEntities)[0]>[],
     [] //end
-  );
-
-  const handleAutostartCheckboxChange = useCallback(
-    async (
-      row: MRT_Row<PluginsInstancesEntity>,
-      event: React.ChangeEvent<HTMLInputElement>
-    ) => {
-      savePluginsInstance(row.original.id, { autoStart: event.target.checked }); //TODO refactorer pour utiliser splice
-    },
-    [tableData]
   );
 
   const handleDeleteRow = useCallback(

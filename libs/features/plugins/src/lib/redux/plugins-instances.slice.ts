@@ -6,7 +6,7 @@ import {
   EntityState,
   PayloadAction,
 } from '@reduxjs/toolkit';
-import { loadPluginsInstances } from '../api/plugins-api';
+import { loadPluginsInstances, savePluginsInstance } from '../api/plugins-api';
 import {
   Paging,
   PluginsInstancesResponse,
@@ -60,6 +60,16 @@ export const fetchPluginsInstances = createAsyncThunk(
   async ({ page, pageSize }: { page: number; pageSize: number }, thunkAPI) => {
     try {
       return await loadPluginsInstances(page, pageSize);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
+export const updatePluginsInstance = createAsyncThunk(
+  'pluginsInstances/update',
+  async ({ id, data }: { id: number; data: object }, thunkAPI) => {
+    try {
+      return await savePluginsInstance(id, data);
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
     }
