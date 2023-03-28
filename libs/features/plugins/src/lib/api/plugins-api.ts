@@ -47,14 +47,7 @@ export async function loadAvailablePlugins(): Promise<AvailablePluginsResponse> 
 
 export async function savePluginsInstance(instanceId: number, data: object) {
   try {
-    await axiosInstance.patch(`/plugins-instances`, {
-      params: {
-        id: instanceId,
-      },
-      data: {
-        data,
-      },
-    });
+    await axiosInstance.patch('/plugins-instances/' + instanceId, data);
   } catch (error) {
     console.error('Error fetching Plugins instances:', error);
     throw error;
