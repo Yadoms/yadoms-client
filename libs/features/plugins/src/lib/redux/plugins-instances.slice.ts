@@ -31,7 +31,7 @@ export interface PluginsInstancesEntity {
   category: string;
   state: PuginsInstancesState;
   fullState: { state: string; messageId: string; messageData: string };
-  configuration: any;
+  configuration: object;
 }
 
 export interface PluginsInstancesState

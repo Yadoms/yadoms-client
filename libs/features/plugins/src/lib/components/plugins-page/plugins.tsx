@@ -115,21 +115,24 @@ export function Plugins(props: PluginsProps) {
         })
       );
     },
-    [tableData]
+    [dispatch]
   );
 
   const handleTogglePowerRow = useCallback(
     async (row: MRT_Row<PluginsInstancesEntity>) => {
       dispatch(
-        startStopPluginsInstance({
-          id: row.original.id,
-          start:
-            row.original.state == PuginsInstancesState.Stopped ||
-            row.original.state == PuginsInstancesState.Error,
-        })
+        startStopPluginsInstance(
+          {
+            id: row.original.id,
+            start:
+              row.original.state === PuginsInstancesState.Stopped ||
+              row.original.state === PuginsInstancesState.Error,
+          },
+          [startStopPluginsInstance]
+        )
       );
     },
-    [tableData]
+    [dispatch]
   );
 
   const theme = useMantineTheme();
@@ -188,7 +191,7 @@ export function Plugins(props: PluginsProps) {
           ),
         },
       ] as MRT_ColumnDef<(typeof pluginsInstancesEntities)[0]>[],
-    [] //end
+    [handleAutostartCheckboxChange, t, theme.colorScheme] //end
   );
 
   const handleDeleteRow = useCallback(

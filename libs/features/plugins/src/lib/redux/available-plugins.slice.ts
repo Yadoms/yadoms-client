@@ -13,9 +13,9 @@ export const AVAILABLE_PLUGINS_FEATURE_KEY = 'availablePlugins';
 interface Locales {
   description: string;
   name: string;
-  customLabels: any;
-  configurationSchema: any;
-  deviceConfiguration: any;
+  customLabels: object;
+  configurationSchema: object;
+  deviceConfiguration: object;
 }
 
 interface Package {
@@ -27,7 +27,7 @@ interface Package {
   supportedPlatforms: string;
   supportManuallyDeviceCreation: boolean;
   supportDeviceRemovedNotification: boolean;
-  configurationSchema: any;
+  configurationSchema: object;
 }
 export interface AvailablePluginsEntity {
   type: string;

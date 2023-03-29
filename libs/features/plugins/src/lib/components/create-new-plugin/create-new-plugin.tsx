@@ -22,7 +22,7 @@ export function CreateNewPlugin(props: CreateNewPluginProps) {
 
   useEffect(() => {
     choosePluginModalHandlers.open();
-  }, []);
+  }, [choosePluginModalHandlers]);
 
   useEffect(() => {
     console.log(selectedPluginType);

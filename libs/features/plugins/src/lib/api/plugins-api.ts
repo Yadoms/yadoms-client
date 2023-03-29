@@ -67,4 +67,4 @@ class PluginsApi {
   }
 }
 
-export let pluginsApi = new PluginsApi();
+export const pluginsApi = new PluginsApi();
