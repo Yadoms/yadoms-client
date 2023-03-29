@@ -29,7 +29,7 @@ class PluginsApi {
       }
       return response.data;
     } catch (error) {
-      console.error('Error fetching Plugins instances:', error);
+      console.error('Error fetching plugins instances : ', error);
       throw error;
     }
   }
@@ -41,7 +41,24 @@ class PluginsApi {
       );
       return response.data;
     } catch (error) {
-      console.error('Error fetching Plugins instances:', error);
+      console.error('Error fetching available plugins : ', error);
+      throw error;
+    }
+  }
+
+  async createPluginsInstance(
+    type: string,
+    name: string,
+    configuration: object
+  ) {
+    try {
+      await axiosInstance.post('/plugins-instances/', {
+        type: { type },
+        displayName: { name },
+        configuration: { configuration },
+      });
+    } catch (error) {
+      console.error('Error creating plugin instance : ', error);
       throw error;
     }
   }
@@ -50,7 +67,7 @@ class PluginsApi {
     try {
       await axiosInstance.patch('/plugins-instances/' + instanceId, data);
     } catch (error) {
-      console.error('Error saving Plugins instances:', error);
+      console.error('Error saving plugin instance : ', error);
       throw error;
     }
   }
@@ -61,7 +78,7 @@ class PluginsApi {
         '/plugins-instances/' + instanceId + (start ? '/start' : '/stop')
       );
     } catch (error) {
-      console.error('Error start/stop Plugins instances:', error);
+      console.error('Error starting/stoping plugin instance : ', error);
       throw error;
     }
   }
