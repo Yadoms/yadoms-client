@@ -44,6 +44,8 @@ import {
   PluginsInstancesEntity,
   selectAllPluginsInstances,
   updatePluginsInstance,
+  startStopPluginsInstance,
+  PuginsInstancesState,
 } from '../../redux/plugins-instances.slice';
 import { useTranslation } from 'react-i18next';
 
@@ -110,6 +112,20 @@ export function Plugins(props: PluginsProps) {
         updatePluginsInstance({
           id: row.original.id,
           data: { autoStart: event.target.checked },
+        })
+      );
+    },
+    [tableData]
+  );
+
+  const handleTogglePowerRow = useCallback(
+    async (row: MRT_Row<PluginsInstancesEntity>) => {
+      dispatch(
+        startStopPluginsInstance({
+          id: row.original.id,
+          start:
+            row.original.state == PuginsInstancesState.Stopped ||
+            row.original.state == PuginsInstancesState.Error,
         })
       );
     },
@@ -275,7 +291,7 @@ export function Plugins(props: PluginsProps) {
           }}
           renderRowActions={({ row, table }) => (
             <Group spacing={3} position="center">
-              <ActionIcon>
+              <ActionIcon onClick={() => handleTogglePowerRow(row)}>
                 <IconPower size={30} stroke={1.5} />
               </ActionIcon>
               <ActionIcon onClick={() => table.setEditingRow(row)}>

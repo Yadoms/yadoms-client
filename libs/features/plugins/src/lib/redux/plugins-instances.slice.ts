@@ -6,7 +6,7 @@ import {
   EntityState,
   PayloadAction,
 } from '@reduxjs/toolkit';
-import { loadPluginsInstances, savePluginsInstance } from '../api/plugins-api';
+import { pluginsApi } from '../api/plugins-api';
 import {
   Paging,
   PluginsInstancesResponse,
@@ -14,16 +14,22 @@ import {
 
 export const PLUGINS_INSTANCES_FEATURE_KEY = 'pluginsInstances';
 
-/*
- * Update these interfaces according to your requirements.
- */
+export enum PuginsInstancesState {
+  Unknown = 'Unknown',
+  Error = 'Error',
+  Stopped = 'Stopped',
+  Running = 'Running',
+  Custom = 'Custom',
+  WaitDebugger = 'WaitDebugger',
+}
+
 export interface PluginsInstancesEntity {
   id: number;
   displayName: string;
   type: string;
   autoStart: boolean;
   category: string;
-  state: string;
+  state: PuginsInstancesState;
   fullState: { state: string; messageId: string; messageData: string };
   configuration: any;
 }
@@ -59,17 +65,29 @@ export const fetchPluginsInstances = createAsyncThunk(
   'pluginsInstances/fetchStatus',
   async ({ page, pageSize }: { page: number; pageSize: number }, thunkAPI) => {
     try {
-      return await loadPluginsInstances(page, pageSize);
+      return await pluginsApi.loadPluginsInstances(page, pageSize);
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
     }
   }
 );
+
 export const updatePluginsInstance = createAsyncThunk(
   'pluginsInstances/update',
   async ({ id, data }: { id: number; data: object }, thunkAPI) => {
     try {
-      return await savePluginsInstance(id, data);
+      return await pluginsApi.savePluginsInstance(id, data);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
+
+export const startStopPluginsInstance = createAsyncThunk(
+  'pluginsInstances/startStop',
+  async ({ id, start }: { id: number; start: boolean }, thunkAPI) => {
+    try {
+      return await pluginsApi.startStopPluginsInstance(id, start);
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
     }

@@ -6,7 +6,7 @@ import {
   EntityState,
   PayloadAction,
 } from '@reduxjs/toolkit';
-import { loadAvailablePlugins } from '../api/plugins-api';
+import { pluginsApi } from '../api/plugins-api';
 import { AvailablePluginsResponse } from '../model/AvailablePluginsResponse';
 export const AVAILABLE_PLUGINS_FEATURE_KEY = 'availablePlugins';
 
@@ -72,7 +72,7 @@ export const fetchAvailablePlugins = createAsyncThunk(
   'availablePlugins/fetchStatus',
   async (_, thunkAPI) => {
     try {
-      return await loadAvailablePlugins();
+      return await pluginsApi.loadAvailablePlugins();
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
     }
