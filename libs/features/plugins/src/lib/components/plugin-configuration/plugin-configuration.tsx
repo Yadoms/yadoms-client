@@ -1,7 +1,11 @@
-import { NumberInput, TextInput, useMantineTheme } from '@mantine/core';
+import { Button, NumberInput, TextInput, useMantineTheme } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
 import { useEffect, useState } from 'react';
+import {
+  getFromInitialValues,
+  validateForm,
+} from './plugins-configuration-forms';
 
 export interface PluginConfigurationSchema {
   [key: string]: {
@@ -35,41 +39,22 @@ interface PluginConfigurationProps {
 
 export function PluginConfiguration(props: PluginConfigurationProps) {
   const theme = useMantineTheme();
-  let validationPattern: RegExp;
 
   const [initialValues, setInitialValues] = useState<Record<string, any>>({});
 
   useEffect(() => {
     // Create initial values object based on configuration schema
-    const newInitialValues: Record<string, any> = {};
-    console.log('props.configurationSchema', props.configurationSchema);
-    Object.entries(props.configurationSchema).forEach(([key, field]) => {
-      console.log('key', key);
-      console.log('field', field);
-
-      newInitialValues[key] = '';
-      console.log('newInitialValues[key]', newInitialValues[key]);
-      if (field.defaultValue !== undefined) {
-        newInitialValues[key] = field.defaultValue;
-      }
-      if (field.type === 'section') {
-        Object.entries(field.content || {}).forEach(([subKey, subField]) => {
-          if (subField.defaultValue !== undefined) {
-            newInitialValues[`${key}.${subKey}`] = subField.defaultValue;
-          }
-        });
-      }
-    });
-    console.log('newInitialValues', newInitialValues);
+    const newInitialValues = getFromInitialValues(props.configurationSchema);
     setInitialValues(newInitialValues);
   }, [props.configurationSchema]);
 
-  const form = useForm<Record<string, any>>({
+  const form = useForm({
     initialValues,
     validate: (values) => validateForm(values, props.configurationSchema),
   });
 
   const onSubmit = () => {
+    console.log(form.values);
     const errorValues = Object.values(form.errors);
     if (errorValues.length === 0) {
       // handle successful form submission
@@ -89,38 +74,6 @@ export function PluginConfiguration(props: PluginConfigurationProps) {
     }
   };
 
-  const validateForm = (
-    values: Record<string, any>,
-    schema: PluginConfigurationSchema
-  ) => {
-    const errors: Record<string, string> = {};
-
-    const validateField = (key: string, value: any, field: any) => {
-      if (field.required && (!value || value.trim() === '')) {
-        errors[key] = `${field.name} is required`;
-      } else if (field.regex && !new RegExp(field.regex).test(value)) {
-        errors[key] = field.regexErrorMessage || `${field.name} is invalid`;
-      }
-    };
-
-    const validateObject = (
-      obj: Record<string, any>,
-      schema: PluginConfigurationSchema
-    ) => {
-      Object.entries(schema).forEach(([key, field]) => {
-        if (field.type === 'section') {
-          validateObject(obj[key] || {}, field.content || {});
-        } else {
-          validateField(key, obj[key], field);
-        }
-      });
-    };
-
-    validateObject(values, schema);
-
-    return errors;
-  };
-
   const renderField = (key: string, field: any) => {
     switch (field.type) {
       case 'string':
@@ -135,17 +88,16 @@ export function PluginConfiguration(props: PluginConfigurationProps) {
             required={field.required}
 
             // onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-            //   validationPattern = new RegExp(field.regex);
+            //   // validationPattern = new RegExp(field.regex);
             //   console.log('event.currentTarget.value', event.currentTarget.value);
             //   form.setFieldValue(key, event.currentTarget.value);
             //   console.log('form', form);
             // }}
-
+            //
             // onBlur={() => {
             //   if (field.regex) {
-            //     console.log('field.pattern', field.regex);
-            //     validationPattern = new RegExp(field.regex); // create regex object
-            //     console.log('Validation pattern set to:', validationPattern);
+            //     // validationPattern = new RegExp(field.regex); // create regex object
+            //
             //     form.setFieldError(key, field.regexErrorMessage); // pass regex as second argument
             //   }
             // }}
@@ -182,9 +134,10 @@ export function PluginConfiguration(props: PluginConfigurationProps) {
 
   return (
     <form
-      onSubmit={(e) => {
-        e.preventDefault();
-      }}
+      onSubmit={form.onSubmit((values) => {
+        console.log('form', form);
+        console.log(values);
+      })}
     >
       <TextInput
         label="Name"
@@ -197,9 +150,9 @@ export function PluginConfiguration(props: PluginConfigurationProps) {
       {Object.entries(props.configurationSchema).map(([key, value]) =>
         renderField(key, value)
       )}
-      <button onClick={onSubmit} type="submit">
+      <Button onClick={onSubmit} type="submit">
         Submit
-      </button>
+      </Button>
     </form>
   );
 }
