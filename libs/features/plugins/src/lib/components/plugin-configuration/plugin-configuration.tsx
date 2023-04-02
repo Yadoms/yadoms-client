@@ -8,6 +8,7 @@ import {
   TextInput,
   useMantineTheme,
   Flex,
+  Radio,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
@@ -117,6 +118,13 @@ export function PluginConfiguration(props: PluginConfigurationProps) {
     return data;
   }
 
+  function getRadioSectionData(field: any) {
+    // const data = [];
+    return Object.entries(field.content).map(([key, value]) => (
+      <Radio value={value.name} label={value.name} />
+    ));
+  }
+
   const renderField = (key: string, field: any) => {
     switch (field.type) {
       case 'string':
@@ -158,6 +166,16 @@ export function PluginConfiguration(props: PluginConfigurationProps) {
             min={0}
           />
         );
+      case 'enum':
+        return (
+          <Select
+            label={field.name}
+            description={field.description}
+            inputWrapperOrder={['label', 'error', 'input', 'description']}
+            // defaultValue={getComboSectionData(field)[0].label}
+            data={[]}
+          />
+        );
       case 'comboSection':
         return (
           <Box
@@ -184,6 +202,17 @@ export function PluginConfiguration(props: PluginConfigurationProps) {
                 renderField(key, value)
               )}
           </Box>
+        );
+      case 'radioSection':
+        return (
+          <Radio.Group
+            name={field.name}
+            label={field.name}
+            description={field.description}
+            withAsterisk
+          >
+            <Group mt="xs">{getRadioSectionData(field)}</Group>
+          </Radio.Group>
         );
       case 'section':
         return (

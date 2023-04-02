@@ -139,7 +139,6 @@ function MainAppShell() {
         width={{ base: 80 }}
         p="md"
         position={{ top: 0 }}
-        zIndex={-1}
       >
         <Center>
           <Logo colorScheme={colorScheme} />

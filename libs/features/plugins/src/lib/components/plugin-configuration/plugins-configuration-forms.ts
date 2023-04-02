@@ -6,30 +6,25 @@ export function getFromInitialValues(
   const newInitialValues: Record<string, any> = {};
   console.log('props.configurationSchema', configurationSchema);
   Object.entries(configurationSchema).forEach(([key, field]) => {
-    if (field.type === 'string') {
-      if (field.defaultValue !== undefined) {
-        newInitialValues[key] = field.defaultValue;
-      } else {
-        newInitialValues[key] = '';
-      }
+    switch (field.type) {
+      case 'string':
+        newInitialValues[key] =
+          field.defaultValue !== undefined ? field.defaultValue : '';
+        break;
+      case 'int':
+        newInitialValues[key] =
+          field.defaultValue !== undefined ? field.defaultValue : 0;
+        break;
+      case 'section':
+        Object.entries(field.content || {}).forEach(([subKey, subField]) => {
+          if (subField.defaultValue !== undefined) {
+            newInitialValues[`${key}.${subKey}`] = subField.defaultValue;
+          }
+        });
+        break;
+      default:
+        break;
     }
-    if (field.type === 'int') {
-      if (field.defaultValue !== undefined) {
-        newInitialValues[key] = field.defaultValue;
-      } else {
-        newInitialValues[key] = 0;
-      }
-    }
-    if (field.type === 'section') {
-      Object.entries(field.content || {}).forEach(([subKey, subField]) => {
-        if (subField.defaultValue !== undefined) {
-          newInitialValues[`${key}.${subKey}`] = subField.defaultValue;
-        }
-      });
-    }
-
-    // if (field.regex) {
-    // }
   });
   console.log('newInitialValuesnewInitialValues', newInitialValues);
   return newInitialValues;
