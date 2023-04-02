@@ -1,7 +1,17 @@
-import { Button, NumberInput, TextInput, useMantineTheme } from '@mantine/core';
+import {
+  Box,
+  Text,
+  Button,
+  Group,
+  NumberInput,
+  Select,
+  TextInput,
+  useMantineTheme,
+  Flex,
+} from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
-import { useEffect, useState } from 'react';
+import { forwardRef, useEffect, useState } from 'react';
 import {
   getFromInitialValues,
   validateForm,
@@ -37,6 +47,26 @@ interface PluginConfigurationProps {
   selectedPluginType: string;
 }
 
+interface ItemProps extends React.ComponentPropsWithoutRef<'div'> {
+  label: string;
+  value: string;
+  description: string;
+}
+
+const SelectItem = forwardRef<HTMLDivElement, ItemProps>(
+  ({ label, description, ...others }: ItemProps, ref) => (
+    <div ref={ref} {...others}>
+      <Group noWrap>
+        <div>
+          <Text size="sm">{label}</Text>
+          <Text size="xs" opacity={0.65}>
+            {description}
+          </Text>
+        </div>
+      </Group>
+    </div>
+  )
+);
 export function PluginConfiguration(props: PluginConfigurationProps) {
   const theme = useMantineTheme();
 
@@ -73,6 +103,19 @@ export function PluginConfiguration(props: PluginConfigurationProps) {
       });
     }
   };
+
+  function getComboSectionData(field: any) {
+    const data: ItemProps[] = [];
+    Object.entries(field.content).map(([key, value]) => {
+      data.push({
+        description: value.description,
+        value: value.name,
+        label: value.name,
+      });
+    });
+
+    return data;
+  }
 
   const renderField = (key: string, field: any) => {
     switch (field.type) {
@@ -115,6 +158,33 @@ export function PluginConfiguration(props: PluginConfigurationProps) {
             min={0}
           />
         );
+      case 'comboSection':
+        return (
+          <Box
+            sx={(theme) => ({
+              backgroundColor:
+                theme.colorScheme === 'dark'
+                  ? theme.colors.dark[5]
+                  : theme.colors.gray[1],
+              textAlign: 'left',
+              padding: theme.spacing.xl,
+              borderRadius: theme.radius.md,
+            })}
+          >
+            <Select
+              label={field.name}
+              description={field.description}
+              inputWrapperOrder={['label', 'error', 'input', 'description']}
+              defaultValue={getComboSectionData(field)[0].label}
+              itemComponent={SelectItem}
+              data={getComboSectionData(field)}
+            />
+            {field.content &&
+              Object.entries(field.content).map(([key, value]) =>
+                renderField(key, value)
+              )}
+          </Box>
+        );
       case 'section':
         return (
           <div key={key}>
@@ -139,17 +209,20 @@ export function PluginConfiguration(props: PluginConfigurationProps) {
         console.log(values);
       })}
     >
-      <TextInput
-        label="Name"
-        placeholder="Plugin name"
-        defaultValue={props.selectedPluginType}
-        description="custom plugin Name"
-        inputWrapperOrder={['label', 'error', 'input', 'description']}
-        withAsterisk
-      />
-      {Object.entries(props.configurationSchema).map(([key, value]) =>
-        renderField(key, value)
-      )}
+      <Flex direction={'column'} gap={10}>
+        <TextInput
+          label="Name"
+          placeholder="Plugin name"
+          defaultValue={props.selectedPluginType}
+          description="custom plugin Name"
+          inputWrapperOrder={['label', 'error', 'input', 'description']}
+          withAsterisk
+        />
+        {Object.entries(props.configurationSchema).map(([key, value]) =>
+          renderField(key, value)
+        )}
+      </Flex>
+
       <Button onClick={onSubmit} type="submit">
         Submit
       </Button>

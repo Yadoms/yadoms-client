@@ -26,7 +26,10 @@ export function CreateNewPlugin(props: CreateNewPluginProps) {
 
   useEffect(() => {
     console.log(selectedPluginType);
-    console.log(selectedPluginConfigurationSchema);
+    console.log(
+      'selectedPluginConfigurationSchema',
+      selectedPluginConfigurationSchema
+    );
   }, [selectedPluginType, selectedPluginConfigurationSchema]);
 
   const handlePluginSelect = (selectedPluginType: string) => {
