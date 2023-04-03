@@ -22,16 +22,19 @@ import {
 import { useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
 
+export enum PluginConfigurationSchemaType {
+  String = 'string',
+  Integer = 'int',
+  Boolean = 'bool',
+  Section = 'section',
+  ComboSection = 'comboSection',
+  RadioSection = 'radioSection',
+  Enum = 'enum',
+}
+
 export interface PluginConfigurationSchema {
   [key: string]: {
-    type?:
-      | 'string'
-      | 'int'
-      | 'bool'
-      | 'section'
-      | 'comboSection'
-      | 'radioSection'
-      | 'enum';
+    type?: PluginConfigurationSchemaType;
     regex?: string;
     regexErrorMessage?: string;
     description?: string;
@@ -57,7 +60,7 @@ export interface PluginConfigurationModalProps {
 interface ItemProps extends React.ComponentPropsWithoutRef<'div'> {
   label: string;
   value: string;
-  description: string;
+  description?: string;
 }
 
 const SelectItem = forwardRef<HTMLDivElement, ItemProps>(
@@ -79,6 +82,7 @@ export function PluginConfigurationModal(props: PluginConfigurationModalProps) {
   const { t } = useTranslation();
 
   const [initialValues, setInitialValues] = useState<Record<string, any>>({});
+  const [selectedOption, setSelectedOption] = useState(undefined);
 
   useEffect(() => {
     // Create initial values object based on configuration schema
@@ -86,6 +90,17 @@ export function PluginConfigurationModal(props: PluginConfigurationModalProps) {
       props.selectedPluginConfigurationSchema
     );
     setInitialValues(newInitialValues);
+
+    // Set default value for fields of type 'enum'
+    Object.entries(props.selectedPluginConfigurationSchema).forEach(
+      ([key, field]) => {
+        if (field.type === 'radioSection') {
+          const data = getRadioSectionData(field);
+          const defaultValue = data.length > 0 ? data[0].value : undefined;
+          setSelectedOption(defaultValue);
+        }
+      }
+    );
   }, [props.selectedPluginConfigurationSchema]);
 
   const form = useForm({
@@ -115,12 +130,12 @@ export function PluginConfigurationModal(props: PluginConfigurationModalProps) {
     }
   };
 
-  function getComboSectionData(field: any) {
+  function getComboSectionData(field: PluginConfigurationSchema) {
     const data: ItemProps[] = [];
     Object.entries(field.content).map(([key, value]) => {
       data.push({
         description: value.description,
-        value: value.name,
+        value: value.key,
         label: value.name,
       });
     });
@@ -128,16 +143,27 @@ export function PluginConfigurationModal(props: PluginConfigurationModalProps) {
     return data;
   }
 
-  function getRadioSectionData(field: any) {
-    // const data = [];
-    return Object.entries(field.content).map(([key, value]) => (
-      <Radio value={value.name} label={value.name} />
+  function getRadioSectionData(field: PluginConfigurationSchema): ItemProps[] {
+    const data: ItemProps[] = [];
+    Object.entries(field.content).map(([key, value]) => {
+      data.push({
+        value: key,
+        label: value.name,
+      });
+    });
+
+    return data;
+  }
+
+  function renderRadioSection(field: PluginConfigurationSchema) {
+    return getRadioSectionData(field).map((radioSectionData) => (
+      <Radio value={radioSectionData.value} label={radioSectionData.label} />
     ));
   }
 
-  const renderField = (key: string, field: any) => {
+  const renderField = (key: string, field: PluginConfigurationSchema) => {
     switch (field.type) {
-      case 'string':
+      case PluginConfigurationSchemaType.String:
         return (
           <TextInput
             label={field.name}
@@ -164,7 +190,7 @@ export function PluginConfigurationModal(props: PluginConfigurationModalProps) {
             // }}
           />
         );
-      case 'int':
+      case PluginConfigurationSchemaType.Integer:
         return (
           <NumberInput
             label={field.name}
@@ -176,7 +202,7 @@ export function PluginConfigurationModal(props: PluginConfigurationModalProps) {
             min={0}
           />
         );
-      case 'enum':
+      case PluginConfigurationSchemaType.Enum:
         return (
           <Select
             label={field.name}
@@ -186,7 +212,7 @@ export function PluginConfigurationModal(props: PluginConfigurationModalProps) {
             data={[]}
           />
         );
-      case 'comboSection':
+      case PluginConfigurationSchemaType.ComboSection:
         return (
           <Box
             sx={(theme) => ({
@@ -213,18 +239,20 @@ export function PluginConfigurationModal(props: PluginConfigurationModalProps) {
               )}
           </Box>
         );
-      case 'radioSection':
+      case PluginConfigurationSchemaType.RadioSection:
         return (
           <Radio.Group
+            value={selectedOption}
+            onChange={setSelectedOption}
             name={field.name}
             label={field.name}
             description={field.description}
             withAsterisk
           >
-            <Group mt="xs">{getRadioSectionData(field)}</Group>
+            <Group mt="xs">{renderRadioSection(field)}</Group>
           </Radio.Group>
         );
-      case 'section':
+      case PluginConfigurationSchemaType.Section:
         return (
           <div key={key}>
             <label>{key}</label>
