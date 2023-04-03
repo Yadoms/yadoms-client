@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
 import { getFromInitialValues } from './plugins-configuration-forms';
-import { PluginConfigurationSchema } from './plugin-configuration';
+import { PluginConfigurationSchema } from '../plugin-configuration/plugin-configuration';
 
 describe('Plugin configuration forms', () => {
   describe(`getFromInitialValues`, () => {

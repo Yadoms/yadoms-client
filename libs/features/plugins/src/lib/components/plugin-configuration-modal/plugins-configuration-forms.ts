@@ -1,4 +1,4 @@
-import { PluginConfigurationSchema } from './plugin-configuration';
+import { PluginConfigurationSchema } from '../plugin-configuration/plugin-configuration';
 
 export function getFromInitialValues(
   configurationSchema: PluginConfigurationSchema
