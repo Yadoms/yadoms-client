@@ -10,6 +10,8 @@ import {
   Text,
   TextInput,
   Divider,
+  Button,
+  ScrollArea,
 } from '@mantine/core';
 import { IconSearch } from '@tabler/icons-react';
 import React, { useEffect, useState } from 'react';
@@ -93,7 +95,7 @@ export function ChoosePluginModal(props: ChoosePluginModalProps) {
       opened={props.opened}
       size="95%"
       zIndex={1000}
-      scrollAreaComponent={Modal.NativeScrollArea}
+      scrollAreaComponent={ScrollArea.Autosize}
     >
       <Modal.Overlay opacity={0.55} blur={3} />
       <Modal.Content>
@@ -113,7 +115,6 @@ export function ChoosePluginModal(props: ChoosePluginModalProps) {
               </Flex>
             }
           </Modal.Title>
-
           <Modal.CloseButton />
         </Modal.Header>
         <Modal.Body>
