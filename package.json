@@ -34,7 +34,8 @@
     "react-i18next": "^12.2.0",
     "react-query": "^3.39.3",
     "react-redux": "8.0.5",
-    "react-router-dom": "^6.8.1"
+    "react-router-dom": "^6.8.1",
+    "react-use-websocket": "^4.3.1"
   },
   "devDependencies": {
     "@mantine/ds": "^6.0.4",
