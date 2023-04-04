@@ -77,6 +77,7 @@ const SelectItem = forwardRef<HTMLDivElement, ItemProps>(
     </div>
   )
 );
+
 export function PluginConfigurationModal(props: PluginConfigurationModalProps) {
   const theme = useMantineTheme();
   const { t } = useTranslation();
@@ -173,21 +174,6 @@ export function PluginConfigurationModal(props: PluginConfigurationModalProps) {
             withAsterisk={!!field.required}
             {...form.getInputProps(key)}
             required={field.required}
-
-            // onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-            //   // validationPattern = new RegExp(field.regex);
-            //   console.log('event.currentTarget.value', event.currentTarget.value);
-            //   form.setFieldValue(key, event.currentTarget.value);
-            //   console.log('form', form);
-            // }}
-            //
-            // onBlur={() => {
-            //   if (field.regex) {
-            //     // validationPattern = new RegExp(field.regex); // create regex object
-            //
-            //     form.setFieldError(key, field.regexErrorMessage); // pass regex as second argument
-            //   }
-            // }}
           />
         );
       case PluginConfigurationSchemaType.Integer:
@@ -241,16 +227,38 @@ export function PluginConfigurationModal(props: PluginConfigurationModalProps) {
         );
       case PluginConfigurationSchemaType.RadioSection:
         return (
-          <Radio.Group
-            value={selectedOption}
-            onChange={setSelectedOption}
-            name={field.name}
-            label={field.name}
-            description={field.description}
-            withAsterisk
-          >
-            <Group mt="xs">{renderRadioSection(field)}</Group>
-          </Radio.Group>
+          <>
+            <Box
+              sx={(theme) => ({
+                backgroundColor:
+                  theme.colorScheme === 'dark'
+                    ? theme.colors.dark[5]
+                    : theme.colors.gray[1],
+                textAlign: 'left',
+                padding: theme.spacing.xl,
+                borderRadius: theme.radius.md,
+              })}
+            >
+              <Radio.Group
+                value={selectedOption}
+                onChange={setSelectedOption}
+                name={field.name}
+                label={field.name}
+                description={field.description}
+                withAsterisk
+              >
+                <Group mt="xs">{renderRadioSection(field)}</Group>
+              </Radio.Group>
+              {field.content[selectedOption] && (
+                <div>
+                  <Box>
+                    <Text>{field.content[selectedOption].name}</Text>
+                  </Box>
+                  {/* render content based on selected option */}
+                </div>
+              )}
+            </Box>
+          </>
         );
       case PluginConfigurationSchemaType.Section:
         return (
