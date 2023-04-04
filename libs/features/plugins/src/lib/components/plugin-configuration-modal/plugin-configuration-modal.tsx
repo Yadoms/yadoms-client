@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  Checkbox,
   Flex,
   Group,
   Modal,
@@ -196,6 +197,15 @@ export function PluginConfigurationModal(props: PluginConfigurationModalProps) {
             inputWrapperOrder={['label', 'error', 'input', 'description']}
             // defaultValue={getComboSectionData(field)[0].label}
             data={[]}
+          />
+        );
+      case PluginConfigurationSchemaType.Boolean:
+        return (
+          <Checkbox
+            label={field.name}
+            description={field.description}
+            checked={field.defaultValue}
+            inputWrapperOrder={['label', 'error', 'input', 'description']}
           />
         );
       case PluginConfigurationSchemaType.ComboSection:

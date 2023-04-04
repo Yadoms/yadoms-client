@@ -53,5 +53,28 @@ describe('Plugin configuration forms', () => {
         });
       });
     });
+    describe(`for bool type`, () => {
+      test(`should return false when defaultValue does not exist`, () => {
+        const configurationSchema: PluginConfigurationSchema = {
+          APIKey: {
+            type: PluginConfigurationSchemaType.Boolean,
+          },
+        };
+        expect(getFromInitialValues(configurationSchema)).toStrictEqual({
+          APIKey: false,
+        });
+      });
+      test(`should return default value when the value exist`, () => {
+        const configurationSchema: PluginConfigurationSchema = {
+          APIKey: {
+            type: PluginConfigurationSchemaType.Boolean,
+            defaultValue: true,
+          },
+        };
+        expect(getFromInitialValues(configurationSchema)).toStrictEqual({
+          APIKey: true,
+        });
+      });
+    });
   });
 });
