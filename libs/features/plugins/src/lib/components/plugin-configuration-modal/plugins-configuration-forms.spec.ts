@@ -1,6 +1,9 @@
 import { describe, expect, test } from 'vitest';
 import { getFromInitialValues } from './plugins-configuration-forms';
-import { PluginConfigurationSchema } from '../plugin-configuration/plugin-configuration';
+import {
+  PluginConfigurationSchema,
+  PluginConfigurationSchemaType,
+} from './plugin-configuration-modal';
 
 describe('Plugin configuration forms', () => {
   describe(`getFromInitialValues`, () => {
@@ -8,7 +11,7 @@ describe('Plugin configuration forms', () => {
       test(`should return empty string when defaultValue does not exist`, () => {
         const configurationSchema: PluginConfigurationSchema = {
           APIKey: {
-            type: 'string',
+            type: PluginConfigurationSchemaType.String,
           },
         };
         expect(getFromInitialValues(configurationSchema)).toStrictEqual({
@@ -18,7 +21,7 @@ describe('Plugin configuration forms', () => {
       test(`should return default value when the value exist`, () => {
         const configurationSchema: PluginConfigurationSchema = {
           APIKey: {
-            type: 'string',
+            type: PluginConfigurationSchemaType.String,
             defaultValue: 'default value',
           },
         };
@@ -31,7 +34,7 @@ describe('Plugin configuration forms', () => {
       test(`should return 0 when defaultValue does not exist`, () => {
         const configurationSchema: PluginConfigurationSchema = {
           APIKey: {
-            type: 'int',
+            type: PluginConfigurationSchemaType.Integer,
           },
         };
         expect(getFromInitialValues(configurationSchema)).toStrictEqual({
@@ -41,7 +44,7 @@ describe('Plugin configuration forms', () => {
       test(`should return default value when the value exist`, () => {
         const configurationSchema: PluginConfigurationSchema = {
           APIKey: {
-            type: 'int',
+            type: PluginConfigurationSchemaType.Integer,
             defaultValue: 10,
           },
         };
