@@ -227,38 +227,36 @@ export function PluginConfigurationModal(props: PluginConfigurationModalProps) {
         );
       case PluginConfigurationSchemaType.RadioSection:
         return (
-          <>
-            <Box
-              sx={(theme) => ({
-                backgroundColor:
-                  theme.colorScheme === 'dark'
-                    ? theme.colors.dark[5]
-                    : theme.colors.gray[1],
-                textAlign: 'left',
-                padding: theme.spacing.xl,
-                borderRadius: theme.radius.md,
-              })}
+          <Box
+            sx={(theme) => ({
+              backgroundColor:
+                theme.colorScheme === 'dark'
+                  ? theme.colors.dark[5]
+                  : theme.colors.gray[1],
+              textAlign: 'left',
+              padding: theme.spacing.xl,
+              borderRadius: theme.radius.md,
+            })}
+          >
+            <Radio.Group
+              value={selectedOption}
+              onChange={setSelectedOption}
+              name={field.name}
+              label={field.name}
+              description={field.description}
+              withAsterisk
             >
-              <Radio.Group
-                value={selectedOption}
-                onChange={setSelectedOption}
-                name={field.name}
-                label={field.name}
-                description={field.description}
-                withAsterisk
-              >
-                <Group mt="xs">{renderRadioSection(field)}</Group>
-              </Radio.Group>
-              {field.content[selectedOption] && (
-                <div>
-                  <Box>
-                    <Text>{field.content[selectedOption].name}</Text>
-                  </Box>
-                  {/* render content based on selected option */}
-                </div>
-              )}
-            </Box>
-          </>
+              <Group mt="xs">{renderRadioSection(field)}</Group>
+            </Radio.Group>
+            {field.content[selectedOption] && (
+              <div>
+                <Box>
+                  <Text>{field.content[selectedOption].name}</Text>
+                </Box>
+                {/* render content based on selected option */}
+              </div>
+            )}
+          </Box>
         );
       case PluginConfigurationSchemaType.Section:
         return (

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDisclosure } from '@mantine/hooks';
 import PluginConfigurationModal from '../plugin-configuration-modal/plugin-configuration-modal';
 import ChoosePluginModal from '../choose-plugin-modal/choose-plugin-modal';
