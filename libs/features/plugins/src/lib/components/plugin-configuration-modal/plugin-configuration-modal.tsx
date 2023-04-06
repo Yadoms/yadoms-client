@@ -61,6 +61,7 @@ export function PluginConfigurationModal(props: PluginConfigurationModalProps) {
 
   const [initialValues, setInitialValues] = useState<Record<string, any>>({});
   const [selectedOption, setSelectedOption] = useState('');
+  const [selectedComboSection, setSelectedComboSection] = useState('');
 
   useEffect(() => {
     // Create initial values object based on configuration schema
@@ -76,6 +77,13 @@ export function PluginConfigurationModal(props: PluginConfigurationModalProps) {
           const data = getRadioSectionData(field);
           const defaultValue = data.length > 0 ? data[0].value : undefined;
           setSelectedOption(defaultValue);
+        }
+        if (field.type === 'comboSection') {
+          const data = getComboSectionData(field);
+          console.log('comboSection', data);
+          const defaultValue = data.length > 0 ? data[0].value : undefined;
+          console.log('defaultValue', defaultValue);
+          setSelectedComboSection(defaultValue);
         }
       }
     );
@@ -110,14 +118,15 @@ export function PluginConfigurationModal(props: PluginConfigurationModalProps) {
 
   function getComboSectionData(field: PluginConfigurationSchema) {
     const data: ItemProps[] = [];
+    console.log('getComboSectionData field', field);
     Object.entries(field.content).map(([key, value]) => {
       data.push({
+        value: key,
         description: value.description,
-        value: value.key,
         label: value.name,
       });
     });
-
+    console.log('getComboSectionData', data);
     return data;
   }
 
@@ -212,6 +221,8 @@ export function PluginConfigurationModal(props: PluginConfigurationModalProps) {
             })}
           >
             <Select
+              value={selectedComboSection}
+              onChange={(event) => setSelectedComboSection(event)}
               label={field.name}
               description={field.description}
               inputWrapperOrder={['label', 'error', 'input', 'description']}
@@ -219,9 +230,13 @@ export function PluginConfigurationModal(props: PluginConfigurationModalProps) {
               itemComponent={SelectItem}
               data={getComboSectionData(field)}
             />
-            {field.content &&
-              Object.entries(field.content).map(([key, value]) =>
-                renderField(key, value)
+            {field.content[selectedComboSection] &&
+              field.content[selectedComboSection].content && (
+                <div>
+                  {Object.entries(
+                    field.content[selectedComboSection].content
+                  ).map(([key, value]) => renderField(key, value))}
+                </div>
               )}
           </Box>
         );
