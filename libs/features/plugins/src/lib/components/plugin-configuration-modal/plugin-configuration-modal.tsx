@@ -206,6 +206,18 @@ export function PluginConfigurationModal(props: PluginConfigurationModalProps) {
             p={2}
           />
         );
+      case PluginConfigurationSchemaType.Decimal:
+        return (
+          <NumberInput
+            label={key}
+            defaultValue={field.defaultValue}
+            description={field.description}
+            precision={2}
+            step={0.05}
+            inputWrapperOrder={['label', 'error', 'input', 'description']}
+            withAsterisk
+          />
+        );
       case PluginConfigurationSchemaType.ComboSection:
         return (
           <Box

@@ -6,6 +6,7 @@ export enum PluginConfigurationSchemaType {
   ComboSection = 'comboSection',
   RadioSection = 'radioSection',
   Enum = 'enum',
+  Decimal = 'decimal',
 }
 
 export interface PluginConfigurationSchema {
