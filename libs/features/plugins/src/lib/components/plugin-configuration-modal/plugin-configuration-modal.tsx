@@ -133,6 +133,18 @@ export function PluginConfigurationModal(props: PluginConfigurationModalProps) {
     return data;
   }
 
+  function getEnumValuesData(field: PluginConfigurationSchema): ItemProps[] {
+    const data: ItemProps[] = [];
+    Object.entries(field.values).map(([key, value]) => {
+      data.push({
+        value: key,
+        label: value,
+      });
+    });
+
+    return data;
+  }
+
   function renderRadioSection(field: PluginConfigurationSchema) {
     return getRadioSectionData(field).map((radioSectionData) => (
       <Radio value={radioSectionData.value} label={radioSectionData.label} />
@@ -140,8 +152,6 @@ export function PluginConfigurationModal(props: PluginConfigurationModalProps) {
   }
 
   const renderField = (key: string, field: PluginConfigurationSchema) => {
-    console.log('key', key);
-    console.log('field', field);
     switch (field.type) {
       case PluginConfigurationSchemaType.String:
         return (
@@ -170,20 +180,21 @@ export function PluginConfigurationModal(props: PluginConfigurationModalProps) {
       case PluginConfigurationSchemaType.Enum:
         return (
           <Select
-            label={field.name}
-            description={field.description}
+            label={key}
             inputWrapperOrder={['label', 'error', 'input', 'description']}
-            // defaultValue={getComboSectionData(field)[0].label}
-            data={[]}
+            value={getEnumValuesData(field)[0].value}
+            data={getEnumValuesData(field)}
+            withAsterisk
           />
         );
       case PluginConfigurationSchemaType.Boolean:
         return (
           <Checkbox
-            label={field.name}
+            label={key}
             description={field.description}
             checked={field.defaultValue}
             inputWrapperOrder={['label', 'error', 'input', 'description']}
+            p={2}
           />
         );
       case PluginConfigurationSchemaType.ComboSection:
@@ -197,6 +208,7 @@ export function PluginConfigurationModal(props: PluginConfigurationModalProps) {
               textAlign: 'left',
               padding: theme.spacing.xl,
               borderRadius: theme.radius.md,
+              border: 'solid',
             })}
           >
             <Select
@@ -247,15 +259,28 @@ export function PluginConfigurationModal(props: PluginConfigurationModalProps) {
         );
       case PluginConfigurationSchemaType.Section:
         return (
-          <div key={key}>
-            <label>{key}</label>
-            <div style={{ marginLeft: '20px' }}>
-              {field.content &&
-                Object.entries(field.content).map(([key, value]) =>
-                  renderField(key, value)
-                )}
+          <Box
+            sx={(theme) => ({
+              backgroundColor:
+                theme.colorScheme === 'dark'
+                  ? theme.colors.dark[5]
+                  : theme.colors.gray[1],
+              textAlign: 'left',
+              padding: theme.spacing.xs,
+              borderRadius: theme.radius.md,
+              border: 'solid',
+            })}
+          >
+            <div key={key}>
+              <label>{key}</label>
+              <div style={{ marginLeft: '20px' }}>
+                {field.content &&
+                  Object.entries(field.content).map(([key, value]) =>
+                    renderField(key, value)
+                  )}
+              </div>
             </div>
-          </div>
+          </Box>
         );
       default:
         return null;
