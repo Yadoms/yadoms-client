@@ -209,7 +209,7 @@ export function PluginConfigurationModal(props: PluginConfigurationModalProps) {
       case PluginConfigurationSchemaType.Decimal:
         return (
           <NumberInput
-            label={key}
+            label={field.name}
             defaultValue={field.defaultValue}
             description={field.description}
             precision={2}
@@ -299,8 +299,8 @@ export function PluginConfigurationModal(props: PluginConfigurationModalProps) {
             })}
           >
             <div key={key}>
-              <label>{key}</label>
-              <div style={{ marginLeft: '20px' }}>
+              <label>{field.name}</label>
+              <div style={{ marginLeft: '10px' }}>
                 {field.content &&
                   Object.entries(field.content).map(([key, value]) =>
                     renderField(key, value)
