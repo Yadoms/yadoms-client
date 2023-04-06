@@ -3,7 +3,7 @@ import { getFromInitialValues } from './plugins-configuration-forms';
 import {
   PluginConfigurationSchema,
   PluginConfigurationSchemaType,
-} from './plugin-configuration-modal';
+} from '../../model/plugin-configuration-schema.model';
 
 describe('Plugin configuration forms', () => {
   describe(`getFromInitialValues`, () => {

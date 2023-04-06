@@ -35,13 +35,18 @@ class PluginsApi {
   }
 
   async loadAvailablePlugins(): Promise<AvailablePluginsResponse> {
-    try {
-      const response = await axiosInstance.get<AvailablePluginsResponse>(
-        `/plugins`
-      );
-      return response.data;
-    } catch (error) {
-      console.error('Error fetching available plugins : ', error);
+  try {
+    const response = await axiosInstance.get<AvailablePluginsResponse>(
+      `/plugins`
+      // {
+      //   params: {
+      //     prop: 'configurationSchema'
+      //   }
+      // }
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching available plugins : ', error);
       throw error;
     }
   }

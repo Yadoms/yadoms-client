@@ -45,7 +45,7 @@ export function ChoosePluginModal(props: ChoosePluginModalProps) {
 
   function generatePluginsGrid() {
     const filteredPlugins = availablePluginsEntities.filter((plugin) =>
-      plugin.package.type.toLowerCase().includes(searchQuery.toLowerCase())
+      plugin.type.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
     return filteredPlugins.map((availablePluginsEntity) => (
@@ -62,26 +62,26 @@ export function ChoosePluginModal(props: ChoosePluginModalProps) {
           <Card.Section>
             <Image
               sx={{ cursor: 'pointer' }}
-              src={`http://localhost:8080/rest/v2/plugins?byType=${availablePluginsEntity.package.type}&prop=icon`}
+              src={`http://localhost:8080/rest/v2/plugins?byType=${availablePluginsEntity.type}&prop=icon`}
               height={160}
               onClick={() => props.onPluginSelect(availablePluginsEntity.type)}
               fit="contain"
-              alt={availablePluginsEntity.package.type}
+              alt={availablePluginsEntity.type}
             />
           </Card.Section>
 
           <Group position="apart" mt="md">
-            <Text fw={700}>{availablePluginsEntity.package.type}</Text>
+            <Text fw={700}>{availablePluginsEntity.type}</Text>
             <Badge color="pink" variant="light">
-              v{availablePluginsEntity.package.version}
+              v{availablePluginsEntity.version}
             </Badge>
           </Group>
           <Text mt="xs" color="dimmed" size="sm" sx={{ flex: '1 0 auto' }}>
-            {availablePluginsEntity.locales.description}
+            {availablePluginsEntity.description}
           </Text>
           <Flex justify={'flex-end'} mt="xs">
             <Text fz="xs" c="dimmed">
-              by {availablePluginsEntity.package.author}
+              by {availablePluginsEntity.author}
             </Text>
           </Flex>
         </Card>

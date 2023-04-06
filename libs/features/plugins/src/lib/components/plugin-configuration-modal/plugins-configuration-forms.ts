@@ -1,7 +1,7 @@
 import {
   PluginConfigurationSchema,
   PluginConfigurationSchemaType,
-} from './plugin-configuration-modal';
+} from '../../model/plugin-configuration-schema.model';
 
 export type InitialValues = {
   [key: string]: string | number | boolean;
