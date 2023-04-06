@@ -107,7 +107,7 @@ export function ChoosePluginModal(props: ChoosePluginModalProps) {
                 <Divider size="sm" orientation="vertical" mx={10} />
                 <TextInput
                   data-autofocus
-                  placeholder={t('plugins.modal.choose-plugin.search')}
+                  placeholder={t('plugins.modal.choose-plugin.search') || ''}
                   icon={<IconSearch size="0.9rem" stroke={1.5} />}
                   value={searchQuery}
                   onChange={(event) => setSearchQuery(event.target.value)}

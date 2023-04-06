@@ -60,7 +60,7 @@ export function PluginConfigurationModal(props: PluginConfigurationModalProps) {
   const { t } = useTranslation();
 
   const [initialValues, setInitialValues] = useState<Record<string, any>>({});
-  const [selectedOption, setSelectedOption] = useState(undefined);
+  const [selectedOption, setSelectedOption] = useState('');
 
   useEffect(() => {
     // Create initial values object based on configuration schema
@@ -140,6 +140,8 @@ export function PluginConfigurationModal(props: PluginConfigurationModalProps) {
   }
 
   const renderField = (key: string, field: PluginConfigurationSchema) => {
+    console.log('key', key);
+    console.log('field', field);
     switch (field.type) {
       case PluginConfigurationSchemaType.String:
         return (
@@ -226,7 +228,7 @@ export function PluginConfigurationModal(props: PluginConfigurationModalProps) {
           >
             <Radio.Group
               value={selectedOption}
-              onChange={setSelectedOption}
+              onChange={(event) => setSelectedOption(event)}
               name={field.name}
               label={field.name}
               description={field.description}
@@ -236,10 +238,9 @@ export function PluginConfigurationModal(props: PluginConfigurationModalProps) {
             </Radio.Group>
             {field.content[selectedOption] && (
               <div>
-                <Box>
-                  <Text>{field.content[selectedOption].name}</Text>
-                </Box>
-                {/* render content based on selected option */}
+                {Object.entries(field.content[selectedOption].content).map(
+                  ([key, value]) => renderField(key, value)
+                )}
               </div>
             )}
           </Box>
