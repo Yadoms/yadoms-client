@@ -12,6 +12,7 @@ import {
   Divider,
   Button,
   ScrollArea,
+  Anchor,
 } from '@mantine/core';
 import { IconSearch } from '@tabler/icons-react';
 import React, { useEffect, useState } from 'react';
@@ -22,6 +23,7 @@ import {
   selectAvailablePluginsLoading,
 } from '../../redux/available-plugins.slice';
 import { useTranslation } from 'react-i18next';
+import LinkifyText from '../linkify-text/linkify-text';
 
 export interface ChoosePluginModalProps {
   opened: boolean;
@@ -77,7 +79,9 @@ export function ChoosePluginModal(props: ChoosePluginModalProps) {
             </Badge>
           </Group>
           <Text mt="xs" color="dimmed" size="sm" sx={{ flex: '1 0 auto' }}>
-            {availablePluginsEntity.description}
+            <LinkifyText
+              text={availablePluginsEntity.description}
+            ></LinkifyText>
           </Text>
           <Flex justify={'flex-end'} mt="xs">
             <Text fz="xs" c="dimmed">
