@@ -80,9 +80,7 @@ export function PluginConfigurationModal(props: PluginConfigurationModalProps) {
         }
         if (field.type === 'comboSection') {
           const data = getComboSectionData(field);
-          console.log('comboSection', data);
           const defaultValue = data.length > 0 ? data[0].value : undefined;
-          console.log('defaultValue', defaultValue);
           setSelectedComboSection(defaultValue);
         }
       }
@@ -118,7 +116,6 @@ export function PluginConfigurationModal(props: PluginConfigurationModalProps) {
 
   function getComboSectionData(field: PluginConfigurationSchema) {
     const data: ItemProps[] = [];
-    console.log('getComboSectionData field', field);
     Object.entries(field.content).map(([key, value]) => {
       data.push({
         value: key,
@@ -126,7 +123,6 @@ export function PluginConfigurationModal(props: PluginConfigurationModalProps) {
         label: value.name,
       });
     });
-    console.log('getComboSectionData', data);
     return data;
   }
 
@@ -300,6 +296,9 @@ export function PluginConfigurationModal(props: PluginConfigurationModalProps) {
           >
             <div key={key}>
               <label>{field.name}</label>
+              <Text fz="xs" color="dark.2">
+                {field.description}
+              </Text>
               <div style={{ marginLeft: '10px' }}>
                 {field.content &&
                   Object.entries(field.content).map(([key, value]) =>
