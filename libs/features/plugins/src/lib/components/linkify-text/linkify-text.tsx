@@ -6,7 +6,7 @@ export interface LinkifyTextProps {
 }
 
 export function LinkifyText(props: LinkifyTextProps) {
-  if (!props.text) {
+  if (props.text === undefined) {
     return null;
   }
   const regex = /\[(.*?)]\((.*?)\)/g;
