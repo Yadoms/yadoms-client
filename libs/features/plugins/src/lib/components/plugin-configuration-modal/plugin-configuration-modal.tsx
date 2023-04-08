@@ -361,14 +361,17 @@ export function PluginConfigurationModal(props: PluginConfigurationModalProps) {
               align="center"
               direction="row"
               wrap="wrap"
-              sx={{
+              sx={(theme) => ({
                 position: 'absolute',
                 bottom: 0,
                 left: 0,
                 right: 0,
-                backgroundColor: 'white',
+                backgroundColor:
+                  theme.colorScheme === 'dark'
+                    ? theme.colors.dark[5]
+                    : theme.colors.gray[1],
                 padding: '20px',
-              }}
+              })}
             >
               <Button onClick={props.onClose} variant={'outline'}>
                 {t('plugins.modal.plugin-configuration.back')}
