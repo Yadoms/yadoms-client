@@ -11,7 +11,7 @@ export interface CreateNewPluginProps {
 }
 export function CreateNewPlugin(props: CreateNewPluginProps) {
   const [openedChoosePluginModal, choosePluginModalHandlers] =
-    useDisclosure(false);
+    useDisclosure(true);
   const [openedPluginConfigurationModal, pluginConfigurationModalHandlers] =
     useDisclosure(false);
   const [selectedPluginType, setSelectedPluginType] = useState('');
@@ -19,10 +19,6 @@ export function CreateNewPlugin(props: CreateNewPluginProps) {
   const selectedPluginConfigurationSchema = useSelector(
     getAvailablePluginConfigurationSchema(selectedPluginType)
   );
-
-  useEffect(() => {
-    choosePluginModalHandlers.open();
-  }, []);
 
   const handlePluginSelect = (selectedPluginType: string) => {
     setSelectedPluginType(selectedPluginType);
