@@ -1,5 +1,5 @@
 import { Select } from '@mantine/core';
-import React from 'react';
+import React, { useState } from 'react';
 import { PluginConfigurationSchemaField } from '../../../model/plugin-configuration-schema.model';
 import { UseFormReturnType } from '@mantine/form';
 import { ItemProps } from '../../plugin-configuration-modal/plugin-configuration-modal';
@@ -11,25 +11,33 @@ export interface CustomEnumSelectProps {
 }
 
 export function CustomEnumSelect(props: CustomEnumSelectProps) {
+  const [value, setValue] = useState<string | null>(
+    getEnumValuesData(props.pluginConfigurationSchemaField)[0].value
+  );
   return (
     <Select
       label={props.pluginKey}
       inputWrapperOrder={['label', 'error', 'input', 'description']}
-      value={getEnumValuesData(props.pluginConfigurationSchemaField)[0].value}
+      value={value}
       data={getEnumValuesData(props.pluginConfigurationSchemaField)}
+      defaultValue={props.pluginConfigurationSchemaField.defaultValue}
+      description={props.pluginConfigurationSchemaField.description}
+      onChange={setValue}
       withAsterisk
     />
   );
 }
+
 function getEnumValuesData(field: PluginConfigurationSchemaField): ItemProps[] {
   const data: ItemProps[] = [];
   Object.entries(field.values).map(([key, value]) => {
     data.push({
       value: key,
-      label: value,
+      label: value as string,
     });
   });
 
   return data;
 }
+
 export default CustomEnumSelect;
