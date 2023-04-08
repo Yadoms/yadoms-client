@@ -24,13 +24,16 @@ import { useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
 import {
   PluginConfigurationSchema,
+  PluginConfigurationSchemaField,
   PluginConfigurationSchemaType,
 } from '../../model/plugin-configuration-schema.model';
+import CustomStringInput from '../custom-plugin-components/custom-string-input/custom-string-input';
+import CustomIntegerInput from '../custom-plugin-components/custom-integer-input/custom-integer-input';
 
 export interface PluginConfigurationModalProps {
   opened: boolean;
   onClose: () => void;
-  selectedPluginConfigurationSchema: PluginConfigurationSchema;
+  selectedPluginConfigurationSchema: PluginConfigurationSchemaField;
   selectedPluginType: string;
 }
 
@@ -73,15 +76,22 @@ export function PluginConfigurationModal(props: PluginConfigurationModalProps) {
     // Set default value for fields of type 'enum'
     Object.entries(props.selectedPluginConfigurationSchema).forEach(
       ([key, field]) => {
-        if (field.type === 'radioSection') {
-          const data = getRadioSectionData(field);
-          const defaultValue = data.length > 0 ? data[0].value : undefined;
-          setSelectedOption(defaultValue);
-        }
-        if (field.type === 'comboSection') {
-          const data = getComboSectionData(field);
-          const defaultValue = data.length > 0 ? data[0].value : undefined;
-          setSelectedComboSection(defaultValue);
+        let data;
+        let defaultValue;
+        console.log('field.pluginConfigurationSchemaField.type', field);
+        switch (field.type) {
+          case 'radioSection':
+            data = getRadioSectionData(field);
+            defaultValue = data.length > 0 ? data[0].value : undefined;
+            setSelectedOption(defaultValue);
+            break;
+          case 'comboSection':
+            data = getComboSectionData(field);
+            defaultValue = data.length > 0 ? data[0].value : undefined;
+            setSelectedComboSection(defaultValue);
+            break;
+          default:
+            break;
         }
       }
     );
@@ -138,7 +148,9 @@ export function PluginConfigurationModal(props: PluginConfigurationModalProps) {
     return data;
   }
 
-  function getEnumValuesData(field: PluginConfigurationSchema): ItemProps[] {
+  function getEnumValuesData(
+    field: PluginConfigurationSchemaField
+  ): ItemProps[] {
     const data: ItemProps[] = [];
     Object.entries(field.values).map(([key, value]) => {
       data.push({
@@ -150,36 +162,28 @@ export function PluginConfigurationModal(props: PluginConfigurationModalProps) {
     return data;
   }
 
-  function renderRadioSection(field: PluginConfigurationSchema) {
+  function renderRadioSection(field: PluginConfigurationSchemaField) {
     return getRadioSectionData(field).map((radioSectionData) => (
       <Radio value={radioSectionData.value} label={radioSectionData.label} />
     ));
   }
 
-  const renderField = (key: string, field: PluginConfigurationSchema) => {
+  const renderField = (key: string, field: PluginConfigurationSchemaField) => {
     switch (field.type) {
       case PluginConfigurationSchemaType.String:
         return (
-          <TextInput
-            label={field.name}
-            placeholder={field.name}
-            description={field.description}
-            inputWrapperOrder={['label', 'error', 'input', 'description']}
-            withAsterisk={!!field.required}
-            {...form.getInputProps(key)}
-            required={field.required}
+          <CustomStringInput
+            form={form}
+            pluginConfigurationSchema={field}
+            pluginKey={key}
           />
         );
       case PluginConfigurationSchemaType.Integer:
         return (
-          <NumberInput
-            label={field.name}
-            description={field.description}
-            placeholder={field.name}
-            defaultValue={field.defaultValue}
-            inputWrapperOrder={['label', 'error', 'input', 'description']}
-            withAsterisk={!!field.required}
-            min={0}
+          <CustomIntegerInput
+            form={form}
+            pluginConfigurationSchema={field}
+            pluginKey={key}
           />
         );
       case PluginConfigurationSchemaType.Enum:

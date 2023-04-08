@@ -1,5 +1,6 @@
 import {
   PluginConfigurationSchema,
+  PluginConfigurationSchemaField,
   PluginConfigurationSchemaType,
 } from '../../model/plugin-configuration-schema.model';
 
@@ -9,7 +10,7 @@ export type InitialValues = {
 export function getFromInitialValues({
   content,
   ...schema
-}: PluginConfigurationSchema): InitialValues {
+}: PluginConfigurationSchemaField): InitialValues {
   const newInitialValues: InitialValues = {};
   for (const [key, field] of Object.entries(schema)) {
     switch (field.type) {
