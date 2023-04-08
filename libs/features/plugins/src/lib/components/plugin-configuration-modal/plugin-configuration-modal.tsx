@@ -1,11 +1,9 @@
 import {
   Box,
   Button,
-  Checkbox,
   Flex,
   Group,
   Modal,
-  NumberInput,
   Radio,
   ScrollArea,
   Select,
@@ -29,6 +27,9 @@ import {
 } from '../../model/plugin-configuration-schema.model';
 import CustomStringInput from '../custom-plugin-components/custom-string-input/custom-string-input';
 import CustomIntegerInput from '../custom-plugin-components/custom-integer-input/custom-integer-input';
+import CustomEnumSelect from '../custom-plugin-components/custom-enum-select/custom-enum-select';
+import CustomBoolCheckbox from '../custom-plugin-components/custom-bool-checkbox/CustomBoolCheckbox';
+import CustomDecimalNumber from '../custom-plugin-components/custom-decimal-number/custom-decimal-number';
 
 export interface PluginConfigurationModalProps {
   opened: boolean;
@@ -37,7 +38,7 @@ export interface PluginConfigurationModalProps {
   selectedPluginType: string;
 }
 
-interface ItemProps extends React.ComponentPropsWithoutRef<'div'> {
+export interface ItemProps extends React.ComponentPropsWithoutRef<'div'> {
   label: string;
   value: string;
   description?: string;
@@ -148,20 +149,6 @@ export function PluginConfigurationModal(props: PluginConfigurationModalProps) {
     return data;
   }
 
-  function getEnumValuesData(
-    field: PluginConfigurationSchemaField
-  ): ItemProps[] {
-    const data: ItemProps[] = [];
-    Object.entries(field.values).map(([key, value]) => {
-      data.push({
-        value: key,
-        label: value,
-      });
-    });
-
-    return data;
-  }
-
   function renderRadioSection(field: PluginConfigurationSchemaField) {
     return getRadioSectionData(field).map((radioSectionData) => (
       <Radio value={radioSectionData.value} label={radioSectionData.label} />
@@ -182,40 +169,32 @@ export function PluginConfigurationModal(props: PluginConfigurationModalProps) {
         return (
           <CustomIntegerInput
             form={form}
-            pluginConfigurationSchema={field}
+            pluginConfigurationSchemaField={field}
             pluginKey={key}
           />
         );
       case PluginConfigurationSchemaType.Enum:
         return (
-          <Select
-            label={key}
-            inputWrapperOrder={['label', 'error', 'input', 'description']}
-            value={getEnumValuesData(field)[0].value}
-            data={getEnumValuesData(field)}
-            withAsterisk
+          <CustomEnumSelect
+            form={form}
+            pluginConfigurationSchemaField={field}
+            pluginKey={key}
           />
         );
       case PluginConfigurationSchemaType.Boolean:
         return (
-          <Checkbox
-            label={key}
-            description={field.description}
-            checked={field.defaultValue}
-            inputWrapperOrder={['label', 'error', 'input', 'description']}
-            p={2}
+          <CustomBoolCheckbox
+            form={form}
+            pluginConfigurationSchemaField={field}
+            pluginKey={key}
           />
         );
       case PluginConfigurationSchemaType.Decimal:
         return (
-          <NumberInput
-            label={field.name}
-            defaultValue={field.defaultValue}
-            description={field.description}
-            precision={2}
-            step={0.05}
-            inputWrapperOrder={['label', 'error', 'input', 'description']}
-            withAsterisk
+          <CustomDecimalNumber
+            form={form}
+            pluginConfigurationSchemaField={field}
+            pluginKey={key}
           />
         );
       case PluginConfigurationSchemaType.ComboSection:
@@ -361,14 +340,17 @@ export function PluginConfigurationModal(props: PluginConfigurationModalProps) {
               align="center"
               direction="row"
               wrap="wrap"
-              sx={{
+              sx={(theme) => ({
                 position: 'absolute',
                 bottom: 0,
                 left: 0,
                 right: 0,
-                backgroundColor: 'white',
+                backgroundColor:
+                  theme.colorScheme === 'dark'
+                    ? theme.colors.dark[5]
+                    : theme.colors.gray[1],
                 padding: '20px',
-              }}
+              })}
             >
               <Button onClick={props.onClose} variant={'outline'}>
                 {t('plugins.modal.plugin-configuration.back')}

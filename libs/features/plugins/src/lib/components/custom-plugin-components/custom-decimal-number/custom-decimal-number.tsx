@@ -1,31 +1,28 @@
-import {
-  PluginConfigurationSchema,
-  PluginConfigurationSchemaField,
-} from '../../../model/plugin-configuration-schema.model';
+import { PluginConfigurationSchemaField } from '../../../model/plugin-configuration-schema.model';
 import { UseFormReturnType } from '@mantine/form';
-import { NumberInput, TextInput } from '@mantine/core';
+import { NumberInput } from '@mantine/core';
 import React from 'react';
 
-export interface CustomTextInputProps {
+export interface CustomDecimalNumberProps {
   pluginKey: string;
   pluginConfigurationSchemaField: PluginConfigurationSchemaField;
   form: UseFormReturnType<Record<string, any>>;
 }
 
-export function CustomIntegerInput(props: CustomTextInputProps) {
+export function CustomDecimalNumber(props: CustomDecimalNumberProps) {
   return (
     <NumberInput
       label={props.pluginConfigurationSchemaField.name}
-      description={props.pluginConfigurationSchemaField.description}
-      placeholder={props.pluginConfigurationSchemaField.name}
       defaultValue={
         isNumber(props.pluginConfigurationSchemaField.defaultValue)
           ? props.pluginConfigurationSchemaField.defaultValue
           : undefined
       }
+      description={props.pluginConfigurationSchemaField.description}
+      precision={2}
+      step={0.05}
       inputWrapperOrder={['label', 'error', 'input', 'description']}
-      withAsterisk={!!props.pluginConfigurationSchemaField.required}
-      min={0}
+      withAsterisk
     />
   );
 }
@@ -36,4 +33,4 @@ function isNumber(
   return typeof value === 'number';
 }
 
-export default CustomIntegerInput;
+export default CustomDecimalNumber;
