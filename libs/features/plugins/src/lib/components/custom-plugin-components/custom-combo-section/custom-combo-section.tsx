@@ -82,11 +82,8 @@ export function CustomComboSection(props: CustomComboSectionProps) {
 
 function getComboSectionData(field: PluginConfigurationSchemaField) {
   const data: ItemProps[] = [];
-  console.log('field.content', field.content);
   if (field.content) {
     Object.entries(field.content).map(([key, value]) => {
-      console.log(`Key: ${key}`);
-      console.log(`Value: ${JSON.stringify(value)}`);
       data.push({
         value: key,
         description: value.description,
