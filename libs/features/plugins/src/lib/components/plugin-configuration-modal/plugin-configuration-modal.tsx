@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  Checkbox,
   Flex,
   Group,
   Modal,
@@ -21,43 +22,25 @@ import {
 } from './plugins-configuration-forms';
 import { useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
-
-export interface PluginConfigurationSchema {
-  [key: string]: {
-    type?:
-      | 'string'
-      | 'int'
-      | 'bool'
-      | 'section'
-      | 'comboSection'
-      | 'radioSection'
-      | 'enum';
-    regex?: string;
-    regexErrorMessage?: string;
-    description?: string;
-    name?: string;
-    required?: boolean | string;
-    encrypted?: boolean;
-    defaultValue?: number | boolean | string;
-    enableWithCheckBox?: boolean;
-    checkbox?: {
-      defaultValue: boolean;
-    };
-    content?: PluginConfigurationSchema;
-  };
-}
+import {
+  PluginConfigurationSchema,
+  PluginConfigurationSchemaField,
+  PluginConfigurationSchemaType,
+} from '../../model/plugin-configuration-schema.model';
+import CustomStringInput from '../custom-plugin-components/custom-string-input/custom-string-input';
+import CustomIntegerInput from '../custom-plugin-components/custom-integer-input/custom-integer-input';
 
 export interface PluginConfigurationModalProps {
   opened: boolean;
   onClose: () => void;
-  selectedPluginConfigurationSchema: PluginConfigurationSchema;
+  selectedPluginConfigurationSchema: PluginConfigurationSchemaField;
   selectedPluginType: string;
 }
 
 interface ItemProps extends React.ComponentPropsWithoutRef<'div'> {
   label: string;
   value: string;
-  description: string;
+  description?: string;
 }
 
 const SelectItem = forwardRef<HTMLDivElement, ItemProps>(
@@ -74,11 +57,14 @@ const SelectItem = forwardRef<HTMLDivElement, ItemProps>(
     </div>
   )
 );
+
 export function PluginConfigurationModal(props: PluginConfigurationModalProps) {
   const theme = useMantineTheme();
   const { t } = useTranslation();
 
   const [initialValues, setInitialValues] = useState<Record<string, any>>({});
+  const [selectedOption, setSelectedOption] = useState('');
+  const [selectedComboSection, setSelectedComboSection] = useState('');
 
   useEffect(() => {
     // Create initial values object based on configuration schema
@@ -86,6 +72,29 @@ export function PluginConfigurationModal(props: PluginConfigurationModalProps) {
       props.selectedPluginConfigurationSchema
     );
     setInitialValues(newInitialValues);
+
+    // Set default value for fields of type 'enum'
+    Object.entries(props.selectedPluginConfigurationSchema).forEach(
+      ([key, field]) => {
+        let data;
+        let defaultValue;
+        console.log('field.pluginConfigurationSchemaField.type', field);
+        switch (field.type) {
+          case 'radioSection':
+            data = getRadioSectionData(field);
+            defaultValue = data.length > 0 ? data[0].value : undefined;
+            setSelectedOption(defaultValue);
+            break;
+          case 'comboSection':
+            data = getComboSectionData(field);
+            defaultValue = data.length > 0 ? data[0].value : undefined;
+            setSelectedComboSection(defaultValue);
+            break;
+          default:
+            break;
+        }
+      }
+    );
   }, [props.selectedPluginConfigurationSchema]);
 
   const form = useForm({
@@ -115,12 +124,23 @@ export function PluginConfigurationModal(props: PluginConfigurationModalProps) {
     }
   };
 
-  function getComboSectionData(field: any) {
+  function getComboSectionData(field: PluginConfigurationSchema) {
     const data: ItemProps[] = [];
     Object.entries(field.content).map(([key, value]) => {
       data.push({
+        value: key,
         description: value.description,
-        value: value.name,
+        label: value.name,
+      });
+    });
+    return data;
+  }
+
+  function getRadioSectionData(field: PluginConfigurationSchema): ItemProps[] {
+    const data: ItemProps[] = [];
+    Object.entries(field.content).map(([key, value]) => {
+      data.push({
+        value: key,
         label: value.name,
       });
     });
@@ -128,65 +148,111 @@ export function PluginConfigurationModal(props: PluginConfigurationModalProps) {
     return data;
   }
 
-  function getRadioSectionData(field: any) {
-    // const data = [];
-    return Object.entries(field.content).map(([key, value]) => (
-      <Radio value={value.name} label={value.name} />
+  function getEnumValuesData(
+    field: PluginConfigurationSchemaField
+  ): ItemProps[] {
+    const data: ItemProps[] = [];
+    Object.entries(field.values).map(([key, value]) => {
+      data.push({
+        value: key,
+        label: value,
+      });
+    });
+
+    return data;
+  }
+
+  function renderRadioSection(field: PluginConfigurationSchemaField) {
+    return getRadioSectionData(field).map((radioSectionData) => (
+      <Radio value={radioSectionData.value} label={radioSectionData.label} />
     ));
   }
 
-  const renderField = (key: string, field: any) => {
+  const renderField = (key: string, field: PluginConfigurationSchemaField) => {
     switch (field.type) {
-      case 'string':
+      case PluginConfigurationSchemaType.String:
         return (
-          <TextInput
-            label={field.name}
-            placeholder={field.name}
-            description={field.description}
-            inputWrapperOrder={['label', 'error', 'input', 'description']}
-            withAsterisk={!!field.required}
-            {...form.getInputProps(key)}
-            required={field.required}
-
-            // onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-            //   // validationPattern = new RegExp(field.regex);
-            //   console.log('event.currentTarget.value', event.currentTarget.value);
-            //   form.setFieldValue(key, event.currentTarget.value);
-            //   console.log('form', form);
-            // }}
-            //
-            // onBlur={() => {
-            //   if (field.regex) {
-            //     // validationPattern = new RegExp(field.regex); // create regex object
-            //
-            //     form.setFieldError(key, field.regexErrorMessage); // pass regex as second argument
-            //   }
-            // }}
+          <CustomStringInput
+            form={form}
+            pluginConfigurationSchema={field}
+            pluginKey={key}
           />
         );
-      case 'int':
+      case PluginConfigurationSchemaType.Integer:
+        return (
+          <CustomIntegerInput
+            form={form}
+            pluginConfigurationSchema={field}
+            pluginKey={key}
+          />
+        );
+      case PluginConfigurationSchemaType.Enum:
+        return (
+          <Select
+            label={key}
+            inputWrapperOrder={['label', 'error', 'input', 'description']}
+            value={getEnumValuesData(field)[0].value}
+            data={getEnumValuesData(field)}
+            withAsterisk
+          />
+        );
+      case PluginConfigurationSchemaType.Boolean:
+        return (
+          <Checkbox
+            label={key}
+            description={field.description}
+            checked={field.defaultValue}
+            inputWrapperOrder={['label', 'error', 'input', 'description']}
+            p={2}
+          />
+        );
+      case PluginConfigurationSchemaType.Decimal:
         return (
           <NumberInput
             label={field.name}
-            description={field.description}
-            placeholder={field.name}
             defaultValue={field.defaultValue}
-            inputWrapperOrder={['label', 'error', 'input', 'description']}
-            withAsterisk={!!field.required}
-            min={0}
-          />
-        );
-      case 'enum':
-        return (
-          <Select
-            label={field.name}
             description={field.description}
+            precision={2}
+            step={0.05}
             inputWrapperOrder={['label', 'error', 'input', 'description']}
-            // defaultValue={getComboSectionData(field)[0].label}
-            data={[]}
+            withAsterisk
           />
         );
-      case 'comboSection':
+      case PluginConfigurationSchemaType.ComboSection:
+        return (
+          <Box
+            sx={(theme) => ({
+              backgroundColor:
+                theme.colorScheme === 'dark'
+                  ? theme.colors.dark[5]
+                  : theme.colors.gray[1],
+              textAlign: 'left',
+              padding: theme.spacing.xl,
+              borderRadius: theme.radius.md,
+              border: 'solid',
+            })}
+          >
+            <Select
+              value={selectedComboSection}
+              onChange={(event) => setSelectedComboSection(event)}
+              label={field.name}
+              description={field.description}
+              inputWrapperOrder={['label', 'error', 'input', 'description']}
+              defaultValue={getComboSectionData(field)[0].label}
+              itemComponent={SelectItem}
+              data={getComboSectionData(field)}
+            />
+            {field.content[selectedComboSection] &&
+              field.content[selectedComboSection].content && (
+                <div>
+                  {Object.entries(
+                    field.content[selectedComboSection].content
+                  ).map(([key, value]) => renderField(key, value))}
+                </div>
+              )}
+          </Box>
+        );
+      case PluginConfigurationSchemaType.RadioSection:
         return (
           <Box
             sx={(theme) => ({
@@ -199,42 +265,52 @@ export function PluginConfigurationModal(props: PluginConfigurationModalProps) {
               borderRadius: theme.radius.md,
             })}
           >
-            <Select
+            <Radio.Group
+              value={selectedOption}
+              onChange={(event) => setSelectedOption(event)}
+              name={field.name}
               label={field.name}
               description={field.description}
-              inputWrapperOrder={['label', 'error', 'input', 'description']}
-              defaultValue={getComboSectionData(field)[0].label}
-              itemComponent={SelectItem}
-              data={getComboSectionData(field)}
-            />
-            {field.content &&
-              Object.entries(field.content).map(([key, value]) =>
-                renderField(key, value)
-              )}
+              withAsterisk
+            >
+              <Group mt="xs">{renderRadioSection(field)}</Group>
+            </Radio.Group>
+            {field.content[selectedOption] && (
+              <div>
+                {Object.entries(field.content[selectedOption].content).map(
+                  ([key, value]) => renderField(key, value)
+                )}
+              </div>
+            )}
           </Box>
         );
-      case 'radioSection':
+      case PluginConfigurationSchemaType.Section:
         return (
-          <Radio.Group
-            name={field.name}
-            label={field.name}
-            description={field.description}
-            withAsterisk
+          <Box
+            sx={(theme) => ({
+              backgroundColor:
+                theme.colorScheme === 'dark'
+                  ? theme.colors.dark[5]
+                  : theme.colors.gray[1],
+              textAlign: 'left',
+              padding: theme.spacing.xs,
+              borderRadius: theme.radius.md,
+              border: 'solid',
+            })}
           >
-            <Group mt="xs">{getRadioSectionData(field)}</Group>
-          </Radio.Group>
-        );
-      case 'section':
-        return (
-          <div key={key}>
-            <label>{key}</label>
-            <div style={{ marginLeft: '20px' }}>
-              {field.content &&
-                Object.entries(field.content).map(([key, value]) =>
-                  renderField(key, value)
-                )}
+            <div key={key}>
+              <label>{field.name}</label>
+              <Text fz="xs" color="dark.2">
+                {field.description}
+              </Text>
+              <div style={{ marginLeft: '10px' }}>
+                {field.content &&
+                  Object.entries(field.content).map(([key, value]) =>
+                    renderField(key, value)
+                  )}
+              </div>
             </div>
-          </div>
+          </Box>
         );
       default:
         return null;

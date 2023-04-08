@@ -38,6 +38,11 @@ class PluginsApi {
     try {
       const response = await axiosInstance.get<AvailablePluginsResponse>(
         `/plugins`
+        // {
+        //   params: {
+        //     prop: 'configurationSchema'
+        //   }
+        // }
       );
       return response.data;
     } catch (error) {
