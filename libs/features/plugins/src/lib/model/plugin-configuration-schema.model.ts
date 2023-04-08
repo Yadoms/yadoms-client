@@ -15,13 +15,14 @@ export interface PluginConfigurationSchemaField {
   regexErrorMessage?: string;
   description?: string;
   name?: string;
-  required?: boolean | string;
+  required?: boolean;
   encrypted?: boolean;
   defaultValue?: number | boolean | string;
   enableWithCheckBox?: boolean;
   checkbox?: {
     defaultValue: boolean;
   };
+  values: string[];
   content?: PluginConfigurationSchema;
 }
 export interface PluginConfigurationSchema {
