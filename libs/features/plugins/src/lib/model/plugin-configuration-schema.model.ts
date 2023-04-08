@@ -22,7 +22,9 @@ export interface PluginConfigurationSchemaField {
   checkbox?: {
     defaultValue: boolean;
   };
-  values: string[];
+  values: {
+    [key: string]: number | string | boolean;
+  };
   content?: PluginConfigurationSchema;
 }
 export interface PluginConfigurationSchema {
