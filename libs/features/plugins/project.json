@@ -1,7 +1,7 @@
 {
   "name": "plugins",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "src",
+  "sourceRoot": "/libs/features/plugins",
   "projectType": "library",
   "tags": [],
   "targets": {
@@ -58,6 +58,18 @@
       "configurations": {
         "ci": {
           "quiet": true
+        }
+      }
+    },
+    "static-storybook": {
+      "executor": "@nrwl/web:file-server",
+      "options": {
+        "buildTarget": "plugins:build-storybook",
+        "staticFilePath": "dist/storybook/plugins"
+      },
+      "configurations": {
+        "ci": {
+          "buildTarget": "plugins:build-storybook:ci"
         }
       }
     }

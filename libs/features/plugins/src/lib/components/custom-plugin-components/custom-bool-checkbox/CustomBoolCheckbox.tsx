@@ -17,7 +17,7 @@ export function CustomBoolCheckbox(props: CustomBoolCheckboxProps) {
   );
   return (
     <Checkbox
-      label={props.pluginKey}
+      label={props.pluginConfigurationSchemaField.name}
       description={props.pluginConfigurationSchemaField.description}
       checked={checked}
       onChange={(event) => setChecked(event.currentTarget.checked)}
