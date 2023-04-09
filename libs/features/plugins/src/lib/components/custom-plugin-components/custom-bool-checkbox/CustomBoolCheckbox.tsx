@@ -1,6 +1,6 @@
 import { PluginConfigurationSchemaField } from '../../../model/plugin-configuration-schema.model';
 import { UseFormReturnType } from '@mantine/form';
-import { Checkbox, Select } from '@mantine/core';
+import { Checkbox } from '@mantine/core';
 import React, { useState } from 'react';
 
 export interface CustomBoolCheckboxProps {

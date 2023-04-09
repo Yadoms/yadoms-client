@@ -16,3 +16,14 @@ export const Primary = {
     },
   },
 };
+
+export const WithDescription = {
+  args: {
+    pluginKey: '',
+    pluginConfigurationSchemaField: {
+      defaultValue: true,
+      name: 'checkbox',
+      description: 'I am a description',
+    },
+  },
+};

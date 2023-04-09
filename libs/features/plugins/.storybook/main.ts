@@ -1,6 +1,14 @@
 const config = {
   stories: ['../src/lib/**/*.stories.@(js|jsx|ts|tsx|mdx)'],
-  addons: ['@storybook/addon-essentials'],
+  addons: [
+    '@storybook/addon-essentials',
+    {
+      name: '@storybook/addon-docs',
+      options: {
+        configureJSX: true,
+      },
+    },
+  ],
   framework: {
     name: '@storybook/react-vite',
     options: {
@@ -8,6 +16,11 @@ const config = {
         viteConfigPath: 'libs/features/plugins/vite.config.ts',
       },
     },
+  },
+  docs: {
+    //👇 See the table below for the list of supported options
+    autodocs: true,
+    defaultName: 'Documentation',
   },
 };
 
