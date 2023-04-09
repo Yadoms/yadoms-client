@@ -20,8 +20,10 @@ export function CustomSection(props: CustomSectionProps) {
             : theme.colors.gray[1],
         textAlign: 'left',
         padding: theme.spacing.xs,
+        marginBottom: theme.spacing.xs,
+        marginTop: theme.spacing.xs,
         borderRadius: theme.radius.md,
-        border: 'solid',
+        border: `2px dotted ${theme.colors.blue[6]}`,
       })}
     >
       <div key={props.pluginKey}>

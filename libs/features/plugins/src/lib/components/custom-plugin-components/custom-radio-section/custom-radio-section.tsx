@@ -31,8 +31,11 @@ export function CustomRadioSection(props: CustomRadioSectionProps) {
             ? theme.colors.dark[5]
             : theme.colors.gray[1],
         textAlign: 'left',
-        padding: theme.spacing.xl,
+        padding: theme.spacing.xs,
+        marginBottom: theme.spacing.xs,
+        marginTop: theme.spacing.xs,
         borderRadius: theme.radius.md,
+        border: `2px dotted ${theme.colors.blue[6]}`,
       })}
     >
       <Radio.Group
