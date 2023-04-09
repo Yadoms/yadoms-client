@@ -1,6 +1,6 @@
 import { PluginConfigurationSchemaField } from '../../../model/plugin-configuration-schema.model';
 import { UseFormReturnType } from '@mantine/form';
-import { Checkbox, Select } from '@mantine/core';
+import { Checkbox } from '@mantine/core';
 import React, { useState } from 'react';
 
 export interface CustomBoolCheckboxProps {
@@ -17,7 +17,7 @@ export function CustomBoolCheckbox(props: CustomBoolCheckboxProps) {
   );
   return (
     <Checkbox
-      label={props.pluginKey}
+      label={props.pluginConfigurationSchemaField.name}
       description={props.pluginConfigurationSchemaField.description}
       checked={checked}
       onChange={(event) => setChecked(event.currentTarget.checked)}
