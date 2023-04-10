@@ -5,8 +5,8 @@
   "scripts": {
     "serve": "nx serve yadoms-cs",
     "build": "nx build yadoms-cs",
-    "plugins:run:storybook": "nx storybook plugins",
-    "plugins:build:storybook": "nx build-storybook plugins",
+    "plugins:run:storybook": "nx storybook pages-plugins",
+    "plugins:build:storybook": "nx build-storybook pages-plugins",
     "test": "nx test yadoms-cs",
     "allTest": "nx run-many --target=test",
     "lint": "nx workspace-lint",
