@@ -3,7 +3,7 @@ import { getFromInitialValues } from './plugins-configuration-forms';
 import {
   PluginConfigurationSchema,
   PluginConfigurationSchemaType,
-} from '../../model/plugin-configuration-schema.model';
+} from '@yadoms/domain/plugins';
 
 describe('Plugin configuration forms', () => {
   describe(`getFromInitialValues`, () => {
