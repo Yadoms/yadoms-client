@@ -15,10 +15,12 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@yadoms/home": ["libs/features/home/src/index.ts"],
-      "@yadoms/plugins": ["libs/features/plugins/src/index.ts"],
+      "@yadoms/domain/plugins": ["libs/domain/plugins/src/index.ts"],
+      "@yadoms/pages/home": ["libs/pages/home/src/index.ts"],
+      "@yadoms/pages/plugins": ["libs/pages/plugins/src/index.ts"],
+      "@yadoms/pages/summary": ["libs/pages/summary/src/index.ts"],
       "@yadoms/shared": ["libs/shared/src/index.ts"],
-      "@yadoms/summary": ["libs/features/summary/src/index.ts"]
+      "@yadoms/store": ["libs/store/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
