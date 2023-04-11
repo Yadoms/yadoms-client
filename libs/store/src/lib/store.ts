@@ -5,7 +5,6 @@ import {
   PLUGINS_INSTANCES_FEATURE_KEY,
   pluginsInstancesReducer,
 } from '@yadoms/domain/plugins';
-import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 
 export const store = configureStore({
   reducer: {
@@ -14,7 +13,7 @@ export const store = configureStore({
   },
   // Additional middleware can be passed to this array
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
-  devTools: process.env.NODE_ENV !== 'production',
+  devTools: process.env['NODE_ENV'] !== 'production',
   // Optional Redux store enhancers
   enhancers: [],
 });
