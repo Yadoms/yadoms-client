@@ -28,12 +28,12 @@ import {
   IconSun,
 } from '@tabler/icons-react';
 import { Logo } from './_logo';
-import { Plugins } from '@yadoms/plugins';
 import { Link, Route, Routes } from 'react-router-dom';
-import { Home } from '@yadoms/home';
-import { Summary } from '@yadoms/summary';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Summary } from '@yadoms/pages/summary';
+import { Home } from '@yadoms/pages/home';
+import { Plugins } from '@yadoms/pages/plugins';
 
 const useStyles = createStyles((theme) => ({
   link: {
