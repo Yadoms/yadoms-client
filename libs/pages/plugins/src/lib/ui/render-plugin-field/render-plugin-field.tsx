@@ -12,6 +12,7 @@ import CustomComboSection from '../custom-plugin-components/custom-combo-section
 import { UseFormReturnType } from '@mantine/form';
 import { CustomRadioSection } from '../custom-plugin-components/custom-radio-section/custom-radio-section';
 import CustomSection from '../custom-plugin-components/custom-section/custom-section';
+import { CustomCheckboxSection } from '../custom-plugin-components/custom-checkbox-section/custom-checkbox.section';
 
 type RenderFieldProps = {
   field: PluginConfigurationSchemaField;
@@ -84,6 +85,14 @@ export default function renderPluginField({
     case PluginConfigurationSchemaType.Section:
       return (
         <CustomSection
+          form={form}
+          pluginConfigurationSchemaField={field}
+          pluginKey={pluginKey}
+        />
+      );
+    case PluginConfigurationSchemaType.CheckboxSection:
+      return (
+        <CustomCheckboxSection
           form={form}
           pluginConfigurationSchemaField={field}
           pluginKey={pluginKey}
