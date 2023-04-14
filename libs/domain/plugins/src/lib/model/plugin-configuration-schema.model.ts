@@ -19,6 +19,8 @@ export interface PluginConfigurationSchemaField {
   name?: string;
   required?: boolean;
   encrypted?: boolean;
+  precision?: number;
+  step?: number;
   defaultValue?: number | boolean | string;
   enableWithCheckBox?: boolean;
   checkbox?: {

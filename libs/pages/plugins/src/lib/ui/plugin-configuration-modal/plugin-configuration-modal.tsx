@@ -15,8 +15,8 @@ import {
 } from './plugins-configuration-forms';
 import { useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
-import { PluginConfigurationSchemaField } from '../../model/plugin-configuration-schema.model';
 import renderPluginField from '../render-plugin-field/render-plugin-field';
+import { PluginConfigurationSchemaField } from '@yadoms/domain/plugins';
 
 export interface PluginConfigurationModalProps {
   opened: boolean;

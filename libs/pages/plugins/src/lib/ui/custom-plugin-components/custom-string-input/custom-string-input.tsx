@@ -1,7 +1,7 @@
-import { PluginConfigurationSchemaField } from '../../../model/plugin-configuration-schema.model';
 import { UseFormReturnType } from '@mantine/form';
 import { TextInput } from '@mantine/core';
 import React from 'react';
+import { PluginConfigurationSchemaField } from '@yadoms/domain/plugins';
 
 export interface CustomTextInputProps {
   pluginKey: string;
