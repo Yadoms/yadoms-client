@@ -28,7 +28,7 @@ import {
   IconSun,
 } from '@tabler/icons-react';
 import { Logo } from './_logo';
-import { Link, Route, Routes } from 'react-router-dom';
+import { Link, Route, Routes, useLocation } from "react-router-dom";
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Summary } from '@yadoms/pages/summary';
@@ -121,7 +121,11 @@ function MainAppShell() {
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   const dark = colorScheme === 'dark';
 
-  const [active, setActive] = useState(0);
+  const location = useLocation();
+  const { pathname } = location;
+  const activeIndex = linksData.findIndex(link => link.route === pathname);
+
+  const [active, setActive] = useState(activeIndex);
 
   const links = linksData.map((link, index) => (
     <NavbarLink
