@@ -1,7 +1,7 @@
-import { PluginConfigurationSchemaField } from '../../../model/plugin-configuration-schema.model';
 import { UseFormReturnType } from '@mantine/form';
 import { Checkbox } from '@mantine/core';
 import React, { useState } from 'react';
+import { PluginConfigurationSchemaField } from "@yadoms/domain/plugins";
 
 export interface CustomBoolCheckboxProps {
   pluginKey: string;

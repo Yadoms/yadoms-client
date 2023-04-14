@@ -31,7 +31,7 @@ export default function renderPluginField({
       return (
         <CustomStringInput
           form={form}
-          pluginConfigurationSchema={field}
+          pluginConfigurationSchemaField={field}
           pluginKey={pluginKey}
         />
       );
