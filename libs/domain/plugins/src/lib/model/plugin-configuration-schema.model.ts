@@ -6,6 +6,7 @@ export enum PluginConfigurationSchemaType {
   ComboSection = 'comboSection',
   RadioSection = 'radioSection',
   CheckboxSection = 'checkboxSection',
+  CustomTime = 'time',
   Enum = 'enum',
   Decimal = 'decimal',
 }
