@@ -10,5 +10,10 @@ export default Story;
 export const Primary = {
   args: {
     pluginKey: '',
+    pluginConfigurationSchemaField: {
+      required: true,
+      name: "label",
+      description: "I am a description",
+    }
   },
 };

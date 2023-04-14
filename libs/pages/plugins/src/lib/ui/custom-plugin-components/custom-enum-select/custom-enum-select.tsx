@@ -16,7 +16,7 @@ export function CustomEnumSelect(props: CustomEnumSelectProps) {
   );
   return (
     <Select
-      label={props.pluginKey}
+      label={props.pluginConfigurationSchemaField.name}
       inputWrapperOrder={['label', 'error', 'input', 'description']}
       value={value}
       data={getEnumValuesData(props.pluginConfigurationSchemaField)}
