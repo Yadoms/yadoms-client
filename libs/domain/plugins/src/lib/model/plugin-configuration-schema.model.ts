@@ -9,6 +9,7 @@ export enum PluginConfigurationSchemaType {
   CustomTime = 'time',
   Enum = 'enum',
   Decimal = 'decimal',
+  MultiSelectSection = 'multiselectSection',
 }
 
 export interface PluginConfigurationSchemaField {

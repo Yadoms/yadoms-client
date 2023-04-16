@@ -14,6 +14,7 @@ import { CustomRadioSection } from '../custom-plugin-components/custom-radio-sec
 import CustomSection from '../custom-plugin-components/custom-section/custom-section';
 import { CustomCheckboxSection } from '../custom-plugin-components/custom-checkbox-section/custom-checkbox.section';
 import { CustomTime } from '../custom-plugin-components/custom-time/custom-time';
+import CustomMultiSelectSection from '../custom-plugin-components/custom-multi-select-section/custom-multi-select-section';
 
 type RenderFieldProps = {
   field: PluginConfigurationSchemaField;
@@ -102,6 +103,14 @@ export default function renderPluginField({
     case PluginConfigurationSchemaType.CustomTime:
       return (
         <CustomTime
+          form={form}
+          pluginConfigurationSchemaField={field}
+          pluginKey={pluginKey}
+        />
+      );
+    case PluginConfigurationSchemaType.MultiSelectSection:
+      return (
+        <CustomMultiSelectSection
           form={form}
           pluginConfigurationSchemaField={field}
           pluginKey={pluginKey}
