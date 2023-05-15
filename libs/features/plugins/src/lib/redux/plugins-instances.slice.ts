@@ -30,7 +30,7 @@ export interface PluginsInstancesEntity {
   autoStart: boolean;
   category: string;
   state: PuginsInstancesState;
-  fullState: { state: string; messageId: string; messageData: string };
+  fullState: string;
   configuration: object;
 }
 

@@ -186,7 +186,7 @@ export function Plugins(props: PluginsProps) {
               color={stateColors[row.original.state.toLowerCase()]}
               variant={theme.colorScheme === 'dark' ? 'light' : 'dot'}
             >
-              {row.original.state}
+              {row.original.fullState || row.original.state}
             </Badge>
           ),
         },
