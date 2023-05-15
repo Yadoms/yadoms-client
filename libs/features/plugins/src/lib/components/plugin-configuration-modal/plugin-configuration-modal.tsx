@@ -1,19 +1,13 @@
 import {
-  Box,
   Button,
   Flex,
-  Group,
   Modal,
-  NumberInput,
-  Radio,
   ScrollArea,
-  Select,
   Space,
-  Text,
   TextInput,
   useMantineTheme,
 } from '@mantine/core';
-import React, { forwardRef, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   getFromInitialValues,
@@ -21,59 +15,22 @@ import {
 } from './plugins-configuration-forms';
 import { useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
-
-export interface PluginConfigurationSchema {
-  [key: string]: {
-    type?:
-      | 'string'
-      | 'int'
-      | 'bool'
-      | 'section'
-      | 'comboSection'
-      | 'radioSection'
-      | 'enum';
-    regex?: string;
-    regexErrorMessage?: string;
-    description?: string;
-    name?: string;
-    required?: boolean | string;
-    encrypted?: boolean;
-    defaultValue?: number | boolean | string;
-    enableWithCheckBox?: boolean;
-    checkbox?: {
-      defaultValue: boolean;
-    };
-    content?: PluginConfigurationSchema;
-  };
-}
+import { PluginConfigurationSchemaField } from '../../model/plugin-configuration-schema.model';
+import renderPluginField from '../render-plugin-field/render-plugin-field';
 
 export interface PluginConfigurationModalProps {
   opened: boolean;
   onClose: () => void;
-  selectedPluginConfigurationSchema: PluginConfigurationSchema;
+  selectedPluginConfigurationSchema: PluginConfigurationSchemaField;
   selectedPluginType: string;
 }
 
-interface ItemProps extends React.ComponentPropsWithoutRef<'div'> {
-  label: string;
+export interface ItemProps extends React.ComponentPropsWithoutRef<'div'> {
+  label?: string;
   value: string;
-  description: string;
+  description?: string;
 }
 
-const SelectItem = forwardRef<HTMLDivElement, ItemProps>(
-  ({ label, description, ...others }: ItemProps, ref) => (
-    <div ref={ref} {...others}>
-      <Group noWrap>
-        <div>
-          <Text size="sm">{label}</Text>
-          <Text size="xs" opacity={0.65}>
-            {description}
-          </Text>
-        </div>
-      </Group>
-    </div>
-  )
-);
 export function PluginConfigurationModal(props: PluginConfigurationModalProps) {
   const theme = useMantineTheme();
   const { t } = useTranslation();
@@ -115,131 +72,6 @@ export function PluginConfigurationModal(props: PluginConfigurationModalProps) {
     }
   };
 
-  function getComboSectionData(field: any) {
-    const data: ItemProps[] = [];
-    Object.entries(field.content).map(([key, value]) => {
-      data.push({
-        description: value.description,
-        value: value.name,
-        label: value.name,
-      });
-    });
-
-    return data;
-  }
-
-  function getRadioSectionData(field: any) {
-    // const data = [];
-    return Object.entries(field.content).map(([key, value]) => (
-      <Radio value={value.name} label={value.name} />
-    ));
-  }
-
-  const renderField = (key: string, field: any) => {
-    switch (field.type) {
-      case 'string':
-        return (
-          <TextInput
-            label={field.name}
-            placeholder={field.name}
-            description={field.description}
-            inputWrapperOrder={['label', 'error', 'input', 'description']}
-            withAsterisk={!!field.required}
-            {...form.getInputProps(key)}
-            required={field.required}
-
-            // onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-            //   // validationPattern = new RegExp(field.regex);
-            //   console.log('event.currentTarget.value', event.currentTarget.value);
-            //   form.setFieldValue(key, event.currentTarget.value);
-            //   console.log('form', form);
-            // }}
-            //
-            // onBlur={() => {
-            //   if (field.regex) {
-            //     // validationPattern = new RegExp(field.regex); // create regex object
-            //
-            //     form.setFieldError(key, field.regexErrorMessage); // pass regex as second argument
-            //   }
-            // }}
-          />
-        );
-      case 'int':
-        return (
-          <NumberInput
-            label={field.name}
-            description={field.description}
-            placeholder={field.name}
-            defaultValue={field.defaultValue}
-            inputWrapperOrder={['label', 'error', 'input', 'description']}
-            withAsterisk={!!field.required}
-            min={0}
-          />
-        );
-      case 'enum':
-        return (
-          <Select
-            label={field.name}
-            description={field.description}
-            inputWrapperOrder={['label', 'error', 'input', 'description']}
-            // defaultValue={getComboSectionData(field)[0].label}
-            data={[]}
-          />
-        );
-      case 'comboSection':
-        return (
-          <Box
-            sx={(theme) => ({
-              backgroundColor:
-                theme.colorScheme === 'dark'
-                  ? theme.colors.dark[5]
-                  : theme.colors.gray[1],
-              textAlign: 'left',
-              padding: theme.spacing.xl,
-              borderRadius: theme.radius.md,
-            })}
-          >
-            <Select
-              label={field.name}
-              description={field.description}
-              inputWrapperOrder={['label', 'error', 'input', 'description']}
-              defaultValue={getComboSectionData(field)[0].label}
-              itemComponent={SelectItem}
-              data={getComboSectionData(field)}
-            />
-            {field.content &&
-              Object.entries(field.content).map(([key, value]) =>
-                renderField(key, value)
-              )}
-          </Box>
-        );
-      case 'radioSection':
-        return (
-          <Radio.Group
-            name={field.name}
-            label={field.name}
-            description={field.description}
-            withAsterisk
-          >
-            <Group mt="xs">{getRadioSectionData(field)}</Group>
-          </Radio.Group>
-        );
-      case 'section':
-        return (
-          <div key={key}>
-            <label>{key}</label>
-            <div style={{ marginLeft: '20px' }}>
-              {field.content &&
-                Object.entries(field.content).map(([key, value]) =>
-                  renderField(key, value)
-                )}
-            </div>
-          </div>
-        );
-      default:
-        return null;
-    }
-  };
   return (
     <Modal.Root
       onClose={props.onClose}
@@ -273,7 +105,12 @@ export function PluginConfigurationModal(props: PluginConfigurationModalProps) {
                 withAsterisk
               />
               {Object.entries(props.selectedPluginConfigurationSchema).map(
-                ([key, value]) => renderField(key, value)
+                ([key, value]) =>
+                  renderPluginField({
+                    field: value,
+                    form: form,
+                    pluginKey: key,
+                  })
               )}
               {renderSpacing(6)}
             </Flex>
@@ -285,14 +122,17 @@ export function PluginConfigurationModal(props: PluginConfigurationModalProps) {
               align="center"
               direction="row"
               wrap="wrap"
-              sx={{
+              sx={(theme) => ({
                 position: 'absolute',
                 bottom: 0,
                 left: 0,
                 right: 0,
-                backgroundColor: 'white',
+                backgroundColor:
+                  theme.colorScheme === 'dark'
+                    ? theme.colors.dark[5]
+                    : theme.colors.gray[1],
                 padding: '20px',
-              }}
+              })}
             >
               <Button onClick={props.onClose} variant={'outline'}>
                 {t('plugins.modal.plugin-configuration.back')}

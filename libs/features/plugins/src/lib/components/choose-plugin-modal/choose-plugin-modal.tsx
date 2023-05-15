@@ -12,6 +12,7 @@ import {
   Divider,
   Button,
   ScrollArea,
+  Anchor,
 } from '@mantine/core';
 import { IconSearch } from '@tabler/icons-react';
 import React, { useEffect, useState } from 'react';
@@ -22,6 +23,7 @@ import {
   selectAvailablePluginsLoading,
 } from '../../redux/available-plugins.slice';
 import { useTranslation } from 'react-i18next';
+import LinkifyText from '../linkify-text/linkify-text';
 
 export interface ChoosePluginModalProps {
   opened: boolean;
@@ -45,7 +47,7 @@ export function ChoosePluginModal(props: ChoosePluginModalProps) {
 
   function generatePluginsGrid() {
     const filteredPlugins = availablePluginsEntities.filter((plugin) =>
-      plugin.package.type.toLowerCase().includes(searchQuery.toLowerCase())
+      plugin.type.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
     return filteredPlugins.map((availablePluginsEntity) => (
@@ -62,26 +64,28 @@ export function ChoosePluginModal(props: ChoosePluginModalProps) {
           <Card.Section>
             <Image
               sx={{ cursor: 'pointer' }}
-              src={`http://localhost:8080/rest/v2/plugins?byType=${availablePluginsEntity.package.type}&prop=icon`}
+              src={`http://localhost:8080/rest/v2/plugins?byType=${availablePluginsEntity.type}&prop=icon`}
               height={160}
               onClick={() => props.onPluginSelect(availablePluginsEntity.type)}
               fit="contain"
-              alt={availablePluginsEntity.package.type}
+              alt={availablePluginsEntity.type}
             />
           </Card.Section>
 
           <Group position="apart" mt="md">
-            <Text fw={700}>{availablePluginsEntity.package.type}</Text>
+            <Text fw={700}>{availablePluginsEntity.type}</Text>
             <Badge color="pink" variant="light">
-              v{availablePluginsEntity.package.version}
+              v{availablePluginsEntity.version}
             </Badge>
           </Group>
           <Text mt="xs" color="dimmed" size="sm" sx={{ flex: '1 0 auto' }}>
-            {availablePluginsEntity.locales.description}
+            <LinkifyText
+              text={availablePluginsEntity.description}
+            ></LinkifyText>
           </Text>
           <Flex justify={'flex-end'} mt="xs">
             <Text fz="xs" c="dimmed">
-              by {availablePluginsEntity.package.author}
+              by {availablePluginsEntity.author}
             </Text>
           </Flex>
         </Card>
@@ -107,7 +111,7 @@ export function ChoosePluginModal(props: ChoosePluginModalProps) {
                 <Divider size="sm" orientation="vertical" mx={10} />
                 <TextInput
                   data-autofocus
-                  placeholder={t('plugins.modal.choose-plugin.search')}
+                  placeholder={t('plugins.modal.choose-plugin.search') || ''}
                   icon={<IconSearch size="0.9rem" stroke={1.5} />}
                   value={searchQuery}
                   onChange={(event) => setSearchQuery(event.target.value)}

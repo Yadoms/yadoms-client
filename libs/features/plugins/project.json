@@ -1,7 +1,7 @@
 {
   "name": "plugins",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "src",
+  "sourceRoot": "/libs/features/plugins",
   "projectType": "library",
   "tags": [],
   "targets": {
@@ -34,6 +34,43 @@
       "options": {
         "passWithNoTests": true,
         "reportsDirectory": "../../coverage/libs/features/plugins"
+      }
+    },
+    "storybook": {
+      "executor": "@nrwl/storybook:storybook",
+      "options": {
+        "port": 4400,
+        "configDir": "libs/features/plugins/.storybook"
+      },
+      "configurations": {
+        "ci": {
+          "quiet": true
+        }
+      }
+    },
+    "build-storybook": {
+      "executor": "@nrwl/storybook:build",
+      "outputs": ["{options.outputDir}"],
+      "options": {
+        "outputDir": "dist/storybook/plugins",
+        "configDir": "libs/features/plugins/.storybook"
+      },
+      "configurations": {
+        "ci": {
+          "quiet": true
+        }
+      }
+    },
+    "static-storybook": {
+      "executor": "@nrwl/web:file-server",
+      "options": {
+        "buildTarget": "plugins:build-storybook",
+        "staticFilePath": "dist/storybook/plugins"
+      },
+      "configurations": {
+        "ci": {
+          "buildTarget": "plugins:build-storybook:ci"
+        }
       }
     }
   }

@@ -8,36 +8,19 @@ import {
 } from '@reduxjs/toolkit';
 import { pluginsApi } from '../api/plugins-api';
 import { AvailablePluginsResponse } from '../model/AvailablePluginsResponse';
+import { PluginConfigurationSchema } from '../model/plugin-configuration-schema.model';
 export const AVAILABLE_PLUGINS_FEATURE_KEY = 'availablePlugins';
 
-interface Locales {
-  description: string;
-  name: string;
-  customLabels: object;
-  configurationSchema: object;
-  deviceConfiguration: object;
-}
-
-interface Package {
-  type: string;
-  version: string;
-  author: string;
-  url: string;
-  credits: string;
-  supportedPlatforms: string;
-  supportManuallyDeviceCreation: boolean;
-  supportDeviceRemovedNotification: boolean;
-  configurationSchema: object;
-}
 export interface AvailablePluginsEntity {
+  name: string;
+  description: string;
   type: string;
   version: string;
   author: string;
   url: string;
   supportManuallyCreatedDevice: boolean;
   supportDeviceRemovedNotification: boolean;
-  locales: Locales;
-  package: Package;
+  configurationSchema: PluginConfigurationSchema;
 }
 
 export interface AvailablePluginsState
@@ -192,24 +175,7 @@ export const getAvailablePluginConfigurationSchema = (pluginType: string) => {
   return createSelector(
     selectAvailablePluginEntityByType(pluginType),
     (availablePluginEntity) => {
-      const mergedConfigSchema = {
-        ...availablePluginEntity?.package.configurationSchema,
-      };
-
-      if (availablePluginEntity?.locales.configurationSchema) {
-        Object.keys(availablePluginEntity.locales.configurationSchema).forEach(
-          (key) => {
-            if (mergedConfigSchema[key]) {
-              mergedConfigSchema[key] = {
-                ...mergedConfigSchema[key],
-                ...availablePluginEntity.locales.configurationSchema[key],
-              };
-            }
-          }
-        );
-      }
-
-      return mergedConfigSchema;
+      return availablePluginEntity?.configurationSchema || {};
     }
   );
 };
