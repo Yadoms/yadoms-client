@@ -15,6 +15,10 @@ const config = {
       builder: {
         viteConfigPath: 'libs/pages/plugins/vite.config.ts',
       },
+
+      builder: {
+        viteConfigPath: 'libs/pages/plugins/vite.config.ts',
+      },
     },
   },
   docs: {
