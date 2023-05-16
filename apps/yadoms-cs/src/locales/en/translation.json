@@ -28,13 +28,22 @@
   },
   "plugins": {
     "home": {
+      "state": "State",
+      "type": "Type",
+      "name": "Name",
       "description": "Manage, add and remove plugins",
-      "create-new-plugin-btn": "Create a plugin"
+      "create-new-plugin-btn": "Create a plugin",
+      "start-automatically": "Start automatically"
     },
     "modal": {
       "choose-plugin": {
         "title": "Choose your plugin",
         "search": "Search a plugin"
+      },
+      "plugin-configuration": {
+        "title": "Fill your configuration",
+        "back": "Back",
+        "create": "Create"
       }
     }
   }

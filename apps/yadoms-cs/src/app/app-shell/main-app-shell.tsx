@@ -1,14 +1,17 @@
 import {
   ActionIcon,
+  Burger,
   Center,
   createStyles,
   Flex,
   Group,
   Header,
   Navbar,
+  Paper,
   rem,
   Stack,
   Tooltip,
+  Transition,
   UnstyledButton,
   useMantineColorScheme,
 } from '@mantine/core';
@@ -28,13 +31,15 @@ import {
   IconSun,
 } from '@tabler/icons-react';
 import { Logo } from './_logo';
-import { Plugins } from '@yadoms/plugins';
-import { Link, Route, Routes } from 'react-router-dom';
-import { Home } from '@yadoms/home';
-import { Summary } from '@yadoms/summary';
+import { Link, Route, Routes, useLocation } from 'react-router-dom';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Summary } from '@yadoms/pages/summary';
+import { Home } from '@yadoms/pages/home';
+import { Plugins } from '@yadoms/pages/plugins';
+import { useDisclosure } from '@mantine/hooks';
 
+const HEADER_HEIGHT = rem(60);
 const useStyles = createStyles((theme) => ({
   link: {
     width: rem(50),
@@ -64,6 +69,27 @@ const useStyles = createStyles((theme) => ({
       }).background,
       color: theme.fn.variant({ variant: 'light', color: theme.primaryColor })
         .color,
+    },
+  },
+
+  burger: {
+    [theme.fn.largerThan('sm')]: {
+      display: 'none',
+    },
+  },
+  dropdown: {
+    position: 'absolute',
+    top: HEADER_HEIGHT,
+    left: 0,
+    right: 0,
+    zIndex: 0,
+    borderTopRightRadius: 0,
+    borderTopLeftRadius: 0,
+    borderTopWidth: 0,
+    overflow: 'hidden',
+
+    [theme.fn.largerThan('sm')]: {
+      display: 'none',
     },
   },
 }));
@@ -121,7 +147,14 @@ function MainAppShell() {
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   const dark = colorScheme === 'dark';
 
-  const [active, setActive] = useState(0);
+  const location = useLocation();
+  const { pathname } = location;
+  const activeIndex = linksData.findIndex((link) => link.route === pathname);
+
+  const [active, setActive] = useState(activeIndex);
+
+  const { classes, cx } = useStyles();
+  const [opened, { toggle, close }] = useDisclosure(false);
 
   const links = linksData.map((link, index) => (
     <NavbarLink
@@ -178,6 +211,23 @@ function MainAppShell() {
                 <IconMoonStars size={16} />
               )}
             </ActionIcon>
+            <Burger
+              opened={opened}
+              onClick={toggle}
+              className={classes.burger}
+              size="sm"
+            />
+            <Transition
+              transition="pop-top-right"
+              duration={200}
+              mounted={opened}
+            >
+              {(styles) => (
+                <Paper className={classes.dropdown} withBorder style={styles}>
+                  {links}
+                </Paper>
+              )}
+            </Transition>
           </Group>
         </Header>
         <div style={{ padding: '15px' }}>

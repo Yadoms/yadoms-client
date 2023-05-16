@@ -28,13 +28,22 @@
   },
   "plugins": {
     "home": {
+      "state": "Etat",
+      "type": "Type",
+      "name": "Nom",
       "description": "Gérer, ajouter et supprimer des plugins",
-      "create-new-plugin-btn": "Créer un plugin"
+      "create-new-plugin-btn": "Créer un plugin",
+      "start-automatically": "Démarrer automatiquement"
     },
     "modal": {
       "choose-plugin": {
         "title": "Choisissez votre plugin",
         "search": "Chercher un plugin"
+      },
+      "plugin-configuration": {
+        "title": "Remplissez votre configuration",
+        "back": "Retour",
+        "create": "Créer"
       }
     }
   }
