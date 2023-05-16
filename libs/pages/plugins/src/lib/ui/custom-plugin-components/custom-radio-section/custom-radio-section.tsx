@@ -1,12 +1,12 @@
-import {
-  PluginConfigurationSchema,
-  PluginConfigurationSchemaField,
-} from '../../../model/plugin-configuration-schema.model';
 import { UseFormReturnType } from '@mantine/form';
 import { Box, Group, Radio } from '@mantine/core';
 import React, { useEffect, useState } from 'react';
 import { ItemProps } from '../../plugin-configuration-modal/plugin-configuration-modal';
 import renderPluginField from '../../render-plugin-field/render-plugin-field';
+import {
+  PluginConfigurationSchema,
+  PluginConfigurationSchemaField,
+} from '@yadoms/domain/plugins';
 
 export interface CustomRadioSectionProps {
   pluginKey: string;

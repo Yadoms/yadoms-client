@@ -1,8 +1,8 @@
 import { Select } from '@mantine/core';
 import React, { useState } from 'react';
-import { PluginConfigurationSchemaField } from '../../../model/plugin-configuration-schema.model';
 import { UseFormReturnType } from '@mantine/form';
 import { ItemProps } from '../../plugin-configuration-modal/plugin-configuration-modal';
+import { PluginConfigurationSchemaField } from '@yadoms/domain/plugins';
 
 export interface CustomEnumSelectProps {
   pluginKey: string;
@@ -16,7 +16,7 @@ export function CustomEnumSelect(props: CustomEnumSelectProps) {
   );
   return (
     <Select
-      label={props.pluginKey}
+      label={props.pluginConfigurationSchemaField.name}
       inputWrapperOrder={['label', 'error', 'input', 'description']}
       value={value}
       data={getEnumValuesData(props.pluginConfigurationSchemaField)}

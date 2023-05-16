@@ -1,8 +1,8 @@
-import { PluginConfigurationSchemaField } from '../../../model/plugin-configuration-schema.model';
 import { UseFormReturnType } from '@mantine/form';
 import { Box, Text } from '@mantine/core';
 import React from 'react';
 import renderPluginField from '../../render-plugin-field/render-plugin-field';
+import { PluginConfigurationSchemaField } from '@yadoms/domain/plugins';
 
 export interface CustomSectionProps {
   pluginKey: string;
