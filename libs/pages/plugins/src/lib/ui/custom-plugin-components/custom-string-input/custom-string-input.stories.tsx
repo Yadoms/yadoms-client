@@ -12,8 +12,8 @@ export const Primary = {
     pluginKey: '',
     pluginConfigurationSchemaField: {
       required: true,
-      name: "label",
-      description: "I am a description",
-    }
+      name: 'label',
+      description: 'I am a description',
+    },
   },
 };

@@ -11,14 +11,14 @@ export const Primary = {
   args: {
     pluginKey: '',
     pluginConfigurationSchemaField: {
-      type: "enum",
+      type: 'enum',
       values: {
         First1: 123,
-        First2: 456
+        First2: 456,
       },
-      defaultValue: "First1",
-      name: "Enum label",
-      description: "Enum description"
-    }
+      defaultValue: 'First1',
+      name: 'Enum label',
+      description: 'Enum description',
+    },
   },
 };

@@ -1,17 +1,20 @@
 import {
-  ActionIcon, Burger,
+  ActionIcon,
+  Burger,
   Center,
   createStyles,
   Flex,
   Group,
   Header,
-  Navbar, Paper,
+  Navbar,
+  Paper,
   rem,
   Stack,
-  Tooltip, Transition,
+  Tooltip,
+  Transition,
   UnstyledButton,
-  useMantineColorScheme
-} from "@mantine/core";
+  useMantineColorScheme,
+} from '@mantine/core';
 import {
   IconAdjustments,
   IconAt,
@@ -28,13 +31,13 @@ import {
   IconSun,
 } from '@tabler/icons-react';
 import { Logo } from './_logo';
-import { Link, Route, Routes, useLocation } from "react-router-dom";
+import { Link, Route, Routes, useLocation } from 'react-router-dom';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Summary } from '@yadoms/pages/summary';
 import { Home } from '@yadoms/pages/home';
 import { Plugins } from '@yadoms/pages/plugins';
-import { useDisclosure } from "@mantine/hooks";
+import { useDisclosure } from '@mantine/hooks';
 
 const HEADER_HEIGHT = rem(60);
 const useStyles = createStyles((theme) => ({
@@ -146,7 +149,7 @@ function MainAppShell() {
 
   const location = useLocation();
   const { pathname } = location;
-  const activeIndex = linksData.findIndex(link => link.route === pathname);
+  const activeIndex = linksData.findIndex((link) => link.route === pathname);
 
   const [active, setActive] = useState(activeIndex);
 
@@ -208,8 +211,17 @@ function MainAppShell() {
                 <IconMoonStars size={16} />
               )}
             </ActionIcon>
-            <Burger opened={opened} onClick={toggle} className={classes.burger} size="sm" />
-            <Transition transition="pop-top-right" duration={200} mounted={opened}>
+            <Burger
+              opened={opened}
+              onClick={toggle}
+              className={classes.burger}
+              size="sm"
+            />
+            <Transition
+              transition="pop-top-right"
+              duration={200}
+              mounted={opened}
+            >
               {(styles) => (
                 <Paper className={classes.dropdown} withBorder style={styles}>
                   {links}

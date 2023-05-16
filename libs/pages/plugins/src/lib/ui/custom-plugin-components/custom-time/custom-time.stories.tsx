@@ -12,9 +12,9 @@ export const Primary = {
     pluginKey: '',
     pluginConfigurationSchemaField: {
       required: true,
-      defaultValue: "12:00",
-      name: "Label",
-      description: "I am a description",
-    }
+      defaultValue: '12:00',
+      name: 'Label',
+      description: 'I am a description',
+    },
   },
 };

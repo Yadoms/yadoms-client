@@ -11,10 +11,10 @@ export const Primary = {
   args: {
     pluginKey: '',
     pluginConfigurationSchemaField: {
-      name: "Label",
-      description: "I am a description",
+      name: 'Label',
+      description: 'I am a description',
       required: true,
       defaultValue: 80,
-    }
+    },
   },
 };
