@@ -54,8 +54,6 @@ export function ChoosePluginModal(props: ChoosePluginModalProps) {
           sx={{ display: 'flex', flexDirection: 'column' }}
           shadow="sm"
           p="xl"
-          component="a"
-          target="_blank"
           withBorder
           h={'100%'}
         >
@@ -76,6 +74,7 @@ export function ChoosePluginModal(props: ChoosePluginModalProps) {
               v{availablePluginsEntity.version}
             </Badge>
           </Group>
+
           <Text mt="xs" color="dimmed" size="sm" sx={{ flex: '1 0 auto' }}>
             <LinkifyText
               text={availablePluginsEntity.description}

@@ -9,6 +9,7 @@ export function LinkifyText(props: LinkifyTextProps) {
   if (props.text === undefined) {
     return null;
   }
+
   const regex = /\[(.*?)]\((.*?)\)/g;
   const parts: (string | JSX.Element)[] = [];
 
@@ -24,7 +25,7 @@ export function LinkifyText(props: LinkifyTextProps) {
     }
 
     parts.push(
-      <Anchor href={url} target="_blank">
+      <Anchor key={index} href={url} target="_blank">
         {title}
       </Anchor>
     );
