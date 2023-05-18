@@ -18,6 +18,7 @@ export function CustomStringInput(props: CustomTextInputProps) {
       inputWrapperOrder={['label', 'error', 'input', 'description']}
       withAsterisk={!!props.pluginConfigurationSchemaField.required}
       required={props.pluginConfigurationSchemaField.required}
+      {...props.form.getInputProps(props.pluginKey)}
     />
   );
 }
