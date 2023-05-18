@@ -2,6 +2,7 @@ import { UseFormReturnType } from '@mantine/form';
 import { NumberInput } from '@mantine/core';
 import React from 'react';
 import { PluginConfigurationSchemaField } from '@yadoms/domain/plugins';
+import LinkifyText from '../../linkify-text/linkify-text';
 
 export interface CustomTextInputProps {
   pluginKey: string;
@@ -13,7 +14,9 @@ export function CustomIntegerInput(props: CustomTextInputProps) {
   return (
     <NumberInput
       label={props.pluginConfigurationSchemaField.name}
-      description={props.pluginConfigurationSchemaField.description}
+      description={
+        <LinkifyText text={props.pluginConfigurationSchemaField.description} />
+      }
       placeholder={props.pluginConfigurationSchemaField.name}
       defaultValue={
         isNumber(props.pluginConfigurationSchemaField.defaultValue)

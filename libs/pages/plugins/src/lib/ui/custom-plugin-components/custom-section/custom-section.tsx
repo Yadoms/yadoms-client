@@ -3,6 +3,7 @@ import { Box, Text } from '@mantine/core';
 import React from 'react';
 import renderPluginField from '../../render-plugin-field/render-plugin-field';
 import { PluginConfigurationSchemaField } from '@yadoms/domain/plugins';
+import LinkifyText from '../../linkify-text/linkify-text';
 
 export interface CustomSectionProps {
   pluginKey: string;
@@ -29,7 +30,9 @@ export function CustomSection(props: CustomSectionProps) {
       <div key={props.pluginKey}>
         <label>{props.pluginConfigurationSchemaField.name}</label>
         <Text fz="xs" color="dark.2">
-          {props.pluginConfigurationSchemaField.description}
+          <LinkifyText
+            text={props.pluginConfigurationSchemaField.description}
+          />
         </Text>
         <div style={{ marginLeft: '10px' }}>
           {props.pluginConfigurationSchemaField.content &&

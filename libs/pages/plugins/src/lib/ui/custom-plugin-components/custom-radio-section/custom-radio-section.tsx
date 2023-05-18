@@ -7,6 +7,7 @@ import {
   PluginConfigurationSchema,
   PluginConfigurationSchemaField,
 } from '@yadoms/domain/plugins';
+import LinkifyText from '../../linkify-text/linkify-text';
 
 export interface CustomRadioSectionProps {
   pluginKey: string;
@@ -43,7 +44,11 @@ export function CustomRadioSection(props: CustomRadioSectionProps) {
         onChange={(event) => setSelectedOption(event)}
         name={props.pluginConfigurationSchemaField.name}
         label={props.pluginConfigurationSchemaField.name}
-        description={props.pluginConfigurationSchemaField.description}
+        description={
+          <LinkifyText
+            text={props.pluginConfigurationSchemaField.description}
+          />
+        }
         withAsterisk
       >
         <Group mt="xs">

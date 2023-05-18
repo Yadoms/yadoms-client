@@ -4,6 +4,7 @@ import React, { forwardRef, useEffect, useState } from 'react';
 import { ItemProps } from '../../plugin-configuration-modal/plugin-configuration-modal';
 import renderPluginField from '../../render-plugin-field/render-plugin-field';
 import { PluginConfigurationSchemaField } from '@yadoms/domain/plugins';
+import LinkifyText from '../../linkify-text/linkify-text';
 
 export interface CustomComboSectionProps {
   pluginKey: string;
@@ -54,7 +55,11 @@ export function CustomComboSection(props: CustomComboSectionProps) {
         value={selectedComboSection}
         onChange={(event) => setSelectedComboSection(event)}
         label={props.pluginConfigurationSchemaField.name}
-        description={props.pluginConfigurationSchemaField.description}
+        description={
+          <LinkifyText
+            text={props.pluginConfigurationSchemaField.description}
+          />
+        }
         inputWrapperOrder={['label', 'error', 'input', 'description']}
         defaultValue={
           getComboSectionData(props.pluginConfigurationSchemaField)[0].label

@@ -2,6 +2,7 @@ import { UseFormReturnType } from '@mantine/form';
 import { NumberInput } from '@mantine/core';
 import React from 'react';
 import { PluginConfigurationSchemaField } from '@yadoms/domain/plugins';
+import LinkifyText from '../../linkify-text/linkify-text';
 
 export interface CustomDecimalNumberProps {
   pluginKey: string;
@@ -18,7 +19,9 @@ export function CustomDecimalNumber(props: CustomDecimalNumberProps) {
           ? props.pluginConfigurationSchemaField.defaultValue
           : undefined
       }
-      description={props.pluginConfigurationSchemaField.description}
+      description={
+        <LinkifyText text={props.pluginConfigurationSchemaField.description} />
+      }
       precision={props.pluginConfigurationSchemaField.precision}
       step={props.pluginConfigurationSchemaField.step}
       inputWrapperOrder={['label', 'error', 'input', 'description']}
