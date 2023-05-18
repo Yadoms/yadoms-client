@@ -2,6 +2,7 @@ import { UseFormReturnType } from '@mantine/form';
 import { TextInput } from '@mantine/core';
 import React from 'react';
 import { PluginConfigurationSchemaField } from '@yadoms/domain/plugins';
+import LinkifyText from '../../linkify-text/linkify-text';
 
 export interface CustomTextInputProps {
   pluginKey: string;
@@ -14,7 +15,9 @@ export function CustomStringInput(props: CustomTextInputProps) {
     <TextInput
       label={props.pluginConfigurationSchemaField.name}
       placeholder={props.pluginConfigurationSchemaField.name}
-      description={props.pluginConfigurationSchemaField.description}
+      description={
+        <LinkifyText text={props.pluginConfigurationSchemaField.description} />
+      }
       inputWrapperOrder={['label', 'error', 'input', 'description']}
       withAsterisk={!!props.pluginConfigurationSchemaField.required}
       required={props.pluginConfigurationSchemaField.required}
