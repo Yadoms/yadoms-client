@@ -108,6 +108,7 @@ export function ChoosePluginModal(props: ChoosePluginModalProps) {
                 <Text>{t('plugins.modal.choose-plugin.title')}</Text>
                 <Divider size="sm" orientation="vertical" mx={10} />
                 <TextInput
+                  disabled={loadingStatus}
                   data-autofocus
                   placeholder={t('plugins.modal.choose-plugin.search') || ''}
                   icon={<IconSearch size="0.9rem" stroke={1.5} />}
