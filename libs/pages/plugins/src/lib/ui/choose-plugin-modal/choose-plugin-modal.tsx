@@ -6,7 +6,6 @@ import {
   Grid,
   Group,
   Image,
-  LoadingOverlay,
   Modal,
   ScrollArea,
   Text,
@@ -22,6 +21,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import LinkifyText from '../linkify-text/linkify-text';
 import { useDispatch, useSelector } from 'react-redux';
+import { ChoosePluginModalSkeleton } from './choose-plugin-modal-skeleton';
 
 export interface ChoosePluginModalProps {
   opened: boolean;
@@ -107,6 +107,7 @@ export function ChoosePluginModal(props: ChoosePluginModalProps) {
                 <Text>{t('plugins.modal.choose-plugin.title')}</Text>
                 <Divider size="sm" orientation="vertical" mx={10} />
                 <TextInput
+                  disabled={loadingStatus}
                   data-autofocus
                   placeholder={t('plugins.modal.choose-plugin.search') || ''}
                   icon={<IconSearch size="0.9rem" stroke={1.5} />}
@@ -119,7 +120,9 @@ export function ChoosePluginModal(props: ChoosePluginModalProps) {
           <Modal.CloseButton />
         </Modal.Header>
         <Modal.Body>
-          <LoadingOverlay visible={loadingStatus} overlayBlur={2} />
+          <ChoosePluginModalSkeleton
+            visible={loadingStatus}
+          ></ChoosePluginModalSkeleton>
           <Grid grow>{generatePluginsGrid()}</Grid>
         </Modal.Body>
       </Modal.Content>
