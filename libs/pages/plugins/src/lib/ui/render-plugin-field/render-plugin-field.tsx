@@ -15,6 +15,7 @@ import CustomSection from '../custom-plugin-components/custom-section/custom-sec
 import { CustomCheckboxSection } from '../custom-plugin-components/custom-checkbox-section/custom-checkbox.section';
 import { CustomTime } from '../custom-plugin-components/custom-time/custom-time';
 import CustomMultiSelectSection from '../custom-plugin-components/custom-multi-select-section/custom-multi-select-section';
+import { randomId } from '@mantine/hooks';
 
 type RenderFieldProps = {
   field: PluginConfigurationSchemaField;
@@ -34,6 +35,7 @@ export default function renderPluginField({
           form={form}
           pluginConfigurationSchemaField={field}
           pluginKey={pluginKey}
+          key={randomId()}
         />
       );
     case PluginConfigurationSchemaType.Integer:
@@ -42,6 +44,7 @@ export default function renderPluginField({
           form={form}
           pluginConfigurationSchemaField={field}
           pluginKey={pluginKey}
+          key={randomId()}
         />
       );
     case PluginConfigurationSchemaType.Enum:
@@ -50,6 +53,7 @@ export default function renderPluginField({
           form={form}
           pluginConfigurationSchemaField={field}
           pluginKey={pluginKey}
+          key={randomId()}
         />
       );
     case PluginConfigurationSchemaType.Boolean:
@@ -58,6 +62,7 @@ export default function renderPluginField({
           form={form}
           pluginConfigurationSchemaField={field}
           pluginKey={pluginKey}
+          key={randomId()}
         />
       );
     case PluginConfigurationSchemaType.Decimal:
@@ -66,6 +71,7 @@ export default function renderPluginField({
           form={form}
           pluginConfigurationSchemaField={field}
           pluginKey={pluginKey}
+          key={randomId()}
         />
       );
     case PluginConfigurationSchemaType.ComboSection:
@@ -74,6 +80,7 @@ export default function renderPluginField({
           form={form}
           pluginConfigurationSchemaField={field}
           pluginKey={pluginKey}
+          key={randomId()}
         />
       );
     case PluginConfigurationSchemaType.RadioSection:
@@ -82,6 +89,7 @@ export default function renderPluginField({
           form={form}
           pluginConfigurationSchemaField={field}
           pluginKey={pluginKey}
+          key={randomId()}
         />
       );
     case PluginConfigurationSchemaType.Section:
@@ -90,6 +98,7 @@ export default function renderPluginField({
           form={form}
           pluginConfigurationSchemaField={field}
           pluginKey={pluginKey}
+          key={randomId()}
         />
       );
     case PluginConfigurationSchemaType.CheckboxSection:
@@ -98,6 +107,7 @@ export default function renderPluginField({
           form={form}
           pluginConfigurationSchemaField={field}
           pluginKey={pluginKey}
+          key={randomId()}
         />
       );
     case PluginConfigurationSchemaType.CustomTime:
@@ -106,6 +116,7 @@ export default function renderPluginField({
           form={form}
           pluginConfigurationSchemaField={field}
           pluginKey={pluginKey}
+          key={randomId()}
         />
       );
     case PluginConfigurationSchemaType.MultiSelectSection:
@@ -114,6 +125,7 @@ export default function renderPluginField({
           form={form}
           pluginConfigurationSchemaField={field}
           pluginKey={pluginKey}
+          key={randomId()}
         />
       );
     default:

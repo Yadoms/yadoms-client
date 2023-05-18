@@ -49,7 +49,8 @@ export const validateForm = (
     console.log('validateField field', field);
     if (field.required && (!value || value.trim() === '')) {
       errors[key] = `${field.name} is required`;
-    } else if (field.regex && !new RegExp(field.regex).test(value)) {
+    }
+    if (field.regex && !new RegExp(field.regex).test(value)) {
       errors[key] = field.regexErrorMessage || `${field.name} is invalid`;
       console.log('errors[key]', errors[key]);
     }

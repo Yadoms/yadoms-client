@@ -2,7 +2,7 @@ import { Anchor } from '@mantine/core';
 import React from 'react';
 
 export interface LinkifyTextProps {
-  text: string;
+  text?: string;
 }
 
 export function LinkifyText(props: LinkifyTextProps) {
