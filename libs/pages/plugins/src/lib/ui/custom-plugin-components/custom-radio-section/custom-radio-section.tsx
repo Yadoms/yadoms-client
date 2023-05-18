@@ -81,7 +81,11 @@ function getRadioSectionData(field: PluginConfigurationSchema): ItemProps[] {
 
 function renderRadioSection(field: PluginConfigurationSchemaField) {
   return getRadioSectionData(field).map((radioSectionData) => (
-    <Radio value={radioSectionData.value} label={radioSectionData.label} />
+    <Radio
+      value={radioSectionData.value}
+      label={radioSectionData.label}
+      key={radioSectionData.value}
+    />
   ));
 }
 export default CustomRadioSection;
