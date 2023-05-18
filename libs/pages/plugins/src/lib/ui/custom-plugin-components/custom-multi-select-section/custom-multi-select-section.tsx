@@ -49,11 +49,11 @@ export function CustomMultiSelectSection(props: CustomMultiSelectSectionProps) {
       <MultiSelect
         label={props.pluginConfigurationSchemaField.name}
         description={props.pluginConfigurationSchemaField.description}
-        placeholder="Pick all you like"
+        placeholder={props.pluginConfigurationSchemaField.placeholder}
         itemComponent={SelectItem}
         data={getMultiSelectData(props.pluginConfigurationSchemaField)}
         searchable
-        nothingFound="Nobody here"
+        nothingFound={props.pluginConfigurationSchemaField.nothingFound}
         maxDropdownHeight={400}
         defaultValue={getMultiSelectDefaultValue(
           props.pluginConfigurationSchemaField
