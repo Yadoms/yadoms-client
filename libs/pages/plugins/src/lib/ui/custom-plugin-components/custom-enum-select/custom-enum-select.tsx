@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { UseFormReturnType } from '@mantine/form';
 import { ItemProps } from '../../plugin-configuration-modal/plugin-configuration-modal';
 import { PluginConfigurationSchemaField } from '@yadoms/domain/plugins';
+import LinkifyText from '../../linkify-text/linkify-text';
 
 export interface CustomEnumSelectProps {
   pluginKey: string;
@@ -21,7 +22,9 @@ export function CustomEnumSelect(props: CustomEnumSelectProps) {
       value={value}
       data={getEnumValuesData(props.pluginConfigurationSchemaField)}
       defaultValue={props.pluginConfigurationSchemaField.defaultValue}
-      description={props.pluginConfigurationSchemaField.description}
+      description={
+        <LinkifyText text={props.pluginConfigurationSchemaField.description} />
+      }
       onChange={setValue}
       withAsterisk
     />

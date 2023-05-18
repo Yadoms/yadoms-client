@@ -1,7 +1,8 @@
 import { PluginConfigurationSchemaField } from '@yadoms/domain/plugins';
 import { UseFormReturnType } from '@mantine/form';
 import { Box, Group, MultiSelect, Text } from '@mantine/core';
-import { forwardRef } from 'react';
+import React, { forwardRef } from 'react';
+import LinkifyText from '../../linkify-text/linkify-text';
 
 export interface CustomMultiSelectSectionProps {
   pluginKey: string;
@@ -48,7 +49,11 @@ export function CustomMultiSelectSection(props: CustomMultiSelectSectionProps) {
     >
       <MultiSelect
         label={props.pluginConfigurationSchemaField.name}
-        description={props.pluginConfigurationSchemaField.description}
+        description={
+          <LinkifyText
+            text={props.pluginConfigurationSchemaField.description}
+          />
+        }
         placeholder={props.pluginConfigurationSchemaField.placeholder}
         itemComponent={SelectItem}
         data={getMultiSelectData(props.pluginConfigurationSchemaField)}

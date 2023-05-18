@@ -3,6 +3,7 @@ import { PluginConfigurationSchemaField } from '@yadoms/domain/plugins';
 import { Box, Checkbox } from '@mantine/core';
 import React, { useState } from 'react';
 import renderPluginField from '../../render-plugin-field/render-plugin-field';
+import LinkifyText from '../../linkify-text/linkify-text';
 
 export interface CustomCheckboxSectionProps {
   pluginKey: string;
@@ -31,7 +32,11 @@ export function CustomCheckboxSection(props: CustomCheckboxSectionProps) {
     >
       <Checkbox
         label={props.pluginConfigurationSchemaField.name}
-        description={props.pluginConfigurationSchemaField.description}
+        description={
+          <LinkifyText
+            text={props.pluginConfigurationSchemaField.description}
+          />
+        }
         checked={checked}
         onChange={(event) => setChecked(event.currentTarget.checked)}
       />
