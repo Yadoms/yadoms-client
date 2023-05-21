@@ -11,6 +11,7 @@ import {
   Paging,
   PluginsInstancesResponse,
 } from '../model/PluginsInstancesResponse';
+import { RootState } from '@yadoms/store';
 
 export const PLUGINS_INSTANCES_FEATURE_KEY = 'pluginsInstances';
 export enum PuginsInstancesState {
@@ -65,8 +66,13 @@ export const fetchPluginsInstances = createAsyncThunk(
   async ({ page, pageSize }: { page: number; pageSize: number }, thunkAPI) => {
     try {
       return await pluginsApi.loadPluginsInstances(page, pageSize);
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error.message);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        return thunkAPI.rejectWithValue(error.message);
+      } else {
+        // Handle other types of errors if needed
+        return thunkAPI.rejectWithValue('Unknown error occurred');
+      }
     }
   }
 );
@@ -76,8 +82,13 @@ export const updatePluginsInstance = createAsyncThunk(
   async ({ id, data }: { id: number; data: object }, thunkAPI) => {
     try {
       return await pluginsApi.savePluginsInstance(id, data);
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error.message);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        return thunkAPI.rejectWithValue(error.message);
+      } else {
+        // Handle other types of errors if needed
+        return thunkAPI.rejectWithValue('Unknown error occurred');
+      }
     }
   }
 );
@@ -87,8 +98,13 @@ export const startStopPluginsInstance = createAsyncThunk(
   async ({ id, start }: { id: number; start: boolean }, thunkAPI) => {
     try {
       return await pluginsApi.startStopPluginsInstance(id, start);
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error.message);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        return thunkAPI.rejectWithValue(error.message);
+      } else {
+        // Handle other types of errors if needed
+        return thunkAPI.rejectWithValue('Unknown error occurred');
+      }
     }
   }
 );
@@ -182,7 +198,7 @@ export const pluginsInstancesReducer = pluginsInstancesSlice.reducer;
 const { selectAll, selectEntities } = pluginsInstancesAdapter.getSelectors();
 
 export const getPluginsInstancesState = (
-  rootState: unknown
+  rootState: RootState
 ): PluginsInstancesState => rootState[PLUGINS_INSTANCES_FEATURE_KEY];
 
 export const selectAllPluginsInstances = createSelector(

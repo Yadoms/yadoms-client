@@ -9,6 +9,7 @@ import {
 import { pluginsApi } from '../api/plugins-api';
 import { AvailablePluginsResponse } from '../model/AvailablePluginsResponse';
 import { PluginConfigurationSchema } from '../model/plugin-configuration-schema.model';
+import { RootState } from '@yadoms/store';
 
 export const AVAILABLE_PLUGINS_FEATURE_KEY = 'availablePlugins';
 export interface AvailablePluginsEntity {
@@ -26,7 +27,7 @@ export interface AvailablePluginsEntity {
 export interface AvailablePluginsState
   extends EntityState<AvailablePluginsEntity> {
   loadingStatus: 'not loaded' | 'loading' | 'loaded' | 'error';
-  error: string | undefined;
+  error: string | undefined | null;
 }
 
 export const availablePluginsAdapter =
@@ -56,8 +57,13 @@ export const fetchAvailablePlugins = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       return await pluginsApi.loadAvailablePlugins();
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error.message);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        return thunkAPI.rejectWithValue(error.message);
+      } else {
+        // Handle other types of errors if needed
+        return thunkAPI.rejectWithValue('Unknown error occurred');
+      }
     }
   }
 );
@@ -143,7 +149,7 @@ const { selectAll, selectEntities, selectById } =
   availablePluginsAdapter.getSelectors();
 
 export const getAvailablePluginsState = (
-  rootState: unknown
+  rootState: RootState
 ): AvailablePluginsState => rootState[AVAILABLE_PLUGINS_FEATURE_KEY];
 
 export const selectAllAvailablePlugins = createSelector(

@@ -21,9 +21,9 @@ import {
 } from '@yadoms/domain/plugins';
 import { useTranslation } from 'react-i18next';
 import LinkifyText from '../linkify-text/linkify-text';
-import { useDispatch, useSelector } from 'react-redux';
 import { ChoosePluginModalSkeleton } from './choose-plugin-modal-skeleton';
 import { Resilience } from '../resilience/resilience';
+import { useAppDispatch, useAppSelector } from '@yadoms/store';
 
 export interface ChoosePluginModalProps {
   opened: boolean;
@@ -33,14 +33,14 @@ export interface ChoosePluginModalProps {
 }
 
 export function ChoosePluginModal(props: ChoosePluginModalProps) {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [searchQuery, setSearchQuery] = useState('');
 
   const { t } = useTranslation();
 
-  const availablePluginsEntities = useSelector(selectAllAvailablePlugins);
-  const loadingStatus = useSelector(selectAvailablePluginsLoading);
-  const errorStatus = useSelector(selectAvailablePluginsError);
+  const availablePluginsEntities = useAppSelector(selectAllAvailablePlugins);
+  const loadingStatus = useAppSelector(selectAvailablePluginsLoading);
+  const errorStatus = useAppSelector(selectAvailablePluginsError);
 
   useEffect(() => {
     dispatch(fetchAvailablePlugins());
