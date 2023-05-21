@@ -26,7 +26,7 @@ export interface AvailablePluginsEntity {
 export interface AvailablePluginsState
   extends EntityState<AvailablePluginsEntity> {
   loadingStatus: 'not loaded' | 'loading' | 'loaded' | 'error';
-  error: string;
+  error: string | undefined;
 }
 
 export const availablePluginsAdapter =
@@ -159,6 +159,10 @@ export const selectAvailablePluginsEntities = createSelector(
 export const selectAvailablePluginsLoading = createSelector(
   getAvailablePluginsState,
   (state) => state.loadingStatus === 'loading'
+);
+export const selectAvailablePluginsError = createSelector(
+  getAvailablePluginsState,
+  (state) => state.loadingStatus === 'error'
 );
 
 export const selectAvailablePluginEntityByType = (pluginType: string) => {
