@@ -38,7 +38,8 @@
     "modal": {
       "choose-plugin": {
         "title": "Choose your plugin",
-        "search": "Search a plugin"
+        "search": "Search a plugin",
+        "resilienceMsg": "No plugins available. Please contact your Yadoms administrator"
       },
       "plugin-configuration": {
         "title": "Fill your configuration",

@@ -16,12 +16,14 @@ import React, { useEffect, useState } from 'react';
 import {
   fetchAvailablePlugins,
   selectAllAvailablePlugins,
+  selectAvailablePluginsError,
   selectAvailablePluginsLoading,
 } from '@yadoms/domain/plugins';
 import { useTranslation } from 'react-i18next';
 import LinkifyText from '../linkify-text/linkify-text';
-import { useDispatch, useSelector } from 'react-redux';
 import { ChoosePluginModalSkeleton } from './choose-plugin-modal-skeleton';
+import { Resilience } from '../resilience/resilience';
+import { useAppDispatch, useAppSelector } from '@yadoms/store';
 
 export interface ChoosePluginModalProps {
   opened: boolean;
@@ -31,13 +33,14 @@ export interface ChoosePluginModalProps {
 }
 
 export function ChoosePluginModal(props: ChoosePluginModalProps) {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [searchQuery, setSearchQuery] = useState('');
 
   const { t } = useTranslation();
 
-  const availablePluginsEntities = useSelector(selectAllAvailablePlugins);
-  const loadingStatus = useSelector(selectAvailablePluginsLoading);
+  const availablePluginsEntities = useAppSelector(selectAllAvailablePlugins);
+  const loadingStatus = useAppSelector(selectAvailablePluginsLoading);
+  const errorStatus = useAppSelector(selectAvailablePluginsError);
 
   useEffect(() => {
     dispatch(fetchAvailablePlugins());
@@ -107,7 +110,7 @@ export function ChoosePluginModal(props: ChoosePluginModalProps) {
                 <Text>{t('plugins.modal.choose-plugin.title')}</Text>
                 <Divider size="sm" orientation="vertical" mx={10} />
                 <TextInput
-                  disabled={loadingStatus}
+                  disabled={loadingStatus || errorStatus}
                   data-autofocus
                   placeholder={t('plugins.modal.choose-plugin.search') || ''}
                   icon={<IconSearch size="0.9rem" stroke={1.5} />}
@@ -120,9 +123,11 @@ export function ChoosePluginModal(props: ChoosePluginModalProps) {
           <Modal.CloseButton />
         </Modal.Header>
         <Modal.Body>
-          <ChoosePluginModalSkeleton
-            visible={loadingStatus}
-          ></ChoosePluginModalSkeleton>
+          <ChoosePluginModalSkeleton visible={loadingStatus} />
+          <Resilience
+            visible={errorStatus}
+            textToDisplay={t('plugins.modal.choose-plugin.resilienceMsg')}
+          />
           <Grid grow>{generatePluginsGrid()}</Grid>
         </Modal.Body>
       </Modal.Content>

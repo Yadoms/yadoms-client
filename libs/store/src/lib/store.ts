@@ -1,4 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
+// eslint-disable-next-line @nx/enforce-module-boundaries
 import {
   AVAILABLE_PLUGINS_FEATURE_KEY,
   availablePluginsReducer,

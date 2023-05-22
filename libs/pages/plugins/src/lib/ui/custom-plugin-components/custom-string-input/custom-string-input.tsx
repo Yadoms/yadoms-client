@@ -4,7 +4,7 @@ import React from 'react';
 import { PluginConfigurationSchemaField } from '@yadoms/domain/plugins';
 import LinkifyText from '../../linkify-text/linkify-text';
 
-export interface CustomTextInputProps {
+interface CustomTextInputProps {
   pluginKey: string;
   pluginConfigurationSchemaField: PluginConfigurationSchemaField;
   form: UseFormReturnType<Record<string, any>>;

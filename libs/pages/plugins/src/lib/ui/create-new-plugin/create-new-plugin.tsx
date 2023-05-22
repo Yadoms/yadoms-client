@@ -3,7 +3,7 @@ import { useDisclosure } from '@mantine/hooks';
 import PluginConfigurationModal from '../plugin-configuration-modal/plugin-configuration-modal';
 import ChoosePluginModal from '../choose-plugin-modal/choose-plugin-modal';
 import { getAvailablePluginConfigurationSchema } from '@yadoms/domain/plugins';
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '@yadoms/store';
 
 export interface CreateNewPluginProps {
   opened: boolean;
@@ -16,7 +16,7 @@ export function CreateNewPlugin(props: CreateNewPluginProps) {
     useDisclosure(false);
   const [selectedPluginType, setSelectedPluginType] = useState('');
 
-  const selectedPluginConfigurationSchema = useSelector(
+  const selectedPluginConfigurationSchema = useAppSelector(
     getAvailablePluginConfigurationSchema(selectedPluginType)
   );
 
