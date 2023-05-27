@@ -1,5 +1,5 @@
 import { UseFormReturnType } from '@mantine/form';
-import { PluginConfigurationSchemaField } from '@yadoms/domain/plugins';
+import { CheckboxSectionField } from '@yadoms/domain/plugins';
 import { Box, Checkbox } from '@mantine/core';
 import React, { useState } from 'react';
 import renderPluginField from '../../render-plugin-field/render-plugin-field';
@@ -7,13 +7,13 @@ import LinkifyText from '../../linkify-text/linkify-text';
 
 export interface CustomCheckboxSectionProps {
   pluginKey: string;
-  pluginConfigurationSchemaField: PluginConfigurationSchemaField;
+  field: CheckboxSectionField;
   form: UseFormReturnType<Record<string, any>>;
 }
 
 export function CustomCheckboxSection(props: CustomCheckboxSectionProps) {
   const [checked, setChecked] = useState<boolean | undefined>(
-    !!props.pluginConfigurationSchemaField.defaultValue
+    !!props.field.defaultValue
   );
   return (
     <Box
@@ -31,25 +31,20 @@ export function CustomCheckboxSection(props: CustomCheckboxSectionProps) {
       })}
     >
       <Checkbox
-        label={props.pluginConfigurationSchemaField.name}
-        description={
-          <LinkifyText
-            text={props.pluginConfigurationSchemaField.description}
-          />
-        }
+        label={props.field.name}
+        description={<LinkifyText text={props.field.description} />}
         checked={checked}
         onChange={(event) => setChecked(event.currentTarget.checked)}
       />
 
       {checked && (
         <div>
-          {Object.entries(props.pluginConfigurationSchemaField.content).map(
-            ([key, value]) =>
-              renderPluginField({
-                field: value,
-                form: props.form,
-                pluginKey: key,
-              })
+          {Object.entries(props.field.content).map(([key, value]) =>
+            renderPluginField({
+              field: value,
+              form: props.form,
+              pluginKey: key,
+            })
           )}
         </div>
       )}

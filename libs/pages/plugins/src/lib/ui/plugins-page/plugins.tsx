@@ -47,7 +47,7 @@ import {
   startStopPluginsInstance,
   updatePluginsInstance,
 } from '@yadoms/domain/plugins';
-import { useDispatch, useSelector } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '@yadoms/store';
 
 /* eslint-disable-next-line */
 export interface PluginsProps {}
@@ -70,10 +70,10 @@ export type Plugin = {
 };
 
 export function Plugins(props: PluginsProps) {
-  const dispatch = useDispatch();
-  const pluginsInstancesEntities = useSelector(selectAllPluginsInstances);
-  const loadingStatus = useSelector(getPluginsInstancesLoadingStatus);
-  const paging = useSelector(getPluginsInstancesPaging);
+  const dispatch = useAppDispatch();
+  const pluginsInstancesEntities = useAppSelector(selectAllPluginsInstances);
+  const loadingStatus = useAppSelector(getPluginsInstancesLoadingStatus);
+  const paging = useAppSelector(getPluginsInstancesPaging);
 
   //we need a table instance ref to pass as a prop to the MRT Toolbar buttons
   const tableInstanceRef = useRef<MRT_TableInstance<Plugin>>(null);

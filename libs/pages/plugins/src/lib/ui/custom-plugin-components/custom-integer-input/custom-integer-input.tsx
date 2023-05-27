@@ -1,30 +1,31 @@
 import { UseFormReturnType } from '@mantine/form';
 import { NumberInput } from '@mantine/core';
 import React from 'react';
-import { PluginConfigurationSchemaField } from '@yadoms/domain/plugins';
+import {
+  IntegerField,
+  PluginConfigurationSchemaField,
+} from '@yadoms/domain/plugins';
 import LinkifyText from '../../linkify-text/linkify-text';
 
 export interface CustomTextInputProps {
   pluginKey: string;
-  pluginConfigurationSchemaField: PluginConfigurationSchemaField;
+  field: IntegerField;
   form: UseFormReturnType<Record<string, any>>;
 }
 
 export function CustomIntegerInput(props: CustomTextInputProps) {
   return (
     <NumberInput
-      label={props.pluginConfigurationSchemaField.name}
-      description={
-        <LinkifyText text={props.pluginConfigurationSchemaField.description} />
-      }
-      placeholder={props.pluginConfigurationSchemaField.name}
+      label={props.field.name}
+      description={<LinkifyText text={props.field.description} />}
+      placeholder={props.field.name}
       defaultValue={
-        isNumber(props.pluginConfigurationSchemaField.defaultValue)
-          ? props.pluginConfigurationSchemaField.defaultValue
+        isNumber(props.field.defaultValue)
+          ? props.field.defaultValue
           : undefined
       }
       inputWrapperOrder={['label', 'error', 'input', 'description']}
-      withAsterisk={!!props.pluginConfigurationSchemaField.required}
+      withAsterisk={!!props.field.required}
       min={0}
     />
   );

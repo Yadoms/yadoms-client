@@ -1,14 +1,14 @@
 import { UseFormReturnType } from '@mantine/form';
 import { Box, Group, Select, Text } from '@mantine/core';
-import React, { forwardRef, useEffect, useState } from 'react';
+import React, { forwardRef, useState } from 'react';
 import { ItemProps } from '../../plugin-configuration-modal/plugin-configuration-modal';
 import renderPluginField from '../../render-plugin-field/render-plugin-field';
-import { PluginConfigurationSchemaField } from '@yadoms/domain/plugins';
+import { ComboSectionField } from '@yadoms/domain/plugins';
 import LinkifyText from '../../linkify-text/linkify-text';
 
 export interface CustomComboSectionProps {
   pluginKey: string;
-  pluginConfigurationSchemaField: PluginConfigurationSchemaField;
+  field: ComboSectionField;
   form: UseFormReturnType<Record<string, any>>;
 }
 
@@ -28,14 +28,13 @@ const SelectItem = forwardRef<HTMLDivElement, ItemProps>(
 );
 
 export function CustomComboSection(props: CustomComboSectionProps) {
-  const [selectedComboSection, setSelectedComboSection] = useState('');
-
-  useEffect(() => {
-    const data = getComboSectionData(props.pluginConfigurationSchemaField);
-    const defaultValue = data.length > 0 ? data[0].value : undefined;
-    setSelectedComboSection(defaultValue);
-  }, [props.pluginConfigurationSchemaField]);
-
+  const [selectedComboSection, setSelectedComboSection] = useState(() => {
+    const data = getComboSectionData(props.field);
+    return data.length > 0 ? data[0].value : '';
+  });
+  // TODO : to be removed when seb added empty content to Linky plugin
+  const selectedComboSectionContent =
+    props.field.content[selectedComboSection]?.content;
   return (
     <Box
       sx={(theme) => ({
@@ -53,41 +52,40 @@ export function CustomComboSection(props: CustomComboSectionProps) {
     >
       <Select
         value={selectedComboSection}
-        onChange={(event) => setSelectedComboSection(event)}
-        label={props.pluginConfigurationSchemaField.name}
-        description={
-          <LinkifyText
-            text={props.pluginConfigurationSchemaField.description}
-          />
-        }
+        onChange={(event: string) => setSelectedComboSection(event)}
+        label={props.field.name}
+        description={<LinkifyText text={props.field.description} />}
         inputWrapperOrder={['label', 'error', 'input', 'description']}
-        defaultValue={
-          getComboSectionData(props.pluginConfigurationSchemaField)[0].label
-        }
+        defaultValue={getComboSectionData(props.field)[0].label}
         itemComponent={SelectItem}
-        data={getComboSectionData(props.pluginConfigurationSchemaField)}
+        data={getComboSectionData(props.field)}
       />
-      {props.pluginConfigurationSchemaField.content[selectedComboSection] &&
-        props.pluginConfigurationSchemaField.content[selectedComboSection]
-          .content && (
-          <div>
-            {Object.entries(
-              props.pluginConfigurationSchemaField.content[selectedComboSection]
-                .content
-            ).map(([key, value]) =>
-              renderPluginField({
-                field: value,
-                form: props.form,
-                pluginKey: key,
-              })
-            )}
-          </div>
-        )}
+      {selectedComboSectionContent && (
+        <div>
+          {Object.entries(selectedComboSectionContent).map(([key, value]) =>
+            renderPluginField({
+              field: value,
+              form: props.form,
+              pluginKey: key,
+            })
+          )}
+        </div>
+      )}
+      {/*{Object.entries(*/}
+      {/*  props.field.content[selectedComboSection] &&*/}
+      {/*  props.field.content[selectedComboSection].content*/}
+      {/*).map(([key, value]) =>*/}
+      {/*  renderPluginField({*/}
+      {/*    field: value,*/}
+      {/*    form: props.form,*/}
+      {/*    pluginKey: key*/}
+      {/*  })*/}
+      {/*)}*/}
     </Box>
   );
 }
 
-function getComboSectionData(field: PluginConfigurationSchemaField) {
+function getComboSectionData(field: ComboSectionField) {
   const data: ItemProps[] = [];
   if (field.content) {
     Object.entries(field.content).map(([key, value]) => {

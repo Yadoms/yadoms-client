@@ -3,15 +3,12 @@ import { Box, Group, Radio } from '@mantine/core';
 import React, { useEffect, useState } from 'react';
 import { ItemProps } from '../../plugin-configuration-modal/plugin-configuration-modal';
 import renderPluginField from '../../render-plugin-field/render-plugin-field';
-import {
-  PluginConfigurationSchema,
-  PluginConfigurationSchemaField,
-} from '@yadoms/domain/plugins';
 import LinkifyText from '../../linkify-text/linkify-text';
+import { RadioSectionField } from '@yadoms/domain/plugins';
 
 export interface CustomRadioSectionProps {
   pluginKey: string;
-  pluginConfigurationSchemaField: PluginConfigurationSchemaField;
+  field: RadioSectionField;
   form: UseFormReturnType<Record<string, any>>;
 }
 
@@ -19,10 +16,10 @@ export function CustomRadioSection(props: CustomRadioSectionProps) {
   const [selectedOption, setSelectedOption] = useState('');
 
   useEffect(() => {
-    const data = getRadioSectionData(props.pluginConfigurationSchemaField);
-    const defaultValue = data.length > 0 ? data[0].value : undefined;
+    const data = getRadioSectionData(props.field);
+    const defaultValue = data.length > 0 ? data[0].value : '';
     setSelectedOption(defaultValue);
-  }, [props.pluginConfigurationSchemaField]);
+  }, [props.field]);
 
   return (
     <Box
@@ -42,29 +39,22 @@ export function CustomRadioSection(props: CustomRadioSectionProps) {
       <Radio.Group
         value={selectedOption}
         onChange={(event) => setSelectedOption(event)}
-        name={props.pluginConfigurationSchemaField.name}
-        label={props.pluginConfigurationSchemaField.name}
-        description={
-          <LinkifyText
-            text={props.pluginConfigurationSchemaField.description}
-          />
-        }
+        name={props.field.name}
+        label={props.field.name}
+        description={<LinkifyText text={props.field.description} />}
         withAsterisk
       >
-        <Group mt="xs">
-          {renderRadioSection(props.pluginConfigurationSchemaField)}
-        </Group>
+        <Group mt="xs">{renderRadioSection(props.field)}</Group>
       </Radio.Group>
-      {props.pluginConfigurationSchemaField.content[selectedOption] && (
+      {props.field.content[selectedOption] && (
         <div>
-          {Object.entries(
-            props.pluginConfigurationSchemaField.content[selectedOption].content
-          ).map(([key, value]) =>
-            renderPluginField({
-              field: value,
-              form: props.form,
-              pluginKey: key,
-            })
+          {Object.entries(props.field.content[selectedOption].content).map(
+            ([key, value]) =>
+              renderPluginField({
+                field: value,
+                form: props.form,
+                pluginKey: key,
+              })
           )}
         </div>
       )}
@@ -72,7 +62,7 @@ export function CustomRadioSection(props: CustomRadioSectionProps) {
   );
 }
 
-function getRadioSectionData(field: PluginConfigurationSchema): ItemProps[] {
+function getRadioSectionData(field: RadioSectionField): ItemProps[] {
   const data: ItemProps[] = [];
   Object.entries(field.content).map(([key, value]) => {
     data.push({
@@ -84,7 +74,7 @@ function getRadioSectionData(field: PluginConfigurationSchema): ItemProps[] {
   return data;
 }
 
-function renderRadioSection(field: PluginConfigurationSchemaField) {
+function renderRadioSection(field: RadioSectionField) {
   return getRadioSectionData(field).map((radioSectionData) => (
     <Radio
       value={radioSectionData.value}
@@ -93,4 +83,5 @@ function renderRadioSection(field: PluginConfigurationSchemaField) {
     />
   ));
 }
+
 export default CustomRadioSection;

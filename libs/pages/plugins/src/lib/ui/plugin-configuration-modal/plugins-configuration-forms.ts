@@ -7,12 +7,11 @@ import {
 export type InitialValues = {
   [key: string]: string | number | boolean;
 };
-export function getFromInitialValues({
-  content,
-  ...schema
-}: PluginConfigurationSchemaField): InitialValues {
+export function getFromInitialValues(
+  PluginConfigurationSchema: PluginConfigurationSchema
+): InitialValues {
   const newInitialValues: InitialValues = {};
-  for (const [key, field] of Object.entries(schema)) {
+  for (const [key, field] of Object.entries(PluginConfigurationSchema)) {
     switch (field.type) {
       case PluginConfigurationSchemaType.String:
         newInitialValues[key] = field.defaultValue ?? '';
@@ -24,7 +23,7 @@ export function getFromInitialValues({
         newInitialValues[key] = field.defaultValue ?? false;
         break;
       case PluginConfigurationSchemaType.Section:
-        for (const [subKey, subField] of Object.entries(content || {})) {
+        for (const [subKey, subField] of Object.entries(field.content || {})) {
           if (subField.defaultValue !== undefined) {
             newInitialValues[`${key}.${subKey}`] = subField.defaultValue;
           }

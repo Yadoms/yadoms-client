@@ -16,12 +16,12 @@ import {
 import { useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
 import renderPluginField from '../render-plugin-field/render-plugin-field';
-import { PluginConfigurationSchemaField } from '@yadoms/domain/plugins';
+import { PluginConfigurationSchema } from '@yadoms/domain/plugins';
 
 export interface PluginConfigurationModalProps {
   opened: boolean;
   onClose: () => void;
-  selectedPluginConfigurationSchema: PluginConfigurationSchemaField;
+  selectedPluginConfigurationSchema: PluginConfigurationSchema;
   selectedPluginType: string;
 }
 
