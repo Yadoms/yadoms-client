@@ -1,17 +1,16 @@
 import {
   PluginConfigurationSchema,
-  PluginConfigurationSchemaField,
   PluginConfigurationSchemaType,
 } from '@yadoms/domain/plugins';
 
-export type InitialValues = {
-  [key: string]: string | number | boolean;
-};
 export function getFromInitialValues(
-  PluginConfigurationSchema: PluginConfigurationSchema
-): InitialValues {
-  const newInitialValues: InitialValues = {};
-  for (const [key, field] of Object.entries(PluginConfigurationSchema)) {
+  configurationSchema: PluginConfigurationSchema
+): Record<string, unknown> {
+  const newInitialValues: Record<string, unknown> = {};
+  for (const [key, field] of Object.entries(configurationSchema)) {
+    let sectionKeys: string[] = [];
+    let firstSectionKey: string | undefined;
+
     switch (field.type) {
       case PluginConfigurationSchemaType.String:
         newInitialValues[key] = field.defaultValue ?? '';
@@ -22,18 +21,29 @@ export function getFromInitialValues(
       case PluginConfigurationSchemaType.Boolean:
         newInitialValues[key] = field.defaultValue ?? false;
         break;
-      case PluginConfigurationSchemaType.Section:
-        for (const [subKey, subField] of Object.entries(field.content || {})) {
-          if (subField.defaultValue !== undefined) {
-            newInitialValues[`${key}.${subKey}`] = subField.defaultValue;
-          }
+      case PluginConfigurationSchemaType.Decimal:
+        newInitialValues[key] = field.defaultValue ?? 0.0;
+        break;
+      case PluginConfigurationSchemaType.ComboSection:
+        sectionKeys = Object.keys(field.content || {});
+        if (sectionKeys.length > 0) {
+          firstSectionKey = sectionKeys[0];
+          newInitialValues[key] = {
+            content: getFromInitialValues(field.content || {}),
+            activeSection: firstSectionKey,
+            activeSectionText: firstSectionKey,
+          };
+        } else {
+          newInitialValues[key] = {
+            content: getFromInitialValues(field.content || {}),
+          };
         }
         break;
       default:
         break;
     }
   }
-  return newInitialValues;
+  return newInitialValues as Record<string, unknown>;
 }
 
 export const validateForm = (

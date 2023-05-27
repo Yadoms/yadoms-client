@@ -42,6 +42,11 @@ export function PluginConfigurationModal(props: PluginConfigurationModalProps) {
     const newInitialValues = getFromInitialValues(
       props.selectedPluginConfigurationSchema
     );
+    console.log(
+      'props.selectedPluginConfigurationSchema',
+      props.selectedPluginConfigurationSchema
+    );
+    console.log('newInitialValues', newInitialValues);
     setInitialValues(newInitialValues);
   }, [props.selectedPluginConfigurationSchema]);
 

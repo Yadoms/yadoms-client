@@ -11,116 +11,108 @@ queryParam "locale=fr"
 
 ```json
 {
+  "id": 6,
+  "displayName": "LametricTime",
   "type": "LametricTime",
-  "version": "1.0.2",
-  "author": "Oussama DAHMAZ",
-  "url": "",
-  "supportManuallyCreatedDevice": false,
-  "supportDeviceRemovedNotification": false,
-  "package": {
-    "type": "LametricTime",
-    "version": "1.0.2",
-    "author": "Oussama DAHMAZ",
-    "credits": "",
-    "supportedPlatforms": "all",
-    "dependencies": {
-      "yadoms": {
-        "minimumVersion": "2.4.0-beta.1"
-      }
-    },
-    "configurationSchema": {
-      "APIKey": {
-        "type": "string",
-        "required": "true",
-        "regex": "[a-zA-Z0-9]{64}"
-      },
-      "PairingMode": {
-        "type": "comboSection",
-        "content": {
-          "Automatic": {
-            "name": "Auto",
-            "type": "section",
-            "content": {
-              "Port": {
-                "type": "enum",
-                "values": {
-                  "Http": "8080",
-                  "Https": "4343"
-                },
-                "defaultValue": "Https"
-              }
-            }
-          },
-          "Manual": {
-            "name": "Manual",
-            "type": "section",
-            "content": {
-              "IPAddress": {
-                "type": "string",
-                "regex": "^(?:[0-9]{1,3}\\.){3}[0-9]{1,3}$",
-                "required": "true"
-              },
-              "Port": {
-                "type": "enum",
-                "values": {
-                  "Http": "8080",
-                  "Https": "4343"
-                },
-                "defaultValue": "Https"
-              }
-            }
+  "configuration": {
+    "APIKey": "cb6860047451c15e28b4bad6a96f0dec5022d625233846909525a90b585b1483",
+    "PairingMode": {
+      "content": {
+        "Automatic": {
+          "content": {
+            "Port": "Https"
+          }
+        },
+        "Manual": {
+          "content": {
+            "IPAddress": "",
+            "Port": "Https"
           }
         }
+      },
+      "activeSection": "Automatic",
+      "activeSectionText": "Auto"
+    }
+  },
+  "autoStart": true,
+  "category": "User"
+}
+```
+
+```json
+{
+  "id": 7,
+  "displayName": "LametricTime",
+  "type": "LametricTime",
+  "configuration": {
+    "APIKey": "cb6860047451c15e28b4bad6a96f0dec5022d625233846909525a90b585b1483",
+    "PairingMode": {
+      "content": {
+        "Automatic": {
+          "content": {
+            "Port": "Https"
+          }
+        },
+        "Manual": {
+          "content": {
+            "IPAddress": "123.12.12.1",
+            "Port": "Https"
+          }
+        }
+      },
+      "activeSection": "Manual",
+      "activeSectionText": "Manual"
+    }
+  },
+  "autoStart": true,
+  "category": "User"
+}
+```
+
+```json
+{
+  "id": 8,
+  "displayName": "linky",
+  "type": "Linky",
+  "configuration": {
+    "SerialPort": "/dev/tty.Bluetooth-Incoming-Port",
+    "EquipmentType": {
+      "content": {
+        "first": {
+          "content": {}
+        },
+        "second": {
+          "content": {
+            "portEnabled": "AllInputsEnabled"
+          }
+        }
+      },
+      "activeSection": "first",
+      "activeSectionText": "1xTIC"
+    }
+  },
+  "autoStart": true,
+  "category": "User"
+}
+```
+
+```json
+{
+  "id": 9,
+  "displayName": "Sigfox",
+  "type": "Sigfox",
+  "configuration": {
+    "port": 8090,
+    "advancedConfiguration": {
+      "content": {
+        "rssiMin": -150,
+        "rssiMax": -100,
+        "tensionMin": 2.4,
+        "tensionMax": 3.6
       }
     }
   },
-  "locales": {
-    "name": "LametricTime",
-    "description": "Support de l'équipement Lametric Time (voir [site web Lametric](https://lametric.com/en-US/time/overview), comment utiliser le [plugin LametricTime](https://github.com/Yadoms/yadoms/wiki/LametricTime))",
-    "configurationSchema": {
-      "APIKey": {
-        "name": "Clé d'API",
-        "description": "Cette clé est nécessaire pour le fonctionnement de votre plugin. Elle peut être obtenue sur simple inscription (gratuite) au [Lametric](https://developer.lametric.com/user/devices).",
-        "regexErrorMessage": "Ce n'est pas une API KEY valide"
-      },
-      "PairingMode": {
-        "name": "Mode d'appairage",
-        "type": "comboSection",
-        "content": {
-          "Automatic": {
-            "name": "Appairage automatique",
-            "description": "Appairage automatique en utilisant le protocole UPNP",
-            "content": {
-              "Port": {
-                "name": "Port",
-                "description": "Le port de communication de Lametric (exemple Http: 8080, Https: 4343)"
-              }
-            }
-          },
-          "Manual": {
-            "name": "Appairage manuel",
-            "description": "Appairage manuel",
-            "content": {
-              "IPAddress": {
-                "name": "Adresse IP",
-                "description": "L'adresse IP du module",
-                "regexErrorMessage": "Ce n'est pas une adresse IP valide"
-              },
-              "Port": {
-                "name": "Port",
-                "description": "Le port de communication de Lametric (exemple Http: 8080, Https: 4343)"
-              }
-            }
-          }
-        }
-      }
-    },
-    "customLabels": {
-      "pluginState": {
-        "failedToConnect": "La connexion a échoué...",
-        "initializationError": "Erreur d'initialisation"
-      }
-    }
-  }
+  "autoStart": true,
+  "category": "User"
 }
 ```

@@ -2,13 +2,13 @@ export enum PluginConfigurationSchemaType {
   String = 'string',
   Integer = 'int',
   Boolean = 'bool',
+  Decimal = 'decimal',
   Section = 'section',
+  CustomTime = 'time',
+  Enum = 'enum',
   ComboSection = 'comboSection',
   RadioSection = 'radioSection',
   CheckboxSection = 'checkboxSection',
-  CustomTime = 'time',
-  Enum = 'enum',
-  Decimal = 'decimal',
   MultiSelectSection = 'multiSelectSection',
 }
 
