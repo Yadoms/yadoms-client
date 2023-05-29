@@ -7,16 +7,18 @@ import {
   TextInput,
   useMantineTheme,
 } from '@mantine/core';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  getFromInitialValues,
-  validateForm,
-} from './plugins-configuration-forms';
+import { validateForm } from './plugins-configuration-forms';
 import { useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
 import renderPluginField from '../render-plugin-field/render-plugin-field';
-import { PluginConfigurationSchema } from '@yadoms/domain/plugins';
+import {
+  PluginConfigurationSchema,
+  pluginFormActions,
+  selectFormInitialState,
+} from '@yadoms/domain/plugins';
+import { useAppDispatch, useAppSelector } from '@yadoms/store';
 
 export interface PluginConfigurationModalProps {
   opened: boolean;
@@ -35,20 +37,24 @@ export function PluginConfigurationModal(props: PluginConfigurationModalProps) {
   const theme = useMantineTheme();
   const { t } = useTranslation();
 
-  const [initialValues, setInitialValues] = useState<Record<string, any>>({});
-
+  // const [initialValues, setInitialValues] = useState<Record<string, unknown>>({});
+  const dispatch = useAppDispatch();
+  const initialValues = useAppSelector(selectFormInitialState);
   useEffect(() => {
-    // Create initial values object based on configuration schema
-    const newInitialValues = getFromInitialValues(
-      props.selectedPluginConfigurationSchema
-    );
     console.log(
       'props.selectedPluginConfigurationSchema',
       props.selectedPluginConfigurationSchema
     );
-    console.log('newInitialValues', newInitialValues);
-    setInitialValues(newInitialValues);
-  }, [props.selectedPluginConfigurationSchema]);
+    console.log('newInitialValuesbefore', initialValues);
+    dispatch(
+      pluginFormActions.setForm({
+        type: props.selectedPluginType,
+        displayName: '',
+        configurationSchema: props.selectedPluginConfigurationSchema,
+      })
+    );
+    console.log('newInitialValuesafter', initialValues);
+  }, [props.selectedPluginConfigurationSchema, dispatch]);
 
   const form = useForm({
     initialValues,

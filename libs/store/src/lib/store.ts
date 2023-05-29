@@ -3,6 +3,8 @@ import { configureStore } from '@reduxjs/toolkit';
 import {
   AVAILABLE_PLUGINS_FEATURE_KEY,
   availablePluginsReducer,
+  PLUGIN_FORM_FEATURE_KEY,
+  pluginFormReducer,
   PLUGINS_INSTANCES_FEATURE_KEY,
   pluginsInstancesReducer,
 } from '@yadoms/domain/plugins';
@@ -11,6 +13,7 @@ export const store = configureStore({
   reducer: {
     [AVAILABLE_PLUGINS_FEATURE_KEY]: availablePluginsReducer,
     [PLUGINS_INSTANCES_FEATURE_KEY]: pluginsInstancesReducer,
+    [PLUGIN_FORM_FEATURE_KEY]: pluginFormReducer,
   },
   // Additional middleware can be passed to this array
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
