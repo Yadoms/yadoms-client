@@ -193,5 +193,94 @@ describe('Plugin form store', () => {
         ).toEqual('activeSection');
       });
     });
+    describe(`for section type`, () => {
+      test(`should return empty content when no content`, () => {
+        const payload = {
+          configurationSchema: {
+            FieldWithComboSection: {
+              type: PluginConfigurationSchemaType.ComboSection,
+              content: {
+                activeSection: {
+                  type: PluginConfigurationSchemaType.Section,
+                  content: {},
+                },
+              },
+            },
+          },
+        };
+        store.dispatch(pluginFormActions.setForm(payload));
+
+        const state = store.getState();
+        expect(
+          state.configuration['FieldWithComboSection'].content['activeSection']
+            .content
+        ).toEqual({});
+      });
+      test(`should return content when nested content`, () => {
+        const payload = {
+          configurationSchema: {
+            FieldWithComboSection: {
+              type: PluginConfigurationSchemaType.ComboSection,
+              content: {
+                activeSection: {
+                  type: PluginConfigurationSchemaType.Section,
+                  content: {
+                    StringKey: {
+                      type: PluginConfigurationSchemaType.String,
+                      defaultValue: 'defaultString',
+                    },
+                  },
+                },
+              },
+            },
+          },
+        };
+        store.dispatch(pluginFormActions.setForm(payload));
+
+        const state = store.getState();
+        expect(
+          state.configuration['FieldWithComboSection'].content['activeSection']
+            .content['StringKey']
+        ).toEqual('defaultString');
+      });
+    });
+    describe(`for enum type`, () => {
+      test(`should return defaultValue`, () => {
+        const payload = {
+          configurationSchema: {
+            FieldWithComboSection: {
+              type: PluginConfigurationSchemaType.ComboSection,
+              content: {
+                activeSection: {
+                  type: PluginConfigurationSchemaType.Section,
+                  content: {
+                    enum: {
+                      type: PluginConfigurationSchemaType.Enum,
+                      defaultValue: 'DefaultValue',
+                    },
+                  },
+                },
+                inactiveSection: {
+                  type: PluginConfigurationSchemaType.Section,
+                  content: {
+                    enum: {
+                      type: PluginConfigurationSchemaType.Enum,
+                      defaultValue: 'DefaultValue',
+                    },
+                  },
+                },
+              },
+            },
+          },
+        };
+        store.dispatch(pluginFormActions.setForm(payload));
+
+        const state = store.getState();
+        expect(
+          state.configuration['FieldWithComboSection'].content['activeSection']
+            .content['enum']
+        ).toEqual('DefaultValue');
+      });
+    });
   });
 });

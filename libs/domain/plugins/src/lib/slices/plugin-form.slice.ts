@@ -60,6 +60,14 @@ const getFromInitialValues = (
       case PluginConfigurationSchemaType.Decimal:
         newInitialValues[key] = field.defaultValue ?? 0.0;
         break;
+      case PluginConfigurationSchemaType.Enum:
+        newInitialValues[key] = field.defaultValue;
+        break;
+      case PluginConfigurationSchemaType.Section:
+        newInitialValues[key] = {
+          content: getFromInitialValues(field.content || {}),
+        };
+        break;
       case PluginConfigurationSchemaType.ComboSection:
         sectionKeys = Object.keys(field.content || {});
         if (sectionKeys.length > 0) {
