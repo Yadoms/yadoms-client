@@ -1,13 +1,13 @@
-import { UseFormReturnType } from '@mantine/form';
 import { NumberInput } from '@mantine/core';
 import React from 'react';
 import { IntegerField } from '@yadoms/domain/plugins';
 import LinkifyText from '../../linkify-text/linkify-text';
+import { FormReturnType } from '../../FormReturnType';
 
 export interface CustomTextInputProps {
   pluginKey: string;
   field: IntegerField;
-  form: UseFormReturnType<Record<string, unknown>>;
+  form: FormReturnType;
 }
 
 export function CustomIntegerInput(props: CustomTextInputProps) {

@@ -1,13 +1,13 @@
 import { MultiSelectSectionField } from '@yadoms/domain/plugins';
-import { UseFormReturnType } from '@mantine/form';
 import { Box, Group, MultiSelect, Text } from '@mantine/core';
 import React, { forwardRef } from 'react';
 import LinkifyText from '../../linkify-text/linkify-text';
+import { FormReturnType } from '../../FormReturnType';
 
 export interface CustomMultiSelectSectionProps {
   pluginKey: string;
   field: MultiSelectSectionField;
-  form: UseFormReturnType<Record<string, unknown>>;
+  form: FormReturnType;
 }
 
 interface ItemProps extends React.ComponentPropsWithoutRef<'div'> {

@@ -119,8 +119,8 @@ export function PluginConfigurationModal(props: PluginConfigurationModalProps) {
                 ([key, value]) =>
                   renderPluginField({
                     field: value,
-                    form: form,
                     pluginKey: key,
+                    form: form,
                   })
               )}
               {renderSpacing(6)}

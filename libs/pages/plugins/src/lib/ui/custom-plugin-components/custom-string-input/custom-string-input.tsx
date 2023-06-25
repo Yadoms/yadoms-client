@@ -3,11 +3,12 @@ import { TextInput } from '@mantine/core';
 import React from 'react';
 import { StringField } from '@yadoms/domain/plugins';
 import LinkifyText from '../../linkify-text/linkify-text';
+import { FormReturnType } from '../../FormReturnType';
 
 interface CustomTextInputProps {
   pluginKey: string;
   field: StringField;
-  form: UseFormReturnType<Record<string, unknown>>;
+  form: FormReturnType;
 }
 
 export function CustomStringInput(props: CustomTextInputProps) {

@@ -1,14 +1,14 @@
 import { CustomTimeField } from '@yadoms/domain/plugins';
-import { UseFormReturnType } from '@mantine/form';
 import { TimeInput } from '@mantine/dates';
 import { IconClock } from '@tabler/icons-react';
 import LinkifyText from '../../linkify-text/linkify-text';
 import React from 'react';
+import { FormReturnType } from '../../FormReturnType';
 
 export interface CustomTimeProps {
   pluginKey: string;
   field: CustomTimeField;
-  form: UseFormReturnType<Record<string, unknown>>;
+  form: FormReturnType;
 }
 
 export function CustomTime(props: CustomTimeProps) {

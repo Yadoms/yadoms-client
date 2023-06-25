@@ -1,13 +1,13 @@
-import { UseFormReturnType } from '@mantine/form';
 import { NumberInput } from '@mantine/core';
 import React from 'react';
 import { DecimalField } from '@yadoms/domain/plugins';
 import LinkifyText from '../../linkify-text/linkify-text';
+import { FormReturnType } from '../../FormReturnType';
 
 export interface CustomDecimalNumberProps {
   pluginKey: string;
   field: DecimalField;
-  form: UseFormReturnType<Record<string, unknown>>;
+  form: FormReturnType;
 }
 
 export function CustomDecimalNumber(props: CustomDecimalNumberProps) {

@@ -1,15 +1,15 @@
-import { UseFormReturnType } from '@mantine/form';
 import { Box, Group, Radio } from '@mantine/core';
 import React, { useEffect, useState } from 'react';
 import { ItemProps } from '../../plugin-configuration-modal/plugin-configuration-modal';
 import renderPluginField from '../../render-plugin-field/render-plugin-field';
 import LinkifyText from '../../linkify-text/linkify-text';
-import { PluginForm, RadioSectionField } from '@yadoms/domain/plugins';
+import { RadioSectionField } from '@yadoms/domain/plugins';
+import { FormReturnType } from '../../FormReturnType';
 
 export interface CustomRadioSectionProps {
   pluginKey: string;
   field: RadioSectionField;
-  form: UseFormReturnType<Record<string, unknown>>;
+  form: FormReturnType;
 }
 
 export function CustomRadioSection(props: CustomRadioSectionProps) {

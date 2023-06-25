@@ -1,10 +1,8 @@
 import {
   PluginConfigurationSchemaField,
   PluginConfigurationSchemaType,
-  PluginForm,
 } from '@yadoms/domain/plugins';
 import React from 'react';
-import { UseFormReturnType } from '@mantine/form';
 import {
   CustomBoolCheckbox,
   CustomCheckboxSection,
@@ -18,10 +16,11 @@ import {
   CustomStringInput,
   CustomTime,
 } from '../custom-plugin-components';
+import { FormReturnType } from '../FormReturnType';
 
 type RenderFieldProps = {
   field: PluginConfigurationSchemaField;
-  form: UseFormReturnType<Record<string, unknown>>;
+  form: FormReturnType;
   pluginKey: string;
 };
 

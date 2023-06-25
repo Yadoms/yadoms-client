@@ -1,14 +1,14 @@
 import { Select } from '@mantine/core';
 import React, { useState } from 'react';
-import { UseFormReturnType } from '@mantine/form';
 import { ItemProps } from '../../plugin-configuration-modal/plugin-configuration-modal';
 import { EnumField } from '@yadoms/domain/plugins';
 import LinkifyText from '../../linkify-text/linkify-text';
+import { FormReturnType } from '../../FormReturnType';
 
 export interface CustomEnumSelectProps {
   pluginKey: string;
   field: EnumField;
-  form: UseFormReturnType<Record<string, unknown>>;
+  form: FormReturnType;
 }
 
 export function CustomEnumSelect(props: CustomEnumSelectProps) {
