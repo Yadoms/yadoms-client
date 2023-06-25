@@ -18,7 +18,7 @@ const pluginFormSlice = createSlice({
     type: '',
     displayName: '',
     configuration: {},
-  } as PluginForm,
+  },
   reducers: {
     setForm: (state, action) => {
       const {
