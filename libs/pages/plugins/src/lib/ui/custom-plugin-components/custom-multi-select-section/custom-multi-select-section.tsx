@@ -7,7 +7,7 @@ import LinkifyText from '../../linkify-text/linkify-text';
 export interface CustomMultiSelectSectionProps {
   pluginKey: string;
   field: MultiSelectSectionField;
-  form: UseFormReturnType<Record<string, any>>;
+  form: UseFormReturnType<Record<string, unknown>>;
 }
 
 interface ItemProps extends React.ComponentPropsWithoutRef<'div'> {

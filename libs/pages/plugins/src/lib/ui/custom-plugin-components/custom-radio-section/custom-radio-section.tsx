@@ -9,7 +9,7 @@ import { PluginForm, RadioSectionField } from '@yadoms/domain/plugins';
 export interface CustomRadioSectionProps {
   pluginKey: string;
   field: RadioSectionField;
-  form: PluginForm;
+  form: UseFormReturnType<Record<string, unknown>>;
 }
 
 export function CustomRadioSection(props: CustomRadioSectionProps) {

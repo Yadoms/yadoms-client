@@ -7,7 +7,7 @@ import LinkifyText from '../../linkify-text/linkify-text';
 export interface CustomBoolCheckboxProps {
   pluginKey: string;
   field: BooleanField;
-  form: UseFormReturnType<Record<string, any>>;
+  form: UseFormReturnType<Record<string, unknown>>;
 }
 
 export function CustomBoolCheckbox(props: CustomBoolCheckboxProps) {

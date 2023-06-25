@@ -8,7 +8,7 @@ import LinkifyText from '../../linkify-text/linkify-text';
 export interface CustomEnumSelectProps {
   pluginKey: string;
   field: EnumField;
-  form: UseFormReturnType<Record<string, any>>;
+  form: UseFormReturnType<Record<string, unknown>>;
 }
 
 export function CustomEnumSelect(props: CustomEnumSelectProps) {

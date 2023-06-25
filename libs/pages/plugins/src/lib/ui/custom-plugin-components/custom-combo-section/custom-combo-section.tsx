@@ -9,7 +9,7 @@ import LinkifyText from '../../linkify-text/linkify-text';
 export interface CustomComboSectionProps {
   pluginKey: string;
   field: ComboSectionField;
-  form: PluginForm;
+  form: UseFormReturnType<Record<string, unknown>>;
 }
 
 const SelectItem = forwardRef<HTMLDivElement, ItemProps>(

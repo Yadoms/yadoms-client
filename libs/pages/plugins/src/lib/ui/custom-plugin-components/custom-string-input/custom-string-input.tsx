@@ -7,7 +7,7 @@ import LinkifyText from '../../linkify-text/linkify-text';
 interface CustomTextInputProps {
   pluginKey: string;
   field: StringField;
-  form: UseFormReturnType<Record<string, any>>;
+  form: UseFormReturnType<Record<string, unknown>>;
 }
 
 export function CustomStringInput(props: CustomTextInputProps) {

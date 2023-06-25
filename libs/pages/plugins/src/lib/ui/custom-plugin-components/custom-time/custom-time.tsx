@@ -1,7 +1,4 @@
-import {
-  CustomTimeField,
-  PluginConfigurationSchemaField,
-} from '@yadoms/domain/plugins';
+import { CustomTimeField } from '@yadoms/domain/plugins';
 import { UseFormReturnType } from '@mantine/form';
 import { TimeInput } from '@mantine/dates';
 import { IconClock } from '@tabler/icons-react';
@@ -11,7 +8,7 @@ import React from 'react';
 export interface CustomTimeProps {
   pluginKey: string;
   field: CustomTimeField;
-  form: UseFormReturnType<Record<string, any>>;
+  form: UseFormReturnType<Record<string, unknown>>;
 }
 
 export function CustomTime(props: CustomTimeProps) {

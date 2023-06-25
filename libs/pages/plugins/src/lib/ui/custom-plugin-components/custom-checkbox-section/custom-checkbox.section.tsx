@@ -8,7 +8,7 @@ import LinkifyText from '../../linkify-text/linkify-text';
 export interface CustomCheckboxSectionProps {
   pluginKey: string;
   field: CheckboxSectionField;
-  form: PluginForm;
+  form: UseFormReturnType<Record<string, unknown>>;
 }
 
 export function CustomCheckboxSection(props: CustomCheckboxSectionProps) {

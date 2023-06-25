@@ -8,7 +8,7 @@ import LinkifyText from '../../linkify-text/linkify-text';
 export interface CustomSectionProps {
   pluginKey: string;
   field: SectionField;
-  form: PluginForm;
+  form: UseFormReturnType<Record<string, unknown>>;
 }
 
 export function CustomSection(props: CustomSectionProps) {

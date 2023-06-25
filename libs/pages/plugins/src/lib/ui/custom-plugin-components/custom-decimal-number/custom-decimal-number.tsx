@@ -7,7 +7,7 @@ import LinkifyText from '../../linkify-text/linkify-text';
 export interface CustomDecimalNumberProps {
   pluginKey: string;
   field: DecimalField;
-  form: UseFormReturnType<Record<string, any>>;
+  form: UseFormReturnType<Record<string, unknown>>;
 }
 
 export function CustomDecimalNumber(props: CustomDecimalNumberProps) {

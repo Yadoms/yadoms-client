@@ -21,7 +21,7 @@ import {
 
 type RenderFieldProps = {
   field: PluginConfigurationSchemaField;
-  form: PluginForm;
+  form: UseFormReturnType<Record<string, unknown>>;
   pluginKey: string;
 };
 
