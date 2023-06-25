@@ -76,7 +76,8 @@ export function Plugins(props: PluginsProps) {
   const paging = useAppSelector(getPluginsInstancesPaging);
 
   //we need a table instance ref to pass as a prop to the MRT Toolbar buttons
-  const tableInstanceRef = useRef<MRT_TableInstance<Plugin>>(null);
+  const tableInstanceRef =
+    useRef<MRT_TableInstance<PluginsInstancesEntity> | null>(null);
 
   //we will also need some weird re-render hacks to force the MRT_ components to re-render since ref changes do not trigger a re-render
   const rerender = useReducer(() => ({}), {})[1];
