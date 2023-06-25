@@ -5,7 +5,7 @@ import {
 } from '../model/plugin-configuration-schema.model';
 import { RootState } from '@yadoms/store';
 
-interface PluginForm {
+export interface PluginForm {
   type: string;
   displayName: string;
   configuration: Record<string, unknown>;

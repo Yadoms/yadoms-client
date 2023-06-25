@@ -3,13 +3,13 @@ import { Box, Group, Select, Text } from '@mantine/core';
 import React, { forwardRef, useState } from 'react';
 import { ItemProps } from '../../plugin-configuration-modal/plugin-configuration-modal';
 import renderPluginField from '../../render-plugin-field/render-plugin-field';
-import { ComboSectionField } from '@yadoms/domain/plugins';
+import { ComboSectionField, PluginForm } from '@yadoms/domain/plugins';
 import LinkifyText from '../../linkify-text/linkify-text';
 
 export interface CustomComboSectionProps {
   pluginKey: string;
   field: ComboSectionField;
-  form: UseFormReturnType<Record<string, any>>;
+  form: PluginForm;
 }
 
 const SelectItem = forwardRef<HTMLDivElement, ItemProps>(

@@ -1,5 +1,5 @@
 import { UseFormReturnType } from '@mantine/form';
-import { CheckboxSectionField } from '@yadoms/domain/plugins';
+import { CheckboxSectionField, PluginForm } from '@yadoms/domain/plugins';
 import { Box, Checkbox } from '@mantine/core';
 import React, { useState } from 'react';
 import renderPluginField from '../../render-plugin-field/render-plugin-field';
@@ -8,7 +8,7 @@ import LinkifyText from '../../linkify-text/linkify-text';
 export interface CustomCheckboxSectionProps {
   pluginKey: string;
   field: CheckboxSectionField;
-  form: UseFormReturnType<Record<string, any>>;
+  form: PluginForm;
 }
 
 export function CustomCheckboxSection(props: CustomCheckboxSectionProps) {

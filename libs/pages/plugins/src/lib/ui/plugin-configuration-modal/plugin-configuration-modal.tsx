@@ -119,7 +119,7 @@ export function PluginConfigurationModal(props: PluginConfigurationModalProps) {
                 ([key, value]) =>
                   renderPluginField({
                     field: value,
-                    form: form,
+                    form: form.values,
                     pluginKey: key,
                   })
               )}

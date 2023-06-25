@@ -1,6 +1,7 @@
 import {
   PluginConfigurationSchemaField,
   PluginConfigurationSchemaType,
+  PluginForm,
 } from '@yadoms/domain/plugins';
 import React from 'react';
 import { UseFormReturnType } from '@mantine/form';
@@ -20,7 +21,7 @@ import {
 
 type RenderFieldProps = {
   field: PluginConfigurationSchemaField;
-  form: UseFormReturnType<Record<string, any>>;
+  form: PluginForm;
   pluginKey: string;
 };
 

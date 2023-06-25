@@ -4,12 +4,12 @@ import React, { useEffect, useState } from 'react';
 import { ItemProps } from '../../plugin-configuration-modal/plugin-configuration-modal';
 import renderPluginField from '../../render-plugin-field/render-plugin-field';
 import LinkifyText from '../../linkify-text/linkify-text';
-import { RadioSectionField } from '@yadoms/domain/plugins';
+import { PluginForm, RadioSectionField } from '@yadoms/domain/plugins';
 
 export interface CustomRadioSectionProps {
   pluginKey: string;
   field: RadioSectionField;
-  form: UseFormReturnType<Record<string, any>>;
+  form: PluginForm;
 }
 
 export function CustomRadioSection(props: CustomRadioSectionProps) {

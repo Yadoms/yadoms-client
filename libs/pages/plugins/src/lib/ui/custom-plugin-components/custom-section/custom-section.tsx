@@ -2,13 +2,13 @@ import { UseFormReturnType } from '@mantine/form';
 import { Box, Text } from '@mantine/core';
 import React from 'react';
 import renderPluginField from '../../render-plugin-field/render-plugin-field';
-import { SectionField } from '@yadoms/domain/plugins';
+import { PluginForm, SectionField } from '@yadoms/domain/plugins';
 import LinkifyText from '../../linkify-text/linkify-text';
 
 export interface CustomSectionProps {
   pluginKey: string;
   field: SectionField;
-  form: UseFormReturnType<Record<string, any>>;
+  form: PluginForm;
 }
 
 export function CustomSection(props: CustomSectionProps) {

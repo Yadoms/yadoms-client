@@ -121,15 +121,12 @@ export function Plugins(props: PluginsProps) {
   const handleTogglePowerRow = useCallback(
     async (row: MRT_Row<PluginsInstancesEntity>) => {
       dispatch(
-        startStopPluginsInstance(
-          {
-            id: row.original.id,
-            start:
-              row.original.state === PuginsInstancesState.Stopped ||
-              row.original.state === PuginsInstancesState.Error,
-          },
-          [startStopPluginsInstance]
-        )
+        startStopPluginsInstance({
+          id: row.original.id,
+          start:
+            row.original.state === PuginsInstancesState.Stopped ||
+            row.original.state === PuginsInstancesState.Error,
+        })
       );
     },
     [dispatch]
