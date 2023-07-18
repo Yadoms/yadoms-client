@@ -7,18 +7,16 @@ import {
   TextInput,
   useMantineTheme,
 } from '@mantine/core';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { validateForm } from './plugins-configuration-forms';
 import { useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
 import renderPluginField from '../render-plugin-field/render-plugin-field';
 import {
+  getInitialValues,
   PluginConfigurationSchema,
-  pluginFormActions,
-  selectFormInitialState,
 } from '@yadoms/domain/plugins';
-import { useAppDispatch, useAppSelector } from '@yadoms/store';
 
 export interface PluginConfigurationModalProps {
   opened: boolean;
@@ -37,24 +35,22 @@ export function PluginConfigurationModal(props: PluginConfigurationModalProps) {
   const theme = useMantineTheme();
   const { t } = useTranslation();
 
-  // const [initialValues, setInitialValues] = useState<Record<string, unknown>>({});
-  const dispatch = useAppDispatch();
-  const initialValues = useAppSelector(selectFormInitialState);
+  const [initialValues, setInitialValues] = useState(
+    getInitialValues({
+      type: props.selectedPluginType,
+      displayName: '',
+      configurationSchema: props.selectedPluginConfigurationSchema,
+    })
+  );
   useEffect(() => {
-    console.log(
-      'props.selectedPluginConfigurationSchema',
-      props.selectedPluginConfigurationSchema
-    );
-    console.log('newInitialValuesbefore', initialValues);
-    dispatch(
-      pluginFormActions.setForm({
+    setInitialValues(
+      getInitialValues({
         type: props.selectedPluginType,
         displayName: '',
         configurationSchema: props.selectedPluginConfigurationSchema,
       })
     );
-    console.log('newInitialValuesafter', initialValues);
-  }, [props.selectedPluginConfigurationSchema, dispatch]);
+  }, [props.selectedPluginType, props.selectedPluginConfigurationSchema]);
 
   const form = useForm({
     initialValues,

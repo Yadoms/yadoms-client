@@ -1,4 +1,3 @@
-import { UseFormReturnType } from '@mantine/form';
 import { TextInput } from '@mantine/core';
 import React from 'react';
 import { StringField } from '@yadoms/domain/plugins';

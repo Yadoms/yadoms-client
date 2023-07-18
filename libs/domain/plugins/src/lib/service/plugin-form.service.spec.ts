@@ -1,15 +1,11 @@
-import { configureStore } from '@reduxjs/toolkit';
 import { PluginConfigurationSchemaType } from '../model/plugin-configuration-schema.model';
-import { pluginFormReducer, pluginFormActions } from './plugin-form.slice';
+import { getInitialValues, InitialValues } from './plugin-form.service';
 
 describe('Plugin form store', () => {
-  const store = configureStore({
-    reducer: pluginFormReducer,
-  });
   describe(`setup the correct form`, () => {
     describe(`for string type`, () => {
       test(`should return empty string when defaultValue does not exist`, () => {
-        const payload = {
+        const payload: InitialValues = {
           type: 'type',
           displayName: 'displayName',
           configurationSchema: {
@@ -18,17 +14,16 @@ describe('Plugin form store', () => {
             },
           },
         };
-        store.dispatch(pluginFormActions.setForm(payload));
+        const initialValues = getInitialValues(payload);
 
-        const state = store.getState();
-        expect(state.type).toBe('type');
-        expect(state.displayName).toBe('displayName');
-        expect(state.configuration).toEqual({
+        expect(initialValues.type).toBe('type');
+        expect(initialValues.displayName).toBe('displayName');
+        expect(initialValues.configuration).toEqual({
           StringKey: '',
         });
       });
       test(`should return default value when the value exist`, () => {
-        const payload = {
+        const payload: InitialValues = {
           type: 'type',
           displayName: 'displayName',
           configurationSchema: {
@@ -38,17 +33,15 @@ describe('Plugin form store', () => {
             },
           },
         };
-        store.dispatch(pluginFormActions.setForm(payload));
-
-        const state = store.getState();
-        expect(state.configuration).toEqual({
+        const initialValues = getInitialValues(payload);
+        expect(initialValues.configuration).toEqual({
           StringKey: 'default value',
         });
       });
     });
     describe(`for int type`, () => {
       test(`should return 0 when defaultValue does not exist`, () => {
-        const payload = {
+        const payload: InitialValues = {
           type: 'type',
           displayName: 'displayName',
           configurationSchema: {
@@ -57,15 +50,13 @@ describe('Plugin form store', () => {
             },
           },
         };
-        store.dispatch(pluginFormActions.setForm(payload));
-
-        const state = store.getState();
-        expect(state.configuration).toEqual({
+        const initialValues = getInitialValues(payload);
+        expect(initialValues.configuration).toEqual({
           IntKey: 0,
         });
       });
       test(`should return default value when the value exist`, () => {
-        const payload = {
+        const payload: InitialValues = {
           type: 'type',
           displayName: 'displayName',
           configurationSchema: {
@@ -75,32 +66,32 @@ describe('Plugin form store', () => {
             },
           },
         };
-        store.dispatch(pluginFormActions.setForm(payload));
-
-        const state = store.getState();
-        expect(state.configuration).toEqual({
+        const initialValues = getInitialValues(payload);
+        expect(initialValues.configuration).toEqual({
           IntKey: 10,
         });
       });
     });
     describe(`for bool type`, () => {
       test(`should return false when defaultValue does not exist`, () => {
-        const payload = {
+        const payload: InitialValues = {
+          type: 'type',
+          displayName: 'displayName',
           configurationSchema: {
             BoolKey: {
               type: PluginConfigurationSchemaType.Boolean,
             },
           },
         };
-        store.dispatch(pluginFormActions.setForm(payload));
-
-        const state = store.getState();
-        expect(state.configuration).toEqual({
+        const initialValues = getInitialValues(payload);
+        expect(initialValues.configuration).toEqual({
           BoolKey: false,
         });
       });
       test(`should return default value when the value exist`, () => {
-        const payload = {
+        const payload: InitialValues = {
+          type: 'type',
+          displayName: 'displayName',
           configurationSchema: {
             BoolKey: {
               type: PluginConfigurationSchemaType.Boolean,
@@ -108,32 +99,33 @@ describe('Plugin form store', () => {
             },
           },
         };
-        store.dispatch(pluginFormActions.setForm(payload));
-
-        const state = store.getState();
-        expect(state.configuration).toEqual({
+        const initialValues = getInitialValues(payload);
+        expect(initialValues.configuration).toEqual({
           BoolKey: true,
         });
       });
     });
     describe(`for decimal type`, () => {
       test(`should return 0.0 when defaultValue does not exist`, () => {
-        const payload = {
+        const payload: InitialValues = {
+          type: 'type',
+          displayName: 'displayName',
           configurationSchema: {
             DecimalKey: {
               type: PluginConfigurationSchemaType.Decimal,
             },
           },
         };
-        store.dispatch(pluginFormActions.setForm(payload));
+        const initialValues = getInitialValues(payload);
 
-        const state = store.getState();
-        expect(state.configuration).toEqual({
+        expect(initialValues.configuration).toEqual({
           DecimalKey: 0.0,
         });
       });
       test(`should return default value when the value exist`, () => {
-        const payload = {
+        const payload: InitialValues = {
+          type: 'type',
+          displayName: 'displayName',
           configurationSchema: {
             DecimalKey: {
               type: PluginConfigurationSchemaType.Decimal,
@@ -141,17 +133,17 @@ describe('Plugin form store', () => {
             },
           },
         };
-        store.dispatch(pluginFormActions.setForm(payload));
-
-        const state = store.getState();
-        expect(state.configuration).toEqual({
+        const initialValues = getInitialValues(payload);
+        expect(initialValues.configuration).toEqual({
           DecimalKey: 1.2,
         });
       });
     });
     describe(`for ComboSection type`, () => {
       test(`should return empty when ComboSection content is empty`, () => {
-        const payload = {
+        const payload: InitialValues = {
+          type: 'type',
+          displayName: 'displayName',
           configurationSchema: {
             emptySectionContent: {
               type: PluginConfigurationSchemaType.ComboSection,
@@ -159,13 +151,15 @@ describe('Plugin form store', () => {
             },
           },
         };
-        store.dispatch(pluginFormActions.setForm(payload));
-
-        const state = store.getState();
-        expect(state.configuration['emptySectionContent'].content).toEqual({});
+        const initialValues = getInitialValues(payload);
+        expect(
+          initialValues.configuration['emptySectionContent'].content
+        ).toEqual({});
       });
       test(`should return active comboSection`, () => {
-        const payload = {
+        const payload: InitialValues = {
+          type: 'type',
+          displayName: 'displayName',
           configurationSchema: {
             FieldWithComboSection: {
               type: PluginConfigurationSchemaType.ComboSection,
@@ -182,20 +176,17 @@ describe('Plugin form store', () => {
             },
           },
         };
-        store.dispatch(pluginFormActions.setForm(payload));
-
-        const state = store.getState();
+        const initialValues = getInitialValues(payload);
         expect(
-          state.configuration['FieldWithComboSection'].activeSection
-        ).toEqual('activeSection');
-        expect(
-          state.configuration['FieldWithComboSection'].activeSectionText
+          initialValues.configuration['FieldWithComboSection'].activeSection
         ).toEqual('activeSection');
       });
     });
     describe(`for section type`, () => {
       test(`should return empty content when no content`, () => {
-        const payload = {
+        const payload: InitialValues = {
+          type: 'type',
+          displayName: 'displayName',
           configurationSchema: {
             FieldWithComboSection: {
               type: PluginConfigurationSchemaType.ComboSection,
@@ -208,16 +199,15 @@ describe('Plugin form store', () => {
             },
           },
         };
-        store.dispatch(pluginFormActions.setForm(payload));
-
-        const state = store.getState();
+        const initialValues = getInitialValues(payload);
         expect(
-          state.configuration['FieldWithComboSection'].content['activeSection']
-            .content
+          initialValues.configuration['FieldWithComboSection'].content[
+            'activeSection'
+          ].content
         ).toEqual({});
       });
       test(`should return content when nested content`, () => {
-        const payload = {
+        const payload: InitialValues = {
           configurationSchema: {
             FieldWithComboSection: {
               type: PluginConfigurationSchemaType.ComboSection,
@@ -235,18 +225,19 @@ describe('Plugin form store', () => {
             },
           },
         };
-        store.dispatch(pluginFormActions.setForm(payload));
-
-        const state = store.getState();
+        const initialValues = getInitialValues(payload);
         expect(
-          state.configuration['FieldWithComboSection'].content['activeSection']
-            .content['StringKey']
+          initialValues.configuration['FieldWithComboSection'].content[
+            'activeSection'
+          ].content['StringKey']
         ).toEqual('defaultString');
       });
     });
     describe(`for enum type`, () => {
       test(`should return defaultValue`, () => {
-        const payload = {
+        const payload: InitialValues = {
+          type: 'type',
+          displayName: 'displayName',
           configurationSchema: {
             FieldWithComboSection: {
               type: PluginConfigurationSchemaType.ComboSection,
@@ -273,12 +264,11 @@ describe('Plugin form store', () => {
             },
           },
         };
-        store.dispatch(pluginFormActions.setForm(payload));
-
-        const state = store.getState();
+        const initialValues = getInitialValues(payload);
         expect(
-          state.configuration['FieldWithComboSection'].content['activeSection']
-            .content['enum']
+          initialValues.configuration['FieldWithComboSection'].content[
+            'activeSection'
+          ].content['enum']
         ).toEqual('DefaultValue');
       });
     });

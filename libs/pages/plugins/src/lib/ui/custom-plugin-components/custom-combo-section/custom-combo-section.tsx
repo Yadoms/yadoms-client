@@ -52,7 +52,13 @@ export function CustomComboSection(props: CustomComboSectionProps) {
     >
       <Select
         value={selectedComboSection}
-        onChange={(event: string) => setSelectedComboSection(event)}
+        onChange={(event: string) => {
+          setSelectedComboSection(event);
+          props.form.setFieldValue(
+            `configuration.${props.pluginKey}.activeSection`,
+            event
+          );
+        }}
         label={props.field.name}
         description={<LinkifyText text={props.field.description} />}
         inputWrapperOrder={['label', 'error', 'input', 'description']}

@@ -1,43 +1,20 @@
-import { createSelector, createSlice } from '@reduxjs/toolkit';
 import {
   PluginConfigurationSchema,
   PluginConfigurationSchemaType,
 } from '../model/plugin-configuration-schema.model';
-import { RootState } from '@yadoms/store';
 
-export interface PluginForm {
+export interface InitialValues {
   type: string;
   displayName: string;
-  configuration: Record<string, unknown>;
+  configurationSchema: PluginConfigurationSchema;
 }
-export const PLUGIN_FORM_FEATURE_KEY = 'pluginForm';
-
-const pluginFormSlice = createSlice({
-  name: PLUGIN_FORM_FEATURE_KEY,
-  initialState: {
-    type: '',
-    displayName: '',
-    configuration: {},
-  },
-  reducers: {
-    setForm: (state, action) => {
-      const {
-        type,
-        displayName,
-        configurationSchema,
-      }: {
-        type: string;
-        displayName: string;
-        configurationSchema: PluginConfigurationSchema;
-      } = action.payload;
-
-      state.type = type;
-      state.displayName = displayName;
-      state.configuration = getFromInitialValues(configurationSchema);
-    },
-  },
-});
-
+export const getInitialValues = (initialValues: InitialValues) => {
+  return {
+    type: initialValues.type,
+    displayName: initialValues.displayName,
+    configuration: getFromInitialValues(initialValues.configurationSchema),
+  };
+};
 const getFromInitialValues = (
   configurationSchema: PluginConfigurationSchema
 ): Record<string, unknown> => {
@@ -75,7 +52,6 @@ const getFromInitialValues = (
           newInitialValues[key] = {
             content: getFromInitialValues(field.content || {}),
             activeSection: firstSectionKey,
-            activeSectionText: firstSectionKey,
           };
         } else {
           newInitialValues[key] = {
@@ -90,10 +66,3 @@ const getFromInitialValues = (
 
   return newInitialValues;
 };
-
-export const selectFormInitialState = createSelector(
-  (state: RootState) => state.pluginForm,
-  (pluginForm) => pluginForm
-);
-export const pluginFormActions = pluginFormSlice.actions;
-export const pluginFormReducer = pluginFormSlice.reducer;
