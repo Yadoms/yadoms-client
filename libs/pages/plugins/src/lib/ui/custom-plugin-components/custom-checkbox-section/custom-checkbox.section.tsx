@@ -1,4 +1,7 @@
-import { CheckboxSectionField } from '@yadoms/domain/plugins';
+import {
+  CheckboxSectionField,
+  getInitialValuesFromSectionFields,
+} from '@yadoms/domain/plugins';
 import { Box, Checkbox } from '@mantine/core';
 import React, { useState } from 'react';
 import renderPluginField from '../../render-plugin-field/render-plugin-field';
@@ -9,12 +12,21 @@ export interface CustomCheckboxSectionProps {
   pluginKey: string;
   field: CheckboxSectionField;
   form: FormReturnType;
+  path: string;
 }
 
 export function CustomCheckboxSection(props: CustomCheckboxSectionProps) {
   const [checked, setChecked] = useState<boolean | undefined>(
     !!props.field.defaultValue
   );
+  console.log(
+    'CustomCheckboxSection props.field.defaultValue',
+    props.field.defaultValue
+  );
+  console.log('CustomCheckboxSection props.field.content', props.field.content);
+  console.log('CustomCheckboxSection props.path', props.path);
+  console.log('CustomCheckboxSection props.field.name', props.field.name);
+  console.log('CustomCheckboxSection props.pluginKey', props.pluginKey);
   return (
     <Box
       sx={(theme) => ({
@@ -39,10 +51,15 @@ export function CustomCheckboxSection(props: CustomCheckboxSectionProps) {
 
       {checked && (
         <div>
-          {Object.entries(props.field.content).map(([key, value]) =>
+          {getInitialValuesFromSectionFields(
+            props.field.content,
+            props.path,
+            ''
+          ).map(({ key, path, field }) =>
             renderPluginField({
-              field: value,
+              field: field,
               form: props.form,
+              path: path,
               pluginKey: key,
             })
           )}

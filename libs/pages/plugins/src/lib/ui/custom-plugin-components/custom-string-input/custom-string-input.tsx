@@ -8,9 +8,12 @@ interface CustomTextInputProps {
   pluginKey: string;
   field: StringField;
   form: FormReturnType;
+  path: string;
 }
 
 export function CustomStringInput(props: CustomTextInputProps) {
+  console.log('pluginKey', props.pluginKey);
+  console.log('path', props.path);
   return (
     <TextInput
       label={props.field.name}
@@ -19,7 +22,7 @@ export function CustomStringInput(props: CustomTextInputProps) {
       inputWrapperOrder={['label', 'error', 'input', 'description']}
       withAsterisk={!!props.field.required}
       required={props.field.required}
-      {...props.form.getInputProps(props.pluginKey)}
+      {...props.form.getInputProps(props.path)}
     />
   );
 }

@@ -3,13 +3,17 @@ import React, { useEffect, useState } from 'react';
 import { ItemProps } from '../../plugin-configuration-modal/plugin-configuration-modal';
 import renderPluginField from '../../render-plugin-field/render-plugin-field';
 import LinkifyText from '../../linkify-text/linkify-text';
-import { RadioSectionField } from '@yadoms/domain/plugins';
+import {
+  getInitialValuesFromSectionFields,
+  RadioSectionField,
+} from '@yadoms/domain/plugins';
 import { FormReturnType } from '../../FormReturnType';
 
 export interface CustomRadioSectionProps {
   pluginKey: string;
   field: RadioSectionField;
   form: FormReturnType;
+  path: string;
 }
 
 export function CustomRadioSection(props: CustomRadioSectionProps) {
@@ -48,13 +52,17 @@ export function CustomRadioSection(props: CustomRadioSectionProps) {
       </Radio.Group>
       {props.field.content[selectedOption] && (
         <div>
-          {Object.entries(props.field.content[selectedOption].content).map(
-            ([key, value]) =>
-              renderPluginField({
-                field: value,
-                form: props.form,
-                pluginKey: key,
-              })
+          {getInitialValuesFromSectionFields(
+            props.field.content[selectedOption].content,
+            props.path,
+            selectedOption
+          ).map(({ key, path, field }) =>
+            renderPluginField({
+              field: field,
+              form: props.form,
+              path: path,
+              pluginKey: key,
+            })
           )}
         </div>
       )}

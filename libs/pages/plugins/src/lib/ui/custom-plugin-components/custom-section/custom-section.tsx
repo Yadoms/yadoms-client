@@ -10,6 +10,7 @@ export interface CustomSectionProps {
   pluginKey: string;
   field: SectionField;
   form: FormReturnType;
+  path: string;
 }
 
 export function CustomSection(props: CustomSectionProps) {
@@ -39,6 +40,7 @@ export function CustomSection(props: CustomSectionProps) {
               renderPluginField({
                 field: value,
                 form: props.form,
+                path: '',
                 pluginKey: key,
               })
             )}

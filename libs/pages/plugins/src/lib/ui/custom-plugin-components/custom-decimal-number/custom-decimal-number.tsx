@@ -8,6 +8,7 @@ export interface CustomDecimalNumberProps {
   pluginKey: string;
   field: DecimalField;
   form: FormReturnType;
+  path: string;
 }
 
 export function CustomDecimalNumber(props: CustomDecimalNumberProps) {

@@ -1,5 +1,9 @@
 import { PluginConfigurationSchemaType } from '../model/plugin-configuration-schema.model';
-import { getInitialValues, InitialValues } from './plugin-form.service';
+import {
+  getInitialValues,
+  getInitialValuesFromSectionFields,
+  InitialValues,
+} from './plugin-form.service';
 
 describe('Plugin form store', () => {
   describe(`setup the correct form`, () => {
@@ -272,5 +276,86 @@ describe('Plugin form store', () => {
         ).toEqual('DefaultValue');
       });
     });
+  });
+});
+describe(`getInitialValuesFromSectionFields`, () => {
+  describe(`for comboSection`, () => {
+    test(`with one content`, () => {});
+  });
+  test(`for comboSection`, () => {
+    getInitialValuesFromSectionFields(
+      [
+        {
+          key: 'APIKey',
+          path: 'configuration.APIKey',
+          field: {
+            type: 'string',
+            required: true,
+            regex: '[a-zA-Z0-9]{64}',
+            name: "Clé d'API",
+            description:
+              'Cette clé est nécessaire pour le fonctionnement de votre plugin. Elle peut être obtenue sur simple inscription (gratuite) au [Lametric](https://developer.lametric.com/user/devices).',
+            regexErrorMessage: "Ce n'est pas une API KEY valide",
+          },
+        },
+        {
+          key: 'PairingMode',
+          path: 'configuration.PairingMode',
+          field: {
+            type: 'comboSection',
+            content: {
+              Automatic: {
+                name: 'Appairage automatique',
+                type: 'section',
+                content: {
+                  Port: {
+                    type: 'enum',
+                    values: {
+                      Http: 8080,
+                      Https: 4343,
+                    },
+                    defaultValue: 'Https',
+                    name: 'Port',
+                    description:
+                      'Le port de communication de Lametric (exemple Http: 8080, Https: 4343)',
+                  },
+                },
+                description:
+                  'Appairage automatique en utilisant le protocole UPNP',
+              },
+              Manual: {
+                name: 'Appairage manuel',
+                type: 'section',
+                content: {
+                  IPAddress: {
+                    type: 'string',
+                    regex: '^(?:[0-9]{1,3}\\.){3}[0-9]{1,3}$',
+                    required: true,
+                    name: 'Adresse IP',
+                    description: "L'adresse IP du module",
+                    regexErrorMessage: "Ce n'est pas une adresse IP valide",
+                  },
+                  Port: {
+                    type: 'enum',
+                    values: {
+                      Http: 8080,
+                      Https: 4343,
+                    },
+                    defaultValue: 'Https',
+                    name: 'Port',
+                    description:
+                      'Le port de communication de Lametric (exemple Http: 8080, Https: 4343)',
+                  },
+                },
+                description: 'Appairage manuel',
+              },
+            },
+            name: "Mode d'appairage",
+          },
+        },
+      ],
+      '',
+      ''
+    );
   });
 });

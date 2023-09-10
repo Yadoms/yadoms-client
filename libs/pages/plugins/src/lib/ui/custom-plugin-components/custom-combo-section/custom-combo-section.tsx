@@ -2,7 +2,10 @@ import { Box, Group, Select, Text } from '@mantine/core';
 import React, { forwardRef, useState } from 'react';
 import { ItemProps } from '../../plugin-configuration-modal/plugin-configuration-modal';
 import renderPluginField from '../../render-plugin-field/render-plugin-field';
-import { ComboSectionField } from '@yadoms/domain/plugins';
+import {
+  ComboSectionField,
+  getInitialValuesFromSectionFields,
+} from '@yadoms/domain/plugins';
 import LinkifyText from '../../linkify-text/linkify-text';
 import { FormReturnType } from '../../FormReturnType';
 
@@ -10,6 +13,7 @@ export interface CustomComboSectionProps {
   pluginKey: string;
   field: ComboSectionField;
   form: FormReturnType;
+  path: string;
 }
 
 const SelectItem = forwardRef<HTMLDivElement, ItemProps>(
@@ -34,7 +38,9 @@ export function CustomComboSection(props: CustomComboSectionProps) {
   });
   // TODO : to be removed when seb added empty content to Linky plugin
   const selectedComboSectionContent =
-    props.field.content[selectedComboSection]?.content;
+    props.field.content[selectedComboSection].content;
+
+  console.log('selectedComboSectionContent props.field', props.field);
   return (
     <Box
       sx={(theme) => ({
@@ -68,10 +74,15 @@ export function CustomComboSection(props: CustomComboSectionProps) {
       />
       {selectedComboSectionContent && (
         <div>
-          {Object.entries(selectedComboSectionContent).map(([key, value]) =>
+          {getInitialValuesFromSectionFields(
+            selectedComboSectionContent,
+            props.path,
+            selectedComboSection
+          ).map(({ key, path, field }) =>
             renderPluginField({
-              field: value,
+              field: field,
               form: props.form,
+              path: path,
               pluginKey: key,
             })
           )}

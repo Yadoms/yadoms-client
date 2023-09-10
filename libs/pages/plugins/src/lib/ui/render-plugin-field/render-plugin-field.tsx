@@ -22,6 +22,7 @@ type RenderFieldProps = {
   field: PluginConfigurationSchemaField;
   form: FormReturnType;
   pluginKey: string;
+  path: string;
 };
 
 type FieldComponentMap = {
@@ -45,6 +46,7 @@ const fieldComponentMap: FieldComponentMap = {
 export default function renderPluginField({
   pluginKey,
   field,
+  path,
   form,
 }: RenderFieldProps) {
   const Component = fieldComponentMap[field.type];
@@ -55,6 +57,7 @@ export default function renderPluginField({
         form={form}
         pluginKey={pluginKey}
         key={pluginKey}
+        path={path}
       />
     );
   }

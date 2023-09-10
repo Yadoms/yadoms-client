@@ -8,6 +8,7 @@ export interface CustomBoolCheckboxProps {
   pluginKey: string;
   field: BooleanField;
   form: FormReturnType;
+  path: string;
 }
 
 export function CustomBoolCheckbox(props: CustomBoolCheckboxProps) {

@@ -8,6 +8,7 @@ export interface CustomMultiSelectSectionProps {
   pluginKey: string;
   field: MultiSelectSectionField;
   form: FormReturnType;
+  path: string;
 }
 
 interface ItemProps extends React.ComponentPropsWithoutRef<'div'> {

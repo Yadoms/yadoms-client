@@ -1,5 +1,5 @@
 import { Select } from '@mantine/core';
-import React, { useState } from 'react';
+import React from 'react';
 import { ItemProps } from '../../plugin-configuration-modal/plugin-configuration-modal';
 import { EnumField } from '@yadoms/domain/plugins';
 import LinkifyText from '../../linkify-text/linkify-text';
@@ -9,21 +9,17 @@ export interface CustomEnumSelectProps {
   pluginKey: string;
   field: EnumField;
   form: FormReturnType;
+  path: string;
 }
 
 export function CustomEnumSelect(props: CustomEnumSelectProps) {
-  const [value, setValue] = useState<string | null>(
-    getEnumValuesData(props.field)[0].value
-  );
   return (
     <Select
       label={props.field.name}
       inputWrapperOrder={['label', 'error', 'input', 'description']}
-      value={value}
       data={getEnumValuesData(props.field)}
-      defaultValue={props.field.defaultValue?.toString()}
       description={<LinkifyText text={props.field.description} />}
-      onChange={setValue}
+      {...props.form.getInputProps(props.path)}
       withAsterisk
     />
   );

@@ -9,6 +9,7 @@ export interface CustomTimeProps {
   pluginKey: string;
   field: CustomTimeField;
   form: FormReturnType;
+  path: string;
 }
 
 export function CustomTime(props: CustomTimeProps) {

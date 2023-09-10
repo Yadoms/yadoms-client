@@ -264,3 +264,45 @@ queryParam "locale=fr"
   "category": "User"
 }
 ```
+
+# IPX800 avec checkbox on
+
+```json
+{
+  "id": 12,
+  "displayName": "IPX800",
+  "type": "IPX800",
+  "configuration": {
+    "IPAddress": "123.123.12.1",
+    "Port": 80,
+    "authentication": {
+      "content": {
+        "Password": "A18EAVI="
+      },
+      "checkbox": true
+    }
+  },
+  "autoStart": true,
+  "category": "User"
+}
+```
+
+#  
+
+```json
+{
+  "displayName": "IPX800",
+  "type": "IPX800",
+  "configuration": {
+    "IPAddress": "123.123.12.1",
+    "Port": 80,
+    "authentication": {
+      "content": {
+        "Password": ""
+      },
+      "checkbox": false
+    }
+  },
+  "autoStart": 1
+}
+```

@@ -8,6 +8,7 @@ export interface CustomTextInputProps {
   pluginKey: string;
   field: IntegerField;
   form: FormReturnType;
+  path: string;
 }
 
 export function CustomIntegerInput(props: CustomTextInputProps) {
@@ -23,6 +24,7 @@ export function CustomIntegerInput(props: CustomTextInputProps) {
       }
       inputWrapperOrder={['label', 'error', 'input', 'description']}
       withAsterisk={!!props.field.required}
+      {...props.form.getInputProps(props.path)}
       min={0}
     />
   );
