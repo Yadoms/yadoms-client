@@ -22,9 +22,11 @@ import {
   MantineReactTable,
   MRT_ColumnDef,
   MRT_GlobalFilterTextInput,
+  MRT_Icons,
   MRT_Row,
   MRT_TableInstance,
   MRT_VisibilityState,
+  useMantineReactTable,
 } from 'mantine-react-table';
 import React, {
   useCallback,
@@ -90,11 +92,11 @@ export function Plugins(props: PluginsProps) {
   const { t } = useTranslation();
 
   //optionally, you can manage the row selection state yourself
-  const [tableData, setTableData] = useState<PluginsInstancesEntity[]>(
+  const [data, setData] = useState<PluginsInstancesEntity[]>(
     () => pluginsInstancesEntities
   );
 
-  const setTableDataMemoized = useCallback(setTableData, [setTableData]);
+  const setTableDataMemoized = useCallback(setData, [setData]);
 
   useEffect(() => {
     dispatch(fetchPluginsInstances({ page: 0, pageSize: 10 }));
@@ -134,61 +136,61 @@ export function Plugins(props: PluginsProps) {
   );
 
   const theme = useMantineTheme();
+
   const columns = useMemo<MRT_ColumnDef<PluginsInstancesEntity>[]>(
-    () =>
-      [
-        {
-          accessorKey: 'type',
-          header: t('plugins.home.type'),
-          enableColumnOrdering: true, //but you can turn back any of those features on if you want like this
-          Cell: ({ row }) => (
-            <Image
-              width={120}
-              height={50}
-              fit="contain"
-              src={
-                'http://localhost:8080/rest/v2/plugins?byType=' +
-                row.original.type +
-                '&prop=icon'
-              }
-              alt="With default placeholder"
-              withPlaceholder
-            />
-          ),
-        },
-        {
-          accessorKey: 'displayName',
-          header: t('plugins.home.name'),
-        },
-        {
-          accessorKey: 'autoStart',
-          header: t('plugins.home.start-automatically'),
-          //columnDefType: 'display', //turns off data column features like sorting, filtering, etc.
-          enableColumnOrdering: true, //but you can turn back any of those features on if you want like this
-          Cell: ({ row }) => (
-            <Checkbox
-              size="sm"
-              color="dimmed"
-              defaultChecked={row.original.autoStart}
-              onChange={(event) => handleAutostartCheckboxChange(row, event)}
-            />
-          ),
-        },
-        {
-          accessorKey: 'state',
-          header: t('plugins.home.state'),
-          // columnDefType: 'display', //turns off data column features like sorting, filtering, etc.
-          // enableColumnOrdering: false, //but you can turn back any of those features on if you want like this
-          Cell: ({ row }) => (
-            <Badge
-              color={stateColors[row.original.state.toLowerCase()]}
-              variant={theme.colorScheme === 'dark' ? 'light' : 'dot'}
-            >
-              {row.original.state}
-            </Badge>
-          ),
-        },
-      ] as MRT_ColumnDef<(typeof pluginsInstancesEntities)[0]>[],
+    () => [
+      {
+        accessorKey: 'type',
+        header: t('plugins.home.type'),
+        enableColumnOrdering: true, //but you can turn back any of those features on if you want like this
+        Cell: ({ row }) => (
+          <Image
+            width={120}
+            height={50}
+            fit="contain"
+            src={
+              'http://localhost:8080/rest/v2/plugins?byType=' +
+              row.original.type +
+              '&prop=icon'
+            }
+            alt="With default placeholder"
+            withPlaceholder
+          />
+        ),
+      },
+      {
+        accessorKey: 'displayName',
+        header: t('plugins.home.name'),
+      },
+      {
+        accessorKey: 'autoStart',
+        header: t('plugins.home.start-automatically'),
+        //columnDefType: 'display', //turns off data column features like sorting, filtering, etc.
+        enableColumnOrdering: true, //but you can turn back any of those features on if you want like this
+        Cell: ({ row }) => (
+          <Checkbox
+            size="sm"
+            color="dimmed"
+            defaultChecked={row.original.autoStart}
+            onChange={(event) => handleAutostartCheckboxChange(row, event)}
+          />
+        ),
+      },
+      {
+        accessorKey: 'state',
+        header: t('plugins.home.state'),
+        // columnDefType: 'display', //turns off data column features like sorting, filtering, etc.
+        // enableColumnOrdering: false, //but you can turn back any of those features on if you want like this
+        Cell: ({ row }) => (
+          <Badge
+            color={stateColors[row.original.state.toLowerCase()]}
+            variant={theme.colorScheme === 'dark' ? 'light' : 'dot'}
+          >
+            {row.original.state}
+          </Badge>
+        ),
+      },
+    ],
     [handleAutostartCheckboxChange, t, theme.colorScheme] //end
   );
 
@@ -200,10 +202,10 @@ export function Plugins(props: PluginsProps) {
         return;
       }
       //send api delete request here, then refetch or update local table data for re-render
-      tableData.splice(row.index, 1);
-      setTableData([...tableData]);
+      data.splice(row.index, 1);
+      setData([...data]);
     },
-    [tableData]
+    [data]
   );
 
   const [isCreatePluginModelOpened, setCreatePluginModelOpened] =
@@ -218,6 +220,62 @@ export function Plugins(props: PluginsProps) {
     { title: 'home', href: '#' },
     { title: 'plugins', href: '#' },
   ];
+
+  const faIcons: Partial<MRT_Icons> = {
+    //change sort icon, connect internal props so that it gets styled correctly
+    IconSearch: () => <IconHomeSearch />,
+  };
+  const table = useMantineReactTable({
+    columns: columns,
+    data,
+    enableEditing: true,
+    enableColumnOrdering: true,
+    positionActionsColumn: 'last',
+    enableTopToolbar: true,
+    enableToolbarInternalActions: false,
+    initialState: {
+      showGlobalFilter: true, //show the global filter by default
+    },
+    icons: faIcons,
+    renderRowActions: ({ table, row }) => (
+      <Group spacing={3} position="center">
+        <ActionIcon onClick={() => handleTogglePowerRow(row)}>
+          <IconPower size={30} stroke={1.5} />
+        </ActionIcon>
+        <ActionIcon onClick={() => table.setEditingRow(row)}>
+          <IconPencil size={30} stroke={1.5} />
+        </ActionIcon>
+        <ActionIcon color="red" onClick={() => handleDeleteRow(row)}>
+          <IconTrash size={30} stroke={1.5} />
+        </ActionIcon>
+      </Group>
+    ),
+    renderTopToolbarCustomActions: ({ table }) => (
+      <Flex
+        sx={(theme) => ({
+          backgroundColor: theme.fn.rgba(theme.colors.blue[3], 0.2),
+          borderRadius: '4px',
+          flexDirection: 'row',
+          gap: '16px',
+          justifyContent: 'space-between',
+          padding: '24px 16px',
+          '@media max-width: 768px': {
+            flexDirection: 'column',
+          },
+        })}
+      >
+        <MRT_GlobalFilterTextInput table={table} />
+        <Box>
+          <Button
+            leftIcon={<IconHomePlus />}
+            onClick={() => setCreatePluginModelOpened(true)}
+          >
+            {t('plugins.home.create-new-plugin-btn')}
+          </Button>
+        </Box>
+      </Flex>
+    ),
+  });
 
   return (
     <Flex direction="column">
@@ -234,76 +292,8 @@ export function Plugins(props: PluginsProps) {
         />
       )}
 
-      {tableInstanceRef.current && (
-        <Flex
-          sx={(theme) => ({
-            backgroundColor: theme.fn.rgba(theme.colors.blue[3], 0.2),
-            borderRadius: '4px',
-            flexDirection: 'row',
-            gap: '16px',
-            justifyContent: 'space-between',
-            padding: '24px 16px',
-            '@media max-width: 768px': {
-              flexDirection: 'column',
-            },
-          })}
-        >
-          <MRT_GlobalFilterTextInput table={tableInstanceRef.current} />
-          <Box>
-            <Button
-              leftIcon={<IconHomePlus />}
-              onClick={() => setCreatePluginModelOpened(true)}
-            >
-              {t('plugins.home.create-new-plugin-btn')}
-            </Button>
-          </Box>
-        </Flex>
-      )}
-
       <Skeleton visible={loadingStatus === 'loading'}>
-        <MantineReactTable
-          displayColumnDefOptions={{
-            'mrt-row-actions': {
-              mantineTableHeadCellProps: {
-                align: 'center',
-              },
-              size: 120,
-            },
-            'mrt-row-expand': {
-              mantineTableHeadCellProps: {
-                align: 'right',
-              },
-              mantineTableBodyCellProps: {
-                align: 'right',
-              },
-            },
-          }}
-          columns={columns}
-          data={tableData}
-          editingMode="modal" //default
-          enableEditing
-          enableColumnOrdering
-          positionActionsColumn="last"
-          enableTopToolbar={false}
-          initialState={{ showGlobalFilter: true }}
-          tableInstanceRef={tableInstanceRef}
-          icons={{
-            IconSearch: () => <IconHomeSearch />,
-          }}
-          renderRowActions={({ row, table }) => (
-            <Group spacing={3} position="center">
-              <ActionIcon onClick={() => handleTogglePowerRow(row)}>
-                <IconPower size={30} stroke={1.5} />
-              </ActionIcon>
-              <ActionIcon onClick={() => table.setEditingRow(row)}>
-                <IconPencil size={30} stroke={1.5} />
-              </ActionIcon>
-              <ActionIcon color="red" onClick={() => handleDeleteRow(row)}>
-                <IconTrash size={30} stroke={1.5} />
-              </ActionIcon>
-            </Group>
-          )}
-        />
+        <MantineReactTable table={table} />
       </Skeleton>
     </Flex>
   );

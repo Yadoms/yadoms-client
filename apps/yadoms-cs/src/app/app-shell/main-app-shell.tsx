@@ -92,6 +92,9 @@ const useStyles = createStyles((theme) => ({
       display: 'none',
     },
   },
+  logoBorder: {
+    borderBottom: '0.0625rem solid #2C2E33',
+  },
 }));
 
 interface NavbarLinkProps {
@@ -170,10 +173,12 @@ function MainAppShell() {
       <Navbar
         height={'100vh'}
         width={{ base: 80 }}
-        p="md"
+        px="md"
+        pb="md"
+        pt="sm"
         position={{ top: 0 }}
       >
-        <Center>
+        <Center className={classes.logoBorder}>
           <Logo colorScheme={colorScheme} />
         </Center>
         <Navbar.Section grow mt={50}>
