@@ -10,6 +10,7 @@ export interface CreateNewPluginProps {
   onClose: () => void;
 }
 export function CreateNewPlugin(props: CreateNewPluginProps) {
+  const [pluginSelected, setPluginSelected] = useState(false);
   const [openedChoosePluginModal, choosePluginModalHandlers] =
     useDisclosure(true);
   const [openedPluginConfigurationModal, pluginConfigurationModalHandlers] =
@@ -22,6 +23,7 @@ export function CreateNewPlugin(props: CreateNewPluginProps) {
 
   const handlePluginSelect = (selectedPluginType: string) => {
     setSelectedPluginType(selectedPluginType);
+    setPluginSelected(true);
     choosePluginModalHandlers.close();
     pluginConfigurationModalHandlers.open();
   };
@@ -44,12 +46,14 @@ export function CreateNewPlugin(props: CreateNewPluginProps) {
         selectedPluginId={selectedPluginType}
         onPluginSelect={handlePluginSelect}
       />
-      <PluginConfigurationModal
-        opened={openedPluginConfigurationModal}
-        onClose={() => closePluginConfigurationModal()}
-        selectedPluginType={selectedPluginType}
-        selectedPluginConfigurationSchema={selectedPluginConfigurationSchema}
-      ></PluginConfigurationModal>
+      {pluginSelected && (
+        <PluginConfigurationModal
+          opened={openedPluginConfigurationModal}
+          onClose={() => closePluginConfigurationModal()}
+          selectedPluginType={selectedPluginType}
+          selectedPluginConfigurationSchema={selectedPluginConfigurationSchema}
+        />
+      )}
     </>
   );
 }

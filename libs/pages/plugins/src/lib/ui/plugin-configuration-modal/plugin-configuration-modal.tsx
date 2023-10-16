@@ -9,19 +9,19 @@ import {
 } from '@mantine/core';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  getFromInitialValues,
-  validateForm,
-} from './plugins-configuration-forms';
+import { validateForm } from './plugins-configuration-forms';
 import { useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
 import renderPluginField from '../render-plugin-field/render-plugin-field';
-import { PluginConfigurationSchemaField } from '@yadoms/domain/plugins';
+import {
+  getInitialValues,
+  PluginConfigurationSchema,
+} from '@yadoms/domain/plugins';
 
 export interface PluginConfigurationModalProps {
   opened: boolean;
   onClose: () => void;
-  selectedPluginConfigurationSchema: PluginConfigurationSchemaField;
+  selectedPluginConfigurationSchema: PluginConfigurationSchema;
   selectedPluginType: string;
 }
 
@@ -35,15 +35,22 @@ export function PluginConfigurationModal(props: PluginConfigurationModalProps) {
   const theme = useMantineTheme();
   const { t } = useTranslation();
 
-  const [initialValues, setInitialValues] = useState<Record<string, any>>({});
-
+  const [initialValues, setInitialValues] = useState(
+    getInitialValues({
+      type: props.selectedPluginType,
+      displayName: '',
+      configurationSchema: props.selectedPluginConfigurationSchema,
+    })
+  );
   useEffect(() => {
-    // Create initial values object based on configuration schema
-    const newInitialValues = getFromInitialValues(
-      props.selectedPluginConfigurationSchema
+    setInitialValues(
+      getInitialValues({
+        type: props.selectedPluginType,
+        displayName: '',
+        configurationSchema: props.selectedPluginConfigurationSchema,
+      })
     );
-    setInitialValues(newInitialValues);
-  }, [props.selectedPluginConfigurationSchema]);
+  }, [props.selectedPluginType, props.selectedPluginConfigurationSchema]);
 
   const form = useForm({
     initialValues,
@@ -108,8 +115,8 @@ export function PluginConfigurationModal(props: PluginConfigurationModalProps) {
                 ([key, value]) =>
                   renderPluginField({
                     field: value,
-                    form: form,
                     pluginKey: key,
+                    form: form,
                   })
               )}
               {renderSpacing(6)}

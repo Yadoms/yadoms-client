@@ -14,7 +14,7 @@ export const store = configureStore({
   },
   // Additional middleware can be passed to this array
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
-  devTools: process.env.NODE_ENV !== 'production',
+  devTools: !import.meta.env.PROD,
   // Optional Redux store enhancers
   enhancers: [],
 });

@@ -2,13 +2,14 @@ import { UseFormReturnType } from '@mantine/form';
 import { Box, Text } from '@mantine/core';
 import React from 'react';
 import renderPluginField from '../../render-plugin-field/render-plugin-field';
-import { PluginConfigurationSchemaField } from '@yadoms/domain/plugins';
+import { SectionField } from '@yadoms/domain/plugins';
 import LinkifyText from '../../linkify-text/linkify-text';
+import { FormReturnType } from '../../FormReturnType';
 
 export interface CustomSectionProps {
   pluginKey: string;
-  pluginConfigurationSchemaField: PluginConfigurationSchemaField;
-  form: UseFormReturnType<Record<string, any>>;
+  field: SectionField;
+  form: FormReturnType;
 }
 
 export function CustomSection(props: CustomSectionProps) {
@@ -28,21 +29,18 @@ export function CustomSection(props: CustomSectionProps) {
       })}
     >
       <div key={props.pluginKey}>
-        <label>{props.pluginConfigurationSchemaField.name}</label>
+        <label>{props.field.name}</label>
         <Text fz="xs" color="dark.2">
-          <LinkifyText
-            text={props.pluginConfigurationSchemaField.description}
-          />
+          <LinkifyText text={props.field.description} />
         </Text>
         <div style={{ marginLeft: '10px' }}>
-          {props.pluginConfigurationSchemaField.content &&
-            Object.entries(props.pluginConfigurationSchemaField.content).map(
-              ([key, value]) =>
-                renderPluginField({
-                  field: value,
-                  form: props.form,
-                  pluginKey: key,
-                })
+          {props.field.content &&
+            Object.entries(props.field.content).map(([key, value]) =>
+              renderPluginField({
+                field: value,
+                form: props.form,
+                pluginKey: key,
+              })
             )}
         </div>
       </div>

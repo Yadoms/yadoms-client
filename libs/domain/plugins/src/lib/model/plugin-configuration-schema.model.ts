@@ -2,18 +2,19 @@ export enum PluginConfigurationSchemaType {
   String = 'string',
   Integer = 'int',
   Boolean = 'bool',
+  Decimal = 'decimal',
   Section = 'section',
+  CustomTime = 'time',
+  Enum = 'enum',
   ComboSection = 'comboSection',
   RadioSection = 'radioSection',
   CheckboxSection = 'checkboxSection',
-  CustomTime = 'time',
-  Enum = 'enum',
-  Decimal = 'decimal',
   MultiSelectSection = 'multiSelectSection',
 }
 
 interface BaseField {
   type: PluginConfigurationSchemaType;
+  name?: string;
   description?: string;
   placeholder?: string;
   defaultValue?: number | boolean | string;
@@ -38,18 +39,22 @@ export interface BooleanField extends BaseField {
 
 export interface SectionField extends BaseField {
   type: PluginConfigurationSchemaType.Section;
+  content: PluginSectionConfigurationSchema;
 }
 
 export interface ComboSectionField extends BaseField {
   type: PluginConfigurationSchemaType.ComboSection;
+  content: PluginSectionConfigurationSchema;
 }
 
 export interface RadioSectionField extends BaseField {
   type: PluginConfigurationSchemaType.RadioSection;
+  content: PluginSectionConfigurationSchema;
 }
 
 export interface CheckboxSectionField extends BaseField {
   type: PluginConfigurationSchemaType.CheckboxSection;
+  content: PluginSectionConfigurationSchema;
 }
 
 export interface CustomTimeField extends BaseField {
@@ -70,6 +75,8 @@ export interface DecimalField extends BaseField {
 
 export interface MultiSelectSectionField extends BaseField {
   type: PluginConfigurationSchemaType.MultiSelectSection;
+  content: PluginMultiSelectSectionConfigurationSchema;
+  nothingFound?: string;
 }
 
 export type PluginConfigurationSchemaField =
@@ -85,8 +92,23 @@ export type PluginConfigurationSchemaField =
   | DecimalField
   | MultiSelectSectionField;
 
+export type SectionType =
+  | SectionField
+  | ComboSectionField
+  | RadioSectionField
+  | CheckboxSectionField
+  | MultiSelectSectionField;
 export interface PluginConfigurationSchema {
+  [key: string]: PluginConfigurationSchemaField;
+}
+export interface PluginSectionConfigurationSchema {
+  [key: string]: SectionType;
+}
+
+export interface PluginMultiSelectSectionConfigurationSchema {
   [key: string]: {
-    pluginConfigurationSchemaField: PluginConfigurationSchemaField;
+    defaultValue: boolean;
+    name: string;
+    description: string;
   };
 }

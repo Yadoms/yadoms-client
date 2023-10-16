@@ -1,6 +1,5 @@
 import { Anchor, Breadcrumbs, Flex } from '@mantine/core';
 import { IconHome2 } from '@tabler/icons-react';
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 export interface Breadcrumbs {

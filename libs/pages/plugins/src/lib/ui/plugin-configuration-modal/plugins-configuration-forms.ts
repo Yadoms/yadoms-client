@@ -1,41 +1,4 @@
-import {
-  PluginConfigurationSchema,
-  PluginConfigurationSchemaField,
-  PluginConfigurationSchemaType,
-} from '@yadoms/domain/plugins';
-
-export type InitialValues = {
-  [key: string]: string | number | boolean;
-};
-export function getFromInitialValues({
-  content,
-  ...schema
-}: PluginConfigurationSchemaField): InitialValues {
-  const newInitialValues: InitialValues = {};
-  for (const [key, field] of Object.entries(schema)) {
-    switch (field.type) {
-      case PluginConfigurationSchemaType.String:
-        newInitialValues[key] = field.defaultValue ?? '';
-        break;
-      case PluginConfigurationSchemaType.Integer:
-        newInitialValues[key] = field.defaultValue ?? 0;
-        break;
-      case PluginConfigurationSchemaType.Boolean:
-        newInitialValues[key] = field.defaultValue ?? false;
-        break;
-      case PluginConfigurationSchemaType.Section:
-        for (const [subKey, subField] of Object.entries(content || {})) {
-          if (subField.defaultValue !== undefined) {
-            newInitialValues[`${key}.${subKey}`] = subField.defaultValue;
-          }
-        }
-        break;
-      default:
-        break;
-    }
-  }
-  return newInitialValues;
-}
+import { PluginConfigurationSchema } from '@yadoms/domain/plugins';
 
 export const validateForm = (
   values: Record<string, any>,

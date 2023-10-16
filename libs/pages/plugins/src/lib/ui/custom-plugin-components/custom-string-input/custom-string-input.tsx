@@ -1,26 +1,24 @@
-import { UseFormReturnType } from '@mantine/form';
 import { TextInput } from '@mantine/core';
 import React from 'react';
-import { PluginConfigurationSchemaField } from '@yadoms/domain/plugins';
+import { StringField } from '@yadoms/domain/plugins';
 import LinkifyText from '../../linkify-text/linkify-text';
+import { FormReturnType } from '../../FormReturnType';
 
 interface CustomTextInputProps {
   pluginKey: string;
-  pluginConfigurationSchemaField: PluginConfigurationSchemaField;
-  form: UseFormReturnType<Record<string, any>>;
+  field: StringField;
+  form: FormReturnType;
 }
 
 export function CustomStringInput(props: CustomTextInputProps) {
   return (
     <TextInput
-      label={props.pluginConfigurationSchemaField.name}
-      placeholder={props.pluginConfigurationSchemaField.name}
-      description={
-        <LinkifyText text={props.pluginConfigurationSchemaField.description} />
-      }
+      label={props.field.name}
+      placeholder={props.field.name}
+      description={<LinkifyText text={props.field.description} />}
       inputWrapperOrder={['label', 'error', 'input', 'description']}
-      withAsterisk={!!props.pluginConfigurationSchemaField.required}
-      required={props.pluginConfigurationSchemaField.required}
+      withAsterisk={!!props.field.required}
+      required={props.field.required}
       {...props.form.getInputProps(props.pluginKey)}
     />
   );

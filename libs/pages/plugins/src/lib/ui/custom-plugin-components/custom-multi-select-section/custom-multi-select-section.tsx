@@ -1,13 +1,13 @@
-import { PluginConfigurationSchemaField } from '@yadoms/domain/plugins';
-import { UseFormReturnType } from '@mantine/form';
+import { MultiSelectSectionField } from '@yadoms/domain/plugins';
 import { Box, Group, MultiSelect, Text } from '@mantine/core';
 import React, { forwardRef } from 'react';
 import LinkifyText from '../../linkify-text/linkify-text';
+import { FormReturnType } from '../../FormReturnType';
 
 export interface CustomMultiSelectSectionProps {
   pluginKey: string;
-  pluginConfigurationSchemaField: PluginConfigurationSchemaField;
-  form: UseFormReturnType<Record<string, any>>;
+  field: MultiSelectSectionField;
+  form: FormReturnType;
 }
 
 interface ItemProps extends React.ComponentPropsWithoutRef<'div'> {
@@ -17,7 +17,7 @@ interface ItemProps extends React.ComponentPropsWithoutRef<'div'> {
 }
 
 const SelectItem = forwardRef<HTMLDivElement, ItemProps>(
-  ({ label, description, ...others }: ItemProps, ref) => (
+  ({ value, label, description, ...others }: ItemProps, ref) => (
     <div ref={ref} {...others}>
       <Group noWrap>
         <div>
@@ -48,27 +48,21 @@ export function CustomMultiSelectSection(props: CustomMultiSelectSectionProps) {
       })}
     >
       <MultiSelect
-        label={props.pluginConfigurationSchemaField.name}
-        description={
-          <LinkifyText
-            text={props.pluginConfigurationSchemaField.description}
-          />
-        }
-        placeholder={props.pluginConfigurationSchemaField.placeholder}
+        label={props.field.name}
+        description={<LinkifyText text={props.field.description} />}
+        placeholder={props.field.placeholder}
         itemComponent={SelectItem}
-        data={getMultiSelectData(props.pluginConfigurationSchemaField)}
+        data={getMultiSelectData(props.field)}
         searchable
-        nothingFound={props.pluginConfigurationSchemaField.nothingFound}
+        nothingFound={props.field.nothingFound}
         maxDropdownHeight={400}
-        defaultValue={getMultiSelectDefaultValue(
-          props.pluginConfigurationSchemaField
-        )}
+        defaultValue={getMultiSelectDefaultValue(props.field)}
       />
     </Box>
   );
 }
 
-function getMultiSelectData(field: PluginConfigurationSchemaField) {
+function getMultiSelectData(field: MultiSelectSectionField) {
   const data: ItemProps[] = [];
   if (field.content) {
     Object.entries(field.content).map(([key, value]) => {
@@ -82,12 +76,12 @@ function getMultiSelectData(field: PluginConfigurationSchemaField) {
   return data;
 }
 
-function getMultiSelectDefaultValue(field: PluginConfigurationSchemaField) {
+function getMultiSelectDefaultValue(field: MultiSelectSectionField) {
   const data: string[] = [];
   if (field.content) {
     data.push(
       ...Object.values(field.content)
-        .filter((value) => value.defaultValue === true)
+        .filter((value) => value.defaultValue)
         .map((value) => value.name)
     );
   }

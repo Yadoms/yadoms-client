@@ -1,27 +1,23 @@
-import { UseFormReturnType } from '@mantine/form';
 import { Checkbox } from '@mantine/core';
 import React, { useState } from 'react';
-import { PluginConfigurationSchemaField } from '@yadoms/domain/plugins';
+import { BooleanField } from '@yadoms/domain/plugins';
 import LinkifyText from '../../linkify-text/linkify-text';
+import { FormReturnType } from '../../FormReturnType';
 
 export interface CustomBoolCheckboxProps {
   pluginKey: string;
-  pluginConfigurationSchemaField: PluginConfigurationSchemaField;
-  form: UseFormReturnType<Record<string, any>>;
+  field: BooleanField;
+  form: FormReturnType;
 }
 
 export function CustomBoolCheckbox(props: CustomBoolCheckboxProps) {
   const [checked, setChecked] = useState(
-    isBoolean(props.pluginConfigurationSchemaField.defaultValue)
-      ? props.pluginConfigurationSchemaField.defaultValue
-      : undefined
+    isBoolean(props.field.defaultValue) ? props.field.defaultValue : undefined
   );
   return (
     <Checkbox
-      label={props.pluginConfigurationSchemaField.name}
-      description={
-        <LinkifyText text={props.pluginConfigurationSchemaField.description} />
-      }
+      label={props.field.name}
+      description={<LinkifyText text={props.field.description} />}
       checked={checked}
       onChange={(event) => setChecked(event.currentTarget.checked)}
       p={2}
