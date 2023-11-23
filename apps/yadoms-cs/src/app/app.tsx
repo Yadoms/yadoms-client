@@ -8,6 +8,7 @@ import { useState } from 'react';
 import { useColorScheme } from '@mantine/hooks';
 import { ModalsProvider } from '@mantine/modals';
 import { Notifications } from '@mantine/notifications';
+// import { YadomsWebSocketConnection } from 'libs/shared/src/lib/services/YadomsWebSocketConnection';
 
 export default function App() {
   const preferredColorScheme = useColorScheme();
@@ -15,6 +16,12 @@ export default function App() {
     useState<ColorScheme>(preferredColorScheme);
   const toggleColorScheme = (value?: ColorScheme) =>
     setColorScheme(value || (colorScheme === 'dark' ? 'light' : 'dark'));
+
+  console.log("App");
+  // const websocket = new YadomsWebSocketConnection();
+  // websocket.onEvent = ((event: any) => { console.log(event); });
+  // websocket.filterAcquisitions([44, 45, 46]);
+
   return (
     <ColorSchemeProvider
       colorScheme={colorScheme}
