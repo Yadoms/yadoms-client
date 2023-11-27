@@ -1,14 +1,18 @@
 import { useContext } from "react";
 import { MyThemeContext, MyThemeType, ThemeValues } from 'libs/shared/src/lib/services/YadomsWebSocketConnection'
+import {v4 as uuidv4} from "uuid";
 
 /* eslint-disable-next-line */
 export interface PagesHomeProps { }
 
 export function Home(props: PagesHomeProps) {
-  const { theme, changeTheme, connected, filterAcquisitions } = useContext(MyThemeContext) as MyThemeType;
+  const { theme, changeTheme, connected, acquisitions, filterAcquisitions } = useContext(MyThemeContext) as MyThemeType;
 
   function updateTheme(newThemeValue: ThemeValues) {
     changeTheme({ value: newThemeValue });
+  }
+  function setAcquisitionsFilter(keywords: number[]) {
+    filterAcquisitions(keywords);
   }
 
   return (
@@ -24,10 +28,12 @@ export function Home(props: PagesHomeProps) {
       <p>Socket is {connected ? "connected" : "DISCONNECTED"}</p>
       <button
         onClick={() => {
-          filterAcquisitions([44, 45, 46]);
+          setAcquisitionsFilter([44, 45, 46]);
         }}>
         Filter acquisitions
       </button>
+      <h1>Acquisitions</h1>
+      {acquisitions.map(a => <p key={uuidv4()}>{a.date.toString()} - {a.keyword} - {a.value}</p>)}
     </div>
   );
 }

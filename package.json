@@ -38,7 +38,8 @@
     "react-i18next": "^13.0.1",
     "react-query": "^3.39.3",
     "react-redux": "8.1.1",
-    "react-router-dom": "^6.14.0"
+    "react-router-dom": "^6.14.0",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "@mantine/ds": "^6.0.14",

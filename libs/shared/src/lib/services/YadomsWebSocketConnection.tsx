@@ -9,15 +9,21 @@ class YadomsWebSocketConnection {
 
     this.ws.onopen = () => this.onConnected?.(true)
     this.ws.onclose = () => this.onConnected?.(false)
-    this.ws.onmessage = (event: any) => this.onNewAcquisition?.(event.data)
+    this.ws.onmessage = (event: any) => {
+      const data = JSON.parse(event.data);
+      if (!("newAcquisition" in data))
+        return;
+      const newAcquisition: Acquisition = { date: data.newAcquisition.date, keyword: data.newAcquisition.keywordId, value: data.newAcquisition.value };
+      this.onNewAcquisition?.(newAcquisition);
+    }
   }
 
   filterAcquisitions(keywords: number[]) {
     this.ws.send(JSON.stringify({ "acquisitionFilter": { "keywords": keywords } }));
   }
 
-  onConnected: Function | undefined;
-  onNewAcquisition: Function | undefined;
+  onConnected: Function | undefined;//TODO à typer
+  onNewAcquisition: Function | undefined; //TODO à typer
 }
 
 
@@ -28,10 +34,16 @@ export type ThemeValues = "light" | "dark";
 export interface ITheme {
   value: ThemeValues;
 }
+export interface Acquisition {
+  date: Date;
+  keyword: number;
+  value: string;
+}
 export type MyThemeType = {
   theme: ITheme;
   changeTheme: (theme: ITheme) => void;
   connected: boolean;
+  acquisitions: Acquisition[];
   filterAcquisitions: (keywords: number[]) => void;
 }
 export const MyThemeContext = createContext<MyThemeType | null>(null);
@@ -39,6 +51,7 @@ export const MyThemeContext = createContext<MyThemeType | null>(null);
 const MyThemeContextTypeProvider = ({ children }: any) => {
   const [theme, setTheme] = useState<ITheme>({ value: "light" });
   const [connected, setConnected] = useState<boolean>(false);
+  const [acquisitions, setAcquisitions] = useState<Acquisition[]>([]);
 
   const updateTheme = (t: ITheme) => {
     const newTheme: ITheme = { value: t.value };
@@ -49,8 +62,9 @@ const MyThemeContextTypeProvider = ({ children }: any) => {
     ws.current?.filterAcquisitions(keywords);
   }
 
-  const onNewAcquisition = (event: MessageEvent) => {
-    console.log(event)
+  const onNewAcquisition = (newAcquisition: Acquisition) => {
+    console.log(newAcquisition.date + " - " + newAcquisition.keyword + " - " + newAcquisition.value);
+    setAcquisitions(acquisitions => [...acquisitions, newAcquisition]);
   }
 
   const ws = useRef<YadomsWebSocketConnection | null>(null);
@@ -58,7 +72,7 @@ const MyThemeContextTypeProvider = ({ children }: any) => {
     const yadomsWebSocketConnection = new YadomsWebSocketConnection();
 
     yadomsWebSocketConnection.onConnected = (connected: boolean) => setConnected(connected);
-    yadomsWebSocketConnection.onNewAcquisition = (event: MessageEvent) => onNewAcquisition(event);
+    yadomsWebSocketConnection.onNewAcquisition = (acquisition: Acquisition) => onNewAcquisition(acquisition);
 
     ws.current = yadomsWebSocketConnection;
 
@@ -68,7 +82,7 @@ const MyThemeContextTypeProvider = ({ children }: any) => {
   }, []);
 
   return (
-    <MyThemeContext.Provider value={{ theme: theme, changeTheme: updateTheme, connected: connected, filterAcquisitions: filterAcquisitions }}>
+    <MyThemeContext.Provider value={{ theme: theme, changeTheme: updateTheme, connected: connected, acquisitions: acquisitions, filterAcquisitions: filterAcquisitions }}>
       {children}
     </MyThemeContext.Provider>
   );
