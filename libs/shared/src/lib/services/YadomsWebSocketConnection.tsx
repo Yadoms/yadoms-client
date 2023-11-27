@@ -1,5 +1,25 @@
-import { createContext, useState } from 'react';
-import useWebSocket from 'react-use-websocket';
+import { createContext, useEffect, useRef, useState } from 'react';
+
+class YadomsWebSocketConnection {
+
+  private ws: WebSocket;
+
+  constructor() {
+    this.ws = new WebSocket('ws://127.0.0.1:8080/ws/v2'); //TODO rendre URL dynamique
+
+    this.ws.onopen = () => this.onConnected?.(true)
+    this.ws.onclose = () => this.onConnected?.(false)
+    this.ws.onmessage = (event: any) => this.onNewAcquisition?.(event.data)
+  }
+
+  filterAcquisitions(keywords: number[]) {
+    this.ws.send(JSON.stringify({ "acquisitionFilter": { "keywords": keywords } }));
+  }
+
+  onConnected: Function | undefined;
+  onNewAcquisition: Function | undefined;
+}
+
 
 
 
@@ -11,19 +31,44 @@ export interface ITheme {
 export type MyThemeType = {
   theme: ITheme;
   changeTheme: (theme: ITheme) => void;
+  connected: boolean;
+  filterAcquisitions: (keywords: number[]) => void;
 }
 export const MyThemeContext = createContext<MyThemeType | null>(null);
 
 const MyThemeContextTypeProvider = ({ children }: any) => {
   const [theme, setTheme] = useState<ITheme>({ value: "light" });
+  const [connected, setConnected] = useState<boolean>(false);
 
   const updateTheme = (t: ITheme) => {
     const newTheme: ITheme = { value: t.value };
     setTheme(newTheme);
   }
 
+  function filterAcquisitions(keywords: number[]): void {
+    ws.current?.filterAcquisitions(keywords);
+  }
+
+  const onNewAcquisition = (event: MessageEvent) => {
+    console.log(event)
+  }
+
+  const ws = useRef<YadomsWebSocketConnection | null>(null);
+  useEffect(() => {
+    const yadomsWebSocketConnection = new YadomsWebSocketConnection();
+
+    yadomsWebSocketConnection.onConnected = (connected: boolean) => setConnected(connected);
+    yadomsWebSocketConnection.onNewAcquisition = (event: MessageEvent) => onNewAcquisition(event);
+
+    ws.current = yadomsWebSocketConnection;
+
+    return () => {      //TODO utile ?
+      ws.current = null;
+    };
+  }, []);
+
   return (
-    <MyThemeContext.Provider value={{ theme: theme, changeTheme: updateTheme }}>
+    <MyThemeContext.Provider value={{ theme: theme, changeTheme: updateTheme, connected: connected, filterAcquisitions: filterAcquisitions }}>
       {children}
     </MyThemeContext.Provider>
   );
@@ -33,45 +78,4 @@ export default MyThemeContextTypeProvider;
 
 
 
-// export class YadomsWebSocketConnection {
 
-//   ws: any;
-
-//   constructor() {
-//     this.ws = useWebSocket('ws://127.0.0.1:8080/ws/v2', { //TODO rendre URL dynamique
-//       share: true,
-//       onOpen: () => console.log('opened'),
-//       onMessage: (event) => {
-//         console.log(event);
-//         if (this.onEvent)
-//           this.onEvent(event);
-//       },
-
-//       // const {
-//       //   sendMessage,
-//       //   sendJsonMessage,
-//       //   lastMessage,
-//       //   lastJsonMessage,
-//       //   readyState,
-//       //   getWebSocket,
-//       // } = useWebSocket('ws://127.0.0.1:8080/ws/v2', { //TODO rendre URL dynamique
-//       //   onOpen: () => console.log('opened'),
-//       //   onMessage: (event) => {
-//       //     console.log(event);
-//       //     if (this.onEvent)
-//       //       this.onEvent(event);
-//       //   },
-//       //Will attempt to reconnect on all close events, such as server shutting down
-//       shouldReconnect: (closeEvent) => true,
-//     });
-//   }
-
-//   filterAcquisitions(keywords: number[]) {
-//     this.ws.sendJsonMessage({ "acquisitionFilter": { "keywords": keywords } });
-
-//   }
-
-//   onEvent: Function | undefined;
-
-
-// }

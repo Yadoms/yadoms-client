@@ -5,7 +5,7 @@ import { MyThemeContext, MyThemeType, ThemeValues } from 'libs/shared/src/lib/se
 export interface PagesHomeProps { }
 
 export function Home(props: PagesHomeProps) {
-  const { theme, changeTheme } = useContext(MyThemeContext) as MyThemeType;
+  const { theme, changeTheme, connected, filterAcquisitions } = useContext(MyThemeContext) as MyThemeType;
 
   function updateTheme(newThemeValue: ThemeValues) {
     changeTheme({ value: newThemeValue });
@@ -20,6 +20,13 @@ export function Home(props: PagesHomeProps) {
           updateTheme(theme.value == "light" ? "dark" : "light")
         }}>
         Bouton
+      </button>
+      <p>Socket is {connected ? "connected" : "DISCONNECTED"}</p>
+      <button
+        onClick={() => {
+          filterAcquisitions([44, 45, 46]);
+        }}>
+        Filter acquisitions
       </button>
     </div>
   );
