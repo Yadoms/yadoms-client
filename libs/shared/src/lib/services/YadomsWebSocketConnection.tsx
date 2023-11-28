@@ -2,14 +2,25 @@ import { createContext, useEffect, useRef, useState } from 'react';
 
 class YadomsWebSocketConnection {
 
-  private ws: WebSocket;
+  private _ws: WebSocket;
+  private _connected: boolean = false;
+  private _subscribedKeywords: number[] = [];
 
   constructor() {
-    this.ws = new WebSocket('ws://127.0.0.1:8080/ws/v2'); //TODO rendre URL dynamique
+    this._ws = new WebSocket('ws://127.0.0.1:8080/ws/v2'); //TODO rendre URL dynamique
 
-    this.ws.onopen = () => this.onConnected?.(true)
-    this.ws.onclose = () => this.onConnected?.(false)
-    this.ws.onmessage = (event: any) => {
+
+    this._ws.onopen = () => {
+      this._connected = true;
+      this.onConnected?.(this._connected)
+      if (this._subscribedKeywords.length != 0)
+        this.filterAcquisitions(this._subscribedKeywords);
+    }
+    this._ws.onclose = () => {
+      this._connected = false;
+      this.onConnected?.(this._connected)
+    }
+    this._ws.onmessage = (event: any) => {
       const data = JSON.parse(event.data);
       if (!("newAcquisition" in data))
         return;
@@ -18,8 +29,14 @@ class YadomsWebSocketConnection {
     }
   }
 
-  filterAcquisitions(keywords: number[]) {
-    this.ws.send(JSON.stringify({ "acquisitionFilter": { "keywords": keywords } }));
+  subscribeToKeywordAcquisitions(keywords: number[]) {
+    this._subscribedKeywords = [...this._subscribedKeywords, ...keywords];
+    if (this._connected)
+      this.filterAcquisitions(this._subscribedKeywords);
+  }
+
+  private filterAcquisitions(keywords: number[]) { //TODO rendre privé
+    this._ws.send(JSON.stringify({ "acquisitionFilter": { "keywords": keywords } }));
   }
 
   private parseYadomsDate(dateAsString: string): Date {
@@ -33,37 +50,24 @@ class YadomsWebSocketConnection {
 
 
 
-export type ThemeValues = "light" | "dark";
-
-export interface ITheme {
-  value: ThemeValues;
-}
 export interface Acquisition {
   date: Date;
   keyword: number;
   value: string;
 }
-export type MyThemeType = {
-  theme: ITheme;
-  changeTheme: (theme: ITheme) => void;
+export type YadomsConnection = {
   connected: boolean;
   acquisitions: Acquisition[];
-  filterAcquisitions: (keywords: number[]) => void;
+  subscribeToKeywordAcquisitions: (keywords: number[]) => void;
 }
-export const MyThemeContext = createContext<MyThemeType | null>(null);
+export const YadomsConnectionContext = createContext<YadomsConnection | null>(null);
 
 const MyThemeContextTypeProvider = ({ children }: any) => {
-  const [theme, setTheme] = useState<ITheme>({ value: "light" });
   const [connected, setConnected] = useState<boolean>(false);
   const [acquisitions, setAcquisitions] = useState<Acquisition[]>([]);
 
-  const updateTheme = (t: ITheme) => {
-    const newTheme: ITheme = { value: t.value };
-    setTheme(newTheme);
-  }
-
-  function filterAcquisitions(keywords: number[]): void {
-    ws.current?.filterAcquisitions(keywords);
+  function subscribeToKeywordAcquisitions(keywords: number[]): void {
+    ws.current?.subscribeToKeywordAcquisitions(keywords);
   }
 
   const onNewAcquisition = (newAcquisition: Acquisition) => {
@@ -86,9 +90,13 @@ const MyThemeContextTypeProvider = ({ children }: any) => {
   }, []);
 
   return (
-    <MyThemeContext.Provider value={{ theme: theme, changeTheme: updateTheme, connected: connected, acquisitions: acquisitions, filterAcquisitions: filterAcquisitions }}>
+    <YadomsConnectionContext.Provider value={{
+      connected: connected,
+      acquisitions: acquisitions,
+      subscribeToKeywordAcquisitions: subscribeToKeywordAcquisitions
+    }}>
       {children}
-    </MyThemeContext.Provider>
+    </YadomsConnectionContext.Provider>
   );
 };
 
