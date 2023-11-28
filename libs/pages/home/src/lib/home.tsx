@@ -33,7 +33,7 @@ export function Home(props: PagesHomeProps) {
         Filter acquisitions
       </button>
       <h1>Acquisitions</h1>
-      {acquisitions.map(a => <p key={uuidv4()}>{a.date.toString()} - {a.keyword} - {a.value}</p>)}
+      {acquisitions.map(a => <p key={uuidv4()}>{a.date.toDateString()} - {a.keyword} - {a.value}</p>)}
     </div>
   );
 }

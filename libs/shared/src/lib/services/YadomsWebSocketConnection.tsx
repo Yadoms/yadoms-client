@@ -13,13 +13,17 @@ class YadomsWebSocketConnection {
       const data = JSON.parse(event.data);
       if (!("newAcquisition" in data))
         return;
-      const newAcquisition: Acquisition = { date: data.newAcquisition.date, keyword: data.newAcquisition.keywordId, value: data.newAcquisition.value };
+      const newAcquisition: Acquisition = { date: this.parseYadomsDate(data.newAcquisition.date), keyword: data.newAcquisition.keywordId, value: data.newAcquisition.value };
       this.onNewAcquisition?.(newAcquisition);
     }
   }
 
   filterAcquisitions(keywords: number[]) {
     this.ws.send(JSON.stringify({ "acquisitionFilter": { "keywords": keywords } }));
+  }
+
+  private parseYadomsDate(dateAsString: string): Date {
+    return new Date(dateAsString.replace(/([0-9]{4})([0-9]{2})([0-9]{2})T([0-9]{2})([0-9]{2})([0-9]{2}).([0-9]*)/, "$1-$2-$3T$4:$5:$6.$7"));
   }
 
   onConnected: Function | undefined;//TODO à typer
@@ -89,7 +93,6 @@ const MyThemeContextTypeProvider = ({ children }: any) => {
 };
 
 export default MyThemeContextTypeProvider;
-
 
 
 
