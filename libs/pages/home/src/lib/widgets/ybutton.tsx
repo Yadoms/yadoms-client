@@ -18,7 +18,7 @@ export function KeywordLog(props: KeywordLogProps) {
     <div>
       <h2>Last acquisitions of {props.keywordId}</h2>
       {acquisitions
-        .filter((element, index, array) => { return element.keyword === props.keywordId; })
+        .filter((element) => { return element.keyword === props.keywordId; })
         .map(a => <p key={uuidv4()}>{a.date.toDateString()} - {a.keyword} - {a.value}</p>)}
     </div>
   );
