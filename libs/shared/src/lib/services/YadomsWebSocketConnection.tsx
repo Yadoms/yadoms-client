@@ -30,14 +30,20 @@ class YadomsWebSocketConnection {
 
     this._ws.onmessage = (event: any) => {
       const data = JSON.parse(event.data);
-      if (!("newAcquisition" in data))
+      if ("serverCurrentTime" in data) {
+        this.onServerCurrenTime?.(this.parseYadomsDate(data.serverCurrentTime));
         return;
-      const newAcquisition: Acquisition = {
-        date: this.parseYadomsDate(data.newAcquisition.date), keyword: data.newAcquisition.keywordId, value: data.newAcquisition.value
-      };
-      this._acquisitionsListeners.get(newAcquisition.keyword)?.forEach((item) => {
-        item(newAcquisition)
-      })
+      }
+      if ("newAcquisition" in data) {
+        const newAcquisition: Acquisition = {
+          date: this.parseYadomsDate(data.newAcquisition.date), keyword: data.newAcquisition.keywordId, value: data.newAcquisition.value
+        };
+        this._acquisitionsListeners.get(newAcquisition.keyword)?.forEach((listener) => {
+          listener(newAcquisition)
+        })
+        return;
+      }
+      console.warn("Unknown socket message received : " + event);
     }
   }
 
@@ -69,18 +75,21 @@ class YadomsWebSocketConnection {
   }
 
   onConnected: ((connected: boolean) => void) | undefined;
+  onServerCurrenTime: ((serverTime: Date) => void) | undefined;
 }
 
 
 
 export type YadomsConnection = {
   connected: boolean;
+  serverCurrentTime: Date | undefined;
   subscribeToKeywordAcquisitions: (keywords: number[], onNewAcquisition: (newAcquisition: Acquisition) => void) => void;
 }
 export const YadomsConnectionContext = createContext<YadomsConnection | null>(null);
 
 const YadomsConnectionContextProvider = ({ children }: any) => {
   const [connected, setConnected] = useState<boolean>(false);
+  const [serverCurrentTime, setServerCurrentTime] = useState<Date>();
 
   function subscribeToKeywordAcquisitions(keywords: number[], onNewAcquisition: (newAcquisition: Acquisition) => void): void {
     ws.current?.subscribeToKeywordAcquisitions(keywords, onNewAcquisition);
@@ -90,6 +99,7 @@ const YadomsConnectionContextProvider = ({ children }: any) => {
   useEffect(() => {
     const yadomsWebSocketConnection = new YadomsWebSocketConnection();
     yadomsWebSocketConnection.onConnected = (connected: boolean) => setConnected(connected);
+    yadomsWebSocketConnection.onServerCurrenTime = (serverTime: Date) => setServerCurrentTime(serverTime);
 
     ws.current = yadomsWebSocketConnection;
   }, []);
@@ -97,6 +107,7 @@ const YadomsConnectionContextProvider = ({ children }: any) => {
   return (
     <YadomsConnectionContext.Provider value={{
       connected: connected,
+      serverCurrentTime: serverCurrentTime,
       subscribeToKeywordAcquisitions: subscribeToKeywordAcquisitions
     }}>
       {children}
