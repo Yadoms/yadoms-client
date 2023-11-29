@@ -1,5 +1,5 @@
-import { useContext, useEffect } from "react";
-import { YadomsConnectionContext, YadomsConnection } from 'libs/shared/src/lib/services/YadomsWebSocketConnection'
+import { useContext, useEffect, useState } from "react";
+import { YadomsConnectionContext, YadomsConnection, Acquisition } from 'libs/shared/src/lib/services/YadomsWebSocketConnection'
 import { v4 as uuidv4 } from "uuid";
 
 /* eslint-disable-next-line */
@@ -8,18 +8,21 @@ export interface KeywordLogProps {
 }
 
 export function KeywordLog(props: KeywordLogProps) {
-  const { acquisitions, subscribeToKeywordAcquisitions } = useContext(YadomsConnectionContext) as YadomsConnection;
+  const { subscribeToKeywordAcquisitions } = useContext(YadomsConnectionContext) as YadomsConnection;
+  const [myAcquisitions, setMyAcquisitions] = useState<Acquisition[]>([]);
 
   useEffect(() => {
-    subscribeToKeywordAcquisitions([props.keywordId]);
+    subscribeToKeywordAcquisitions([props.keywordId], (newAcquisition: Acquisition) => {
+      console.log(props.keywordId + " : " + newAcquisition.date + " - " + newAcquisition.keyword + " - " + newAcquisition.value);
+      setMyAcquisitions(myAcquisitions => [newAcquisition, ...myAcquisitions].slice(0, 4));
+    });
   }, [props.keywordId]);
 
   return (
     <div>
       <h2>Last acquisitions of {props.keywordId}</h2>
-      {acquisitions
-        .filter((element) => { return element.keyword === props.keywordId; })
-        .map(a => <p key={uuidv4()}>{a.date.toDateString()} - {a.keyword} - {a.value}</p>)}
+      {myAcquisitions
+        .map(acq => <p key={uuidv4()}>{acq.date.toLocaleTimeString()} : {acq.value}</p>)}
     </div>
   );
 }

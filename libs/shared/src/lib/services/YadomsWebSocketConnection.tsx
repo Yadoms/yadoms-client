@@ -1,38 +1,63 @@
 import { createContext, useEffect, useRef, useState } from 'react';
 
+export interface Acquisition {
+  date: Date;
+  keyword: number;
+  value: string;
+}
+
+type AcquisitionListeners = (newAcquisition: Acquisition) => void;
+
 class YadomsWebSocketConnection {
 
   private _ws: WebSocket;
   private _connected: boolean = false;
-  private _subscribedKeywords: number[] = [];
+  private _acquisitionsListeners = new Map<number, AcquisitionListeners[]>();
 
   constructor() {
     this._ws = new WebSocket('ws://127.0.0.1:8080/ws/v2'); //TODO rendre URL dynamique
 
-
     this._ws.onopen = () => {
       this._connected = true;
       this.onConnected?.(this._connected)
-      if (this._subscribedKeywords.length != 0)
-        this.filterAcquisitions(this._subscribedKeywords);
+      this.updateKeywordsFilter();
     }
+
     this._ws.onclose = () => {
       this._connected = false;
       this.onConnected?.(this._connected)
     }
+
     this._ws.onmessage = (event: any) => {
       const data = JSON.parse(event.data);
       if (!("newAcquisition" in data))
         return;
-      const newAcquisition: Acquisition = { date: this.parseYadomsDate(data.newAcquisition.date), keyword: data.newAcquisition.keywordId, value: data.newAcquisition.value };
-      this.onNewAcquisition?.(newAcquisition);
+      const newAcquisition: Acquisition = {
+        date: this.parseYadomsDate(data.newAcquisition.date), keyword: data.newAcquisition.keywordId, value: data.newAcquisition.value
+      };
+      this._acquisitionsListeners.get(newAcquisition.keyword)?.forEach((item) => {
+        item(newAcquisition)
+      })
     }
   }
 
-  subscribeToKeywordAcquisitions(keywords: number[]) {
-    this._subscribedKeywords = [...this._subscribedKeywords, ...keywords];
+  subscribeToKeywordAcquisitions(keywords: number[], onNewAcquisition: (newAcquisition: Acquisition) => void) {
+    keywords.forEach((keyword: number) => {
+      const listeners = this._acquisitionsListeners.get(keyword);
+      if (listeners === undefined)
+        this._acquisitionsListeners.set(keyword, [onNewAcquisition]);
+      else
+        listeners.push(onNewAcquisition);
+    });
+
     if (this._connected)
-      this.filterAcquisitions(this._subscribedKeywords);
+      this.updateKeywordsFilter();
+  }
+
+  private updateKeywordsFilter() {
+    if (this._acquisitionsListeners.size == 0)
+      return;
+    this.filterAcquisitions([...this._acquisitionsListeners.keys()]);
   }
 
   private filterAcquisitions(keywords: number[]) {
@@ -44,43 +69,27 @@ class YadomsWebSocketConnection {
   }
 
   onConnected: ((connected: boolean) => void) | undefined;
-  onNewAcquisition: ((acquisition: Acquisition) => void) | undefined;
 }
 
 
 
-
-export interface Acquisition {
-  date: Date;
-  keyword: number;
-  value: string;
-}
 export type YadomsConnection = {
   connected: boolean;
-  acquisitions: Acquisition[];
-  subscribeToKeywordAcquisitions: (keywords: number[]) => void;
+  subscribeToKeywordAcquisitions: (keywords: number[], onNewAcquisition: (newAcquisition: Acquisition) => void) => void;
 }
 export const YadomsConnectionContext = createContext<YadomsConnection | null>(null);
 
 const YadomsConnectionContextProvider = ({ children }: any) => {
   const [connected, setConnected] = useState<boolean>(false);
-  const [acquisitions, setAcquisitions] = useState<Acquisition[]>([]);
 
-  function subscribeToKeywordAcquisitions(keywords: number[]): void {
-    ws.current?.subscribeToKeywordAcquisitions(keywords);
-  }
-
-  const onNewAcquisition = (newAcquisition: Acquisition) => {
-    console.log(newAcquisition.date + " - " + newAcquisition.keyword + " - " + newAcquisition.value);
-    setAcquisitions(acquisitions => [...acquisitions, newAcquisition]);
+  function subscribeToKeywordAcquisitions(keywords: number[], onNewAcquisition: (newAcquisition: Acquisition) => void): void {
+    ws.current?.subscribeToKeywordAcquisitions(keywords, onNewAcquisition);
   }
 
   const ws = useRef<YadomsWebSocketConnection | null>(null);
   useEffect(() => {
     const yadomsWebSocketConnection = new YadomsWebSocketConnection();
-
     yadomsWebSocketConnection.onConnected = (connected: boolean) => setConnected(connected);
-    yadomsWebSocketConnection.onNewAcquisition = (acquisition: Acquisition) => onNewAcquisition(acquisition);
 
     ws.current = yadomsWebSocketConnection;
   }, []);
@@ -88,7 +97,6 @@ const YadomsConnectionContextProvider = ({ children }: any) => {
   return (
     <YadomsConnectionContext.Provider value={{
       connected: connected,
-      acquisitions: acquisitions,
       subscribeToKeywordAcquisitions: subscribeToKeywordAcquisitions
     }}>
       {children}
