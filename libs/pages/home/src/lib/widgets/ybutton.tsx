@@ -10,7 +10,9 @@ export interface KeywordLogProps {
 export function KeywordLog(props: KeywordLogProps) {
   const { acquisitions, subscribeToKeywordAcquisitions } = useContext(YadomsConnectionContext) as YadomsConnection;
 
-  subscribeToKeywordAcquisitions([props.keywordId]);
+  useEffect(() => {
+    subscribeToKeywordAcquisitions([props.keywordId]);
+  }, [props.keywordId]);
 
   return (
     <div>

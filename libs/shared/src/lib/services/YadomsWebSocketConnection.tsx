@@ -35,7 +35,7 @@ class YadomsWebSocketConnection {
       this.filterAcquisitions(this._subscribedKeywords);
   }
 
-  private filterAcquisitions(keywords: number[]) { //TODO rendre privé
+  private filterAcquisitions(keywords: number[]) {
     this._ws.send(JSON.stringify({ "acquisitionFilter": { "keywords": keywords } }));
   }
 
@@ -43,8 +43,8 @@ class YadomsWebSocketConnection {
     return new Date(dateAsString.replace(/([0-9]{4})([0-9]{2})([0-9]{2})T([0-9]{2})([0-9]{2})([0-9]{2}).([0-9]*)/, "$1-$2-$3T$4:$5:$6.$7"));
   }
 
-  onConnected: Function | undefined;//TODO à typer
-  onNewAcquisition: Function | undefined; //TODO à typer
+  onConnected: ((connected: boolean) => void) | undefined;
+  onNewAcquisition: ((acquisition: Acquisition) => void) | undefined;
 }
 
 
@@ -62,7 +62,7 @@ export type YadomsConnection = {
 }
 export const YadomsConnectionContext = createContext<YadomsConnection | null>(null);
 
-const MyThemeContextTypeProvider = ({ children }: any) => {
+const YadomsConnectionContextProvider = ({ children }: any) => {
   const [connected, setConnected] = useState<boolean>(false);
   const [acquisitions, setAcquisitions] = useState<Acquisition[]>([]);
 
@@ -83,10 +83,6 @@ const MyThemeContextTypeProvider = ({ children }: any) => {
     yadomsWebSocketConnection.onNewAcquisition = (acquisition: Acquisition) => onNewAcquisition(acquisition);
 
     ws.current = yadomsWebSocketConnection;
-
-    return () => {      //TODO utile ?
-      ws.current = null;
-    };
   }, []);
 
   return (
@@ -100,7 +96,7 @@ const MyThemeContextTypeProvider = ({ children }: any) => {
   );
 };
 
-export default MyThemeContextTypeProvider;
+export default YadomsConnectionContextProvider;
 
 
 

@@ -7,7 +7,7 @@ import { Provider } from 'react-redux';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import { store } from '@yadoms/store';
-import MyThemeContextTypeProvider from 'libs/shared/src/lib/services/YadomsWebSocketConnection'
+import YadomsConnectionContextProvider from 'libs/shared/src/lib/services/YadomsWebSocketConnection'
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -18,13 +18,13 @@ const queryClient = new QueryClient();
 root.render(
   <Provider store={store}>
     <QueryClientProvider client={queryClient}>
-      <MyThemeContextTypeProvider>
+      <YadomsConnectionContextProvider>
         <BrowserRouter>
           <StrictMode>
             <App />
           </StrictMode>
         </BrowserRouter>
-      </MyThemeContextTypeProvider>
+      </YadomsConnectionContextProvider>
       <ReactQueryDevtools initialIsOpen={false} position={'bottom-right'} />
     </QueryClientProvider>
   </Provider>
