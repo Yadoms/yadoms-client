@@ -18,6 +18,7 @@ export function CustomEnumSelect(props: CustomEnumSelectProps) {
       label={props.field.name}
       inputWrapperOrder={['label', 'error', 'input', 'description']}
       data={getEnumValuesData(props.field)}
+      defaultValue={props.field.defaultValue}
       description={<LinkifyText text={props.field.description} />}
       {...props.form.getInputProps(props.path)}
       withAsterisk
