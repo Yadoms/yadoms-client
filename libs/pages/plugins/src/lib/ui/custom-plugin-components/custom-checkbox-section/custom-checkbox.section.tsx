@@ -45,7 +45,8 @@ export function CustomCheckboxSection(props: CustomCheckboxSectionProps) {
       <Checkbox
         label={props.field.name}
         description={<LinkifyText text={props.field.description} />}
-        checked={checked}
+        // defaultValue={props.field.defaultValue}
+        {...props.form.getInputProps(props.path)}
         onChange={(event) => setChecked(event.currentTarget.checked)}
       />
 

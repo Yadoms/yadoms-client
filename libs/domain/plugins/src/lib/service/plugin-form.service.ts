@@ -66,6 +66,7 @@ export const getFromInitialValues = (
         break;
       case PluginConfigurationSchemaType.CheckboxSection:
         sectionKeys = Object.keys(field.content || {});
+        console.log('sectionKeys', sectionKeys);
         if (sectionKeys.length > 0) {
           newInitialValues[key] = {
             content: getFromInitialValues(field.content || {}),
@@ -77,11 +78,16 @@ export const getFromInitialValues = (
           };
         }
         break;
+      case PluginConfigurationSchemaType.MultiSelectSection:
+        console.log('MultiSelectSection', field);
+        newInitialValues[key] = {
+          content: getFromInitialValues(field.content || {}),
+        };
+        break;
       default:
         break;
     }
   }
-
   return newInitialValues;
 };
 

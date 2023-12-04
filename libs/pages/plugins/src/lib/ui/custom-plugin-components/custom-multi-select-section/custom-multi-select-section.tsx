@@ -58,6 +58,7 @@ export function CustomMultiSelectSection(props: CustomMultiSelectSectionProps) {
         nothingFound={props.field.nothingFound}
         maxDropdownHeight={400}
         defaultValue={getMultiSelectDefaultValue(props.field)}
+        {...props.form.getInputProps(props.path)}
       />
     </Box>
   );
