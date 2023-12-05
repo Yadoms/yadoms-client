@@ -40,7 +40,6 @@ export function CustomComboSection(props: CustomComboSectionProps) {
   const selectedComboSectionContent =
     props.field.content[selectedComboSection].content;
 
-  console.log('selectedComboSectionContent props.field', props.field);
   return (
     <Box
       sx={(theme) => ({

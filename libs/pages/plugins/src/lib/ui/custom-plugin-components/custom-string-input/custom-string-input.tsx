@@ -12,8 +12,6 @@ interface CustomTextInputProps {
 }
 
 export function CustomStringInput(props: CustomTextInputProps) {
-  console.log('pluginKey', props.pluginKey);
-  console.log('path', props.path);
   return (
     <TextInput
       label={props.field.name}

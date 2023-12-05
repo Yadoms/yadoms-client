@@ -5,17 +5,12 @@ export const validateForm = (
   schema: PluginConfigurationSchema
 ) => {
   const errors: Record<string, string> = {};
-  console.log('validateForm', values);
   const validateField = (key: string, value: any, field: any) => {
-    console.log('validateField key', key);
-    console.log('validateField value', value);
-    console.log('validateField field', field);
     if (field.required && (!value || value.trim() === '')) {
       errors[key] = `${field.name} is required`;
     }
     if (field.regex && !new RegExp(field.regex).test(value)) {
       errors[key] = field.regexErrorMessage || `${field.name} is invalid`;
-      console.log('errors[key]', errors[key]);
     }
   };
 
@@ -33,6 +28,5 @@ export const validateForm = (
   };
 
   validateObject(values, schema);
-  console.log('errors', errors);
   return errors;
 };

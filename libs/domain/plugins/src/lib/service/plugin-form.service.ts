@@ -66,7 +66,6 @@ export const getFromInitialValues = (
         break;
       case PluginConfigurationSchemaType.CheckboxSection:
         sectionKeys = Object.keys(field.content || {});
-        console.log('sectionKeys', sectionKeys);
         if (sectionKeys.length > 0) {
           newInitialValues[key] = {
             content: getFromInitialValues(field.content || {}),
@@ -79,7 +78,6 @@ export const getFromInitialValues = (
         }
         break;
       case PluginConfigurationSchemaType.MultiSelectSection:
-        console.log('MultiSelectSection', field);
         newInitialValues[key] = {
           content: getFromInitialValues(field.content || {}),
         };
@@ -129,7 +127,6 @@ export const getFromInitialValuesTest = (
       default:
     }
   }
-  console.log('newInitialValues getFromInitialValuesTest', newInitialValues);
   return newInitialValues;
 };
 
@@ -149,15 +146,7 @@ export const getInitialValuesFromSectionFields = (
     path: string;
     field: PluginConfigurationSchemaField;
   }> = [];
-  console.log(
-    'getInitialValuesFromSectionFields configurationSchema',
-    configurationSchema
-  );
   for (const [key, field] of Object.entries(configurationSchema)) {
-    console.log(
-      'field?.type',
-      typeof PluginConfigurationSchemaType.CheckboxSection
-    );
     switch (field?.type) {
       case PluginConfigurationSchemaType.CheckboxSection:
         newInitialValues.push({
@@ -166,18 +155,21 @@ export const getInitialValuesFromSectionFields = (
           field: field,
         });
         break;
+      case PluginConfigurationSchemaType.ComboSection:
+        newInitialValues.push({
+          key: key,
+          path: `${parentKey}.${selectedKey}.content.${key}`,
+          field: field,
+        });
+        break;
       default:
         newInitialValues.push({
           key: key,
-          path: `${parentKey}.content.${selectedKey}.content.${key}`,
+          path: `${parentKey}.${selectedKey}.content.${key}`,
           field: field,
         });
     }
   }
-  console.log(
-    'getInitialValuesFromSectionFields newInitialValues',
-    newInitialValues
-  );
   return newInitialValues;
 };
 

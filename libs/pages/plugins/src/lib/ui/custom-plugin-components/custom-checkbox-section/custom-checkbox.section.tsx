@@ -19,14 +19,6 @@ export function CustomCheckboxSection(props: CustomCheckboxSectionProps) {
   const [checked, setChecked] = useState<boolean | undefined>(
     !!props.field.defaultValue
   );
-  console.log(
-    'CustomCheckboxSection props.field.defaultValue',
-    props.field.defaultValue
-  );
-  console.log('CustomCheckboxSection props.field.content', props.field.content);
-  console.log('CustomCheckboxSection props.path', props.path);
-  console.log('CustomCheckboxSection props.field.name', props.field.name);
-  console.log('CustomCheckboxSection props.pluginKey', props.pluginKey);
   return (
     <Box
       sx={(theme) => ({
@@ -45,7 +37,7 @@ export function CustomCheckboxSection(props: CustomCheckboxSectionProps) {
       <Checkbox
         label={props.field.name}
         description={<LinkifyText text={props.field.description} />}
-        // defaultValue={props.field.defaultValue}
+        checked={checked}
         {...props.form.getInputProps(props.path)}
         onChange={(event) => setChecked(event.currentTarget.checked)}
       />

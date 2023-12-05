@@ -52,7 +52,6 @@ export function PluginConfigurationModal(props: PluginConfigurationModalProps) {
         configurationSchema: props.selectedPluginConfigurationSchema,
       })
     );
-    console.log('initialValues', initialValues);
   }, [props.selectedPluginType, props.selectedPluginConfigurationSchema]);
 
   const form = useForm({
@@ -72,7 +71,6 @@ export function PluginConfigurationModal(props: PluginConfigurationModalProps) {
         color: theme.colors.green[6],
       });
     } else {
-      console.log('form', form);
       // handle validation errors
       notifications.show({
         title: 'Validation error',
