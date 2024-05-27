@@ -4,9 +4,9 @@ import App from './app/app';
 import { BrowserRouter } from 'react-router-dom';
 import './i18n';
 import { Provider } from 'react-redux';
-import { QueryClient, QueryClientProvider } from 'react-query';
-import { ReactQueryDevtools } from 'react-query/devtools';
 import { store } from '@yadoms/store';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { YadomsConnectionContextProvider } from '@yadoms/shared';
 
 const root = ReactDOM.createRoot(
@@ -20,12 +20,10 @@ root.render(
     <QueryClientProvider client={queryClient}>
       <YadomsConnectionContextProvider>
         <BrowserRouter>
-          <StrictMode>
             <App />
-          </StrictMode>
         </BrowserRouter>
       </YadomsConnectionContextProvider>
-      <ReactQueryDevtools initialIsOpen={false} position={'bottom-right'} />
+      <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   </Provider>
 );
