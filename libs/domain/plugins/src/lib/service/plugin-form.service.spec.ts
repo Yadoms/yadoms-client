@@ -279,9 +279,7 @@ describe('Plugin form store', () => {
   });
 });
 describe(`getInitialValuesFromSectionFields`, () => {
-  describe(`for comboSection`, () => {
-    test(`with one content`, () => {});
-  });
+  // TODO: combo section with one content
   test(`for comboSection`, () => {
     getInitialValuesFromSectionFields(
       [
