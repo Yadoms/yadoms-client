@@ -358,7 +358,4 @@ describe(`getInitialValuesFromSectionFields`, () => {
       ''
     );
   });
-
 });
-
-

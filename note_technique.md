@@ -287,7 +287,7 @@ queryParam "locale=fr"
 }
 ```
 
-#  
+#
 
 ```json
 {

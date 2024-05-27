@@ -3,7 +3,7 @@ import {
   getInitialValuesFromSectionFields,
 } from '@yadoms/domain/plugins';
 import { Box, Checkbox } from '@mantine/core';
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 import renderPluginField from '../../render-plugin-field/render-plugin-field';
 import LinkifyText from '../../linkify-text/linkify-text';
 import { FormReturnType } from '../../FormReturnType';
@@ -19,9 +19,7 @@ export function CustomCheckboxSection(props: CustomCheckboxSectionProps) {
   const CHECKBOX_PATH = `${props.path}.checkbox`;
   const CHECKBOX_VALUE = props.form.getInputProps(CHECKBOX_PATH).value;
 
-  const [checked, setChecked] = useState<boolean>(
-    !!props.field.defaultValue
-  );
+  const [checked, setChecked] = useState<boolean>(!!props.field.defaultValue);
 
   useEffect(() => {
     setChecked(CHECKBOX_VALUE);

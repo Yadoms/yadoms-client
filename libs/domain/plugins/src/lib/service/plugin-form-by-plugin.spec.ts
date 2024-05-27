@@ -1,5 +1,3 @@
 describe(`getInitialValuesFromSectionFields`, () => {
-  test(`IPX800`, () => {
-
-  });
+  test(`IPX800`, () => {});
 });
