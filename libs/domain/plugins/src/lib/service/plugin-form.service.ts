@@ -21,7 +21,9 @@ export const getInitialValues = (initialValues: InitialValues) => {
   };
 };
 export const getFromInitialValues = (
-  configurationSchema: PluginConfigurationSchema | PluginMultiSelectSectionConfigurationSchema
+  configurationSchema:
+    | PluginConfigurationSchema
+    | PluginMultiSelectSectionConfigurationSchema
 ): Record<string, unknown> => {
   const newInitialValues: Record<string, unknown> = {};
 
