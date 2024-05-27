@@ -18,8 +18,6 @@ export const store = configureStore({
   // Additional middleware can be passed to this array
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
   devTools: !import.meta.env.PROD,
-  // Optional Redux store enhancers
-  enhancers: [],
 });
 
 export type RootState = ReturnType<typeof store.getState>;

@@ -54,7 +54,7 @@ export function ChoosePluginModal(props: ChoosePluginModalProps) {
     return filteredPlugins.map((availablePluginsEntity) => (
       <Grid.Col span={3} key={`col-${availablePluginsEntity.type}`}>
         <Card
-          sx={{ display: 'flex', flexDirection: 'column' }}
+          style={{ display: 'flex', flexDirection: 'column' }}
           shadow="sm"
           p="xl"
           withBorder
@@ -62,7 +62,7 @@ export function ChoosePluginModal(props: ChoosePluginModalProps) {
         >
           <Card.Section>
             <Image
-              sx={{ cursor: 'pointer' }}
+              style={{ cursor: 'pointer' }}
               src={`http://localhost:8080/rest/v2/plugins?byType=${availablePluginsEntity.type}&prop=icon`}
               height={160}
               onClick={() => props.onPluginSelect(availablePluginsEntity.type)}
@@ -71,14 +71,16 @@ export function ChoosePluginModal(props: ChoosePluginModalProps) {
             />
           </Card.Section>
 
-          <Group position="apart" mt="md">
+          <Group flex="apart" mt="md">
             <Text fw={700}>{availablePluginsEntity.type}</Text>
             <Badge color="pink" variant="light">
               v{availablePluginsEntity.version}
             </Badge>
           </Group>
 
-          <Text mt="xs" color="dimmed" size="sm" sx={{ flex: '1 0 auto' }}>
+          <Text mt="xs" color="dimmed"
+                size="sm"
+                style={{ flex: '1 0 auto' }}>
             <LinkifyText
               text={availablePluginsEntity.description}
             ></LinkifyText>
@@ -113,7 +115,7 @@ export function ChoosePluginModal(props: ChoosePluginModalProps) {
                   disabled={loadingStatus || errorStatus}
                   data-autofocus
                   placeholder={t('plugins.modal.choose-plugin.search') || ''}
-                  icon={<IconSearch size="0.9rem" stroke={1.5} />}
+                  leftSection={<IconSearch size="0.9rem" stroke={1.5} />}
                   value={searchQuery}
                   onChange={(event) => setSearchQuery(event.target.value)}
                 />

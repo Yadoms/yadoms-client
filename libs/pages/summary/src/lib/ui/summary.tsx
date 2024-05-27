@@ -42,7 +42,7 @@ export function Summary() {
         {t('summary.home.description')}
       </Title>
       <Box maw={'100%'} pos="relative" pt={'20px'}>
-        <LoadingOverlay visible={isLoading} overlayBlur={2} />
+        <LoadingOverlay visible={isLoading} overlayProps={{ radius: 'sm', blur: 2 }} />
         <Paper shadow="xs" p="md">
           <Table highlightOnHover>
             <tbody>{rows}</tbody>

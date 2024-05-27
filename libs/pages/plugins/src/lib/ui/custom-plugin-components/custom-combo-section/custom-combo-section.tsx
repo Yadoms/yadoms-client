@@ -8,6 +8,7 @@ import {
 } from '@yadoms/domain/plugins';
 import LinkifyText from '../../linkify-text/linkify-text';
 import { FormReturnType } from '../../FormReturnType';
+import classes from './CustomComboSection.module.css';
 
 export interface CustomComboSectionProps {
   pluginKey: string;
@@ -19,7 +20,7 @@ export interface CustomComboSectionProps {
 const SelectItem = forwardRef<HTMLDivElement, ItemProps>(
   ({ label, description, ...others }: ItemProps, ref) => (
     <div ref={ref} {...others}>
-      <Group noWrap>
+      <Group wrap="nowrap">
         <div>
           <Text size="sm">{label}</Text>
           <Text size="xs" opacity={0.65}>
@@ -42,18 +43,7 @@ export function CustomComboSection(props: CustomComboSectionProps) {
 
   return (
     <Box
-      sx={(theme) => ({
-        backgroundColor:
-          theme.colorScheme === 'dark'
-            ? theme.colors.dark[5]
-            : theme.colors.gray[1],
-        textAlign: 'left',
-        padding: theme.spacing.xs,
-        marginBottom: theme.spacing.xs,
-        marginTop: theme.spacing.xs,
-        borderRadius: theme.radius.md,
-        border: `2px dotted ${theme.colors.blue[6]}`,
-      })}
+      className={classes.boxCustomCheckboxSection}
     >
       <Select
         value={selectedComboSection}

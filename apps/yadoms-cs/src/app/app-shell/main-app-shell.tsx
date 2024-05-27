@@ -1,20 +1,4 @@
-import {
-  ActionIcon,
-  Burger,
-  Center,
-  createStyles,
-  Flex,
-  Group,
-  Header,
-  Navbar,
-  Paper,
-  rem,
-  Stack,
-  Tooltip,
-  Transition,
-  UnstyledButton,
-  useMantineColorScheme,
-} from '@mantine/core';
+import { ActionIcon, Center, Flex, rem, Stack, Tooltip, UnstyledButton, useMantineColorScheme } from '@mantine/core';
 import {
   IconAdjustments,
   IconAt,
@@ -28,7 +12,7 @@ import {
   IconPlugConnectedX,
   IconRobot,
   IconSettingsAutomation,
-  IconSun,
+  IconSun
 } from '@tabler/icons-react';
 import { Logo } from './_logo';
 import { Link, Route, Routes, useLocation } from 'react-router-dom';
@@ -38,64 +22,7 @@ import { Summary } from '@yadoms/pages/summary';
 import { Home } from '@yadoms/pages/home';
 import { Plugins } from '@yadoms/pages/plugins';
 import { useDisclosure } from '@mantine/hooks';
-
-const HEADER_HEIGHT = rem(60);
-const useStyles = createStyles((theme) => ({
-  link: {
-    width: rem(50),
-    height: rem(50),
-    borderRadius: theme.radius.md,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    color:
-      theme.colorScheme === 'dark'
-        ? theme.colors.dark[0]
-        : theme.colors.gray[7],
-
-    '&:hover': {
-      backgroundColor:
-        theme.colorScheme === 'dark'
-          ? theme.colors.dark[5]
-          : theme.colors.gray[0],
-    },
-  },
-
-  active: {
-    '&, &:hover': {
-      backgroundColor: theme.fn.variant({
-        variant: 'light',
-        color: theme.primaryColor,
-      }).background,
-      color: theme.fn.variant({ variant: 'light', color: theme.primaryColor })
-        .color,
-    },
-  },
-
-  burger: {
-    [theme.fn.largerThan('sm')]: {
-      display: 'none',
-    },
-  },
-  dropdown: {
-    position: 'absolute',
-    top: HEADER_HEIGHT,
-    left: 0,
-    right: 0,
-    zIndex: 0,
-    borderTopRightRadius: 0,
-    borderTopLeftRadius: 0,
-    borderTopWidth: 0,
-    overflow: 'hidden',
-
-    [theme.fn.largerThan('sm')]: {
-      display: 'none',
-    },
-  },
-  logoBorder: {
-    borderBottom: '0.0625rem solid #2C2E33',
-  },
-}));
+import classes from './MainAppShell.module.css';
 
 interface NavbarLinkProps {
   icon: React.FC<any>;
@@ -103,18 +30,18 @@ interface NavbarLinkProps {
   active?: boolean;
 
   route: string;
+
   onClick?(): void;
 }
 
 function NavbarLink({
-  icon: Icon,
-  label,
-  active,
-  onClick,
-  route,
-}: NavbarLinkProps) {
+                      icon: Icon,
+                      label,
+                      active,
+                      onClick,
+                      route
+                    }: NavbarLinkProps) {
   const { t } = useTranslation();
-  const { classes, cx } = useStyles();
   return (
     <Tooltip
       label={t(`side-bar.${label}`)}
@@ -125,9 +52,10 @@ function NavbarLink({
         component={Link}
         to={route}
         onClick={onClick}
-        className={cx(classes.link, { [classes.active]: active })}
+        className={classes.link}
+        data-active={active || undefined}
       >
-        <Icon size="1.2rem" stroke={1.5} />
+        <Icon style={{ width: rem(20), height: rem(20) }} stroke={1.5} />
       </UnstyledButton>
     </Tooltip>
   );
@@ -143,7 +71,7 @@ const linksData = [
   { icon: IconMailForward, label: 'recipients', route: '/' },
   { icon: IconAdjustments, label: 'install-and-update', route: '/' },
   { icon: IconHomeCog, label: 'maintenance', route: '/' },
-  { icon: IconAt, label: 'about', route: '/' },
+  { icon: IconAt, label: 'about', route: '/' }
 ];
 
 function MainAppShell() {
@@ -156,9 +84,6 @@ function MainAppShell() {
 
   const [active, setActive] = useState(activeIndex);
 
-  const { classes, cx } = useStyles();
-  const [opened, { toggle, close }] = useDisclosure(false);
-
   const links = linksData.map((link, index) => (
     <NavbarLink
       {...link}
@@ -170,40 +95,24 @@ function MainAppShell() {
 
   return (
     <Flex direction={'row'}>
-      <Navbar
-        height={'100vh'}
-        width={{ base: 80 }}
-        px="md"
-        pb="md"
-        pt="sm"
-        position={{ top: 0 }}
-      >
-        <Center className={classes.logoBorder}>
-          <Logo colorScheme={colorScheme} />
+      <nav className={classes.navbar}>
+        <Center>
+          <Logo />
         </Center>
-        <Navbar.Section grow mt={50}>
-          <Stack justify="center" spacing={0}>
+
+        <div className={classes.navbarMain}>
+          <Stack justify="center" gap={0}>
             {links}
           </Stack>
-        </Navbar.Section>
-        <Navbar.Section>
-          <Stack justify="center" spacing={0}>
-            <NavbarLink icon={IconLogout} label="logout" route={'/'} />
-          </Stack>
-        </Navbar.Section>
-      </Navbar>
-      <Flex
-        direction={'column'}
-        sx={(theme) => ({
-          width: '100%',
-          backgroundColor:
-            theme.colorScheme === 'dark'
-              ? theme.colors.dark[8]
-              : theme.colors.gray[0],
-        })}
-      >
-        <Header height={60} zIndex={-1}>
-          <Group sx={{ height: '100%' }} px={20} position="right">
+        </div>
+
+        <Stack justify="center" gap={0}>
+          <NavbarLink icon={IconLogout} label="Logout" route={'/'} />
+        </Stack>
+      </nav>
+      <Flex direction={'column'} style={{ width: '100%'}}>
+        <header className={classes.header}>
+          <div className={classes.inner}>
             <ActionIcon
               variant="default"
               color={dark ? 'yellow' : 'blue'}
@@ -216,26 +125,11 @@ function MainAppShell() {
                 <IconMoonStars size={16} />
               )}
             </ActionIcon>
-            <Burger
-              opened={opened}
-              onClick={toggle}
-              className={classes.burger}
-              size="sm"
-            />
-            <Transition
-              transition="pop-top-right"
-              duration={200}
-              mounted={opened}
-            >
-              {(styles) => (
-                <Paper className={classes.dropdown} withBorder style={styles}>
-                  {links}
-                </Paper>
-              )}
-            </Transition>
-          </Group>
-        </Header>
-        <div style={{ padding: '15px' }}>
+          </div>
+
+        </header>
+
+        <div style={{padding: '10px'}}>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/summary" element={<Summary />} />
@@ -244,7 +138,8 @@ function MainAppShell() {
         </div>
       </Flex>
     </Flex>
-  );
+  )
+    ;
 }
 
 export default MainAppShell;

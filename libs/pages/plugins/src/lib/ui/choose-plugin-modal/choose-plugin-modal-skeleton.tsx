@@ -24,7 +24,7 @@ function generateSkeletonCols(numCols: number) {
     cols.push(
       <Grid.Col key={i} span={3}>
         <Card
-          sx={{ display: 'flex', flexDirection: 'column' }}
+          style={{ display: 'flex', flexDirection: 'column' }}
           shadow="sm"
           p="xl"
           withBorder
