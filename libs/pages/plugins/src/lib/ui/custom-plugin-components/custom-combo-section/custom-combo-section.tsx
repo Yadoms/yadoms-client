@@ -1,11 +1,7 @@
-import { Box, Group, Select, Text } from '@mantine/core';
-import React, { forwardRef, useState } from 'react';
-import { ItemProps } from '../../plugin-configuration-modal/plugin-configuration-modal';
+import { Box, Combobox, Group, Input, InputBase, Text, useCombobox } from '@mantine/core';
+import React, { useState } from 'react';
 import renderPluginField from '../../render-plugin-field/render-plugin-field';
-import {
-  ComboSectionField,
-  getInitialValuesFromSectionFields,
-} from '@yadoms/domain/plugins';
+import { ComboSectionField, getInitialValuesFromSectionFields } from '@yadoms/domain/plugins';
 import LinkifyText from '../../linkify-text/linkify-text';
 import { FormReturnType } from '../../FormReturnType';
 import classes from './CustomComboSection.module.css';
@@ -17,50 +13,92 @@ export interface CustomComboSectionProps {
   path: string;
 }
 
-const SelectItem = forwardRef<HTMLDivElement, ItemProps>(
-  ({ label, description, ...others }: ItemProps, ref) => (
-    <div ref={ref} {...others}>
-      <Group wrap="nowrap">
-        <div>
-          <Text size="sm">{label}</Text>
-          <Text size="xs" opacity={0.65}>
-            {description}
-          </Text>
-        </div>
-      </Group>
-    </div>
-  )
-);
+interface Item {
+  label: string;
+  description: string;
+  value: string;
+}
+
+function SelectOption({ label, description }: Item) {
+  return (
+    <Group wrap="nowrap">
+      <div>
+        <Text size="sm">{label}</Text>
+        <Text size="xs" opacity={0.65}>
+          {description}
+        </Text>
+      </div>
+    </Group>
+  );
+}
 
 export function CustomComboSection(props: CustomComboSectionProps) {
+  const comboSectionData = getComboSectionData(props.field);
   const [selectedComboSection, setSelectedComboSection] = useState(() => {
-    const data = getComboSectionData(props.field);
+    const data = comboSectionData;
     return data.length > 0 ? data[0].value : '';
   });
   // TODO : to be removed when seb added empty content to Linky plugin
   const selectedComboSectionContent =
     props.field.content[selectedComboSection].content;
 
+  const combobox = useCombobox({
+    onDropdownClose: () => combobox.resetSelectedOption(),
+  });
+
+
+  const [value, setValue] = useState<string>(() => {
+    const data = comboSectionData;
+    return data.length > 0 ? data[0].value : '';
+  });
+  const selectedOption = comboSectionData.find((item) => {
+      return item.value === value
+    }
+  );
+  const options = comboSectionData.map((item) => (
+    <Combobox.Option value={item.value} key={item.value}>
+      <SelectOption {...item} />
+    </Combobox.Option>
+  ));
+
   return (
     <Box
       className={classes.boxCustomCheckboxSection}
     >
-      <Select
-        value={selectedComboSection}
-        onChange={(event: string) => {
-          setSelectedComboSection(event);
-          props.form.setFieldValue(
-            `configuration.${props.pluginKey}.activeSection`,
-            event
-          );
+      <Combobox
+        store={combobox}
+        withinPortal={false}
+        onOptionSubmit={(val) => {
+          setValue(val);
+          combobox.closeDropdown();
         }}
-        label={props.field.name}
-        description={<LinkifyText text={props.field.description} />}
-        inputWrapperOrder={['label', 'error', 'input', 'description']}
-        defaultValue={getComboSectionData(props.field)[0].label}
-        itemComponent={SelectItem}
-        data={getComboSectionData(props.field)}
-      />
+      >
+        <Combobox.Target>
+          <InputBase
+            component="button"
+            type="button"
+            pointer
+            rightSection={<Combobox.Chevron />}
+            onClick={() => combobox.toggleDropdown()}
+            rightSectionPointerEvents="none"
+            multiline
+            label={props.field.name}
+            description={<LinkifyText text={props.field.description} />}
+            inputWrapperOrder={['label', 'error', 'input', 'description']}
+          >
+            {selectedOption ? (
+              <SelectOption {...selectedOption} />
+            ) : (
+              <Input.Placeholder>Pick value</Input.Placeholder>
+            )}
+          </InputBase>
+        </Combobox.Target>
+
+        <Combobox.Dropdown>
+          <Combobox.Options>{options}</Combobox.Options>
+        </Combobox.Dropdown>
+      </Combobox>
+
       {selectedComboSectionContent && (
         <div>
           {getInitialValuesFromSectionFields(
@@ -92,16 +130,17 @@ export function CustomComboSection(props: CustomComboSectionProps) {
 }
 
 function getComboSectionData(field: ComboSectionField) {
-  const data: ItemProps[] = [];
+  const data: Item[] = [];
   if (field.content) {
     Object.entries(field.content).map(([key, value]) => {
       data.push({
         value: key,
-        description: value.description,
-        label: value.name,
+        description: value.description!,
+        label: value.name!,
       });
     });
   }
+  console.log(data);
   return data;
 }
 

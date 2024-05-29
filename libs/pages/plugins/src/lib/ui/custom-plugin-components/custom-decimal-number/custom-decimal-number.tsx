@@ -21,7 +21,7 @@ export function CustomDecimalNumber(props: CustomDecimalNumberProps) {
           : undefined
       }
       description={<LinkifyText text={props.field.description} />}
-      precision={props.field.precision}
+      decimalScale={props.field.precision}
       step={props.field.step}
       inputWrapperOrder={['label', 'error', 'input', 'description']}
       withAsterisk

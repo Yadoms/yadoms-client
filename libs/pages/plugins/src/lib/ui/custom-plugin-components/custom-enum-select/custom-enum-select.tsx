@@ -26,15 +26,14 @@ export function CustomEnumSelect(props: CustomEnumSelectProps) {
   );
 }
 
-function getEnumValuesData(field: EnumField): ItemProps[] {
-  const data: ItemProps[] = [];
+function getEnumValuesData(field: EnumField): string[] {
+  const data: string[] = [];
   Object.entries(field.values).map(([key, value]) => {
-    data.push({
-      value: key,
-      label: value as string,
-    });
+    data.push(value as string);
   });
-
+  console.log('data', data);
+  console.log('defaultValue', field.defaultValue?.toString());
+  console.log('field', field);
   return data;
 }
 
