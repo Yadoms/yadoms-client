@@ -7,7 +7,6 @@
   padding: 24px 16px;
 
   @media max-with: 768px {
-  flex-direction: column;
-
-}
+    flex-direction: column;
+  }
 }
