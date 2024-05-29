@@ -1,0 +1,13 @@
+.flex {
+  background-color: rgba(var(--mantine-color-blue-3), 0.2) ;
+  border-radius: 4px;
+  flex-direction: row;
+  gap: 16px;
+  justify-content: space-between;
+  padding: 24px 16px;
+
+  @media max-with: 768px {
+  flex-direction: column;
+
+}
+}

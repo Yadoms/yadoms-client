@@ -1,7 +1,7 @@
-.box-custom-checkbox-section {
+.box {
   background-color: light-dark(
-    var(--mantine-color-dark-5),
-    var(--mantine-color-gray-1)
+    var(--mantine-color-gray-1),
+    var(--mantine-color-dark-5)
   );
   text-align: left;
   padding: var(--mantine-spacing-xs);

@@ -4,7 +4,7 @@ import renderPluginField from '../../render-plugin-field/render-plugin-field';
 import { ComboSectionField, getInitialValuesFromSectionFields } from '@yadoms/domain/plugins';
 import LinkifyText from '../../linkify-text/linkify-text';
 import { FormReturnType } from '../../FormReturnType';
-import classes from './CustomComboSection.module.css';
+import classes from '../components.module.css';
 
 export interface CustomComboSectionProps {
   pluginKey: string;
@@ -63,7 +63,8 @@ export function CustomComboSection(props: CustomComboSectionProps) {
 
   return (
     <Box
-      className={classes.boxCustomCheckboxSection}
+
+      className={classes.box}
     >
       <Combobox
         store={combobox}
@@ -140,7 +141,6 @@ function getComboSectionData(field: ComboSectionField) {
       });
     });
   }
-  console.log(data);
   return data;
 }
 

@@ -5,6 +5,7 @@ import renderPluginField from '../../render-plugin-field/render-plugin-field';
 import { SectionField } from '@yadoms/domain/plugins';
 import LinkifyText from '../../linkify-text/linkify-text';
 import { FormReturnType } from '../../FormReturnType';
+import classes from '../components.module.css';
 
 export interface CustomSectionProps {
   pluginKey: string;
@@ -16,18 +17,7 @@ export interface CustomSectionProps {
 export function CustomSection(props: CustomSectionProps) {
   return (
     <Box
-      sx={(theme) => ({
-        backgroundColor:
-          theme.colorScheme === 'dark'
-            ? theme.colors.dark[5]
-            : theme.colors.gray[1],
-        textAlign: 'left',
-        padding: theme.spacing.xs,
-        marginBottom: theme.spacing.xs,
-        marginTop: theme.spacing.xs,
-        borderRadius: theme.radius.md,
-        border: `2px dotted ${theme.colors.blue[6]}`,
-      })}
+      className={classes.box}
     >
       <div key={props.pluginKey}>
         <label>{props.field.name}</label>

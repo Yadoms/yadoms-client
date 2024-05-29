@@ -3,6 +3,7 @@ import { Box, Group, MultiSelect, Text } from '@mantine/core';
 import React, { forwardRef } from 'react';
 import LinkifyText from '../../linkify-text/linkify-text';
 import { FormReturnType } from '../../FormReturnType';
+import classes from '../components.module.css';
 
 export interface CustomMultiSelectSectionProps {
   pluginKey: string;
@@ -20,7 +21,7 @@ interface ItemProps extends React.ComponentPropsWithoutRef<'div'> {
 const SelectItem = forwardRef<HTMLDivElement, ItemProps>(
   ({ value, label, description, ...others }: ItemProps, ref) => (
     <div ref={ref} {...others}>
-      <Group noWrap>
+      <Group wrap="nowrap">
         <div>
           <Text>{label}</Text>
           <Text size="xs" color="dimmed">
@@ -35,18 +36,7 @@ const SelectItem = forwardRef<HTMLDivElement, ItemProps>(
 export function CustomMultiSelectSection(props: CustomMultiSelectSectionProps) {
   return (
     <Box
-      sx={(theme) => ({
-        backgroundColor:
-          theme.colorScheme === 'dark'
-            ? theme.colors.dark[5]
-            : theme.colors.gray[1],
-        textAlign: 'left',
-        padding: theme.spacing.xs,
-        marginBottom: theme.spacing.xs,
-        marginTop: theme.spacing.xs,
-        borderRadius: theme.radius.md,
-        border: `2px dotted ${theme.colors.blue[6]}`,
-      })}
+      className={classes.box}
     >
       <MultiSelect
         label={props.field.name}

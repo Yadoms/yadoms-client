@@ -1,95 +1,83 @@
-import { Box, Group, Radio } from '@mantine/core';
-import React, { useEffect, useState } from 'react';
-import { ItemProps } from '../../plugin-configuration-modal/plugin-configuration-modal';
-import renderPluginField from '../../render-plugin-field/render-plugin-field';
+import { MultiSelectSectionField } from '@yadoms/domain/plugins';
+import { Box, Group, MultiSelect, Text } from '@mantine/core';
+import React, { forwardRef } from 'react';
 import LinkifyText from '../../linkify-text/linkify-text';
-import {
-  getInitialValuesFromSectionFields,
-  RadioSectionField,
-} from '@yadoms/domain/plugins';
 import { FormReturnType } from '../../FormReturnType';
+import classes from '../components.module.css';
 
-export interface CustomRadioSectionProps {
+export interface CustomMultiSelectSectionProps {
   pluginKey: string;
-  field: RadioSectionField;
+  field: MultiSelectSectionField;
   form: FormReturnType;
   path: string;
 }
 
-export function CustomRadioSection(props: CustomRadioSectionProps) {
-  const [selectedOption, setSelectedOption] = useState('');
+interface ItemProps extends React.ComponentPropsWithoutRef<'div'> {
+  value: string;
+  label: string;
+  description: string;
+}
 
-  useEffect(() => {
-    const data = getRadioSectionData(props.field);
-    const defaultValue = data.length > 0 ? data[0].value : '';
-    setSelectedOption(defaultValue);
-  }, [props.field]);
+const SelectItem = forwardRef<HTMLDivElement, ItemProps>(
+  ({ value, label, description, ...others }: ItemProps, ref) => (
+    <div ref={ref} {...others}>
+      <Group wrap="nowrap">
+        <div>
+          <Text>{label}</Text>
+          <Text size="xs" color="dimmed">
+            {description}
+          </Text>
+        </div>
+      </Group>
+    </div>
+  )
+);
 
+export function CustomRadioSection(props: CustomMultiSelectSectionProps) {
   return (
     <Box
-      sx={(theme) => ({
-        backgroundColor:
-          theme.colorScheme === 'dark'
-            ? theme.colors.dark[5]
-            : theme.colors.gray[1],
-        textAlign: 'left',
-        padding: theme.spacing.xs,
-        marginBottom: theme.spacing.xs,
-        marginTop: theme.spacing.xs,
-        borderRadius: theme.radius.md,
-        border: `2px dotted ${theme.colors.blue[6]}`,
-      })}
+      className={classes.box}
     >
-      <Radio.Group
-        value={selectedOption}
-        onChange={(event) => setSelectedOption(event)}
-        name={props.field.name}
+      <MultiSelect
         label={props.field.name}
         description={<LinkifyText text={props.field.description} />}
-        withAsterisk
-      >
-        <Group mt="xs">{renderRadioSection(props.field)}</Group>
-      </Radio.Group>
-      {props.field.content[selectedOption] && (
-        <div>
-          {getInitialValuesFromSectionFields(
-            props.field.content[selectedOption].content,
-            props.path,
-            selectedOption
-          ).map(({ key, path, field }) =>
-            renderPluginField({
-              field: field,
-              form: props.form,
-              path: path,
-              pluginKey: key,
-            })
-          )}
-        </div>
-      )}
+        placeholder={props.field.placeholder}
+        itemComponent={SelectItem}
+        data={getMultiSelectData(props.field)}
+        searchable
+        nothingFound={props.field.nothingFound}
+        maxDropdownHeight={400}
+        defaultValue={getMultiSelectDefaultValue(props.field)}
+        {...props.form.getInputProps(props.path)}
+      />
     </Box>
   );
 }
 
-function getRadioSectionData(field: RadioSectionField): ItemProps[] {
+function getMultiSelectData(field: MultiSelectSectionField) {
   const data: ItemProps[] = [];
-  Object.entries(field.content).map(([key, value]) => {
-    data.push({
-      value: key,
-      label: value.name,
+  if (field.content) {
+    Object.entries(field.content).map(([key, value]) => {
+      data.push({
+        value: value.name,
+        label: value.name,
+        description: value.description,
+      });
     });
-  });
-
+  }
   return data;
 }
 
-function renderRadioSection(field: RadioSectionField) {
-  return getRadioSectionData(field).map((radioSectionData) => (
-    <Radio
-      value={radioSectionData.value}
-      label={radioSectionData.label}
-      key={radioSectionData.value}
-    />
-  ));
+function getMultiSelectDefaultValue(field: MultiSelectSectionField) {
+  const data: string[] = [];
+  if (field.content) {
+    data.push(
+      ...Object.values(field.content)
+        .filter((value) => value.defaultValue)
+        .map((value) => value.name)
+    );
+  }
+  return data;
 }
 
 export default CustomRadioSection;
