@@ -20,7 +20,6 @@ export function CustomEnumSelect(props: CustomEnumSelectProps) {
       data={getEnumValuesData(props.field)}
       defaultValue={getDefaultValue(props.field)}
       description={<LinkifyText text={props.field.description} />}
-      {...props.form.getInputProps(props.path)}
       withAsterisk
 
     />

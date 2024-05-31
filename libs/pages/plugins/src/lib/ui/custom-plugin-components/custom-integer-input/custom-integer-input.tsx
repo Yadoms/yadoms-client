@@ -24,7 +24,6 @@ export function CustomIntegerInput(props: CustomTextInputProps) {
       }
       inputWrapperOrder={['label', 'error', 'input', 'description']}
       withAsterisk={!!props.field.required}
-      {...props.form.getInputProps(props.path)}
       min={0}
     />
   );

@@ -1,83 +1,86 @@
-import { MultiSelectSectionField } from '@yadoms/domain/plugins';
-import { Box, Group, MultiSelect, Text } from '@mantine/core';
-import React, { forwardRef } from 'react';
+import { RadioSectionField } from '@yadoms/domain/plugins';
+import { Box, Group, Radio } from '@mantine/core';
+import React, { useEffect, useState } from 'react';
 import LinkifyText from '../../linkify-text/linkify-text';
 import { FormReturnType } from '../../FormReturnType';
 import classes from '../components.module.css';
+import renderPluginField from '../../render-plugin-field/render-plugin-field';
+import { ItemProps } from '../../plugin-configuration-modal/plugin-configuration-modal';
 
-export interface CustomMultiSelectSectionProps {
+export interface CustomRadioSectionProps {
   pluginKey: string;
-  field: MultiSelectSectionField;
+  field: RadioSectionField;
   form: FormReturnType;
   path: string;
 }
 
-interface ItemProps extends React.ComponentPropsWithoutRef<'div'> {
-  value: string;
-  label: string;
-  description: string;
-}
 
-const SelectItem = forwardRef<HTMLDivElement, ItemProps>(
-  ({ value, label, description, ...others }: ItemProps, ref) => (
-    <div ref={ref} {...others}>
-      <Group wrap="nowrap">
-        <div>
-          <Text>{label}</Text>
-          <Text size="xs" color="dimmed">
-            {description}
-          </Text>
-        </div>
-      </Group>
-    </div>
-  )
-);
+export function CustomRadioSection(props: CustomRadioSectionProps) {
+  const [selectedOption, setSelectedOption] = useState('');
 
-export function CustomRadioSection(props: CustomMultiSelectSectionProps) {
+  useEffect(() => {
+    const data = getRadioSectionData(props.field);
+    const defaultValue = data.length > 0 ? data[0].value : '';
+    setSelectedOption(defaultValue);
+  }, [props.field]);
+
+
+  function getGroupOptions() {
+    const radioSectionData = getRadioSectionData(props.field);
+    return(
+    <Group mt="xs">
+      {radioSectionData.map((itemProps) => (
+        <Radio key={itemProps.value} value={itemProps.value} label={itemProps.label} />
+      ))}
+    </Group>
+    )
+  }
+
   return (
     <Box
       className={classes.box}
     >
-      <MultiSelect
+      <Radio.Group
+        value={selectedOption}
+        onChange={(event) => {
+          console.log('event', event);
+          setSelectedOption(event)
+        }}
+        name={props.field.name}
         label={props.field.name}
         description={<LinkifyText text={props.field.description} />}
-        placeholder={props.field.placeholder}
-        itemComponent={SelectItem}
-        data={getMultiSelectData(props.field)}
-        searchable
-        nothingFound={props.field.nothingFound}
-        maxDropdownHeight={400}
-        defaultValue={getMultiSelectDefaultValue(props.field)}
-        {...props.form.getInputProps(props.path)}
-      />
+        withAsterisk
+      >
+        {getGroupOptions()}
+      </Radio.Group>
+      {props.field.content[selectedOption] && (
+        <div>
+          {Object.entries(props.field.content[selectedOption].content).map(
+            ([key, value]) =>
+              renderPluginField({
+                field: value,
+                form: props.form,
+                pluginKey: key,
+              })
+          )}
+        </div>
+      )}
     </Box>
   );
 }
 
-function getMultiSelectData(field: MultiSelectSectionField) {
+function getRadioSectionData(field: RadioSectionField) {
   const data: ItemProps[] = [];
   if (field.content) {
     Object.entries(field.content).map(([key, value]) => {
       data.push({
-        value: value.name,
+        value: key,
         label: value.name,
-        description: value.description,
       });
     });
   }
   return data;
 }
 
-function getMultiSelectDefaultValue(field: MultiSelectSectionField) {
-  const data: string[] = [];
-  if (field.content) {
-    data.push(
-      ...Object.values(field.content)
-        .filter((value) => value.defaultValue)
-        .map((value) => value.name)
-    );
-  }
-  return data;
-}
 
 export default CustomRadioSection;
