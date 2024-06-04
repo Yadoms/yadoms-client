@@ -21,16 +21,16 @@ export function CustomEnumSelect(props: CustomEnumSelectProps) {
       defaultValue={getDefaultValue(props.field)}
       description={<LinkifyText text={props.field.description} />}
       withAsterisk
-
     />
   );
 }
 
-
-function getEnumValuesData(field: EnumField): { value: string; label: string }[] {
+function getEnumValuesData(
+  field: EnumField
+): { value: string; label: string }[] {
   return Object.entries(field.values).map(([key, value]) => ({
     value: key,
-    label: value.toString()
+    label: value.toString(),
   }));
 }
 

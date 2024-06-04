@@ -1,4 +1,13 @@
-import { ActionIcon, Center, Flex, rem, Stack, Tooltip, UnstyledButton, useMantineColorScheme } from '@mantine/core';
+import {
+  ActionIcon,
+  Center,
+  Flex,
+  rem,
+  Stack,
+  Tooltip,
+  UnstyledButton,
+  useMantineColorScheme,
+} from '@mantine/core';
 import {
   IconAdjustments,
   IconAt,
@@ -12,7 +21,7 @@ import {
   IconPlugConnectedX,
   IconRobot,
   IconSettingsAutomation,
-  IconSun
+  IconSun,
 } from '@tabler/icons-react';
 import { Logo } from './_logo';
 import { Link, Route, Routes, useLocation } from 'react-router-dom';
@@ -35,12 +44,12 @@ interface NavbarLinkProps {
 }
 
 function NavbarLink({
-                      icon: Icon,
-                      label,
-                      active,
-                      onClick,
-                      route
-                    }: NavbarLinkProps) {
+  icon: Icon,
+  label,
+  active,
+  onClick,
+  route,
+}: NavbarLinkProps) {
   const { t } = useTranslation();
   return (
     <Tooltip
@@ -71,7 +80,7 @@ const linksData = [
   { icon: IconMailForward, label: 'recipients', route: '/' },
   { icon: IconAdjustments, label: 'install-and-update', route: '/' },
   { icon: IconHomeCog, label: 'maintenance', route: '/' },
-  { icon: IconAt, label: 'about', route: '/' }
+  { icon: IconAt, label: 'about', route: '/' },
 ];
 
 function MainAppShell() {
@@ -110,7 +119,7 @@ function MainAppShell() {
           <NavbarLink icon={IconLogout} label="Logout" route={'/'} />
         </Stack>
       </nav>
-      <Flex direction={'column'} style={{ width: '100%'}}>
+      <Flex direction={'column'} style={{ width: '100%' }}>
         <header className={classes.header}>
           <div className={classes.inner}>
             <ActionIcon
@@ -126,10 +135,9 @@ function MainAppShell() {
               )}
             </ActionIcon>
           </div>
-
         </header>
 
-        <div style={{padding: '10px'}}>
+        <div style={{ padding: '10px' }}>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/summary" element={<Summary />} />
@@ -138,8 +146,7 @@ function MainAppShell() {
         </div>
       </Flex>
     </Flex>
-  )
-    ;
+  );
 }
 
 export default MainAppShell;

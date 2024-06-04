@@ -8,7 +8,10 @@ import { useQuery } from '@tanstack/react-query';
 export function Summary() {
   const { t } = useTranslation();
 
-  const { isLoading, data } = useQuery({ queryKey: ['system-informations'], queryFn: loadSystemInformations })
+  const { isLoading, data } = useQuery({
+    queryKey: ['system-informations'],
+    queryFn: loadSystemInformations,
+  });
 
   const breadcrumbsItem = [
     { title: 'home', href: '#' },
@@ -42,7 +45,10 @@ export function Summary() {
         {t('summary.home.description')}
       </Title>
       <Box maw={'100%'} pos="relative" pt={'20px'}>
-        <LoadingOverlay visible={isLoading} overlayProps={{ radius: 'sm', blur: 2 }} />
+        <LoadingOverlay
+          visible={isLoading}
+          overlayProps={{ radius: 'sm', blur: 2 }}
+        />
         <Paper shadow="xs" p="md">
           <Table highlightOnHover>
             <tbody>{rows}</tbody>

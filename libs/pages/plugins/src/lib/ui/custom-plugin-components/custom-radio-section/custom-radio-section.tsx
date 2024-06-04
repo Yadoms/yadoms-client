@@ -14,7 +14,6 @@ export interface CustomRadioSectionProps {
   path: string;
 }
 
-
 export function CustomRadioSection(props: CustomRadioSectionProps) {
   const [selectedOption, setSelectedOption] = useState('');
 
@@ -24,27 +23,28 @@ export function CustomRadioSection(props: CustomRadioSectionProps) {
     setSelectedOption(defaultValue);
   }, [props.field]);
 
-
   function getGroupOptions() {
     const radioSectionData = getRadioSectionData(props.field);
-    return(
-    <Group mt="xs">
-      {radioSectionData.map((itemProps) => (
-        <Radio key={itemProps.value} value={itemProps.value} label={itemProps.label} />
-      ))}
-    </Group>
-    )
+    return (
+      <Group mt="xs">
+        {radioSectionData.map((itemProps) => (
+          <Radio
+            key={itemProps.value}
+            value={itemProps.value}
+            label={itemProps.label}
+          />
+        ))}
+      </Group>
+    );
   }
 
   return (
-    <Box
-      className={classes.box}
-    >
+    <Box className={classes.box}>
       <Radio.Group
         value={selectedOption}
         onChange={(event) => {
           console.log('event', event);
-          setSelectedOption(event)
+          setSelectedOption(event);
         }}
         name={props.field.name}
         label={props.field.name}
@@ -81,6 +81,5 @@ function getRadioSectionData(field: RadioSectionField) {
   }
   return data;
 }
-
 
 export default CustomRadioSection;

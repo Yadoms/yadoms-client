@@ -15,7 +15,7 @@ export interface CustomTimeProps {
 export function CustomTime(props: CustomTimeProps) {
   return (
     <TimeInput
-      icon={<IconClock size="1rem" stroke={1.5} />}
+      leftSection={<IconClock size="1rem" stroke={1.5} />}
       label={props.field.name}
       description={<LinkifyText text={props.field.description} />}
       required={props.field.required}

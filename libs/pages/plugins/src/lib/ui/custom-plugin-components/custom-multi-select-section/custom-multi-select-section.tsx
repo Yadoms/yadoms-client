@@ -35,9 +35,7 @@ const SelectItem = forwardRef<HTMLDivElement, ItemProps>(
 
 export function CustomMultiSelectSection(props: CustomMultiSelectSectionProps) {
   return (
-    <Box
-      className={classes.box}
-    >
+    <Box className={classes.box}>
       <MultiSelect
         label={props.field.name}
         description={<LinkifyText text={props.field.description} />}
@@ -56,6 +54,7 @@ export function CustomMultiSelectSection(props: CustomMultiSelectSectionProps) {
 
 function getMultiSelectData(field: MultiSelectSectionField) {
   const data: ItemProps[] = [];
+  console.log('field', field);
   if (field.content) {
     Object.entries(field.content).map(([key, value]) => {
       data.push({

@@ -1,5 +1,5 @@
 .flex {
-  background-color: rgba(var(--mantine-color-blue-3), 0.2) ;
+  background-color: rgba(var(--mantine-color-blue-3), 0.2);
   border-radius: 4px;
   flex-direction: row;
   gap: 16px;

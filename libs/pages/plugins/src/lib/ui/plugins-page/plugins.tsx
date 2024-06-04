@@ -24,9 +24,9 @@ import {
   MRT_GlobalFilterTextInput,
   MRT_Icons,
   MRT_Row,
-  MRT_TableInstance, MRT_TablePagination,
+  MRT_TableInstance,
   MRT_VisibilityState,
-  useMantineReactTable
+  useMantineReactTable,
 } from 'mantine-react-table';
 import React, {
   useCallback,
@@ -253,9 +253,7 @@ export function Plugins(props: PluginsProps) {
       </Group>
     ),
     renderTopToolbar: ({ table }) => (
-      <Flex
-        className={classes.flex}
-      >
+      <Flex className={classes.flex}>
         <MRT_GlobalFilterTextInput table={table} />
         <Box>
           <Button

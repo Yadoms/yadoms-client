@@ -1,7 +1,18 @@
-import { Box, Combobox, Group, Input, InputBase, Text, useCombobox } from '@mantine/core';
+import {
+  Box,
+  Combobox,
+  Group,
+  Input,
+  InputBase,
+  Text,
+  useCombobox,
+} from '@mantine/core';
 import React, { useState } from 'react';
 import renderPluginField from '../../render-plugin-field/render-plugin-field';
-import { ComboSectionField, getInitialValuesFromSectionFields } from '@yadoms/domain/plugins';
+import {
+  ComboSectionField,
+  getInitialValuesFromSectionFields,
+} from '@yadoms/domain/plugins';
 import LinkifyText from '../../linkify-text/linkify-text';
 import { FormReturnType } from '../../FormReturnType';
 import classes from '../components.module.css';
@@ -46,15 +57,13 @@ export function CustomComboSection(props: CustomComboSectionProps) {
     onDropdownClose: () => combobox.resetSelectedOption(),
   });
 
-
   const [value, setValue] = useState<string>(() => {
     const data = comboSectionData;
     return data.length > 0 ? data[0].value : '';
   });
   const selectedOption = comboSectionData.find((item) => {
-      return item.value === value
-    }
-  );
+    return item.value === value;
+  });
   const options = comboSectionData.map((item) => (
     <Combobox.Option value={item.value} key={item.value}>
       <SelectOption {...item} />
@@ -62,10 +71,7 @@ export function CustomComboSection(props: CustomComboSectionProps) {
   ));
 
   return (
-    <Box
-
-      className={classes.box}
-    >
+    <Box className={classes.box}>
       <Combobox
         store={combobox}
         withinPortal={false}
