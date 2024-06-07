@@ -1,6 +1,6 @@
 import { MultiSelectSectionField } from '@yadoms/domain/plugins';
-import { Box, Group, MultiSelect, Text } from '@mantine/core';
-import React, { forwardRef } from 'react';
+import { Box, Group, MultiSelect, MultiSelectProps, Text } from '@mantine/core';
+import React from 'react';
 import LinkifyText from '../../linkify-text/linkify-text';
 import { FormReturnType } from '../../FormReturnType';
 import classes from '../components.module.css';
@@ -12,56 +12,42 @@ export interface CustomMultiSelectSectionProps {
   path: string;
 }
 
-interface ItemProps extends React.ComponentPropsWithoutRef<'div'> {
-  value: string;
-  label: string;
-  description: string;
-}
-
-const SelectItem = forwardRef<HTMLDivElement, ItemProps>(
-  ({ value, label, description, ...others }: ItemProps, ref) => (
-    <div ref={ref} {...others}>
-      <Group wrap="nowrap">
-        <div>
-          <Text>{label}</Text>
-          <Text size="xs" color="dimmed">
-            {description}
-          </Text>
-        </div>
-      </Group>
-    </div>
-  )
-);
-
 export function CustomMultiSelectSection(props: CustomMultiSelectSectionProps) {
+
+  const renderMultiSelectOption: MultiSelectProps['renderOption'] = ({ option }) => (
+    <Group wrap="nowrap">
+      <div>
+        <Text>{props.field.content[option.value].name}</Text>
+        <Text size="xs" color="dimmed">
+          {props.field.content[option.value].description}
+        </Text>
+      </div>
+    </Group>
+  );
+
   return (
     <Box className={classes.box}>
       <MultiSelect
+        comboboxProps={{ zIndex: 1000 }}
         label={props.field.name}
         description={<LinkifyText text={props.field.description} />}
         placeholder={props.field.placeholder}
-        itemComponent={SelectItem}
+        renderOption={renderMultiSelectOption}
         data={getMultiSelectData(props.field)}
         searchable
-        nothingFound={props.field.nothingFound}
+        nothingFoundMessage={props.field.nothingFound}
         maxDropdownHeight={400}
         defaultValue={getMultiSelectDefaultValue(props.field)}
-        {...props.form.getInputProps(props.path)}
       />
     </Box>
   );
 }
 
 function getMultiSelectData(field: MultiSelectSectionField) {
-  const data: ItemProps[] = [];
-  console.log('field', field);
+  const data: string[] = [];
   if (field.content) {
     Object.entries(field.content).map(([key, value]) => {
-      data.push({
-        value: value.name,
-        label: value.name,
-        description: value.description,
-      });
+      data.push(key);
     });
   }
   return data;

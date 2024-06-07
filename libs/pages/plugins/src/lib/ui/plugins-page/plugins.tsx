@@ -6,10 +6,10 @@ import {
   Checkbox,
   Flex,
   Group,
-  Image,
+  Image, MultiSelect,
   Skeleton,
   Title,
-  useMantineTheme,
+  useMantineTheme
 } from '@mantine/core';
 import {
   IconHomePlus,

@@ -22,10 +22,6 @@ export function CustomCheckboxSection(props: CustomCheckboxSectionProps) {
 
   const [checked, setChecked] = useState<boolean>(!!props.field.defaultValue);
 
-  useEffect(() => {
-    setChecked(CHECKBOX_VALUE);
-  }, [CHECKBOX_VALUE]);
-
   return (
     <Box className={classes.box}>
       <Checkbox
