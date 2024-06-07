@@ -30,7 +30,7 @@ function getEnumValuesData(
 ): { value: string; label: string }[] {
   return Object.entries(field.values).map(([key, value]) => ({
     value: key,
-    label: value.toString()
+    label: value.toString(),
   }));
 }
 

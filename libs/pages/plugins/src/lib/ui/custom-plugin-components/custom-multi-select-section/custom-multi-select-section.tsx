@@ -13,8 +13,9 @@ export interface CustomMultiSelectSectionProps {
 }
 
 export function CustomMultiSelectSection(props: CustomMultiSelectSectionProps) {
-
-  const renderMultiSelectOption: MultiSelectProps['renderOption'] = ({ option }) => (
+  const renderMultiSelectOption: MultiSelectProps['renderOption'] = ({
+    option,
+  }) => (
     <Group wrap="nowrap">
       <div>
         <Text>{props.field.content[option.value].name}</Text>
@@ -34,7 +35,7 @@ export function CustomMultiSelectSection(props: CustomMultiSelectSectionProps) {
         placeholder={props.field.placeholder}
         renderOption={renderMultiSelectOption}
         data={getMultiSelectData(props.field)}
-        inputWrapperOrder={['label', 'error', 'description','input']}
+        inputWrapperOrder={['label', 'error', 'description', 'input']}
         searchable
         nothingFoundMessage={props.field.nothingFound}
         maxDropdownHeight={400}

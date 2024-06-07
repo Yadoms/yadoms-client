@@ -22,7 +22,7 @@ root.render(
     <QueryClientProvider client={queryClient}>
       <YadomsConnectionContextProvider>
         <BrowserRouter>
-            <App />
+          <App />
         </BrowserRouter>
       </YadomsConnectionContextProvider>
       <ReactQueryDevtools initialIsOpen={false} />
