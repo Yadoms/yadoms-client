@@ -34,6 +34,7 @@ export function CustomMultiSelectSection(props: CustomMultiSelectSectionProps) {
         placeholder={props.field.placeholder}
         renderOption={renderMultiSelectOption}
         data={getMultiSelectData(props.field)}
+        inputWrapperOrder={['label', 'error', 'description','input']}
         searchable
         nothingFoundMessage={props.field.nothingFound}
         maxDropdownHeight={400}

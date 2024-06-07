@@ -17,7 +17,6 @@ export function CustomStringInput(props: CustomTextInputProps) {
       label={props.field.name}
       placeholder={props.field.name}
       description={<LinkifyText text={props.field.description} />}
-      defaultValue={props.field.defaultValue}
       inputWrapperOrder={['label', 'error', 'input', 'description']}
       withAsterisk={!!props.field.required}
       required={props.field.required}

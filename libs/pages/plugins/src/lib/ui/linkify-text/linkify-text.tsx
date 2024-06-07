@@ -25,7 +25,7 @@ export function LinkifyText(props: LinkifyTextProps) {
     }
 
     parts.push(
-      <Anchor key={index} href={url} target="_blank">
+      <Anchor key={index} href={url} target="_blank" underline="hover" fz="xs">
         {title}
       </Anchor>
     );

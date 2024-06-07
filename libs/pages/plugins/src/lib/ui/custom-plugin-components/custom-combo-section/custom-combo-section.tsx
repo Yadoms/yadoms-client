@@ -76,6 +76,7 @@ export function CustomComboSection(props: CustomComboSectionProps) {
         store={combobox}
         withinPortal={false}
         onOptionSubmit={(val) => {
+          setSelectedComboSection(val);
           setValue(val);
           combobox.closeDropdown();
         }}
@@ -122,16 +123,6 @@ export function CustomComboSection(props: CustomComboSectionProps) {
           )}
         </div>
       )}
-      {/*{Object.entries(*/}
-      {/*  props.field.content[selectedComboSection] &&*/}
-      {/*  props.field.content[selectedComboSection].content*/}
-      {/*).map(([key, value]) =>*/}
-      {/*  renderPluginField({*/}
-      {/*    field: value,*/}
-      {/*    form: props.form,*/}
-      {/*    pluginKey: key*/}
-      {/*  })*/}
-      {/*)}*/}
     </Box>
   );
 }
