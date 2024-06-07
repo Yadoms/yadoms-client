@@ -50,7 +50,8 @@ class KeywordLog extends Component<KeywordLogProps, KeywordLogState> {
 
     this.onNewAcquisition = this.onNewAcquisition.bind(this);
     this.applyKeywordsToListen = this.applyKeywordsToListen.bind(this);
-    this.handleKeywordsToListenChange = this.handleKeywordsToListenChange.bind(this);
+    this.handleKeywordsToListenChange =
+      this.handleKeywordsToListenChange.bind(this);
   }
 
   componentDidMount() {
