@@ -30,13 +30,13 @@ function getEnumValuesData(
 ): { value: string; label: string }[] {
   return Object.entries(field.values).map(([key, value]) => ({
     value: key,
-    label: value.toString(),
+    label: value.toString()
   }));
 }
 
 function getDefaultValue(field: EnumField): string {
   const defaultValue = field.defaultValue?.toString();
-  if(defaultValue === undefined) {
+  if (defaultValue === undefined) {
     return field.value.toString();
   }
   return defaultValue;
