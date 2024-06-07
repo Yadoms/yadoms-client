@@ -36,7 +36,10 @@ function getEnumValuesData(
 
 function getDefaultValue(field: EnumField): string {
   const defaultValue = field.defaultValue?.toString();
-  return defaultValue || '';
+  if(defaultValue === undefined) {
+    return field.value.toString();
+  }
+  return defaultValue;
 }
 
 export default CustomEnumSelect;

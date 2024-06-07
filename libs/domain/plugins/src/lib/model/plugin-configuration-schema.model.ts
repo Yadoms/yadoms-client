@@ -18,6 +18,7 @@ interface BaseField {
   description?: string;
   placeholder?: string;
   defaultValue?: number | boolean | string;
+  value: number | boolean | string;
   required?: boolean;
   encrypted?: boolean;
 }
