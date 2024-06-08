@@ -77,7 +77,7 @@ class YButton extends Component<ButtonProps, ButtonState> {
   private onClick() {
     console.log('Button clicked !');
 
-    var localIsPressed = !this.state.isPressed;
+    const localIsPressed = !this.state.isPressed;
 
     this.setState({
       isPressed: localIsPressed,
