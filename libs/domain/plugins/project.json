@@ -3,6 +3,7 @@
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/domain/plugins/src",
   "projectType": "library",
+  "tags": [],
   "targets": {
     "build": {
       "executor": "@nx/vite:build",
@@ -13,7 +14,7 @@
     },
     "test": {
       "executor": "@nx/vite:test",
-      "outputs": ["coverage/libs/domain/plugins"],
+      "outputs": ["{workspaceRoot}/coverage/libs/domain/plugins"],
       "options": {
         "passWithNoTests": true,
         "reportsDirectory": "../../../coverage/libs/domain/plugins"
@@ -26,6 +27,5 @@
         "lintFilePatterns": ["libs/domain/plugins/**/*.ts"]
       }
     }
-  },
-  "tags": []
+  }
 }

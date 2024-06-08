@@ -3,6 +3,7 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/store/src",
   "projectType": "library",
+  "tags": [],
   "targets": {
     "lint": {
       "executor": "@nx/linter:eslint",
@@ -13,12 +14,11 @@
     },
     "test": {
       "executor": "@nx/vite:test",
-      "outputs": ["coverage/libs/store"],
+      "outputs": ["{workspaceRoot}/coverage/libs/store"],
       "options": {
         "passWithNoTests": true,
         "reportsDirectory": "../../coverage/libs/store"
       }
     }
-  },
-  "tags": []
+  }
 }
