@@ -9,7 +9,7 @@ import {
   Modal,
   ScrollArea,
   Text,
-  TextInput,
+  TextInput
 } from '@mantine/core';
 import { IconSearch } from '@tabler/icons-react';
 import React, { useEffect, useState } from 'react';
@@ -17,7 +17,7 @@ import {
   fetchAvailablePlugins,
   selectAllAvailablePlugins,
   selectAvailablePluginsError,
-  selectAvailablePluginsLoading,
+  selectAvailablePluginsLoading
 } from '@yadoms/domain/plugins';
 import { useTranslation } from 'react-i18next';
 import LinkifyText from '../linkify-text/linkify-text';
@@ -93,6 +93,10 @@ export function ChoosePluginModal(props: ChoosePluginModalProps) {
     ));
   }
 
+  function isPluginsGridDisplayed() {
+    return !errorStatus && !loadingStatus;
+  }
+
   return (
     <Modal.Root
       onClose={props.onClose}
@@ -128,7 +132,9 @@ export function ChoosePluginModal(props: ChoosePluginModalProps) {
             visible={errorStatus}
             textToDisplay={t('plugins.modal.choose-plugin.resilienceMsg')}
           />
-          <Grid grow>{generatePluginsGrid()}</Grid>
+          {isPluginsGridDisplayed() && (
+            <Grid grow>{generatePluginsGrid()}</Grid>)
+          }
         </Modal.Body>
       </Modal.Content>
     </Modal.Root>
