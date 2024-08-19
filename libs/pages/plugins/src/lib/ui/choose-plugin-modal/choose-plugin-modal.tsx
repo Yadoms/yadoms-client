@@ -127,11 +127,14 @@ export function ChoosePluginModal(props: ChoosePluginModalProps) {
           <Modal.CloseButton />
         </Modal.Header>
         <Modal.Body>
-          <ChoosePluginModalSkeleton visible={loadingStatus} />
-          <Resilience
-            visible={errorStatus}
-            textToDisplay={t('plugins.modal.choose-plugin.resilienceMsg')}
-          />
+          {loadingStatus && (
+            <ChoosePluginModalSkeleton />)
+          }
+          {errorStatus && (
+            <Resilience
+              textToDisplay={t('plugins.modal.choose-plugin.resilienceMsg')}
+            />)
+          }
           {isPluginsGridDisplayed() && (
             <Grid grow>{generatePluginsGrid()}</Grid>)
           }

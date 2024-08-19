@@ -1,20 +1,8 @@
 import { Card, Flex, Grid, Skeleton } from '@mantine/core';
-import { useState, useEffect } from 'react';
 
-export interface ChoosePluginModalSkeletonProps {
-  visible: boolean;
-}
+export function ChoosePluginModalSkeleton() {
 
-export function ChoosePluginModalSkeleton(
-  props: ChoosePluginModalSkeletonProps
-) {
-  const [isVisible, setIsVisible] = useState(props.visible);
-
-  useEffect(() => {
-    setIsVisible(props.visible);
-  }, [props.visible]);
-
-  return <>{isVisible && <Grid>{generateSkeletonCols(8)}</Grid>}</>;
+  return <Grid>{generateSkeletonCols(8)}</Grid>;
 }
 
 function generateSkeletonCols(numCols: number) {
