@@ -51,6 +51,12 @@ export const validateForm: (
           }
           break;
 
+        case PluginConfigurationSchemaType.CheckboxSection:
+          if (!field.checkbox) {
+            break;
+          }
+          validateObject(field.content, `${currentPath}.content`);
+          break;
         case PluginConfigurationSchemaType.Section:
           console.log('section currentPath', currentPath);
           validateObject(field.content, `${currentPath}.content`);
