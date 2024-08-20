@@ -57,8 +57,11 @@ export const validateForm: (
           }
           validateObject(field.content, `${currentPath}.content`);
           break;
+
+        case PluginConfigurationSchemaType.ComboSection:
+          validateObject(field.content, `${currentPath}.content`);
+          break;
         case PluginConfigurationSchemaType.Section:
-          console.log('section currentPath', currentPath);
           validateObject(field.content, `${currentPath}.content`);
           break;
         default:
