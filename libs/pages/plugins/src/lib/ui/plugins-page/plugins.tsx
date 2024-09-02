@@ -9,9 +9,15 @@ import {
   Image,
   Skeleton,
   Title,
-  useMantineTheme
+  useMantineTheme,
 } from '@mantine/core';
-import { IconHomePlus, IconHomeSearch, IconPencil, IconPower, IconTrash } from '@tabler/icons-react';
+import {
+  IconHomePlus,
+  IconHomeSearch,
+  IconPencil,
+  IconPower,
+  IconTrash,
+} from '@tabler/icons-react';
 import {
   MantineReactTable,
   MRT_ColumnDef,
@@ -20,9 +26,16 @@ import {
   MRT_Row,
   MRT_TableInstance,
   MRT_VisibilityState,
-  useMantineReactTable
+  useMantineReactTable,
 } from 'mantine-react-table';
-import React, { useCallback, useEffect, useMemo, useReducer, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useReducer,
+  useRef,
+  useState,
+} from 'react';
 import CreateNewPlugin from '../create-new-plugin/create-new-plugin';
 import { BreadCrumbs, openDeleteModal } from '@yadoms/shared';
 import { useTranslation } from 'react-i18next';
@@ -34,7 +47,7 @@ import {
   PuginsInstancesState,
   selectAllPluginsInstances,
   startStopPluginsInstance,
-  updatePluginsInstance
+  updatePluginsInstance,
 } from '@yadoms/domain/plugins';
 import { useAppDispatch, useAppSelector } from '@yadoms/store';
 import classes from './plugins.module.css';
@@ -64,7 +77,8 @@ export function Plugins(props: PluginsProps) {
   const pluginsInstancesEntities = useAppSelector(selectAllPluginsInstances);
   const loadingStatus = useAppSelector(getPluginsInstancesLoadingStatus);
   const paging = useAppSelector(getPluginsInstancesPaging);
-
+  const serverUrl = import.meta.env.VITE_SERVER_URL;
+  const serverContext = import.meta.env.VITE_SERVER_CONTEXT;
   //we need a table instance ref to pass as a prop to the MRT Toolbar buttons
   const tableInstanceRef =
     useRef<MRT_TableInstance<PluginsInstancesEntity> | null>(null);
@@ -137,12 +151,11 @@ export function Plugins(props: PluginsProps) {
             height={50}
             fit="contain"
             src={
-              'http://localhost:8080/rest/v2/plugins?byType=' +
+              `${serverUrl}${serverContext}/plugins?byType=` +
               row.original.type +
               '&prop=icon'
             }
             alt="With default placeholder"
-            withPlaceholder
           />
         ),
       },

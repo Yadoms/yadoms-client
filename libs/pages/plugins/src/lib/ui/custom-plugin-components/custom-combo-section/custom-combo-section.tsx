@@ -75,10 +75,21 @@ export function CustomComboSection(props: CustomComboSectionProps) {
       <Combobox
         store={combobox}
         withinPortal={false}
-        onOptionSubmit={(val) => {
-          setSelectedComboSection(val);
-          setValue(val);
-          props.form.setFieldValue(`${props.path}.activeSection`, val);
+        onOptionSubmit={(selectedComboSection) => {
+          setSelectedComboSection(selectedComboSection);
+          setValue(selectedComboSection);
+          props.form.setFieldValue(
+            `${props.path}.activeSection`,
+            selectedComboSection
+          );
+          console.log('CustomComboSection field', props.field);
+          console.log(
+            'CustomComboSection selectedComboSection',
+            selectedComboSection
+          );
+          console.log('CustomComboSection path', props.path);
+          // TODO set nested validator using
+          props.form.setFieldError('email', 'Invalid email');
           combobox.closeDropdown();
         }}
       >

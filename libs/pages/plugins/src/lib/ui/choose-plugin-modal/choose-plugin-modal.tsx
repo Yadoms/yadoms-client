@@ -9,7 +9,7 @@ import {
   Modal,
   ScrollArea,
   Text,
-  TextInput
+  TextInput,
 } from '@mantine/core';
 import { IconSearch } from '@tabler/icons-react';
 import React, { useEffect, useState } from 'react';
@@ -17,7 +17,7 @@ import {
   fetchAvailablePlugins,
   selectAllAvailablePlugins,
   selectAvailablePluginsError,
-  selectAvailablePluginsLoading
+  selectAvailablePluginsLoading,
 } from '@yadoms/domain/plugins';
 import { useTranslation } from 'react-i18next';
 import LinkifyText from '../linkify-text/linkify-text';
@@ -47,6 +47,9 @@ export function ChoosePluginModal(props: ChoosePluginModalProps) {
   }, [dispatch]);
 
   function generatePluginsGrid() {
+    const serverUrl = import.meta.env.VITE_SERVER_URL;
+    const serverContext = import.meta.env.VITE_SERVER_CONTEXT;
+
     const filteredPlugins = availablePluginsEntities.filter((plugin) =>
       plugin.type.toLowerCase().includes(searchQuery.toLowerCase())
     );
@@ -63,11 +66,12 @@ export function ChoosePluginModal(props: ChoosePluginModalProps) {
           <Card.Section>
             <Image
               style={{ cursor: 'pointer' }}
-              src={`http://localhost:8080/rest/v2/plugins?byType=${availablePluginsEntity.type}&prop=icon`}
+              src={`${serverUrl}${serverContext}/plugins?byType=${availablePluginsEntity.type}&prop=icon`}
               height={160}
               onClick={() => props.onPluginSelect(availablePluginsEntity.type)}
               fit="contain"
               alt={availablePluginsEntity.type}
+              fallbackSrc="https://placehold.co/600x400?text=Placeholder"
             />
           </Card.Section>
 
@@ -127,17 +131,15 @@ export function ChoosePluginModal(props: ChoosePluginModalProps) {
           <Modal.CloseButton />
         </Modal.Header>
         <Modal.Body>
-          {loadingStatus && (
-            <ChoosePluginModalSkeleton />)
-          }
+          {loadingStatus && <ChoosePluginModalSkeleton />}
           {errorStatus && (
             <Resilience
               textToDisplay={t('plugins.modal.choose-plugin.resilienceMsg')}
-            />)
-          }
+            />
+          )}
           {isPluginsGridDisplayed() && (
-            <Grid grow>{generatePluginsGrid()}</Grid>)
-          }
+            <Grid grow>{generatePluginsGrid()}</Grid>
+          )}
         </Modal.Body>
       </Modal.Content>
     </Modal.Root>

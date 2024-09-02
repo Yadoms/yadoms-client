@@ -1,6 +1,7 @@
 import {
   Button,
   Flex,
+  LoadingOverlay,
   Modal,
   ScrollArea,
   Space,
@@ -17,8 +18,11 @@ import {
   getFromInitialValuesTest,
   getInitialValues,
   PluginConfigurationSchema,
+  pluginsApi,
 } from '@yadoms/domain/plugins';
 import classes from './plugin-configuration-modal.module.css';
+import { useDisclosure } from '@mantine/hooks';
+import { useMutation } from '@tanstack/react-query';
 
 export interface PluginConfigurationModalProps {
   opened: boolean;
@@ -38,10 +42,55 @@ export function PluginConfigurationModal(props: PluginConfigurationModalProps) {
   const theme = useMantineTheme();
   const { t } = useTranslation();
 
+  const [loadingOverlayVisible, { toggle }] = useDisclosure(false);
+
+  const mutation = useMutation({
+    mutationFn: ({
+      type,
+      displayName,
+      configurationSchema,
+    }: {
+      type: string;
+      displayName: string;
+      configurationSchema: Record<string, unknown>;
+    }) => {
+      return pluginsApi.createPluginsInstance(
+        type,
+        displayName,
+        configurationSchema
+      );
+    },
+    onMutate: (variables) => {
+      // A mutation is about to happen!
+      console.log(`onMutate mutation`);
+      toggle();
+    },
+    onError: (error, variables, context) => {
+      // An error happened!
+      console.log(`error mutation`);
+      notifications.show({
+        title: 'Validation error',
+        message: 'Please fix the errors in the form and try again.',
+        color: 'red',
+      });
+    },
+    onSuccess: (data, variables, context) => {
+      console.log(`success mutation`);
+      toggle();
+      notifications.show({
+        title: 'Form submitted',
+        message: 'Your form has been submitted successfully.',
+        color: theme.colors.green[6],
+        position: 'bottom-right',
+      });
+      props.onCloseAllModals();
+    },
+  });
+
   const [initialValues, setInitialValues] = useState(
     getInitialValues({
       type: props.selectedPluginType,
-      displayName: '',
+      displayName: props.selectedPluginType,
       configurationSchema: props.selectedPluginConfigurationSchema,
     })
   );
@@ -50,7 +99,7 @@ export function PluginConfigurationModal(props: PluginConfigurationModalProps) {
     setInitialValues(
       getInitialValues({
         type: props.selectedPluginType,
-        displayName: '',
+        displayName: props.selectedPluginType,
         configurationSchema: props.selectedPluginConfigurationSchema,
       })
     );
@@ -70,7 +119,6 @@ export function PluginConfigurationModal(props: PluginConfigurationModalProps) {
       onClose={handleClose}
       opened={props.opened}
       size="95%"
-      zIndex={1000}
       scrollAreaComponent={ScrollArea.Autosize}
     >
       <Modal.Overlay opacity={0.55} blur={3} />
@@ -89,11 +137,10 @@ export function PluginConfigurationModal(props: PluginConfigurationModalProps) {
                   values, // <- form.getValues() at the moment of submit
                   event // <- form element submit event
                 );
-                notifications.show({
-                  title: 'Form submitted',
-                  message: 'Your form has been submitted successfully.',
-                  color: theme.colors.green[6],
-                  position: 'bottom-right',
+                mutation.mutate({
+                  type: values.type,
+                  displayName: values.displayName,
+                  configurationSchema: values.configuration,
                 });
               },
               (validationErrors, values, event) => {
@@ -104,19 +151,20 @@ export function PluginConfigurationModal(props: PluginConfigurationModalProps) {
                   values, // <- form.getValues() at the moment of submit
                   event // <- form element submit event
                 );
-                notifications.show({
-                  title: 'Validation error',
-                  message: 'Please fix the errors in the form and try again.',
-                  color: 'red',
-                });
               }
             )}
           >
             <Flex direction={'column'} gap={10}>
+              <LoadingOverlay
+                visible={loadingOverlayVisible}
+                zIndex={1000}
+                overlayProps={{ radius: 'sm', blur: 2 }}
+              />
               <TextInput
+                {...form.getInputProps('displayName')}
+                key={form.key('displayName')}
                 label="Name"
                 placeholder="Plugin name"
-                defaultValue={props.selectedPluginType}
                 description="custom plugin Name"
                 inputWrapperOrder={['label', 'error', 'input', 'description']}
                 withAsterisk

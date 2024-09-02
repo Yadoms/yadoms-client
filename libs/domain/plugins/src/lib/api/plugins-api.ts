@@ -1,6 +1,7 @@
 import { axiosInstance } from '@yadoms/shared';
 import { PluginsInstancesResponse } from '../model/PluginsInstancesResponse';
 import { AvailablePluginsResponse } from '../model/AvailablePluginsResponse';
+import { PluginConfigurationSchema } from '../model/plugin-configuration-schema.model';
 
 class PluginsApi {
   async loadPluginsInstances(
@@ -53,14 +54,14 @@ class PluginsApi {
 
   async createPluginsInstance(
     type: string,
-    name: string,
-    configuration: object
+    displayName: string,
+    configurationSchema: Record<string, unknown>
   ) {
     try {
       await axiosInstance.post('/plugins-instances/', {
-        type: { type },
-        displayName: { name },
-        configuration: { configuration },
+        type: type,
+        displayName: displayName,
+        configuration: configurationSchema,
       });
     } catch (error) {
       console.error('Error creating plugin instance : ', error);

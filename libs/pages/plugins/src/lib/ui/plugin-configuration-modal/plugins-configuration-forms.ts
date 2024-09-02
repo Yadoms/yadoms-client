@@ -14,6 +14,8 @@ export const validateForm: (
       console.log('key', key);
       console.log('field', field);
       console.log('field.type', field.type);
+      let sectionKeys: string[] = [];
+      let firstSectionKey = '';
 
       switch (field.type) {
         case PluginConfigurationSchemaType.String:
@@ -59,7 +61,19 @@ export const validateForm: (
           break;
 
         case PluginConfigurationSchemaType.ComboSection:
-          validateObject(field.content, `${currentPath}.content`);
+          sectionKeys = Object.keys(field.content);
+          firstSectionKey = sectionKeys[0];
+          console.log('sectionKeys', sectionKeys);
+          console.log('firstSectionKey', firstSectionKey);
+          console.log('field.content', field.content[sectionKeys[0]]);
+          console.log(
+            '${currentPath}.content.${firstSectionKey}.content',
+            `${currentPath}.content.${firstSectionKey}`
+          );
+          validateObject(
+            field.content[sectionKeys[0]],
+            `${currentPath}.content.${firstSectionKey}`
+          );
           break;
         case PluginConfigurationSchemaType.Section:
           validateObject(field.content, `${currentPath}.content`);
