@@ -32,7 +32,7 @@ class ButtonStateAcquisitionListener implements AcquisitionListener {
   private onNewAcquisition: (newAcquisition: Acquisition) => void;
 }
 
-class YButton extends Component<ButtonProps, ButtonState> {
+export class YButton extends Component<ButtonProps, ButtonState> {
   static contextType = YadomsConnectionContext;
   context!: React.ContextType<typeof YadomsConnectionContext>;
 

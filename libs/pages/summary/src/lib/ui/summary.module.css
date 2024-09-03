@@ -1,0 +1,18 @@
+.item {
+  height: 100%;
+  width: 100%;
+
+  transition: box-shadow 150ms ease, transform 100ms ease;
+  overflow: clip;
+  @mixin hover {
+    box-shadow: var(--mantine-shadow-md);
+    transform: scale(1.05);
+  }
+}
+
+@media (max-width: 48em) {
+  .item {
+    display: flex;
+    flex-direction: column;
+  }
+}

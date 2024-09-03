@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import { YadomsConnectionContext, YadomsConnection } from '@yadoms/shared';
-import YButton from './widgets/YButton';
+import { YButton } from './widgets/ybutton';
 import KeywordLog from './widgets/keywordLog';
 
 /* eslint-disable-next-line */
