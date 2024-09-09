@@ -58,7 +58,7 @@ class PluginsApi {
     configurationSchema: Record<string, unknown>
   ) {
     try {
-      await axiosInstance.post('/plugins-instances/', {
+      await axiosInstance.post('/plugins-instances', {
         type: type,
         displayName: displayName,
         configuration: configurationSchema,
@@ -71,7 +71,7 @@ class PluginsApi {
 
   async savePluginsInstance(instanceId: number, data: object) {
     try {
-      await axiosInstance.patch('/plugins-instances/' + instanceId, data);
+      await axiosInstance.patch('/plugins-instances' + instanceId, data);
     } catch (error) {
       console.error('Error saving plugin instance : ', error);
       throw error;
