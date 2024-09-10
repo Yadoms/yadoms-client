@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import { YadomsConnectionContext, YadomsConnection } from '@yadoms/shared';
-import YButton from './widgets/YButton';
 import KeywordLog from './widgets/keywordLog';
+import YButton from './widgets/ybutton';
 
 /* eslint-disable-next-line */
 export interface PagesHomeProps {}
