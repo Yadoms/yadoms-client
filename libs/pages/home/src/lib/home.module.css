@@ -1,0 +1,32 @@
+.grid {
+  display: grid;
+  gap: 16px;
+  padding: 16px;
+
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  align-items: start;
+}
+
+.card {
+  border-radius: 12px;
+  box-shadow: 0 1px 2px var(--mantine-color-blue-light-color);
+  overflow: hidden;
+
+  padding: 12px;
+}
+
+.tile {
+  min-height: 90px;
+  display: grid;
+  place-items: center;
+}
+
+.wide {
+  min-height: 240px;
+}
+
+@media (min-width: 900px) {
+  .wide {
+    grid-column: span 2;
+  }
+}
