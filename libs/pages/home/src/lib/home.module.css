@@ -17,6 +17,7 @@
 
 .tile {
   min-height: 90px;
+  height: 100%;
   display: grid;
   place-items: center;
 }
@@ -25,6 +26,7 @@
   min-height: 240px;
 }
 
+/* If screen enought large, use 2 columns */
 @media (min-width: 900px) {
   .wide {
     grid-column: span 2;

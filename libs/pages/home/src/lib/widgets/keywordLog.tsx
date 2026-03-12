@@ -6,7 +6,7 @@ import {
 } from '@yadoms/shared';
 import { v4 as uuidv4 } from 'uuid';
 import { Button, TextInput } from '@mantine/core';
-import { WidgetProps } from './Widget';
+import { WidgetProps, Widget } from './Widget';
 
 export interface KeywordLogProps extends WidgetProps {
   keywordsToListen: string;
@@ -71,10 +71,14 @@ class KeywordLog extends Component<KeywordLogProps, KeywordLogState> {
   }
 
   private applyKeywordsToListen() {
-    this.context!.subscribeToKeywordAcquisitions(
+    this.context?.subscribeToKeywordAcquisitions(
       this.parseKeywordsToListen(this.state.keywordsToListen),
       this.acquisitionListener
     );
+  }
+
+  private handleSettingsClick() {
+    console.log('Settings button clicked !');
   }
 
   private handleKeywordsToListenChange(
@@ -85,23 +89,25 @@ class KeywordLog extends Component<KeywordLogProps, KeywordLogState> {
 
   render() {
     return (
-      <div style={{ border: '1px solid', margin: '10px' }}>
-        <h2>Keyword Log #{this.props.widgetId}</h2>
-        <TextInput
-          data-autofocus
-          label="Select keywords to listen (comma separated)"
-          value={this.state.keywordsToListen}
-          onChange={this.handleKeywordsToListenChange}
-        />
-        <Button onClick={this.applyKeywordsToListen} type="submit">
-          Apply
-        </Button>
-        {this.state.myAcquisitions.map((acq) => (
-          <p key={uuidv4()}>
-            [{acq.date.toLocaleTimeString()}] kwd #{acq.keyword} = {acq.value}
-          </p>
-        ))}
-      </div>
+      <Widget widgetId={this.props.widgetId} onSettingsClick={this.handleSettingsClick}>
+        <div style={{ margin: '10px', height: '100%', width: '100%' }}>
+          <h2>Keyword Log #{this.props.widgetId}</h2>
+          <TextInput
+            data-autofocus
+            label="Select keywords to listen (comma separated)"
+            value={this.state.keywordsToListen}
+            onChange={this.handleKeywordsToListenChange}
+          />
+          <Button onClick={this.applyKeywordsToListen} type="submit">
+            Apply
+          </Button>
+          {this.state.myAcquisitions.map((acq) => (
+            <p key={uuidv4()}>
+              [{acq.date.toLocaleTimeString()}] kwd #{acq.keyword} = {acq.value}
+            </p>
+          ))}
+        </div>
+      </Widget>
     );
   }
 }

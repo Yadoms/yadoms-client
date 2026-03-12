@@ -6,7 +6,7 @@ import {
 } from '@yadoms/shared';
 import { v4 as uuidv4 } from 'uuid';
 import { Button } from '@mantine/core';
-import { WidgetProps } from './Widget';
+import { WidgetProps, Widget } from './Widget';
 import { keywordsApi } from '@yadoms/domain/keywords';
 import { connect } from 'react-redux';
 
@@ -63,15 +63,19 @@ class YButton extends Component<ButtonProps, ButtonState> {
 
   private onNewAcquisition(newAcquisition: Acquisition) {
     this.setState({
-      isPressed: parseInt(newAcquisition.value) != 0 ? true : false,
+      isPressed: parseInt(newAcquisition.value) !== 0 ? true : false,
     });
   }
 
   private applyKeywordsToListen() {
-    this.context!.subscribeToKeywordAcquisitions(
+    this.context?.subscribeToKeywordAcquisitions(
       [this.state.buttonKeyword],
       this.acquisitionListener
     );
+  }
+
+  private handleSettingsClick() {
+    console.log('Settings button clicked !');
   }
 
   private onClick() {
@@ -90,17 +94,20 @@ class YButton extends Component<ButtonProps, ButtonState> {
   }
   render() {
     return (
-      <div style={{ border: '1px solid', margin: '10px' }}>
-        <h2>
-          Button #{this.props.widgetId} on keyword #{this.props.buttonKeyword}
-        </h2>
-        <Button
-          onClick={this.onClick}
-          className={`toggle-button ${this.state.isPressed ? 'on' : 'off'}`}
-        >
-          Click on Me ! {this.state.isPressed ? 'ON' : 'OFF'}
-        </Button>
-      </div>
+      <Widget widgetId={this.props.widgetId} onSettingsClick={this.handleSettingsClick}>
+        <div style={{ margin: '10px', height: '100%', width: '100%' }}>
+
+          <h2>
+            Button #{this.props.widgetId} on keyword #{this.props.buttonKeyword}
+          </h2>
+          <Button
+            onClick={this.onClick}
+            className={`toggle-button ${this.state.isPressed ? 'on' : 'off'}`}
+          >
+            Click on Me ! {this.state.isPressed ? 'ON' : 'OFF'}
+          </Button>
+        </div>
+      </Widget>
     );
   }
 }
