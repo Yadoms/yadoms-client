@@ -21,11 +21,11 @@ export function Home(props: PagesHomeProps) {
       <div className={classes.grid}>
         
         <div className={classNames(classes.card, classes.tile)}>
-          <YButton widgetId={1} buttonKeyword={20}></YButton>
+          <YButton widgetId={1}></YButton>
         </div>
 
         <div className={classNames(classes.card, classes.tile)}>
-          <YButton widgetId={2} buttonKeyword={30}></YButton>
+          <YButton widgetId={2}></YButton>
         </div>
 
         <div className={classNames(classes.card, classes.wide)}>

@@ -5,18 +5,20 @@ import {
   AcquisitionListener,
 } from '@yadoms/shared';
 import { v4 as uuidv4 } from 'uuid';
-import { Button } from '@mantine/core';
+import { Button, Modal, Select } from '@mantine/core';
 import { WidgetProps, Widget } from './Widget';
 import { keywordsApi } from '@yadoms/domain/keywords';
 import { connect } from 'react-redux';
 
 export interface ButtonProps extends WidgetProps {
-  buttonKeyword: number;
+  inverted?: boolean; //TODO à appliquer
 }
 
 interface ButtonState {
   myAcquisitions: Acquisition[]; //TODO conserver ?
-  buttonKeyword: number;
+  selectedKeyword?: number | null;
+  settingsModalOpen: boolean;
+  keywordsOptions: { value: string; label: string }[];
   isPressed: boolean;
 }
 
@@ -44,7 +46,9 @@ class YButton extends Component<ButtonProps, ButtonState> {
 
     this.state = {
       myAcquisitions: [],
-      buttonKeyword: props.buttonKeyword,
+      selectedKeyword: null,
+      settingsModalOpen: false,
+      keywordsOptions: [],
       isPressed: false,
     };
 
@@ -55,6 +59,9 @@ class YButton extends Component<ButtonProps, ButtonState> {
     this.onNewAcquisition = this.onNewAcquisition.bind(this);
     this.applyKeywordsToListen = this.applyKeywordsToListen.bind(this);
     this.onClick = this.onClick.bind(this);
+    this.handleSettingsClick = this.handleSettingsClick.bind(this);
+    this.loadKeywords = this.loadKeywords.bind(this);
+    this.saveSettings = this.saveSettings.bind(this);
   }
 
   componentDidMount() {
@@ -68,14 +75,39 @@ class YButton extends Component<ButtonProps, ButtonState> {
   }
 
   private applyKeywordsToListen() {
+    if (!this.state.selectedKeyword) 
+      return;
     this.context?.subscribeToKeywordAcquisitions(
-      [this.state.buttonKeyword],
+      [this.state.selectedKeyword],
       this.acquisitionListener
     );
   }
 
   private handleSettingsClick() {
-    console.log('Settings button clicked !');
+    // Open settings modal to choose keyword
+    this.setState({ settingsModalOpen: true });
+    if (this.state.keywordsOptions.length === 0) {
+      this.loadKeywords();
+    }
+  }
+
+  private async loadKeywords() {
+    try {
+      const res = await keywordsApi.loadKeywords(0, 200);
+      const options = res.keywords.map((k) => ({
+        value: String(k.id),
+        label: `${k.id} - ${k.friendlyName}`,
+      }));
+      this.setState({ keywordsOptions: options });
+    } catch (err) {
+      console.error('Failed to load keywords for selection', err);
+    }
+  }
+
+  private saveSettings() {
+    this.setState({ settingsModalOpen: false });
+    // re-subscribe with new selection
+    this.applyKeywordsToListen();
   }
 
   private onClick() {
@@ -87,8 +119,12 @@ class YButton extends Component<ButtonProps, ButtonState> {
       isPressed: localIsPressed,
     });
 
+    if (!this.state.selectedKeyword) {
+      console.warn('No keyword selected for this widget');
+      return;
+    }
     keywordsApi.sendCommand(
-      this.props.buttonKeyword,
+      this.state.selectedKeyword,
       localIsPressed ? '1' : '0'
     );
   }
@@ -97,8 +133,25 @@ class YButton extends Component<ButtonProps, ButtonState> {
       <Widget widgetId={this.props.widgetId} onSettingsClick={this.handleSettingsClick}>
         <div style={{ margin: '10px', height: '100%', width: '100%' }}>
 
+          <Modal
+            opened={this.state.settingsModalOpen}
+            onClose={() => this.setState({ settingsModalOpen: false })}
+            title="Select keyword"
+          >
+            <Select
+              data={this.state.keywordsOptions}
+              value={this.state.selectedKeyword ? String(this.state.selectedKeyword) : undefined}
+              onChange={(val) => this.setState({ selectedKeyword: val ? parseInt(val, 10) : null })}
+              placeholder="Choose a keyword"
+              searchable
+            />
+            <div style={{ marginTop: 12 }}>
+              <Button onClick={() => this.saveSettings()}>Save</Button>
+            </div>
+          </Modal>
+
           <h2>
-            Button #{this.props.widgetId} on keyword #{this.props.buttonKeyword}
+            Button #{this.props.widgetId} {this.state.selectedKeyword ? `on keyword #${this.state.selectedKeyword}` : ''}
           </h2>
           <Button
             onClick={this.onClick}
