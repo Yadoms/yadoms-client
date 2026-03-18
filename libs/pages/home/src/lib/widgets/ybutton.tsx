@@ -12,6 +12,7 @@ import { connect } from 'react-redux';
 
 export interface ButtonProps extends WidgetProps {
   inverted?: boolean; //TODO à appliquer
+  size?: 'small' | 'wide';
 }
 
 interface ButtonState {
@@ -130,9 +131,12 @@ class YButton extends Component<ButtonProps, ButtonState> {
   }
   render() {
     return (
-      <Widget widgetId={this.props.widgetId} onSettingsClick={this.handleSettingsClick}>
+      <Widget
+        widgetId={this.props.widgetId}
+        onSettingsClick={this.handleSettingsClick}
+        size={this.props.size ?? 'small'}
+      >
         <div style={{ margin: '10px', height: '100%', width: '100%' }}>
-
           <Modal
             opened={this.state.settingsModalOpen}
             onClose={() => this.setState({ settingsModalOpen: false })}
@@ -140,8 +144,16 @@ class YButton extends Component<ButtonProps, ButtonState> {
           >
             <Select
               data={this.state.keywordsOptions}
-              value={this.state.selectedKeyword ? String(this.state.selectedKeyword) : undefined}
-              onChange={(val) => this.setState({ selectedKeyword: val ? parseInt(val, 10) : null })}
+              value={
+                this.state.selectedKeyword
+                  ? String(this.state.selectedKeyword)
+                  : undefined
+              }
+              onChange={(val) =>
+                this.setState({
+                  selectedKeyword: val ? parseInt(val, 10) : null,
+                })
+              }
               placeholder="Choose a keyword"
               searchable
             />
@@ -151,7 +163,10 @@ class YButton extends Component<ButtonProps, ButtonState> {
           </Modal>
 
           <h2>
-            Button #{this.props.widgetId} {this.state.selectedKeyword ? `on keyword #${this.state.selectedKeyword}` : ''}
+            Button #{this.props.widgetId}{' '}
+            {this.state.selectedKeyword
+              ? `on keyword #${this.state.selectedKeyword}`
+              : ''}
           </h2>
           <Button
             onClick={this.onClick}

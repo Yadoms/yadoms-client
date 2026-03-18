@@ -15,15 +15,14 @@
   padding: 12px;
 }
 
-.tile {
+.small {
   min-height: 90px;
   height: 100%;
-  display: grid;
-  place-items: center;
 }
 
 .wide {
   min-height: 240px;
+  height: 100%;
 }
 
 /* If screen enought large, use 2 columns */

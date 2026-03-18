@@ -89,7 +89,11 @@ class KeywordLog extends Component<KeywordLogProps, KeywordLogState> {
 
   render() {
     return (
-      <Widget widgetId={this.props.widgetId} onSettingsClick={this.handleSettingsClick}>
+      <Widget
+        widgetId={this.props.widgetId}
+        onSettingsClick={this.handleSettingsClick}
+        size={this.props.size ?? 'wide'}
+      >
         <div style={{ margin: '10px', height: '100%', width: '100%' }}>
           <h2>Keyword Log #{this.props.widgetId}</h2>
           <TextInput

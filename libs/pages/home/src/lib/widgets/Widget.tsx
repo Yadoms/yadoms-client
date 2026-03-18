@@ -1,10 +1,13 @@
 import React from 'react';
 import { IconSettings } from '@tabler/icons-react';
+import classes from '../home.module.css';
+import classNames from "classnames";
 
 export interface WidgetProps {
   widgetId?: number;
   onSettingsClick?: () => void;
   children?: React.ReactNode;
+  size?: 'small' | 'wide';
 }
 
 type SettingsButtonProps = {
@@ -39,10 +42,17 @@ export function SettingsButton({
  * Widget wrapper: provides a `relative` container so the SettingsButton
  * can be positioned top-right without affecting document flow.
  */
-export function Widget({ widgetId, children, onSettingsClick }: WidgetProps) {
+export function Widget({ widgetId, children, onSettingsClick, size = 'small' }: WidgetProps) {
+  const sizeClass =
+    size === 'wide'
+      ? classes.wide
+      : classes.small;
+
   return (
-    <div className="relative" style={{ position: 'relative' }}>
-      <SettingsButton onClick={onSettingsClick} />
+    <div className={classNames(classes.card, sizeClass)}>
+      <div className="relative" style={{ position: 'relative' }}>
+        <SettingsButton onClick={onSettingsClick} />
+      </div>
       {children}
     </div>
   );
