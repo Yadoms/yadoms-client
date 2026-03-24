@@ -37,7 +37,7 @@ class KeywordLog extends Component<KeywordLogProps, KeywordLogState> {
 
   constructor(props: KeywordLogProps) {
     super(props);
-    console.log('KeywordLog creation #' + props.widgetId);
+    console.log('KeywordLog creation #' + props.id);
 
     this.state = {
       myAcquisitions: [],
@@ -90,12 +90,12 @@ class KeywordLog extends Component<KeywordLogProps, KeywordLogState> {
   render() {
     return (
       <Widget
-        widgetId={this.props.widgetId}
+        id={this.props.id}
         onSettingsClick={this.handleSettingsClick}
         size={this.props.size ?? 'wide'}
       >
         <div style={{ margin: '10px', height: '100%', width: '100%' }}>
-          <h2>Keyword Log #{this.props.widgetId}</h2>
+          <h2>Keyword Log #{this.props.id}</h2>
           <TextInput
             data-autofocus
             label="Select keywords to listen (comma separated)"

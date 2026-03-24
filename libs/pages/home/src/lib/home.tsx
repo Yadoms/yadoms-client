@@ -20,21 +20,13 @@ export function Home(props: PagesHomeProps) {
       <p>Server current time is {serverCurrentTime?.toString()}</p>
       <div className={classes.grid}>
         
-        {/* <div className={classNames(classes.card, classes.tile)}> */}
-          <YButton widgetId={1}></YButton>
-        {/* </div> */}
+          <YButton id={1}></YButton>
 
-        {/* <div className={classNames(classes.card, classes.tile)}> */}
-          <YButton widgetId={2}></YButton>
-        {/* </div> */}
+          <YButton id={2}></YButton>
 
-        {/* <div className={classNames(classes.card, classes.wide)}> */}
-          <KeywordLog widgetId={3} keywordsToListen={'45,46'}></KeywordLog>
-        {/* </div> */}
+          <KeywordLog id={3} keywordsToListen={'45,46'}></KeywordLog>
 
-        {/* <div className={classNames(classes.card, classes.wide)}> */}
-          <KeywordLog widgetId={4} keywordsToListen={'24, 25, 26'}></KeywordLog>
-        {/* </div> */}
+          <KeywordLog id={4} keywordsToListen={'24, 25, 26'}></KeywordLog>
       </div>
     </div>
   );

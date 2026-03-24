@@ -5,7 +5,7 @@ import {
   AcquisitionListener,
 } from '@yadoms/shared';
 import { v4 as uuidv4 } from 'uuid';
-import { Button, Modal, Select } from '@mantine/core';
+import { Button } from '@mantine/core';
 import { WidgetProps, Widget } from './Widget';
 import { keywordsApi } from '@yadoms/domain/keywords';
 import { connect } from 'react-redux';
@@ -16,10 +16,8 @@ export interface ButtonProps extends WidgetProps {
 }
 
 interface ButtonState {
-  myAcquisitions: Acquisition[]; //TODO conserver ?
+  myAcquisitions: Acquisition[];
   selectedKeyword?: number | null;
-  settingsModalOpen: boolean;
-  keywordsOptions: { value: string; label: string }[];
   isPressed: boolean;
 }
 
@@ -43,13 +41,11 @@ class YButton extends Component<ButtonProps, ButtonState> {
 
   constructor(props: ButtonProps) {
     super(props);
-    console.log('yButton creation #' + props.widgetId);
+    console.log('yButton creation #' + props.id);
 
     this.state = {
       myAcquisitions: [],
       selectedKeyword: null,
-      settingsModalOpen: false,
-      keywordsOptions: [],
       isPressed: false,
     };
 
@@ -60,9 +56,8 @@ class YButton extends Component<ButtonProps, ButtonState> {
     this.onNewAcquisition = this.onNewAcquisition.bind(this);
     this.applyKeywordsToListen = this.applyKeywordsToListen.bind(this);
     this.onClick = this.onClick.bind(this);
-    this.handleSettingsClick = this.handleSettingsClick.bind(this);
-    this.loadKeywords = this.loadKeywords.bind(this);
-    this.saveSettings = this.saveSettings.bind(this);
+    this.handleSettingsChanged = this.handleSettingsChanged.bind(this);
+    this.handleKeywordSelected = this.handleKeywordSelected.bind(this);
   }
 
   componentDidMount() {
@@ -71,44 +66,27 @@ class YButton extends Component<ButtonProps, ButtonState> {
 
   private onNewAcquisition(newAcquisition: Acquisition) {
     this.setState({
-      isPressed: parseInt(newAcquisition.value) !== 0 ? true : false,
+      isPressed: parseInt(newAcquisition.value) !== 0,
     });
   }
 
   private applyKeywordsToListen() {
-    if (!this.state.selectedKeyword) 
-      return;
+    if (!this.state.selectedKeyword) return;
     this.context?.subscribeToKeywordAcquisitions(
       [this.state.selectedKeyword],
       this.acquisitionListener
     );
   }
 
-  private handleSettingsClick() {
-    // Open settings modal to choose keyword
-    this.setState({ settingsModalOpen: true });
-    if (this.state.keywordsOptions.length === 0) {
-      this.loadKeywords();
-    }
+  private handleSettingsChanged() {
+    // Placeholder for external setting hook.
+    console.log('YButton settings button clicked');
   }
 
-  private async loadKeywords() {
-    try {
-      const res = await keywordsApi.loadKeywords(0, 200);
-      const options = res.keywords.map((k) => ({
-        value: String(k.id),
-        label: `${k.id} - ${k.friendlyName}`,
-      }));
-      this.setState({ keywordsOptions: options });
-    } catch (err) {
-      console.error('Failed to load keywords for selection', err);
-    }
-  }
-
-  private saveSettings() {
-    this.setState({ settingsModalOpen: false });
-    // re-subscribe with new selection
-    this.applyKeywordsToListen();
+  private handleKeywordSelected(keyword: number | null) {
+    this.setState({ selectedKeyword: keyword }, () => {
+      this.applyKeywordsToListen();
+    });
   }
 
   private onClick() {
@@ -132,38 +110,14 @@ class YButton extends Component<ButtonProps, ButtonState> {
   render() {
     return (
       <Widget
-        widgetId={this.props.widgetId}
-        onSettingsClick={this.handleSettingsClick}
+        id={this.props.id}
+        onSettingsChanged={this.handleSettingsChanged}
+        onKeywordSelected={this.handleKeywordSelected}
         size={this.props.size ?? 'small'}
       >
         <div style={{ margin: '10px', height: '100%', width: '100%' }}>
-          <Modal
-            opened={this.state.settingsModalOpen}
-            onClose={() => this.setState({ settingsModalOpen: false })}
-            title="Select keyword"
-          >
-            <Select
-              data={this.state.keywordsOptions}
-              value={
-                this.state.selectedKeyword
-                  ? String(this.state.selectedKeyword)
-                  : undefined
-              }
-              onChange={(val) =>
-                this.setState({
-                  selectedKeyword: val ? parseInt(val, 10) : null,
-                })
-              }
-              placeholder="Choose a keyword"
-              searchable
-            />
-            <div style={{ marginTop: 12 }}>
-              <Button onClick={() => this.saveSettings()}>Save</Button>
-            </div>
-          </Modal>
-
           <h2>
-            Button #{this.props.widgetId}{' '}
+            Button #{this.props.id}{' '}
             {this.state.selectedKeyword
               ? `on keyword #${this.state.selectedKeyword}`
               : ''}
