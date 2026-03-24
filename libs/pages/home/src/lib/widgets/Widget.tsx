@@ -35,7 +35,14 @@ export function SettingsButton({
       aria-label={title}
       title={title}
       onClick={onClick}
-      style={{ position: 'absolute', top: 8, right: 8, zIndex: 9999, background: 'transparent', border: 'none' }}
+      style={{
+        position: 'absolute',
+        top: 8,
+        right: 8,
+        zIndex: 9999,
+        background: 'transparent',
+        border: 'none',
+      }}
     >
       <IconSettings size={size} stroke={2} />
     </button>
@@ -110,10 +117,18 @@ export class Widget extends Component<WidgetProps, WidgetState> {
     return (
       <div className={classNames(classes.card, sizeClass)}>
         <div className="relative" style={{ position: 'relative' }}>
-          <Modal opened={this.state.settingsModalOpen} onClose={this.closeModal} title="Select keyword">
+          <Modal
+            opened={this.state.settingsModalOpen}
+            onClose={this.closeModal}
+            title="Select keyword"
+          >
             <Select
               data={this.state.keywordsOptions}
-              value={this.state.selectedKeyword ? String(this.state.selectedKeyword) : undefined}
+              value={
+                this.state.selectedKeyword
+                  ? String(this.state.selectedKeyword)
+                  : undefined
+              }
               onChange={(val) => this.handleKeywordChange(val)}
               placeholder="Choose a keyword"
               searchable

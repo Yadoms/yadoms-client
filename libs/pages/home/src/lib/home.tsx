@@ -18,14 +18,13 @@ export function Home(props: PagesHomeProps) {
       <p>Socket is {connected ? 'connected' : 'DISCONNECTED'}</p>
       <p>Server current time is {serverCurrentTime?.toString()}</p>
       <div className={classes.grid}>
-        
-          <YButton id={1}></YButton>
+        <YButton id={1}></YButton>
 
-          <YButton id={2}></YButton>
+        <YButton id={2}></YButton>
 
-          <KeywordLog id={3} keywordsToListen={'45,46'}></KeywordLog>
+        <KeywordLog id={3} keywordsToListen={'45,46'}></KeywordLog>
 
-          <KeywordLog id={4} keywordsToListen={'24, 25, 26'}></KeywordLog>
+        <KeywordLog id={4} keywordsToListen={'24, 25, 26'}></KeywordLog>
       </div>
     </div>
   );
