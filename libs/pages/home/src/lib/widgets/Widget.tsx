@@ -6,7 +6,7 @@ import { Modal, Select, Button } from '@mantine/core';
 import { keywordsApi } from '@yadoms/domain/keywords';
 
 export interface WidgetProps {
-  id?: number;
+  id: number;
   onSettingsChanged?: () => void;
   onSettingsClick?: () => void;
   onKeywordSelected?: (keywordId: number | null) => void;

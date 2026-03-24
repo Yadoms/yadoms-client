@@ -3,7 +3,6 @@ import { YadomsConnectionContext, YadomsConnection } from '@yadoms/shared';
 import YButton from './widgets/ybutton';
 import KeywordLog from './widgets/keywordLog';
 import classes from './home.module.css';
-import classNames from "classnames";
 
 /* eslint-disable-next-line */
 export interface PagesHomeProps {}

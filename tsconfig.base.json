@@ -17,6 +17,7 @@
     "paths": {
       "@yadoms/domain/keywords": ["libs/domain/keywords/src/index.ts"],
       "@yadoms/domain/plugins": ["libs/domain/plugins/src/index.ts"],
+      "@yadoms/domain/widgets": ["libs/domain/widgets/src/index.ts"],
       "@yadoms/pages/home": ["libs/pages/home/src/index.ts"],
       "@yadoms/pages/plugins": ["libs/pages/plugins/src/index.ts"],
       "@yadoms/pages/summary": ["libs/pages/summary/src/index.ts"],

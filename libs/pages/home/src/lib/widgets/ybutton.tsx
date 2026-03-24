@@ -8,6 +8,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { Button } from '@mantine/core';
 import { WidgetProps, Widget } from './Widget';
 import { keywordsApi } from '@yadoms/domain/keywords';
+import { widgetsApi } from '@yadoms/domain/widgets';
 import { connect } from 'react-redux';
 
 export interface ButtonProps extends WidgetProps {
@@ -42,6 +43,8 @@ class YButton extends Component<ButtonProps, ButtonState> {
   constructor(props: ButtonProps) {
     super(props);
     console.log('yButton creation #' + props.id);
+    const configuration = widgetsApi.getWidgetConfiguration(props.id);
+    console.log('yButton configuration for widget #' + props.id, configuration);
 
     this.state = {
       myAcquisitions: [],
