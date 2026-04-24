@@ -18,7 +18,7 @@ export function Home(props: PagesHomeProps) {
       <p>Socket is {connected ? 'connected' : 'DISCONNECTED'}</p>
       <p>Server current time is {serverCurrentTime?.toString()}</p>
       <div className={classes.grid}>
-        <YButton id={1}></YButton> 
+        <YButton id={1}></YButton>
         <YButton id={2}></YButton>
         <YButton id={3}></YButton>
         <KeywordLog id={4}></KeywordLog>
