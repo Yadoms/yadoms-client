@@ -12,7 +12,7 @@ export interface KeywordsResponse {
 
 export interface Acquisition {
   value: unknown;
-  date: string; //TODO existe-t-il un format de date plus adapté ? (ex: timestamp)
+  date: Date | string;
 }
 
 export interface keywordAcquisitions {

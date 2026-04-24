@@ -3,18 +3,26 @@ import {
   YadomsConnectionContext,
   Acquisition,
   AcquisitionListener,
+  parseYadomsDate,
 } from '@yadoms/shared';
 import { v4 as uuidv4 } from 'uuid';
 import { Button, TextInput } from '@mantine/core';
 import { WidgetProps, Widget } from './Widget';
-
-export interface KeywordLogProps extends WidgetProps {
-  keywordsToListen: string;
-}
+import { widgetsApi } from '@yadoms/domain/widgets';
+import { keywordsApi } from '@yadoms/domain/keywords';
 
 interface KeywordLogState {
   myAcquisitions: Acquisition[];
   keywordsToListen: string;
+}
+
+interface KeywordLogConfiguration {
+  devices: [
+    {
+      deviceId: number; //TODO utile ?
+      keywordId: number;
+    }
+  ];
 }
 
 class KeywordLogAcquisitionListener implements AcquisitionListener {
@@ -29,19 +37,19 @@ class KeywordLogAcquisitionListener implements AcquisitionListener {
   private onNewAcquisition: (newAcquisition: Acquisition) => void;
 }
 
-class KeywordLog extends Component<KeywordLogProps, KeywordLogState> {
+class KeywordLog extends Component<WidgetProps, KeywordLogState> {
   static contextType = YadomsConnectionContext;
   context!: React.ContextType<typeof YadomsConnectionContext>;
 
   acquisitionListener: KeywordLogAcquisitionListener;
 
-  constructor(props: KeywordLogProps) {
+  constructor(props: WidgetProps) {
     super(props);
     console.log('KeywordLog creation #' + props.id);
 
     this.state = {
       myAcquisitions: [],
-      keywordsToListen: props.keywordsToListen,
+      keywordsToListen: '',
     };
 
     this.acquisitionListener = new KeywordLogAcquisitionListener(
@@ -54,11 +62,57 @@ class KeywordLog extends Component<KeywordLogProps, KeywordLogState> {
       this.handleKeywordsToListenChange.bind(this);
   }
 
-  componentDidMount() {
+  async componentDidMount() {
+    try {
+      const configuration =
+        await widgetsApi.getWidgetConfiguration<KeywordLogConfiguration>(
+          this.props.id
+        );
+      const keywordIds = configuration.devices.map(
+        (device) => device.keywordId
+      );
+      const acquisitionsResponse = await keywordsApi.getLatestAcquisitions(
+        keywordIds,
+        10
+      );
+
+      // Transform API acquisitions to shared Acquisition type
+      const acquisitions: Acquisition[] =
+        acquisitionsResponse.acquisitions.flatMap((existingAcquisitions) =>
+          existingAcquisitions.acquisitions.map((acq) => ({
+            date: parseYadomsDate(acq.date),
+            keyword: existingAcquisitions.keywordId,
+            value:
+              typeof acq.value === 'string' ? acq.value : String(acq.value),
+          }))
+        );
+
+      // SSort acquisitions by date desc
+      acquisitions.sort((a, b) => b.date.getTime() - a.date.getTime());
+
+      console.debug(
+        'keywordLog configuration for widget #' + this.props.id,
+        configuration
+      );
+      console.debug(
+        'keywordLog acquisitions for widget #' + this.props.id,
+        acquisitions
+      );
+
+      this.setState({
+        myAcquisitions: acquisitions,
+        keywordsToListen: keywordIds.join(', '),
+      });
+    } catch (error) {
+      console.error('Failed to load configuration:', error);
+      // Handle error, e.g., set default state or show error UI
+    }
+
     this.applyKeywordsToListen();
   }
 
-  private parseKeywordsToListen(value: string) {
+  private parseKeywordsToListen(value: string): number[] {
+    //TODO utile ?
     return value.split(',').map((element) => {
       return parseInt(element, 10);
     });
@@ -72,7 +126,7 @@ class KeywordLog extends Component<KeywordLogProps, KeywordLogState> {
 
   private applyKeywordsToListen() {
     this.context?.subscribeToKeywordAcquisitions(
-      this.parseKeywordsToListen(this.state.keywordsToListen),
+      this.parseKeywordsToListen(this.state.keywordsToListen), //TODO récupérer les keywordIds depuis la configuration du widget
       this.acquisitionListener
     );
   }

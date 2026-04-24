@@ -11,11 +11,6 @@ import { keywordsApi } from '@yadoms/domain/keywords';
 import { widgetsApi } from '@yadoms/domain/widgets';
 import { connect } from 'react-redux';
 
-export interface ButtonProps extends WidgetProps {
-  inverted?: boolean; //TODO à appliquer
-  size?: 'small' | 'wide';
-}
-
 interface ButtonState {
   selectedKeyword?: number | null;
   isPressed: boolean;
@@ -23,13 +18,13 @@ interface ButtonState {
 
 interface ButtonConfiguration {
   device: {
-    deviceId: number;
+    deviceId: number; //TODO utile ?
     keywordId: number;
   };
-  askConfirmation?: boolean;
-  invert: boolean;
+  askConfirmation?: boolean; //TODO à gérer
+  invert: boolean; //TODO à gérer
   kind: {
-    activeSection: 'toggle' | 'pushButton';
+    activeSection: 'toggle' | 'pushButton'; //TODO à gérer
     content: {
       toggle?: {
         radio: boolean;
@@ -56,13 +51,14 @@ class ButtonStateAcquisitionListener implements AcquisitionListener {
   private onNewAcquisition: (newAcquisition: Acquisition) => void;
 }
 
-class YButton extends Component<ButtonProps, ButtonState> {
+// Renommer YButton en switch ? (pour être cohérent avec le type de widget connu du serveur)
+class YButton extends Component<WidgetProps, ButtonState> {
   static contextType = YadomsConnectionContext;
   context!: React.ContextType<typeof YadomsConnectionContext>;
 
   acquisitionListener: ButtonStateAcquisitionListener;
 
-  constructor(props: ButtonProps) {
+  constructor(props: WidgetProps) {
     super(props);
     console.log('yButton creation #' + props.id);
 

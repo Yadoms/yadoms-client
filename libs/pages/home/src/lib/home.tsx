@@ -18,15 +18,10 @@ export function Home(props: PagesHomeProps) {
       <p>Socket is {connected ? 'connected' : 'DISCONNECTED'}</p>
       <p>Server current time is {serverCurrentTime?.toString()}</p>
       <div className={classes.grid}>
-        <YButton id={1}></YButton> // Renommer YButton en switch ? (pour être cohérent avec le type de widget connu du serveur)
-
+        <YButton id={1}></YButton> 
         <YButton id={2}></YButton>
-
         <YButton id={3}></YButton>
-
-        <KeywordLog id={4} keywordsToListen={'45,46'}></KeywordLog>
-
-        <KeywordLog id={5} keywordsToListen={'24, 25, 26'}></KeywordLog>
+        <KeywordLog id={4}></KeywordLog>
       </div>
     </div>
   );

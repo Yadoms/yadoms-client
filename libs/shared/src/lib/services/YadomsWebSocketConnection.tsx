@@ -1,4 +1,5 @@
 import { createContext, useEffect, useRef, useState } from 'react';
+import { parseYadomsDate } from '../yadoms-utils';
 
 export interface Acquisition {
   date: Date;
@@ -33,12 +34,12 @@ class YadomsWebSocketConnection {
     this._ws.onmessage = (event: any) => {
       const data = JSON.parse(event.data);
       if ('serverCurrentTime' in data) {
-        this.onServerCurrenTime?.(this.parseYadomsDate(data.serverCurrentTime));
+        this.onServerCurrenTime?.(parseYadomsDate(data.serverCurrentTime));
         return;
       }
       if ('newAcquisition' in data) {
         const newAcquisition: Acquisition = {
-          date: this.parseYadomsDate(data.newAcquisition.date),
+          date: parseYadomsDate(data.newAcquisition.date),
           keyword: data.newAcquisition.keywordId,
           value: data.newAcquisition.value,
         };
@@ -87,15 +88,6 @@ class YadomsWebSocketConnection {
   private filterAcquisitions(keywords: number[]) {
     this._ws.send(
       JSON.stringify({ acquisitionFilter: { keywords: keywords } })
-    );
-  }
-
-  private parseYadomsDate(dateAsString: string): Date {
-    return new Date(
-      dateAsString.replace(
-        /([0-9]{4})([0-9]{2})([0-9]{2})T([0-9]{2})([0-9]{2})([0-9]{2}).([0-9]*)/,
-        '$1-$2-$3T$4:$5:$6.$7'
-      )
     );
   }
 

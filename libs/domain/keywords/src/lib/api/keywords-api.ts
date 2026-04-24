@@ -1,4 +1,4 @@
-import { axiosInstance } from '@yadoms/shared';
+import { axiosInstance, parseYadomsDate } from '@yadoms/shared';
 import {
   KeywordsResponse,
   Acquisition,
@@ -59,6 +59,17 @@ class KeywordsApi {
           },
         }
       );
+
+      // Adapt date format from API to Acquisition type
+      console.debug('Raw acquisitions response from API : ', response.data);
+      for (const item of response.data.acquisitions) {
+        for (const acq of item.acquisitions) {
+          if (typeof acq.date === 'string') {
+            acq.date = parseYadomsDate(acq.date);
+          }
+        }
+      }
+
       return response.data;
     } catch (error) {
       console.error('Error fetching latest acquisitions:', error);
