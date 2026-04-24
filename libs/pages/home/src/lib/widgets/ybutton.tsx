@@ -17,9 +17,31 @@ export interface ButtonProps extends WidgetProps {
 }
 
 interface ButtonState {
-  myAcquisitions: Acquisition[];
   selectedKeyword?: number | null;
   isPressed: boolean;
+}
+
+interface ButtonConfiguration {
+  device: {
+    deviceId: number;
+    keywordId: number;
+  };
+  askConfirmation?: boolean;
+  invert: boolean;
+  kind: {
+    activeSection: 'toggle' | 'pushButton';
+    content: {
+      toggle?: {
+        radio: boolean;
+      };
+      pushButton?: {
+        content: {
+          icon: string; //TODO à gérer
+        };
+        radio: boolean;
+      };
+    };
+  };
 }
 
 class ButtonStateAcquisitionListener implements AcquisitionListener {
@@ -43,11 +65,8 @@ class YButton extends Component<ButtonProps, ButtonState> {
   constructor(props: ButtonProps) {
     super(props);
     console.log('yButton creation #' + props.id);
-    const configuration = widgetsApi.getWidgetConfiguration(props.id);
-    console.log('yButton configuration for widget #' + props.id, configuration);
 
     this.state = {
-      myAcquisitions: [],
       selectedKeyword: null,
       isPressed: false,
     };
@@ -63,7 +82,34 @@ class YButton extends Component<ButtonProps, ButtonState> {
     this.handleKeywordSelected = this.handleKeywordSelected.bind(this);
   }
 
-  componentDidMount() {
+  async componentDidMount() {
+    try {
+      const configuration =
+        await widgetsApi.getWidgetConfiguration<ButtonConfiguration>(
+          this.props.id
+        );
+      const keywordId = configuration.device.keywordId;
+      const lastState =
+        ((await keywordsApi.getLatestAcquisition(keywordId))
+          ?.value as number) === 1;
+      console.debug(
+        'yButton configuration for widget #' + this.props.id,
+        configuration
+      );
+      console.debug(
+        'yButton acquisitions for widget #' + this.props.id,
+        lastState
+      );
+
+      this.setState({
+        selectedKeyword: keywordId,
+        isPressed: lastState || false,
+      });
+    } catch (error) {
+      console.error('Failed to load configuration:', error);
+      // Handle error, e.g., set default state or show error UI
+    }
+
     this.applyKeywordsToListen();
   }
 

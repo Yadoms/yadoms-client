@@ -7,13 +7,13 @@ class WidgetsApi {
     return response.data;
   }
 
-  async getWidgetConfiguration(widgetId: number): Promise<object> {
+  async getWidgetConfiguration<T>(widgetId: number): Promise<T> {
     const response = await axiosInstance.get(`/widgets/${widgetId}`, {
       params: {
         prop: 'configuration',
       },
     });
-    return response.data;
+    return response.data.configuration as T;
   }
 }
 

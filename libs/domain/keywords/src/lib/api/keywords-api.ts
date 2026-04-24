@@ -1,5 +1,9 @@
 import { axiosInstance } from '@yadoms/shared';
-import { KeywordsResponse } from '../model/KeywordsResponse';
+import {
+  KeywordsResponse,
+  Acquisition,
+  AcquisitionsResponse,
+} from '../model/KeywordsResponse';
 
 class KeywordsApi {
   async loadKeywords(
@@ -39,6 +43,37 @@ class KeywordsApi {
       console.error('Error starting/stoping plugin instance : ', error);
       throw error;
     }
+  }
+
+  async getLatestAcquisitions(
+    keywordIds: number[],
+    limit = 1
+  ): Promise<AcquisitionsResponse> {
+    try {
+      const ids = keywordIds.join('|');
+      const response = await axiosInstance.get<AcquisitionsResponse>(
+        `/keywords/${ids}/acquisitions`,
+        {
+          params: {
+            limit,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching latest acquisitions:', error);
+      throw error;
+    }
+  }
+
+  async getLatestAcquisition(
+    keywordId: number
+  ): Promise<Acquisition | undefined> {
+    const acquisitions = await keywordsApi.getLatestAcquisitions([keywordId]);
+    const keywordAcquisitions = acquisitions.acquisitions.find(
+      (item) => item.keywordId === keywordId
+    );
+    return keywordAcquisitions?.acquisitions[0] || undefined;
   }
 }
 
