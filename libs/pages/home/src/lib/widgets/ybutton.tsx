@@ -12,17 +12,13 @@ import { widgetsApi } from '@yadoms/domain/widgets';
 import { connect } from 'react-redux';
 
 interface ButtonState {
-  selectedKeyword?: number | null;
   isPressed: boolean;
 }
 
 interface ButtonConfiguration {
-  device: {
-    deviceId: number; //TODO utile ?
-    keywordId: number;
-  };
+  keywordId: number;
   askConfirmation?: boolean; //TODO à gérer
-  invert: boolean; //TODO à gérer
+  invert: boolean;
   kind: {
     activeSection: 'toggle' | 'pushButton'; //TODO à gérer
     content: {
@@ -57,13 +53,13 @@ class YButton extends Component<WidgetProps, ButtonState> {
   context!: React.ContextType<typeof YadomsConnectionContext>;
 
   acquisitionListener: ButtonStateAcquisitionListener;
+  configuration?: ButtonConfiguration;
 
   constructor(props: WidgetProps) {
     super(props);
     console.log('yButton creation #' + props.id);
 
     this.state = {
-      selectedKeyword: null,
       isPressed: false,
     };
 
@@ -75,22 +71,21 @@ class YButton extends Component<WidgetProps, ButtonState> {
     this.applyKeywordsToListen = this.applyKeywordsToListen.bind(this);
     this.onClick = this.onClick.bind(this);
     this.handleSettingsChanged = this.handleSettingsChanged.bind(this);
-    this.handleKeywordSelected = this.handleKeywordSelected.bind(this);
   }
 
   async componentDidMount() {
     try {
-      const configuration =
+      this.configuration =
         await widgetsApi.getWidgetConfiguration<ButtonConfiguration>(
           this.props.id
         );
-      const keywordId = configuration.device.keywordId;
+      const keywordId = this.configuration.keywordId;
       const lastState =
         ((await keywordsApi.getLatestAcquisition(keywordId))
           ?.value as number) === 1;
       console.debug(
         'yButton configuration for widget #' + this.props.id,
-        configuration
+        this.configuration
       );
       console.debug(
         'yButton acquisitions for widget #' + this.props.id,
@@ -98,7 +93,6 @@ class YButton extends Component<WidgetProps, ButtonState> {
       );
 
       this.setState({
-        selectedKeyword: keywordId,
         isPressed: lastState || false,
       });
     } catch (error) {
@@ -116,9 +110,9 @@ class YButton extends Component<WidgetProps, ButtonState> {
   }
 
   private applyKeywordsToListen() {
-    if (!this.state.selectedKeyword) return;
+    if (!this.configuration?.keywordId) return;
     this.context?.subscribeToKeywordAcquisitions(
-      [this.state.selectedKeyword],
+      [this.configuration.keywordId],
       this.acquisitionListener
     );
   }
@@ -126,12 +120,6 @@ class YButton extends Component<WidgetProps, ButtonState> {
   private handleSettingsChanged() {
     // Placeholder for external setting hook.
     console.log('YButton settings button clicked');
-  }
-
-  private handleKeywordSelected(keyword: number | null) {
-    this.setState({ selectedKeyword: keyword }, () => {
-      this.applyKeywordsToListen();
-    });
   }
 
   private onClick() {
@@ -143,35 +131,47 @@ class YButton extends Component<WidgetProps, ButtonState> {
       isPressed: localIsPressed,
     });
 
-    if (!this.state.selectedKeyword) {
-      console.warn('No keyword selected for this widget');
-      return;
+    if (this.configuration?.keywordId) {
+      keywordsApi.sendCommand(
+        this.configuration.keywordId,
+        localIsPressed ? '1' : '0'
+      );
     }
-    keywordsApi.sendCommand(
-      this.state.selectedKeyword,
-      localIsPressed ? '1' : '0'
-    );
   }
   render() {
     return (
       <Widget
         id={this.props.id}
         onSettingsChanged={this.handleSettingsChanged}
-        onKeywordSelected={this.handleKeywordSelected}
         size={this.props.size ?? 'small'}
       >
         <div style={{ margin: '10px', height: '100%', width: '100%' }}>
           <h2>
             Button #{this.props.id}{' '}
-            {this.state.selectedKeyword
-              ? `on keyword #${this.state.selectedKeyword}`
+            {this.configuration
+              ? `on keyword #${this.configuration.keywordId}`
               : ''}
           </h2>
           <Button
             onClick={this.onClick}
-            className={`toggle-button ${this.state.isPressed ? 'on' : 'off'}`}
+            className={`toggle-button ${
+              this.configuration?.invert
+                ? this.state.isPressed
+                  ? 'off'
+                  : 'on'
+                : this.state.isPressed
+                ? 'on'
+                : 'off'
+            }`}
           >
-            Click on Me ! {this.state.isPressed ? 'ON' : 'OFF'}
+            Click on Me !{' '}
+            {this.configuration?.invert
+              ? this.state.isPressed
+                ? 'OFF'
+                : 'ON'
+              : this.state.isPressed
+              ? 'ON'
+              : 'OFF'}
           </Button>
         </div>
       </Widget>

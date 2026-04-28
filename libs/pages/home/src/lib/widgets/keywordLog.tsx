@@ -15,12 +15,7 @@ interface KeywordLogState {
 }
 
 interface KeywordLogConfiguration {
-  devices: [
-    {
-      deviceId: number; //TODO utile ?
-      keywordId: number;
-    }
-  ];
+  keywordIds: number[];
 }
 
 class KeywordLogAcquisitionListener implements AcquisitionListener {
@@ -64,11 +59,8 @@ class KeywordLog extends Component<WidgetProps, KeywordLogState> {
         await widgetsApi.getWidgetConfiguration<KeywordLogConfiguration>(
           this.props.id
         );
-      const keywordIds = configuration.devices.map(
-        (device) => device.keywordId
-      );
       const acquisitionsResponse = await keywordsApi.getLatestAcquisitions(
-        keywordIds,
+        configuration.keywordIds,
         10
       );
 
@@ -102,7 +94,7 @@ class KeywordLog extends Component<WidgetProps, KeywordLogState> {
       });
 
       this.context?.subscribeToKeywordAcquisitions(
-        keywordIds,
+        configuration.keywordIds,
         this.acquisitionListener
       );
     } catch (error) {

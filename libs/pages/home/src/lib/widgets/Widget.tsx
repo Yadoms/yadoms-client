@@ -9,7 +9,6 @@ export interface WidgetProps {
   id: number;
   onSettingsChanged?: () => void;
   onSettingsClick?: () => void;
-  onKeywordSelected?: (keywordId: number | null) => void;
   children?: React.ReactNode;
   size?: 'small' | 'wide';
 }
@@ -104,10 +103,6 @@ export class Widget extends Component<WidgetProps, WidgetState> {
 
   private saveSettings() {
     this.setState({ settingsModalOpen: false });
-
-    if (this.props.onKeywordSelected) {
-      this.props.onKeywordSelected(this.state.selectedKeyword);
-    }
     this.props.onSettingsChanged?.();
   }
 
