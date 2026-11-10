@@ -142,6 +142,7 @@ class YButton extends Component<WidgetProps, ButtonState> {
     return (
       <Widget
         id={this.props.id}
+        keywordId={this.configuration?.keywordId}
         onSettingsChanged={this.handleSettingsChanged}
         size={this.props.size ?? 'small'}
       >

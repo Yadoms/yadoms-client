@@ -7,6 +7,7 @@ import { keywordsApi } from '@yadoms/domain/keywords';
 
 export interface WidgetProps {
   id: number;
+  keywordId?: number;
   onSettingsChanged?: () => void;
   onSettingsClick?: () => void;
   children?: React.ReactNode;
@@ -84,7 +85,10 @@ export class Widget extends Component<WidgetProps, WidgetState> {
   }
 
   private async handleSettingsClick() {
-    this.setState({ settingsModalOpen: true });
+    this.setState({
+      settingsModalOpen: true,
+      selectedKeyword: this.props.keywordId ?? null,
+    });
     if (this.state.keywordsOptions.length === 0) {
       await this.loadKeywords();
     }
@@ -120,9 +124,9 @@ export class Widget extends Component<WidgetProps, WidgetState> {
             <Select
               data={this.state.keywordsOptions}
               value={
-                this.state.selectedKeyword
+                this.state.selectedKeyword !== null
                   ? String(this.state.selectedKeyword)
-                  : undefined
+                  : null
               }
               onChange={(val) => this.handleKeywordChange(val)}
               placeholder="Choose a keyword"
