@@ -9,9 +9,14 @@
       "request": "launch",
       "name": "Launch Chrome against localhost",
       "url": "http://localhost:4200",
-      "webRoot": "${workspaceFolder}",
+      "webRoot": "${workspaceFolder}/apps/yadoms-cs",
+      "sourceMaps": true,
+      "pathMapping": {
+        "/@fs/C:/projects/domotique/yadoms/yadoms-client/": "${workspaceFolder}/"
+      },
       "sourceMapPathOverrides": {
-        "webpack:///src/*": "${webRoot}/src/*"
+        "http://localhost:4200/@fs/*": "*",
+        "/@fs/*": "*"
       }
     },
     {
