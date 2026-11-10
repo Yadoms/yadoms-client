@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
-import { IconSettings } from '@tabler/icons-react';
+import { IconSettings, IconPlus, IconTrash } from '@tabler/icons-react';
 import classes from '../home.module.css';
 import classNames from 'classnames';
-import { Modal, Select, Button } from '@mantine/core';
+import { Modal, Select, Button, ActionIcon, Group, Stack } from '@mantine/core';
 import { keywordsApi } from '@yadoms/domain/keywords';
 
 export interface WidgetProps {
   id: number;
   keywordId?: number;
+  keywordIds?: number[];
   onSettingsChanged?: () => void;
   onSettingsClick?: () => void;
   children?: React.ReactNode;
@@ -51,7 +52,7 @@ export function SettingsButton({
 
 interface WidgetState {
   settingsModalOpen: boolean;
-  selectedKeyword: number | null;
+  selectedKeywords: (number | null)[];
   keywordsOptions: { value: string; label: string }[];
 }
 
@@ -61,14 +62,29 @@ export class Widget extends Component<WidgetProps, WidgetState> {
 
     this.state = {
       settingsModalOpen: false,
-      selectedKeyword: null,
+      selectedKeywords: [null],
       keywordsOptions: [],
     };
 
     this.handleSettingsClick = this.handleSettingsClick.bind(this);
     this.closeModal = this.closeModal.bind(this);
     this.handleKeywordChange = this.handleKeywordChange.bind(this);
+    this.addKeyword = this.addKeyword.bind(this);
+    this.removeKeyword = this.removeKeyword.bind(this);
     this.saveSettings = this.saveSettings.bind(this);
+  }
+
+  private get isMultiKeywords() {
+    return this.props.keywordIds !== undefined;
+  }
+
+  private initialKeywords(): (number | null)[] {
+    if (this.isMultiKeywords) {
+      return this.props.keywordIds?.length
+        ? [...this.props.keywordIds]
+        : [null];
+    }
+    return [this.props.keywordId ?? null];
   }
 
   private async loadKeywords() {
@@ -87,7 +103,7 @@ export class Widget extends Component<WidgetProps, WidgetState> {
   private async handleSettingsClick() {
     this.setState({
       settingsModalOpen: true,
-      selectedKeyword: this.props.keywordId ?? null,
+      selectedKeywords: this.initialKeywords(),
     });
     if (this.state.keywordsOptions.length === 0) {
       await this.loadKeywords();
@@ -101,8 +117,41 @@ export class Widget extends Component<WidgetProps, WidgetState> {
     this.setState({ settingsModalOpen: false });
   }
 
-  handleKeywordChange(value: string | null) {
-    this.setState({ selectedKeyword: value ? parseInt(value, 10) : null });
+  handleKeywordChange(index: number, value: string | null) {
+    this.setState((prevState) => ({
+      selectedKeywords: prevState.selectedKeywords.map((kw, i) =>
+        i === index ? (value ? parseInt(value, 10) : null) : kw
+      ),
+    }));
+  }
+
+  private addKeyword() {
+    this.setState((prevState) => ({
+      selectedKeywords: [...prevState.selectedKeywords, null],
+    }));
+  }
+
+  private removeKeyword(index: number) {
+    this.setState((prevState) =>
+      prevState.selectedKeywords.length <= 1
+        ? null
+        : {
+            selectedKeywords: prevState.selectedKeywords.filter(
+              (_, i) => i !== index
+            ),
+          }
+    );
+  }
+
+  private optionsFor(index: number) {
+    const usedElsewhere = new Set(
+      this.state.selectedKeywords
+        .filter((kw, i) => i !== index && kw !== null)
+        .map(String)
+    );
+    return this.state.keywordsOptions.filter(
+      (option) => !usedElsewhere.has(option.value)
+    );
   }
 
   private saveSettings() {
@@ -112,6 +161,9 @@ export class Widget extends Component<WidgetProps, WidgetState> {
 
   render() {
     const sizeClass = this.props.size === 'wide' ? classes.wide : classes.small;
+    const { selectedKeywords } = this.state;
+    const canRemove = selectedKeywords.length > 1;
+    const hasSelectedKeyword = selectedKeywords.some((kw) => kw !== null);
 
     return (
       <div className={classNames(classes.card, sizeClass)}>
@@ -119,21 +171,50 @@ export class Widget extends Component<WidgetProps, WidgetState> {
           <Modal
             opened={this.state.settingsModalOpen}
             onClose={this.closeModal}
-            title="Select keyword"
+            title={this.isMultiKeywords ? 'Select keywords' : 'Select keyword'}
           >
-            <Select
-              data={this.state.keywordsOptions}
-              value={
-                this.state.selectedKeyword !== null
-                  ? String(this.state.selectedKeyword)
-                  : null
-              }
-              onChange={(val) => this.handleKeywordChange(val)}
-              placeholder="Choose a keyword"
-              searchable
-            />
+            <Stack gap="xs">
+              {selectedKeywords.map((keyword, index) => (
+                <Group key={index} gap="xs" wrap="nowrap">
+                  <Select
+                    style={{ flex: 1 }}
+                    data={this.optionsFor(index)}
+                    value={keyword !== null ? String(keyword) : null}
+                    onChange={(val) => this.handleKeywordChange(index, val)}
+                    placeholder="Choose a keyword"
+                    searchable
+                  />
+                  {this.isMultiKeywords && (
+                    <ActionIcon
+                      variant="subtle"
+                      color="red"
+                      aria-label="Remove keyword"
+                      title="Remove keyword"
+                      disabled={!canRemove}
+                      onClick={() => this.removeKeyword(index)}
+                    >
+                      <IconTrash size={18} />
+                    </ActionIcon>
+                  )}
+                </Group>
+              ))}
+              {this.isMultiKeywords && (
+                <Button
+                  variant="light"
+                  leftSection={<IconPlus size={16} />}
+                  onClick={this.addKeyword}
+                >
+                  Add keyword
+                </Button>
+              )}
+            </Stack>
             <div style={{ marginTop: 12 }}>
-              <Button onClick={this.saveSettings}>Save</Button>
+              <Button
+                onClick={this.saveSettings}
+                disabled={!hasSelectedKeyword}
+              >
+                Save
+              </Button>
             </div>
           </Modal>
           <SettingsButton onClick={this.handleSettingsClick} />

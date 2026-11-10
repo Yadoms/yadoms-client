@@ -12,6 +12,7 @@ import { keywordsApi } from '@yadoms/domain/keywords';
 
 interface KeywordLogState {
   myAcquisitions: Acquisition[];
+  keywordIds: number[];
 }
 
 interface KeywordLogConfiguration {
@@ -44,6 +45,7 @@ class KeywordLog extends Component<WidgetProps, KeywordLogState> {
 
     this.state = {
       myAcquisitions: [],
+      keywordIds: [],
     };
 
     this.acquisitionListener = new KeywordLogAcquisitionListener(
@@ -91,6 +93,7 @@ class KeywordLog extends Component<WidgetProps, KeywordLogState> {
 
       this.setState({
         myAcquisitions: acquisitions,
+        keywordIds: configuration.keywordIds,
       });
 
       this.context?.subscribeToKeywordAcquisitions(
@@ -120,6 +123,7 @@ class KeywordLog extends Component<WidgetProps, KeywordLogState> {
     return (
       <Widget
         id={this.props.id}
+        keywordIds={this.state.keywordIds}
         onSettingsClick={this.handleSettingsClick}
         size={this.props.size ?? 'wide'}
       >
