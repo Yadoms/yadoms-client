@@ -38,7 +38,7 @@ export function SettingsButton({
         position: 'absolute',
         top: 8,
         right: 8,
-        zIndex: 9999,
+        zIndex: 1,
         background: 'transparent',
         border: 'none',
       }}
