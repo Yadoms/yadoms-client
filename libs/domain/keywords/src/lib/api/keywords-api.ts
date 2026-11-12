@@ -4,7 +4,7 @@ import {
   Acquisition,
   AcquisitionsResponse,
 } from '../model/KeywordsResponse';
-import type { KeywordEntity } from '../slices/keywords.slice';
+import type { AccessMode, KeywordEntity } from '../slices/keywords.slice';
 
 export function formatKeywordLabel(
   keyword: Pick<KeywordEntity, 'deviceId' | 'friendlyName'>,
@@ -67,6 +67,24 @@ class KeywordsApi {
 
     // Server returns the keyword itself when only one is requested
     return response.data.keywords ?? [response.data];
+  }
+
+  async getDeviceKeywords(
+    deviceId: number,
+    capacityNames: string[],
+    accessMode?: AccessMode
+  ): Promise<KeywordEntity[]> {
+    const response = await axiosInstance.get<KeywordsResponse>(`/keywords`, {
+      params: {
+        'from-device-id': deviceId,
+        'from-capacity-name': capacityNames.length
+          ? capacityNames.join('|')
+          : undefined,
+        'from-access-mode': accessMode,
+      },
+    });
+    if (response.status === 204) return [];
+    return response.data.keywords;
   }
 
   async getFriendlyNames(keywordIds: number[]): Promise<Map<number, string>> {

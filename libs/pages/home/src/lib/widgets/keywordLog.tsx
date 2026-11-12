@@ -200,6 +200,7 @@ class KeywordLog extends Component<WidgetProps, KeywordLogState> {
         title={this.state.title}
         defaultTitle={this.defaultTitle}
         keywordIds={this.state.keywordIds}
+        showDeviceStatus={false}
         onSettingsClick={this.handleSettingsClick}
         onSettingsChanged={this.handleSettingsChanged}
         size={this.props.size ?? 'wide'}
