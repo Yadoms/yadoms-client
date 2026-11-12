@@ -51,7 +51,14 @@
   "widgets": {
     "button": {
       "push": "Envoyer",
-      "sent": "Envoyé !"
+      "sent": "Envoyé !",
+      "invert": "Inversion de l'état",
+      "askConfirmation": "Demande de confirmation",
+      "confirmTitle": "Confirmation",
+      "confirmToggle": "Passer \"{{name}}\" à {{state}} ?",
+      "confirmPush": "Envoyer la commande à \"{{name}}\" ?",
+      "confirm": "Confirmer",
+      "cancel": "Annuler"
     }
   }
 }

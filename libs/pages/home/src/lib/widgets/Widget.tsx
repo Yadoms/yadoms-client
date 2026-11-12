@@ -43,6 +43,9 @@ export interface WidgetProps {
     title: string
   ) => Promise<void> | void;
   onSettingsClick?: () => void;
+  renderSettings?: (
+    selectedKeywordCapacities: (string | undefined)[]
+  ) => React.ReactNode;
   children?: React.ReactNode;
   size?: 'small' | 'wide';
 }
@@ -84,7 +87,7 @@ interface WidgetState {
   settingsModalOpen: boolean;
   title: string;
   selectedKeywords: (number | null)[];
-  keywordsOptions: { value: string; label: string }[];
+  keywordsOptions: { value: string; label: string; capacityName: string }[];
   saving: boolean;
   saveError: string | null;
   signalPower?: number | null;
@@ -252,6 +255,7 @@ export class Widget extends Component<WidgetProps, WidgetState> {
         .map((k) => ({
           value: String(k.id),
           label: formatKeywordLabel(k, deviceNames.get(k.deviceId)),
+          capacityName: k.capacityName,
         }))
         .sort((a, b) => a.label.localeCompare(b.label));
       this.setState({ keywordsOptions: options });
@@ -312,6 +316,14 @@ export class Widget extends Component<WidgetProps, WidgetState> {
     );
     return this.state.keywordsOptions.filter(
       (option) => !usedElsewhere.has(option.value)
+    );
+  }
+
+  private selectedKeywordCapacities() {
+    return this.state.selectedKeywords.map(
+      (kw) =>
+        this.state.keywordsOptions.find((option) => option.value === String(kw))
+          ?.capacityName
     );
   }
 
@@ -393,6 +405,7 @@ export class Widget extends Component<WidgetProps, WidgetState> {
                   Add keyword
                 </Button>
               )}
+              {this.props.renderSettings?.(this.selectedKeywordCapacities())}
             </Stack>
             {this.state.saveError && (
               <Text c="red" size="sm" mt="sm">

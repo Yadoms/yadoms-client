@@ -5,7 +5,8 @@ import {
   AcquisitionListener,
 } from '@yadoms/shared';
 import { v4 as uuidv4 } from 'uuid';
-import { Button, Group, Switch, Text } from '@mantine/core';
+import { Button, Checkbox, Group, Switch, Text } from '@mantine/core';
+import { openConfirmModal } from '@mantine/modals';
 import { getI18n } from 'react-i18next';
 import { WidgetProps, Widget } from './Widget';
 import {
@@ -24,11 +25,13 @@ interface ButtonState {
   keywordLabel?: string;
   keywordCapacityName?: string;
   showSentMessage: boolean;
+  settingsInvert: boolean;
+  settingsAskConfirmation: boolean;
 }
 
 interface ButtonConfiguration {
   keywordId: number;
-  askConfirmation?: boolean; //TODO à gérer
+  askConfirmation?: boolean;
   invert: boolean;
   kind: {
     activeSection: 'toggle' | 'pushButton'; //TODO à gérer
@@ -75,6 +78,8 @@ class YButton extends Component<WidgetProps, ButtonState> {
       isPressed: false,
       title: '',
       showSentMessage: false,
+      settingsInvert: false,
+      settingsAskConfirmation: false,
     };
 
     this.acquisitionListener = new ButtonStateAcquisitionListener(
@@ -85,6 +90,8 @@ class YButton extends Component<WidgetProps, ButtonState> {
     this.applyKeywordsToListen = this.applyKeywordsToListen.bind(this);
     this.onClick = this.onClick.bind(this);
     this.handleSettingsChanged = this.handleSettingsChanged.bind(this);
+    this.handleSettingsClick = this.handleSettingsClick.bind(this);
+    this.renderSettings = this.renderSettings.bind(this);
   }
 
   async componentDidMount() {
@@ -169,6 +176,13 @@ class YButton extends Component<WidgetProps, ButtonState> {
     );
   }
 
+  private handleSettingsClick() {
+    this.setState({
+      settingsInvert: this.configuration?.invert ?? false,
+      settingsAskConfirmation: this.configuration?.askConfirmation ?? false,
+    });
+  }
+
   private async handleSettingsChanged(keywordIds: number[], title: string) {
     if (!this.configuration)
       throw new Error('Widget configuration is not loaded');
@@ -176,6 +190,8 @@ class YButton extends Component<WidgetProps, ButtonState> {
     const newConfiguration: ButtonConfiguration = {
       ...this.configuration,
       keywordId: keywordIds[0],
+      invert: this.state.settingsInvert,
+      askConfirmation: this.state.settingsAskConfirmation,
     };
     await widgetsApi.updateWidget(this.props.id, {
       title,
@@ -199,11 +215,33 @@ class YButton extends Component<WidgetProps, ButtonState> {
   }
 
   private onClick() {
-    if (this.isPushButton) {
-      this.push();
-    } else {
-      this.toggle();
+    const apply = () => (this.isPushButton ? this.push() : this.toggle());
+
+    if (!this.configuration?.askConfirmation) {
+      apply();
+      return;
     }
+
+    const t = getI18n()?.t;
+    const name = this.displayedTitle;
+    const message = this.isPushButton
+      ? t?.('widgets.button.confirmPush', { name }) ??
+        `Envoyer la commande à "${name}" ?`
+      : t?.('widgets.button.confirmToggle', {
+          name,
+          state: this.isOn ? 'OFF' : 'ON',
+        }) ?? `Passer "${name}" à ${this.isOn ? 'OFF' : 'ON'} ?`;
+
+    openConfirmModal({
+      title: t?.('widgets.button.confirmTitle') ?? 'Confirmation',
+      centered: true,
+      children: <Text size="sm">{message}</Text>,
+      labels: {
+        confirm: t?.('widgets.button.confirm') ?? 'Confirmer',
+        cancel: t?.('widgets.button.cancel') ?? 'Annuler',
+      },
+      onConfirm: apply,
+    });
   }
 
   private toggle() {
@@ -272,6 +310,36 @@ class YButton extends Component<WidgetProps, ButtonState> {
     );
   }
 
+  private renderSettings(selectedKeywordCapacities: (string | undefined)[]) {
+    const t = getI18n()?.t;
+    return (
+      <>
+        {selectedKeywordCapacities[0] === 'switch' && (
+          <Checkbox
+            mt="xs"
+            label={t?.('widgets.button.invert') ?? "Inversion de l'état"}
+            checked={this.state.settingsInvert}
+            onChange={(event) =>
+              this.setState({ settingsInvert: event.currentTarget.checked })
+            }
+          />
+        )}
+        <Checkbox
+          mt="xs"
+          label={
+            t?.('widgets.button.askConfirmation') ?? 'Demande de confirmation'
+          }
+          checked={this.state.settingsAskConfirmation}
+          onChange={(event) =>
+            this.setState({
+              settingsAskConfirmation: event.currentTarget.checked,
+            })
+          }
+        />
+      </>
+    );
+  }
+
   render() {
     return (
       <Widget
@@ -281,6 +349,8 @@ class YButton extends Component<WidgetProps, ButtonState> {
         keywordId={this.configuration?.keywordId}
         keywordCapacities={['switch', 'event']}
         onSettingsChanged={this.handleSettingsChanged}
+        onSettingsClick={this.handleSettingsClick}
+        renderSettings={this.renderSettings}
         size={this.props.size ?? 'small'}
       >
         <div style={{ margin: '10px', height: '100%', width: '100%' }}>

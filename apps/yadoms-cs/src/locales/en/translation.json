@@ -51,7 +51,14 @@
   "widgets": {
     "button": {
       "push": "Send",
-      "sent": "Sent!"
+      "sent": "Sent!",
+      "invert": "Invert state",
+      "askConfirmation": "Ask for confirmation",
+      "confirmTitle": "Confirmation",
+      "confirmToggle": "Switch \"{{name}}\" to {{state}}?",
+      "confirmPush": "Send the command to \"{{name}}\"?",
+      "confirm": "Confirm",
+      "cancel": "Cancel"
     }
   }
 }
