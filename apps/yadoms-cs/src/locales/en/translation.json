@@ -48,6 +48,9 @@
       }
     }
   },
+  "connection": {
+    "lost": "Connection lost"
+  },
   "widgets": {
     "button": {
       "push": "Send",

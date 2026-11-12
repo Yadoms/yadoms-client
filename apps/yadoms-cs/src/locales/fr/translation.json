@@ -48,6 +48,9 @@
       }
     }
   },
+  "connection": {
+    "lost": "Connexion perdue"
+  },
   "widgets": {
     "button": {
       "push": "Envoyer",

@@ -12,12 +12,26 @@ export interface AcquisitionListener {
   onReceived(newAcquisition: Acquisition): void;
 }
 
+const RECONNECT_DELAY_MS = 5000;
+
 class YadomsWebSocketConnection {
-  private _ws: WebSocket;
+  private _ws!: WebSocket;
   private _connected = false;
+  private _closed = false;
+  private _reconnectTimer: ReturnType<typeof setTimeout> | undefined;
   private _acquisitionsListeners = new Map<number, AcquisitionListener[]>();
 
   constructor() {
+    this.connect();
+  }
+
+  close() {
+    this._closed = true;
+    clearTimeout(this._reconnectTimer);
+    this._ws.close();
+  }
+
+  private connect() {
     this._ws = new WebSocket('ws://127.0.0.1:8080/ws/v2'); //TODO rendre URL dynamique
 
     this._ws.onopen = () => {
@@ -27,8 +41,13 @@ class YadomsWebSocketConnection {
     };
 
     this._ws.onclose = () => {
+      if (this._closed) return;
       this._connected = false;
       this.onConnected?.(this._connected);
+      this._reconnectTimer = setTimeout(
+        () => this.connect(),
+        RECONNECT_DELAY_MS
+      );
     };
 
     this._ws.onmessage = (event: any) => {
@@ -96,7 +115,7 @@ class YadomsWebSocketConnection {
 }
 
 export type YadomsConnection = {
-  connected: boolean;
+  connected: boolean | undefined;
   serverCurrentTime: Date | undefined;
   subscribeToKeywordAcquisitions: (
     keywords: number[],
@@ -108,7 +127,7 @@ export const YadomsConnectionContext = createContext<YadomsConnection | null>(
 );
 
 export const YadomsConnectionContextProvider = ({ children }: any) => {
-  const [connected, setConnected] = useState<boolean>(false);
+  const [connected, setConnected] = useState<boolean>();
   const [serverCurrentTime, setServerCurrentTime] = useState<Date>();
 
   function subscribeToKeywordAcquisitions(
@@ -127,6 +146,8 @@ export const YadomsConnectionContextProvider = ({ children }: any) => {
       setServerCurrentTime(serverTime);
 
     ws.current = yadomsWebSocketConnection;
+
+    return () => yadomsWebSocketConnection.close();
   }, []);
 
   return (

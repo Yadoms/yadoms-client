@@ -1,7 +1,9 @@
 import {
   ActionIcon,
+  Alert,
   Center,
   Flex,
+  Overlay,
   rem,
   Stack,
   Tooltip,
@@ -25,8 +27,9 @@ import {
 } from '@tabler/icons-react';
 import { Logo } from './_logo';
 import { Link, Route, Routes, useLocation } from 'react-router-dom';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { YadomsConnection, YadomsConnectionContext } from '@yadoms/shared';
 import { Summary } from '@yadoms/pages/summary';
 import { Home } from '@yadoms/pages/home';
 import { Plugins } from '@yadoms/pages/plugins';
@@ -86,6 +89,10 @@ const linksData = [
 function MainAppShell() {
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   const dark = colorScheme === 'dark';
+  const { t } = useTranslation();
+  const { connected } = useContext(
+    YadomsConnectionContext
+  ) as YadomsConnection;
 
   const location = useLocation();
   const { pathname } = location;
@@ -104,6 +111,13 @@ function MainAppShell() {
 
   return (
     <Flex direction={'row'}>
+      {connected === false && (
+        <Overlay fixed center color="#000" backgroundOpacity={0.6}>
+          <Alert color="red" variant="filled">
+            {t('connection.lost')}
+          </Alert>
+        </Overlay>
+      )}
       <nav className={classes.navbar}>
         <Center>
           <Logo />
