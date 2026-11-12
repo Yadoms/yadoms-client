@@ -41,7 +41,7 @@ class KeywordLog extends Component<WidgetProps, KeywordLogState> {
   acquisitionListener: KeywordLogAcquisitionListener;
   configuration?: KeywordLogConfiguration;
 
-  acquisitionsHistoryDepth = 6;
+  acquisitionsHistoryDepth = 20;
 
   constructor(props: WidgetProps) {
     super(props);
@@ -114,7 +114,7 @@ class KeywordLog extends Component<WidgetProps, KeywordLogState> {
 
     const acquisitionsResponse = await keywordsApi.getLatestAcquisitions(
       keywordIds,
-      10
+      this.acquisitionsHistoryDepth
     );
 
     // Transform API acquisitions to shared Acquisition type
@@ -190,7 +190,7 @@ class KeywordLog extends Component<WidgetProps, KeywordLogState> {
       >
         <div style={{ margin: '10px', height: '100%', width: '100%' }}>
           <h2>{this.displayedTitle}</h2>
-          <div>
+          <div style={{ height: '200px', overflowY: 'auto' }}>
             {this.state.myAcquisitions.map((acq) => (
               <p
                 key={uuidv4()}
