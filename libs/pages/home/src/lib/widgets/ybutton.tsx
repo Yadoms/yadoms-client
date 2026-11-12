@@ -79,28 +79,32 @@ class YButton extends Component<WidgetProps, ButtonState> {
         await widgetsApi.getWidgetConfiguration<ButtonConfiguration>(
           this.props.id
         );
-      const keywordId = this.configuration.keywordId;
-      const lastState =
-        ((await keywordsApi.getLatestAcquisition(keywordId))
-          ?.value as number) === 1;
       console.debug(
         'yButton configuration for widget #' + this.props.id,
         this.configuration
       );
-      console.debug(
-        'yButton acquisitions for widget #' + this.props.id,
-        lastState
-      );
-
-      this.setState({
-        isPressed: lastState || false,
-      });
+      await this.loadLastState();
     } catch (error) {
       console.error('Failed to load configuration:', error);
       // Handle error, e.g., set default state or show error UI
     }
 
     this.applyKeywordsToListen();
+  }
+
+  private async loadLastState() {
+    if (!this.configuration) return;
+    const lastState =
+      ((await keywordsApi.getLatestAcquisition(this.configuration.keywordId))
+        ?.value as number) === 1;
+    console.debug(
+      'yButton acquisitions for widget #' + this.props.id,
+      lastState
+    );
+
+    this.setState({
+      isPressed: lastState || false,
+    });
   }
 
   private onNewAcquisition(newAcquisition: Acquisition) {
@@ -117,9 +121,24 @@ class YButton extends Component<WidgetProps, ButtonState> {
     );
   }
 
-  private handleSettingsChanged() {
-    // Placeholder for external setting hook.
-    console.log('YButton settings button clicked');
+  private async handleSettingsChanged(keywordIds: number[]) {
+    if (!this.configuration)
+      throw new Error('Widget configuration is not loaded');
+
+    const newConfiguration: ButtonConfiguration = {
+      ...this.configuration,
+      keywordId: keywordIds[0],
+    };
+    await widgetsApi.updateWidgetConfiguration(this.props.id, newConfiguration);
+    this.configuration = newConfiguration;
+
+    this.applyKeywordsToListen();
+    try {
+      await this.loadLastState();
+    } catch (error) {
+      console.error('Failed to load last state:', error);
+      this.forceUpdate();
+    }
   }
 
   private onClick() {

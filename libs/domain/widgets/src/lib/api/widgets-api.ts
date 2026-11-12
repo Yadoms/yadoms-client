@@ -15,6 +15,13 @@ class WidgetsApi {
     });
     return response.data.configuration as T;
   }
+
+  async updateWidgetConfiguration<T>(
+    widgetId: number,
+    configuration: T
+  ): Promise<void> {
+    await axiosInstance.patch(`/widgets/${widgetId}`, { configuration });
+  }
 }
 
 export const widgetsApi = new WidgetsApi();

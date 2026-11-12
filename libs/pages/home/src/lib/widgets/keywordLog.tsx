@@ -36,6 +36,7 @@ class KeywordLog extends Component<WidgetProps, KeywordLogState> {
   context!: React.ContextType<typeof YadomsConnectionContext>;
 
   acquisitionListener: KeywordLogAcquisitionListener;
+  configuration?: KeywordLogConfiguration;
 
   acquisitionsHistoryDepth = 6;
 
@@ -53,56 +54,78 @@ class KeywordLog extends Component<WidgetProps, KeywordLogState> {
     );
 
     this.onNewAcquisition = this.onNewAcquisition.bind(this);
+    this.handleSettingsChanged = this.handleSettingsChanged.bind(this);
   }
 
   async componentDidMount() {
     try {
-      const configuration =
+      this.configuration =
         await widgetsApi.getWidgetConfiguration<KeywordLogConfiguration>(
           this.props.id
         );
-      const acquisitionsResponse = await keywordsApi.getLatestAcquisitions(
-        configuration.keywordIds,
-        10
-      );
-
-      // Transform API acquisitions to shared Acquisition type
-      let acquisitions: Acquisition[] =
-        acquisitionsResponse.acquisitions.flatMap((existingAcquisitions) =>
-          existingAcquisitions.acquisitions.map((acq) => ({
-            date: parseYadomsDate(acq.date),
-            keyword: existingAcquisitions.keywordId,
-            value:
-              typeof acq.value === 'string' ? acq.value : String(acq.value),
-          }))
-        );
-
-      // SSort acquisitions by date desc
-      acquisitions = acquisitions
-        .sort((a, b) => b.date.getTime() - a.date.getTime())
-        .slice(0, this.acquisitionsHistoryDepth);
-
       console.debug(
         'keywordLog configuration for widget #' + this.props.id,
-        configuration
+        this.configuration
       );
-      console.debug(
-        'keywordLog acquisitions for widget #' + this.props.id,
-        acquisitions
-      );
-
-      this.setState({
-        myAcquisitions: acquisitions,
-        keywordIds: configuration.keywordIds,
-      });
-
-      this.context?.subscribeToKeywordAcquisitions(
-        configuration.keywordIds,
-        this.acquisitionListener
-      );
+      await this.applyKeywords(this.configuration.keywordIds);
     } catch (error) {
       console.error('Failed to load configuration:', error);
       // Handle error, e.g., set default state or show error UI
+    }
+  }
+
+  private async applyKeywords(keywordIds: number[]) {
+    this.setState({ keywordIds });
+    this.context?.subscribeToKeywordAcquisitions(
+      keywordIds,
+      this.acquisitionListener
+    );
+
+    const acquisitionsResponse = await keywordsApi.getLatestAcquisitions(
+      keywordIds,
+      10
+    );
+
+    // Transform API acquisitions to shared Acquisition type
+    let acquisitions: Acquisition[] = acquisitionsResponse.acquisitions.flatMap(
+      (existingAcquisitions) =>
+        existingAcquisitions.acquisitions.map((acq) => ({
+          date: parseYadomsDate(acq.date),
+          keyword: existingAcquisitions.keywordId,
+          value: typeof acq.value === 'string' ? acq.value : String(acq.value),
+        }))
+    );
+
+    // SSort acquisitions by date desc
+    acquisitions = acquisitions
+      .sort((a, b) => b.date.getTime() - a.date.getTime())
+      .slice(0, this.acquisitionsHistoryDepth);
+
+    console.debug(
+      'keywordLog acquisitions for widget #' + this.props.id,
+      acquisitions
+    );
+
+    this.setState({
+      myAcquisitions: acquisitions,
+    });
+  }
+
+  private async handleSettingsChanged(keywordIds: number[]) {
+    if (!this.configuration)
+      throw new Error('Widget configuration is not loaded');
+
+    const newConfiguration: KeywordLogConfiguration = {
+      ...this.configuration,
+      keywordIds,
+    };
+    await widgetsApi.updateWidgetConfiguration(this.props.id, newConfiguration);
+    this.configuration = newConfiguration;
+
+    try {
+      await this.applyKeywords(keywordIds);
+    } catch (error) {
+      console.error('Failed to load acquisitions:', error);
     }
   }
 
@@ -125,6 +148,7 @@ class KeywordLog extends Component<WidgetProps, KeywordLogState> {
         id={this.props.id}
         keywordIds={this.state.keywordIds}
         onSettingsClick={this.handleSettingsClick}
+        onSettingsChanged={this.handleSettingsChanged}
         size={this.props.size ?? 'wide'}
       >
         <div style={{ margin: '10px', height: '100%', width: '100%' }}>

@@ -2,14 +2,22 @@ import React, { Component } from 'react';
 import { IconSettings, IconPlus, IconTrash } from '@tabler/icons-react';
 import classes from '../home.module.css';
 import classNames from 'classnames';
-import { Modal, Select, Button, ActionIcon, Group, Stack } from '@mantine/core';
+import {
+  Modal,
+  Select,
+  Button,
+  ActionIcon,
+  Group,
+  Stack,
+  Text,
+} from '@mantine/core';
 import { keywordsApi } from '@yadoms/domain/keywords';
 
 export interface WidgetProps {
   id: number;
   keywordId?: number;
   keywordIds?: number[];
-  onSettingsChanged?: () => void;
+  onSettingsChanged?: (keywordIds: number[]) => Promise<void> | void;
   onSettingsClick?: () => void;
   children?: React.ReactNode;
   size?: 'small' | 'wide';
@@ -54,6 +62,8 @@ interface WidgetState {
   settingsModalOpen: boolean;
   selectedKeywords: (number | null)[];
   keywordsOptions: { value: string; label: string }[];
+  saving: boolean;
+  saveError: string | null;
 }
 
 export class Widget extends Component<WidgetProps, WidgetState> {
@@ -64,6 +74,8 @@ export class Widget extends Component<WidgetProps, WidgetState> {
       settingsModalOpen: false,
       selectedKeywords: [null],
       keywordsOptions: [],
+      saving: false,
+      saveError: null,
     };
 
     this.handleSettingsClick = this.handleSettingsClick.bind(this);
@@ -104,13 +116,13 @@ export class Widget extends Component<WidgetProps, WidgetState> {
     this.setState({
       settingsModalOpen: true,
       selectedKeywords: this.initialKeywords(),
+      saveError: null,
     });
     if (this.state.keywordsOptions.length === 0) {
       await this.loadKeywords();
     }
 
     this.props.onSettingsClick?.();
-    this.props.onSettingsChanged?.();
   }
 
   private closeModal() {
@@ -154,9 +166,23 @@ export class Widget extends Component<WidgetProps, WidgetState> {
     );
   }
 
-  private saveSettings() {
-    this.setState({ settingsModalOpen: false });
-    this.props.onSettingsChanged?.();
+  private async saveSettings() {
+    const keywordIds = this.state.selectedKeywords.filter(
+      (kw): kw is number => kw !== null
+    );
+    if (keywordIds.length === 0) return;
+
+    this.setState({ saving: true, saveError: null });
+    try {
+      await this.props.onSettingsChanged?.(keywordIds);
+      this.setState({ saving: false, settingsModalOpen: false });
+    } catch (err) {
+      console.error('Failed to save widget settings', err);
+      this.setState({
+        saving: false,
+        saveError: 'Failed to save settings',
+      });
+    }
   }
 
   render() {
@@ -208,10 +234,16 @@ export class Widget extends Component<WidgetProps, WidgetState> {
                 </Button>
               )}
             </Stack>
+            {this.state.saveError && (
+              <Text c="red" size="sm" mt="sm">
+                {this.state.saveError}
+              </Text>
+            )}
             <div style={{ marginTop: 12 }}>
               <Button
                 onClick={this.saveSettings}
                 disabled={!hasSelectedKeyword}
+                loading={this.state.saving}
               >
                 Save
               </Button>
