@@ -183,7 +183,10 @@ export class Widget extends Component<WidgetProps, WidgetState> {
 
     const keywordId = this.statusKeywordId;
     if (!this.showDeviceStatus || keywordId === undefined) {
-      this.context?.subscribeToKeywordAcquisitions([], this.deviceStatusListener);
+      this.context?.subscribeToKeywordAcquisitions(
+        [],
+        this.deviceStatusListener
+      );
       return;
     }
 
