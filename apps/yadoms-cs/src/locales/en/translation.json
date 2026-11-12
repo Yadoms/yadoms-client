@@ -23,7 +23,8 @@
       "started-from": "Started from",
       "database-engine": "Database engine",
       "version-database-engine": "Version of database engine",
-      "database-size": "Database size"
+      "database-size": "Database size",
+      "server-current-time": "Server current time"
     }
   },
   "plugins": {

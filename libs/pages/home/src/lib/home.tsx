@@ -1,5 +1,3 @@
-import { useContext } from 'react';
-import { YadomsConnectionContext, YadomsConnection } from '@yadoms/shared';
 import YButton from './widgets/ybutton';
 import KeywordLog from './widgets/keywordLog';
 import classes from './home.module.css';
@@ -8,14 +6,9 @@ import classes from './home.module.css';
 export interface PagesHomeProps {}
 
 export function Home(props: PagesHomeProps) {
-  const { serverCurrentTime } = useContext(
-    YadomsConnectionContext
-  ) as YadomsConnection;
-
   return (
     <div>
       <h1>Welcome to PagesHome!</h1>
-      <p>Server current time is {serverCurrentTime?.toString()}</p>
       <div className={classes.grid}>
         <YButton id={1}></YButton>
         <YButton id={2}></YButton>

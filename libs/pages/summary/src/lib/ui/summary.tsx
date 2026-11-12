@@ -1,12 +1,19 @@
 import { Box, Flex, LoadingOverlay, Paper, Table, Title } from '@mantine/core';
-import React from 'react';
+import React, { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
-import { BreadCrumbs } from '@yadoms/shared';
+import {
+  BreadCrumbs,
+  YadomsConnection,
+  YadomsConnectionContext,
+} from '@yadoms/shared';
 import { loadSystemInformations } from '../summary-api';
 import { useQuery } from '@tanstack/react-query';
 
 export function Summary() {
   const { t } = useTranslation();
+  const { serverCurrentTime } = useContext(
+    YadomsConnectionContext
+  ) as YadomsConnection;
 
   const { isLoading, data } = useQuery({
     queryKey: ['system-informations'],
@@ -29,6 +36,10 @@ export function Summary() {
       dataKey: data?.databaseEngine.version,
     },
     { i18nKey: 'database-size', dataKey: data?.database.size },
+    {
+      i18nKey: 'server-current-time',
+      dataKey: serverCurrentTime?.toString(),
+    },
   ];
 
   const rows = systemInformations.map((element) => (

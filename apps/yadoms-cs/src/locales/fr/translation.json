@@ -23,7 +23,8 @@
       "started-from": "Démarré depuis",
       "database-engine": "Moteur de base de données",
       "version-database-engine": "Version du moteur de base de données",
-      "database-size": "Taille de base de données"
+      "database-size": "Taille de base de données",
+      "server-current-time": "Heure actuelle du serveur"
     }
   },
   "plugins": {
