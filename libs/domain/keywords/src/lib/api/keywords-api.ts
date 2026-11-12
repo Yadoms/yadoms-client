@@ -45,6 +45,24 @@ class KeywordsApi {
     }
   }
 
+  async getFriendlyNames(keywordIds: number[]): Promise<Map<number, string>> {
+    const friendlyNames = new Map<number, string>();
+    if (keywordIds.length === 0) return friendlyNames;
+
+    const response = await axiosInstance.get(
+      `/keywords/${keywordIds.join('|')}`
+    );
+    if (response.status === 204) return friendlyNames;
+
+    // Server returns the keyword itself when only one is requested
+    const keywords: { id: number; friendlyName: string }[] = response.data
+      .keywords ?? [response.data];
+    for (const keyword of keywords) {
+      friendlyNames.set(keyword.id, keyword.friendlyName);
+    }
+    return friendlyNames;
+  }
+
   async getLatestAcquisitions(
     keywordIds: number[],
     limit = 1

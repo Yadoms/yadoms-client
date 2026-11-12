@@ -13,6 +13,8 @@ import { connect } from 'react-redux';
 
 interface ButtonState {
   isPressed: boolean;
+  title: string;
+  keywordFriendlyName?: string;
 }
 
 interface ButtonConfiguration {
@@ -61,6 +63,7 @@ class YButton extends Component<WidgetProps, ButtonState> {
 
     this.state = {
       isPressed: false,
+      title: '',
     };
 
     this.acquisitionListener = new ButtonStateAcquisitionListener(
@@ -75,15 +78,16 @@ class YButton extends Component<WidgetProps, ButtonState> {
 
   async componentDidMount() {
     try {
-      this.configuration =
-        await widgetsApi.getWidgetConfiguration<ButtonConfiguration>(
-          this.props.id
-        );
+      const widget = await widgetsApi.getWidget<ButtonConfiguration>(
+        this.props.id
+      );
+      this.configuration = widget.configuration;
       console.debug(
         'yButton configuration for widget #' + this.props.id,
         this.configuration
       );
-      await this.loadLastState();
+      this.setState({ title: widget.title });
+      await Promise.all([this.loadKeywordFriendlyName(), this.loadLastState()]);
     } catch (error) {
       console.error('Failed to load configuration:', error);
       // Handle error, e.g., set default state or show error UI
@@ -107,6 +111,28 @@ class YButton extends Component<WidgetProps, ButtonState> {
     });
   }
 
+  private async loadKeywordFriendlyName() {
+    if (!this.configuration?.keywordId) return;
+    try {
+      const friendlyNames = await keywordsApi.getFriendlyNames([
+        this.configuration.keywordId,
+      ]);
+      this.setState({
+        keywordFriendlyName: friendlyNames.get(this.configuration.keywordId),
+      });
+    } catch (error) {
+      console.error('Failed to load keyword friendly name:', error);
+    }
+  }
+
+  private get displayedTitle() {
+    return (
+      this.state.title ||
+      this.state.keywordFriendlyName ||
+      `Button #${this.props.id}`
+    );
+  }
+
   private onNewAcquisition(newAcquisition: Acquisition) {
     this.setState({
       isPressed: parseInt(newAcquisition.value) !== 0,
@@ -121,7 +147,7 @@ class YButton extends Component<WidgetProps, ButtonState> {
     );
   }
 
-  private async handleSettingsChanged(keywordIds: number[]) {
+  private async handleSettingsChanged(keywordIds: number[], title: string) {
     if (!this.configuration)
       throw new Error('Widget configuration is not loaded');
 
@@ -129,10 +155,15 @@ class YButton extends Component<WidgetProps, ButtonState> {
       ...this.configuration,
       keywordId: keywordIds[0],
     };
-    await widgetsApi.updateWidgetConfiguration(this.props.id, newConfiguration);
+    await widgetsApi.updateWidget(this.props.id, {
+      title,
+      configuration: newConfiguration,
+    });
     this.configuration = newConfiguration;
+    this.setState({ title, keywordFriendlyName: undefined });
 
     this.applyKeywordsToListen();
+    await this.loadKeywordFriendlyName();
     try {
       await this.loadLastState();
     } catch (error) {
@@ -161,17 +192,14 @@ class YButton extends Component<WidgetProps, ButtonState> {
     return (
       <Widget
         id={this.props.id}
+        title={this.state.title}
+        defaultTitle={this.state.keywordFriendlyName}
         keywordId={this.configuration?.keywordId}
         onSettingsChanged={this.handleSettingsChanged}
         size={this.props.size ?? 'small'}
       >
         <div style={{ margin: '10px', height: '100%', width: '100%' }}>
-          <h2>
-            Button #{this.props.id}{' '}
-            {this.configuration
-              ? `on keyword #${this.configuration.keywordId}`
-              : ''}
-          </h2>
+          <h2>{this.displayedTitle}</h2>
           <Button
             onClick={this.onClick}
             className={`toggle-button ${

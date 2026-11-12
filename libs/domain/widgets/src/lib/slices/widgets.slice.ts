@@ -17,6 +17,7 @@ export interface WidgetEntity {
   page: number;
   type: string;
   position: number;
+  title: string;
   configuration: object;
 }
 

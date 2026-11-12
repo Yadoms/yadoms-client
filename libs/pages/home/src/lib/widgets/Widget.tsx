@@ -10,14 +10,20 @@ import {
   Group,
   Stack,
   Text,
+  TextInput,
 } from '@mantine/core';
 import { keywordsApi } from '@yadoms/domain/keywords';
 
 export interface WidgetProps {
   id: number;
+  title?: string;
+  defaultTitle?: string;
   keywordId?: number;
   keywordIds?: number[];
-  onSettingsChanged?: (keywordIds: number[]) => Promise<void> | void;
+  onSettingsChanged?: (
+    keywordIds: number[],
+    title: string
+  ) => Promise<void> | void;
   onSettingsClick?: () => void;
   children?: React.ReactNode;
   size?: 'small' | 'wide';
@@ -60,6 +66,7 @@ export function SettingsButton({
 
 interface WidgetState {
   settingsModalOpen: boolean;
+  title: string;
   selectedKeywords: (number | null)[];
   keywordsOptions: { value: string; label: string }[];
   saving: boolean;
@@ -72,6 +79,7 @@ export class Widget extends Component<WidgetProps, WidgetState> {
 
     this.state = {
       settingsModalOpen: false,
+      title: '',
       selectedKeywords: [null],
       keywordsOptions: [],
       saving: false,
@@ -115,6 +123,7 @@ export class Widget extends Component<WidgetProps, WidgetState> {
   private async handleSettingsClick() {
     this.setState({
       settingsModalOpen: true,
+      title: this.props.title ?? '',
       selectedKeywords: this.initialKeywords(),
       saveError: null,
     });
@@ -174,7 +183,10 @@ export class Widget extends Component<WidgetProps, WidgetState> {
 
     this.setState({ saving: true, saveError: null });
     try {
-      await this.props.onSettingsChanged?.(keywordIds);
+      await this.props.onSettingsChanged?.(
+        keywordIds,
+        this.state.title.trim()
+      );
       this.setState({ saving: false, settingsModalOpen: false });
     } catch (err) {
       console.error('Failed to save widget settings', err);
@@ -197,9 +209,17 @@ export class Widget extends Component<WidgetProps, WidgetState> {
           <Modal
             opened={this.state.settingsModalOpen}
             onClose={this.closeModal}
-            title={this.isMultiKeywords ? 'Select keywords' : 'Select keyword'}
+            title="Widget settings"
           >
             <Stack gap="xs">
+              <TextInput
+                label="Title"
+                value={this.state.title}
+                onChange={(event) =>
+                  this.setState({ title: event.currentTarget.value })
+                }
+                placeholder={this.props.defaultTitle}
+              />
               {selectedKeywords.map((keyword, index) => (
                 <Group key={index} gap="xs" wrap="nowrap">
                   <Select
