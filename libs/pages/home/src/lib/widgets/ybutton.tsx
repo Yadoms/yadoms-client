@@ -151,9 +151,7 @@ class YButton extends Component<WidgetProps, ButtonState> {
 
   private get displayedTitle() {
     return (
-      this.state.title ||
-      this.state.keywordLabel ||
-      `Button #${this.props.id}`
+      this.state.title || this.state.keywordLabel || `Button #${this.props.id}`
     );
   }
 
