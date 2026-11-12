@@ -13,7 +13,7 @@ import {
   Text,
   TextInput,
 } from '@mantine/core';
-import { keywordsApi } from '@yadoms/domain/keywords';
+import { devicesApi, keywordsApi } from '@yadoms/domain/keywords';
 
 export interface WidgetProps {
   id: number;
@@ -111,15 +111,22 @@ export class Widget extends Component<WidgetProps, WidgetState> {
 
   private async loadKeywords() {
     try {
-      const res = await keywordsApi.loadKeywords(
-        undefined,
-        undefined,
-        this.props.keywordCapacities
-      );
-      const options = res.keywords.map((k) => ({
-        value: String(k.id),
-        label: `${k.id} - ${k.friendlyName}`,
-      }));
+      const [res, deviceNames] = await Promise.all([
+        keywordsApi.loadKeywords(
+          undefined,
+          undefined,
+          this.props.keywordCapacities
+        ),
+        devicesApi.getFriendlyNames(),
+      ]);
+      const options = res.keywords
+        .map((k) => ({
+          value: String(k.id),
+          label: `${deviceNames.get(k.deviceId) ?? k.deviceId} - ${
+            k.friendlyName
+          }`,
+        }))
+        .sort((a, b) => a.label.localeCompare(b.label));
       this.setState({ keywordsOptions: options });
     } catch (err) {
       console.error('Failed to load keywords for selection', err);
