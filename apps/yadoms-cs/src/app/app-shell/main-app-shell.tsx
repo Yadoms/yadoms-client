@@ -90,9 +90,7 @@ function MainAppShell() {
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   const dark = colorScheme === 'dark';
   const { t } = useTranslation();
-  const { connected } = useContext(
-    YadomsConnectionContext
-  ) as YadomsConnection;
+  const { connected } = useContext(YadomsConnectionContext) as YadomsConnection;
 
   const location = useLocation();
   const { pathname } = location;
