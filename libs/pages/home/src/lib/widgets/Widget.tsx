@@ -111,8 +111,8 @@ export class Widget extends Component<WidgetProps, WidgetState> {
   private async loadKeywords() {
     try {
       const res = await keywordsApi.loadKeywords(
-        0,
-        200,
+        undefined,
+        undefined,
         this.props.keywordCapacities
       );
       const options = res.keywords.map((k) => ({

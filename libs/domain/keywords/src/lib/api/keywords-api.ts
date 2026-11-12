@@ -7,8 +7,8 @@ import {
 
 class KeywordsApi {
   async loadKeywords(
-    currentPage = 0,
-    pageSize = 10,
+    currentPage?: number,
+    pageSize?: number,
     capacityNames?: string[]
   ): Promise<KeywordsResponse> {
     try {
