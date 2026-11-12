@@ -6,6 +6,7 @@ import {
   parseYadomsDate,
 } from '@yadoms/shared';
 import { v4 as uuidv4 } from 'uuid';
+import { getI18n } from 'react-i18next';
 import { WidgetProps, Widget } from './Widget';
 import { widgetsApi } from '@yadoms/domain/widgets';
 import { keywordsApi } from '@yadoms/domain/keywords';
@@ -195,8 +196,10 @@ class KeywordLog extends Component<WidgetProps, KeywordLogState> {
                 key={uuidv4()}
                 style={{ fontSize: '0.85rem', margin: '4px 0' }}
               >
-                [{acq.date.toLocaleTimeString()}] kwd #{acq.keyword} ={' '}
-                {acq.value}
+                [{acq.date.toLocaleTimeString(getI18n()?.language)}]{' '}
+                {this.state.keywordFriendlyNames.get(acq.keyword) ??
+                  `#${acq.keyword}`}{' '}
+                = {acq.value}
               </p>
             ))}
           </div>

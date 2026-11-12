@@ -195,6 +195,7 @@ class YButton extends Component<WidgetProps, ButtonState> {
         title={this.state.title}
         defaultTitle={this.state.keywordFriendlyName}
         keywordId={this.configuration?.keywordId}
+        keywordCapacities={['switch', 'event']}
         onSettingsChanged={this.handleSettingsChanged}
         size={this.props.size ?? 'small'}
       >

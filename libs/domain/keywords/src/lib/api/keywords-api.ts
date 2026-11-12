@@ -8,13 +8,17 @@ import {
 class KeywordsApi {
   async loadKeywords(
     currentPage = 0,
-    pageSize = 10
+    pageSize = 10,
+    capacityNames?: string[]
   ): Promise<KeywordsResponse> {
     try {
       const response = await axiosInstance.get<KeywordsResponse>(`/keywords`, {
         params: {
           page: currentPage,
           perPage: pageSize,
+          'from-capacity-name': capacityNames?.length
+            ? capacityNames.join('|')
+            : undefined,
         },
       });
       if (response.status === 204) {

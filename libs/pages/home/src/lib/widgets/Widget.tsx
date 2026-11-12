@@ -20,6 +20,7 @@ export interface WidgetProps {
   defaultTitle?: string;
   keywordId?: number;
   keywordIds?: number[];
+  keywordCapacities?: string[];
   onSettingsChanged?: (
     keywordIds: number[],
     title: string
@@ -109,7 +110,11 @@ export class Widget extends Component<WidgetProps, WidgetState> {
 
   private async loadKeywords() {
     try {
-      const res = await keywordsApi.loadKeywords(0, 200);
+      const res = await keywordsApi.loadKeywords(
+        0,
+        200,
+        this.props.keywordCapacities
+      );
       const options = res.keywords.map((k) => ({
         value: String(k.id),
         label: `${k.id} - ${k.friendlyName}`,
@@ -183,10 +188,7 @@ export class Widget extends Component<WidgetProps, WidgetState> {
 
     this.setState({ saving: true, saveError: null });
     try {
-      await this.props.onSettingsChanged?.(
-        keywordIds,
-        this.state.title.trim()
-      );
+      await this.props.onSettingsChanged?.(keywordIds, this.state.title.trim());
       this.setState({ saving: false, settingsModalOpen: false });
     } catch (err) {
       console.error('Failed to save widget settings', err);
