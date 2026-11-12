@@ -5,16 +5,21 @@ import {
   AcquisitionListener,
 } from '@yadoms/shared';
 import { v4 as uuidv4 } from 'uuid';
-import { Button } from '@mantine/core';
+import { Button, Group, Switch, Text } from '@mantine/core';
+import { getI18n } from 'react-i18next';
 import { WidgetProps, Widget } from './Widget';
 import { keywordsApi } from '@yadoms/domain/keywords';
 import { widgetsApi } from '@yadoms/domain/widgets';
 import { connect } from 'react-redux';
 
+const SENT_MESSAGE_DURATION_MS = 2000;
+
 interface ButtonState {
   isPressed: boolean;
   title: string;
   keywordFriendlyName?: string;
+  keywordCapacityName?: string;
+  showSentMessage: boolean;
 }
 
 interface ButtonConfiguration {
@@ -56,6 +61,7 @@ class YButton extends Component<WidgetProps, ButtonState> {
 
   acquisitionListener: ButtonStateAcquisitionListener;
   configuration?: ButtonConfiguration;
+  private sentMessageTimeout?: ReturnType<typeof setTimeout>;
 
   constructor(props: WidgetProps) {
     super(props);
@@ -64,6 +70,7 @@ class YButton extends Component<WidgetProps, ButtonState> {
     this.state = {
       isPressed: false,
       title: '',
+      showSentMessage: false,
     };
 
     this.acquisitionListener = new ButtonStateAcquisitionListener(
@@ -87,13 +94,17 @@ class YButton extends Component<WidgetProps, ButtonState> {
         this.configuration
       );
       this.setState({ title: widget.title });
-      await Promise.all([this.loadKeywordFriendlyName(), this.loadLastState()]);
+      await Promise.all([this.loadKeyword(), this.loadLastState()]);
     } catch (error) {
       console.error('Failed to load configuration:', error);
       // Handle error, e.g., set default state or show error UI
     }
 
     this.applyKeywordsToListen();
+  }
+
+  componentWillUnmount() {
+    clearTimeout(this.sentMessageTimeout);
   }
 
   private async loadLastState() {
@@ -111,18 +122,23 @@ class YButton extends Component<WidgetProps, ButtonState> {
     });
   }
 
-  private async loadKeywordFriendlyName() {
+  private async loadKeyword() {
     if (!this.configuration?.keywordId) return;
     try {
-      const friendlyNames = await keywordsApi.getFriendlyNames([
+      const [keyword] = await keywordsApi.getKeywords([
         this.configuration.keywordId,
       ]);
       this.setState({
-        keywordFriendlyName: friendlyNames.get(this.configuration.keywordId),
+        keywordFriendlyName: keyword?.friendlyName,
+        keywordCapacityName: keyword?.capacityName,
       });
     } catch (error) {
-      console.error('Failed to load keyword friendly name:', error);
+      console.error('Failed to load keyword:', error);
     }
+  }
+
+  private get isPushButton() {
+    return this.state.keywordCapacityName === 'event';
   }
 
   private get displayedTitle() {
@@ -160,10 +176,14 @@ class YButton extends Component<WidgetProps, ButtonState> {
       configuration: newConfiguration,
     });
     this.configuration = newConfiguration;
-    this.setState({ title, keywordFriendlyName: undefined });
+    this.setState({
+      title,
+      keywordFriendlyName: undefined,
+      keywordCapacityName: undefined,
+    });
 
     this.applyKeywordsToListen();
-    await this.loadKeywordFriendlyName();
+    await this.loadKeyword();
     try {
       await this.loadLastState();
     } catch (error) {
@@ -173,8 +193,14 @@ class YButton extends Component<WidgetProps, ButtonState> {
   }
 
   private onClick() {
-    console.log('Button clicked !');
+    if (this.isPushButton) {
+      this.push();
+    } else {
+      this.toggle();
+    }
+  }
 
+  private toggle() {
     const localIsPressed = !this.state.isPressed;
 
     this.setState({
@@ -188,6 +214,58 @@ class YButton extends Component<WidgetProps, ButtonState> {
       );
     }
   }
+
+  private async push() {
+    if (!this.configuration?.keywordId) return;
+
+    try {
+      await keywordsApi.sendCommand(this.configuration.keywordId, '1');
+    } catch (error) {
+      console.error('Failed to send event command:', error);
+      return;
+    }
+
+    clearTimeout(this.sentMessageTimeout);
+    this.setState({ showSentMessage: true });
+    this.sentMessageTimeout = setTimeout(
+      () => this.setState({ showSentMessage: false }),
+      SENT_MESSAGE_DURATION_MS
+    );
+  }
+
+  private get isOn() {
+    return this.configuration?.invert
+      ? !this.state.isPressed
+      : this.state.isPressed;
+  }
+
+  private renderToggle() {
+    return (
+      <Switch
+        size="xl"
+        onLabel="ON"
+        offLabel="OFF"
+        checked={this.isOn}
+        onChange={this.onClick}
+      />
+    );
+  }
+
+  private renderPushButton() {
+    return (
+      <Group gap="sm" wrap="nowrap">
+        <Button onClick={this.onClick}>
+          {getI18n()?.t('widgets.button.push') ?? 'Envoyer'}
+        </Button>
+        {this.state.showSentMessage && (
+          <Text c="green" size="sm">
+            {getI18n()?.t('widgets.button.sent') ?? 'Envoyé !'}
+          </Text>
+        )}
+      </Group>
+    );
+  }
+
   render() {
     return (
       <Widget
@@ -201,27 +279,7 @@ class YButton extends Component<WidgetProps, ButtonState> {
       >
         <div style={{ margin: '10px', height: '100%', width: '100%' }}>
           <h2>{this.displayedTitle}</h2>
-          <Button
-            onClick={this.onClick}
-            className={`toggle-button ${
-              this.configuration?.invert
-                ? this.state.isPressed
-                  ? 'off'
-                  : 'on'
-                : this.state.isPressed
-                ? 'on'
-                : 'off'
-            }`}
-          >
-            Click on Me !{' '}
-            {this.configuration?.invert
-              ? this.state.isPressed
-                ? 'OFF'
-                : 'ON'
-              : this.state.isPressed
-              ? 'ON'
-              : 'OFF'}
-          </Button>
+          {this.isPushButton ? this.renderPushButton() : this.renderToggle()}
         </div>
       </Widget>
     );

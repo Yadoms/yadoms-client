@@ -4,6 +4,7 @@ import {
   Acquisition,
   AcquisitionsResponse,
 } from '../model/KeywordsResponse';
+import type { KeywordEntity } from '../slices/keywords.slice';
 
 class KeywordsApi {
   async loadKeywords(
@@ -49,19 +50,21 @@ class KeywordsApi {
     }
   }
 
-  async getFriendlyNames(keywordIds: number[]): Promise<Map<number, string>> {
-    const friendlyNames = new Map<number, string>();
-    if (keywordIds.length === 0) return friendlyNames;
+  async getKeywords(keywordIds: number[]): Promise<KeywordEntity[]> {
+    if (keywordIds.length === 0) return [];
 
     const response = await axiosInstance.get(
       `/keywords/${keywordIds.join('|')}`
     );
-    if (response.status === 204) return friendlyNames;
+    if (response.status === 204) return [];
 
     // Server returns the keyword itself when only one is requested
-    const keywords: { id: number; friendlyName: string }[] = response.data
-      .keywords ?? [response.data];
-    for (const keyword of keywords) {
+    return response.data.keywords ?? [response.data];
+  }
+
+  async getFriendlyNames(keywordIds: number[]): Promise<Map<number, string>> {
+    const friendlyNames = new Map<number, string>();
+    for (const keyword of await this.getKeywords(keywordIds)) {
       friendlyNames.set(keyword.id, keyword.friendlyName);
     }
     return friendlyNames;

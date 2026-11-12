@@ -47,5 +47,11 @@
         "create": "Create"
       }
     }
+  },
+  "widgets": {
+    "button": {
+      "push": "Send",
+      "sent": "Sent!"
+    }
   }
 }
