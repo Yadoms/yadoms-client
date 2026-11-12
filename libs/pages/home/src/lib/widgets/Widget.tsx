@@ -8,6 +8,7 @@ import {
   Button,
   ActionIcon,
   Group,
+  Input,
   Stack,
   Text,
   TextInput,
@@ -222,6 +223,9 @@ export class Widget extends Component<WidgetProps, WidgetState> {
                 }
                 placeholder={this.props.defaultTitle}
               />
+              <Input.Label>
+                {this.isMultiKeywords ? 'Equipements' : 'Equipement'}
+              </Input.Label>
               {selectedKeywords.map((keyword, index) => (
                 <Group key={index} gap="xs" wrap="nowrap">
                   <Select
