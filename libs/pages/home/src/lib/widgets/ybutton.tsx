@@ -8,7 +8,11 @@ import { v4 as uuidv4 } from 'uuid';
 import { Button, Group, Switch, Text } from '@mantine/core';
 import { getI18n } from 'react-i18next';
 import { WidgetProps, Widget } from './Widget';
-import { keywordsApi } from '@yadoms/domain/keywords';
+import {
+  devicesApi,
+  formatKeywordLabel,
+  keywordsApi,
+} from '@yadoms/domain/keywords';
 import { widgetsApi } from '@yadoms/domain/widgets';
 import { connect } from 'react-redux';
 
@@ -17,7 +21,7 @@ const SENT_MESSAGE_DURATION_MS = 2000;
 interface ButtonState {
   isPressed: boolean;
   title: string;
-  keywordFriendlyName?: string;
+  keywordLabel?: string;
   keywordCapacityName?: string;
   showSentMessage: boolean;
 }
@@ -128,9 +132,13 @@ class YButton extends Component<WidgetProps, ButtonState> {
       const [keyword] = await keywordsApi.getKeywords([
         this.configuration.keywordId,
       ]);
+      if (!keyword) return;
+      const deviceFriendlyName = await devicesApi.getFriendlyName(
+        keyword.deviceId
+      );
       this.setState({
-        keywordFriendlyName: keyword?.friendlyName,
-        keywordCapacityName: keyword?.capacityName,
+        keywordLabel: formatKeywordLabel(keyword, deviceFriendlyName),
+        keywordCapacityName: keyword.capacityName,
       });
     } catch (error) {
       console.error('Failed to load keyword:', error);
@@ -144,7 +152,7 @@ class YButton extends Component<WidgetProps, ButtonState> {
   private get displayedTitle() {
     return (
       this.state.title ||
-      this.state.keywordFriendlyName ||
+      this.state.keywordLabel ||
       `Button #${this.props.id}`
     );
   }
@@ -178,7 +186,7 @@ class YButton extends Component<WidgetProps, ButtonState> {
     this.configuration = newConfiguration;
     this.setState({
       title,
-      keywordFriendlyName: undefined,
+      keywordLabel: undefined,
       keywordCapacityName: undefined,
     });
 
@@ -271,7 +279,7 @@ class YButton extends Component<WidgetProps, ButtonState> {
       <Widget
         id={this.props.id}
         title={this.state.title}
-        defaultTitle={this.state.keywordFriendlyName}
+        defaultTitle={this.state.keywordLabel}
         keywordId={this.configuration?.keywordId}
         keywordCapacities={['switch', 'event']}
         onSettingsChanged={this.handleSettingsChanged}

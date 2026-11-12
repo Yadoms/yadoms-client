@@ -13,7 +13,11 @@ import {
   Text,
   TextInput,
 } from '@mantine/core';
-import { devicesApi, keywordsApi } from '@yadoms/domain/keywords';
+import {
+  devicesApi,
+  formatKeywordLabel,
+  keywordsApi,
+} from '@yadoms/domain/keywords';
 
 export interface WidgetProps {
   id: number;
@@ -122,9 +126,7 @@ export class Widget extends Component<WidgetProps, WidgetState> {
       const options = res.keywords
         .map((k) => ({
           value: String(k.id),
-          label: `${deviceNames.get(k.deviceId) ?? k.deviceId} - ${
-            k.friendlyName
-          }`,
+          label: formatKeywordLabel(k, deviceNames.get(k.deviceId)),
         }))
         .sort((a, b) => a.label.localeCompare(b.label));
       this.setState({ keywordsOptions: options });

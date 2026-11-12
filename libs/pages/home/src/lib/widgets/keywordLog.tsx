@@ -9,13 +9,18 @@ import { v4 as uuidv4 } from 'uuid';
 import { getI18n } from 'react-i18next';
 import { WidgetProps, Widget } from './Widget';
 import { widgetsApi } from '@yadoms/domain/widgets';
-import { keywordsApi } from '@yadoms/domain/keywords';
+import {
+  devicesApi,
+  formatKeywordLabel,
+  keywordsApi,
+} from '@yadoms/domain/keywords';
 
 interface KeywordLogState {
   myAcquisitions: Acquisition[];
   keywordIds: number[];
   title: string;
   keywordFriendlyNames: Map<number, string>;
+  keywordLabels: Map<number, string>;
 }
 
 interface KeywordLogConfiguration {
@@ -52,6 +57,7 @@ class KeywordLog extends Component<WidgetProps, KeywordLogState> {
       keywordIds: [],
       title: '',
       keywordFriendlyNames: new Map(),
+      keywordLabels: new Map(),
     };
 
     this.acquisitionListener = new KeywordLogAcquisitionListener(
@@ -82,10 +88,20 @@ class KeywordLog extends Component<WidgetProps, KeywordLogState> {
 
   private async loadKeywordFriendlyNames(keywordIds: number[]) {
     try {
-      const keywordFriendlyNames = await keywordsApi.getFriendlyNames(
-        keywordIds
+      const keywords = await keywordsApi.getKeywords(keywordIds);
+      const deviceNames = await devicesApi.getFriendlyNames(
+        keywords.map((k) => k.deviceId)
       );
-      this.setState({ keywordFriendlyNames });
+      const keywordFriendlyNames = new Map<number, string>();
+      const keywordLabels = new Map<number, string>();
+      for (const keyword of keywords) {
+        keywordFriendlyNames.set(keyword.id, keyword.friendlyName);
+        keywordLabels.set(
+          keyword.id,
+          formatKeywordLabel(keyword, deviceNames.get(keyword.deviceId))
+        );
+      }
+      this.setState({ keywordFriendlyNames, keywordLabels });
     } catch (error) {
       console.error('Failed to load keywords friendly names:', error);
     }
@@ -93,7 +109,7 @@ class KeywordLog extends Component<WidgetProps, KeywordLogState> {
 
   private get defaultTitle() {
     return this.state.keywordIds
-      .map((id) => this.state.keywordFriendlyNames.get(id))
+      .map((id) => this.state.keywordLabels.get(id))
       .filter((name): name is string => !!name)
       .join(', ');
   }

@@ -6,6 +6,13 @@ import {
 } from '../model/KeywordsResponse';
 import type { KeywordEntity } from '../slices/keywords.slice';
 
+export function formatKeywordLabel(
+  keyword: Pick<KeywordEntity, 'deviceId' | 'friendlyName'>,
+  deviceFriendlyName?: string
+): string {
+  return `${deviceFriendlyName ?? keyword.deviceId} - ${keyword.friendlyName}`;
+}
+
 class KeywordsApi {
   async loadKeywords(
     currentPage?: number,
