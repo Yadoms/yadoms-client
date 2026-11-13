@@ -33,6 +33,7 @@ import { YadomsConnection, YadomsConnectionContext } from '@yadoms/shared';
 import { Summary } from '@yadoms/pages/summary';
 import { Home } from '@yadoms/pages/home';
 import { Plugins } from '@yadoms/pages/plugins';
+import { Devices } from '@yadoms/pages/devices';
 import { useDisclosure } from '@mantine/hooks';
 import classes from './MainAppShell.module.css';
 
@@ -78,7 +79,7 @@ const linksData = [
   { icon: IconListCheck, label: 'summary', route: '/summary' },
   { icon: IconSettingsAutomation, label: 'system-configuration', route: '/' },
   { icon: IconPlugConnectedX, label: 'plugins', route: '/plugins' },
-  { icon: IconDevices2, label: 'devices', route: '/' },
+  { icon: IconDevices2, label: 'devices', route: '/devices' },
   { icon: IconRobot, label: 'automation-center', route: '/' },
   { icon: IconMailForward, label: 'recipients', route: '/' },
   { icon: IconAdjustments, label: 'install-and-update', route: '/' },
@@ -154,6 +155,7 @@ function MainAppShell() {
             <Route path="/" element={<Home />} />
             <Route path="/summary" element={<Summary />} />
             <Route path="/plugins" element={<Plugins />} />
+            <Route path="/devices" element={<Devices />} />
           </Routes>
         </div>
       </Flex>

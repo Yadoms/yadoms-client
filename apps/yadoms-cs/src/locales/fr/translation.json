@@ -49,6 +49,26 @@
       }
     }
   },
+  "devices": {
+    "home": {
+      "description": "Gérer et supprimer des équipements",
+      "name": "Nom",
+      "model": "Modèle",
+      "plugin": "Plugin",
+      "configure": "Configurer",
+      "delete": "Supprimer",
+      "cancel": "Annuler",
+      "deleteDevice": "Supprimer l'équipement",
+      "confirmBlacklistDevice": "Cette opération va mettre l'équipement {{name}} en liste noire, et supprimer son historique de données.\nUn équipement en liste noire sera ignoré par Yadoms, même si le matériel associé continue d'envoyer des données. Un équipement en liste noire peut être restauré.",
+      "deletePermanently": "Supprimer définitivement",
+      "confirmDeletePermanently": "L'équipement {{name}} et son historique de données vont être supprimés définitivement.",
+      "deleteError": "Impossible de supprimer l'équipement",
+      "restore": "Restaurer",
+      "restoreError": "Impossible de restaurer l'équipement",
+      "blacklisted": "Supprimé",
+      "showBlacklisted": "Afficher les équipements supprimés"
+    }
+  },
   "connection": {
     "lost": "Connexion perdue"
   },

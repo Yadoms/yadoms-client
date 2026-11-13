@@ -49,6 +49,26 @@
       }
     }
   },
+  "devices": {
+    "home": {
+      "description": "Manage and remove devices",
+      "name": "Name",
+      "model": "Model",
+      "plugin": "Plugin",
+      "configure": "Configure",
+      "delete": "Delete",
+      "cancel": "Cancel",
+      "deleteDevice": "Delete device",
+      "confirmBlacklistDevice": "This operation will blacklist the device {{name}} and delete its data history.\nA blacklisted device is ignored by Yadoms, even if the associated hardware keeps sending data. A blacklisted device can be restored.",
+      "deletePermanently": "Delete permanently",
+      "confirmDeletePermanently": "The device {{name}} and its data history will be permanently deleted.",
+      "deleteError": "Failed to delete the device",
+      "restore": "Restore",
+      "restoreError": "Failed to restore the device",
+      "blacklisted": "Deleted",
+      "showBlacklisted": "Show deleted devices"
+    }
+  },
   "connection": {
     "lost": "Connection lost"
   },

@@ -1,6 +1,7 @@
 import { axiosInstance } from '@yadoms/shared';
 import { PluginsInstancesResponse } from '../model/PluginsInstancesResponse';
 import { AvailablePluginsResponse } from '../model/AvailablePluginsResponse';
+import type { PluginsInstancesEntity } from '../slices/plugins-instances.slice';
 
 class PluginsApi {
   async loadPluginsInstances(
@@ -32,6 +33,14 @@ class PluginsApi {
       console.error('Error fetching plugins instances : ', error);
       throw error;
     }
+  }
+
+  async getAllPluginsInstances(): Promise<PluginsInstancesEntity[]> {
+    const response = await axiosInstance.get<{
+      instances: PluginsInstancesEntity[];
+    }>(`/plugins-instances`);
+    if (response.status === 204) return [];
+    return response.data.instances;
   }
 
   async loadAvailablePlugins(): Promise<AvailablePluginsResponse> {
