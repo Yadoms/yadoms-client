@@ -37,6 +37,7 @@ export function Home({ pageId = 0 }: PagesHomeProps) {
   const [widgets, setWidgets] = useState<WidgetEntity[]>([]);
   const [editMode, setEditMode] = useState(false);
   const [addWidgetOpened, setAddWidgetOpened] = useState(false);
+  const [newWidgetType, setNewWidgetType] = useState<string | null>(null);
   const [draggedId, setDraggedId] = useState<number | null>(null);
   const [dragOverId, setDragOverId] = useState<number | null>(null);
 
@@ -72,16 +73,41 @@ export function Home({ pageId = 0 }: PagesHomeProps) {
     }
   };
 
-  const createWidget = async (type: string) => {
+  const createWidget = async (
+    type: string,
+    title: string,
+    configuration: object
+  ) => {
     await widgetsApi.createWidget({
       page: pageId,
       type,
       position:
         widgets.reduce((max, widget) => Math.max(max, widget.position), -1) + 1,
-      title: '',
-      configuration: widgetTypes[type].defaultConfiguration,
+      title,
+      configuration,
     });
+    setNewWidgetType(null);
     await loadWidgets();
+  };
+
+  const renderNewWidget = (type: string) => {
+    const widgetType = widgetTypes[type];
+    const NewWidgetComponent = widgetType.component;
+    // Only the widget settings modal is visible, as it is rendered in a portal
+    return (
+      <div hidden>
+        <NewWidgetComponent
+          size={widgetType.size}
+          editMode
+          creation={{
+            configuration: widgetType.defaultConfiguration,
+            onCreate: (title, configuration) =>
+              createWidget(type, title, configuration),
+            onCancel: () => setNewWidgetType(null),
+          }}
+        />
+      </div>
+    );
   };
 
   const handleDragStart = (event: DragEvent<HTMLDivElement>, id: number) => {
@@ -179,8 +205,9 @@ export function Home({ pageId = 0 }: PagesHomeProps) {
       <AddWidgetModal
         opened={addWidgetOpened}
         onClose={() => setAddWidgetOpened(false)}
-        onCreate={createWidget}
+        onTypeSelected={setNewWidgetType}
       />
+      {newWidgetType && renderNewWidget(newWidgetType)}
     </div>
   );
 }

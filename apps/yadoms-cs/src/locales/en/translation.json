@@ -57,11 +57,10 @@
     "editDone": "Done",
     "addWidget": "Add a widget",
     "widgetType": "Widget type",
-    "create": "Create",
+    "next": "Next",
     "cancel": "Cancel",
     "dragToReorder": "Drag to reorder",
     "loadError": "Failed to load widgets",
-    "addWidgetError": "Failed to add the widget",
     "saveOrderError": "Failed to save widgets order"
   },
   "widgets": {

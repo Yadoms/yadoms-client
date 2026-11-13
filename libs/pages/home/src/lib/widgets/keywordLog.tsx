@@ -7,8 +7,7 @@ import {
 } from '@yadoms/shared';
 import { v4 as uuidv4 } from 'uuid';
 import { getI18n } from 'react-i18next';
-import { WidgetProps, Widget } from './Widget';
-import { widgetsApi } from '@yadoms/domain/widgets';
+import { WidgetProps, Widget, loadWidget, saveWidget } from './Widget';
 import {
   devicesApi,
   formatKeywordLabel,
@@ -70,9 +69,7 @@ class KeywordLog extends Component<WidgetProps, KeywordLogState> {
 
   async componentDidMount() {
     try {
-      const widget = await widgetsApi.getWidget<KeywordLogConfiguration>(
-        this.props.id
-      );
+      const widget = await loadWidget<KeywordLogConfiguration>(this.props);
       this.configuration = widget.configuration;
       console.debug(
         'keywordLog configuration for widget #' + this.props.id,
@@ -171,10 +168,9 @@ class KeywordLog extends Component<WidgetProps, KeywordLogState> {
       ...this.configuration,
       keywordIds,
     };
-    await widgetsApi.updateWidget(this.props.id, {
-      title,
-      configuration: newConfiguration,
-    });
+    await saveWidget(this.props, { title, configuration: newConfiguration });
+    if (this.props.creation) return;
+
     this.configuration = newConfiguration;
     this.setState({ title });
 
@@ -210,6 +206,7 @@ class KeywordLog extends Component<WidgetProps, KeywordLogState> {
         onSettingsChanged={this.handleSettingsChanged}
         size={this.props.size ?? 'wide'}
         editMode={this.props.editMode}
+        creation={this.props.creation}
       >
         <div style={{ margin: '10px', height: '100%', width: '100%' }}>
           <h2>{this.displayedTitle}</h2>

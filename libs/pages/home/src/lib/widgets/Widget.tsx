@@ -24,14 +24,23 @@ import {
   AcquisitionListener,
   YadomsConnectionContext,
 } from '@yadoms/shared';
+import { WidgetDetails, widgetsApi } from '@yadoms/domain/widgets';
 import { v4 as uuidv4 } from 'uuid';
 import { DeviceStatusIcons } from './DeviceStatusIcons';
 
 const SIGNAL_POWER_CAPACITY = 'signalPower';
 const BATTERY_LEVEL_CAPACITY = 'batteryLevel';
 
+export interface WidgetCreation {
+  configuration: object;
+  onCreate: (title: string, configuration: object) => Promise<void>;
+  onCancel: () => void;
+}
+
 export interface WidgetProps {
-  id: number;
+  // Undefined while the widget is being created
+  id?: number;
+  creation?: WidgetCreation;
   title?: string;
   defaultTitle?: string;
   keywordId?: number;
@@ -49,6 +58,29 @@ export interface WidgetProps {
   children?: React.ReactNode;
   size?: 'small' | 'wide';
   editMode?: boolean;
+}
+
+export function loadWidget<T>({
+  id,
+  creation,
+}: WidgetProps): Promise<WidgetDetails<T>> {
+  if (creation)
+    return Promise.resolve({
+      title: '',
+      configuration: creation.configuration as T,
+    });
+  if (id === undefined) return Promise.reject(new Error('Widget has no id'));
+  return widgetsApi.getWidget<T>(id);
+}
+
+export function saveWidget<T>(
+  { id, creation }: WidgetProps,
+  details: WidgetDetails<T>
+): Promise<void> {
+  if (creation)
+    return creation.onCreate(details.title, details.configuration as object);
+  if (id === undefined) return Promise.reject(new Error('Widget has no id'));
+  return widgetsApi.updateWidget(id, details);
 }
 
 type SettingsButtonProps = {
@@ -146,6 +178,7 @@ export class Widget extends Component<WidgetProps, WidgetState> {
 
   componentDidMount() {
     void this.loadDeviceStatus();
+    if (this.props.creation) void this.handleSettingsClick();
   }
 
   componentDidUpdate(prevProps: WidgetProps) {
@@ -281,6 +314,7 @@ export class Widget extends Component<WidgetProps, WidgetState> {
 
   private closeModal() {
     this.setState({ settingsModalOpen: false });
+    this.props.creation?.onCancel();
   }
 
   handleKeywordChange(index: number, value: string | null) {

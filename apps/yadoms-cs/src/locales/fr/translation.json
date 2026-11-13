@@ -57,11 +57,10 @@
     "editDone": "Terminer",
     "addWidget": "Ajouter un widget",
     "widgetType": "Type de widget",
-    "create": "Créer",
+    "next": "Suivant",
     "cancel": "Annuler",
     "dragToReorder": "Glisser pour réordonner",
     "loadError": "Impossible de charger les widgets",
-    "addWidgetError": "Impossible d'ajouter le widget",
     "saveOrderError": "Impossible d'enregistrer l'ordre des widgets"
   },
   "widgets": {

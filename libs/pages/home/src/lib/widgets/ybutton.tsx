@@ -8,13 +8,12 @@ import { v4 as uuidv4 } from 'uuid';
 import { Button, Checkbox, Group, Switch, Text } from '@mantine/core';
 import { openConfirmModal } from '@mantine/modals';
 import { getI18n } from 'react-i18next';
-import { WidgetProps, Widget } from './Widget';
+import { WidgetProps, Widget, loadWidget, saveWidget } from './Widget';
 import {
   devicesApi,
   formatKeywordLabel,
   keywordsApi,
 } from '@yadoms/domain/keywords';
-import { widgetsApi } from '@yadoms/domain/widgets';
 import { connect } from 'react-redux';
 
 const SENT_MESSAGE_DURATION_MS = 2000;
@@ -96,9 +95,7 @@ class YButton extends Component<WidgetProps, ButtonState> {
 
   async componentDidMount() {
     try {
-      const widget = await widgetsApi.getWidget<ButtonConfiguration>(
-        this.props.id
-      );
+      const widget = await loadWidget<ButtonConfiguration>(this.props);
       this.configuration = widget.configuration;
       console.debug(
         'yButton configuration for widget #' + this.props.id,
@@ -193,10 +190,9 @@ class YButton extends Component<WidgetProps, ButtonState> {
       invert: this.state.settingsInvert,
       askConfirmation: this.state.settingsAskConfirmation,
     };
-    await widgetsApi.updateWidget(this.props.id, {
-      title,
-      configuration: newConfiguration,
-    });
+    await saveWidget(this.props, { title, configuration: newConfiguration });
+    if (this.props.creation) return;
+
     this.configuration = newConfiguration;
     this.setState({
       title,
@@ -353,6 +349,7 @@ class YButton extends Component<WidgetProps, ButtonState> {
         renderSettings={this.renderSettings}
         size={this.props.size ?? 'small'}
         editMode={this.props.editMode}
+        creation={this.props.creation}
       >
         <div style={{ margin: '10px', height: '100%', width: '100%' }}>
           <h2>{this.displayedTitle}</h2>
