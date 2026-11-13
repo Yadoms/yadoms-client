@@ -7,6 +7,46 @@
   align-items: start;
 }
 
+.item {
+  position: relative;
+  height: 100%;
+  border-radius: 12px;
+}
+
+.editing .item {
+  cursor: grab;
+  outline: 1px dashed var(--mantine-color-blue-4);
+}
+
+.dragging {
+  opacity: 0.4;
+}
+
+.editing .dropTarget {
+  outline: 2px solid var(--mantine-color-blue-6);
+}
+
+.dragHandle {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  z-index: 1;
+  color: var(--mantine-color-dimmed);
+  pointer-events: none;
+}
+
+.addWidget {
+  min-height: 90px;
+  height: 100%;
+  border-radius: 12px;
+  border: 2px dashed var(--mantine-color-blue-4);
+  color: var(--mantine-color-blue-6);
+}
+
+.addWidget:hover {
+  background-color: var(--mantine-color-blue-light);
+}
+
 .card {
   border-radius: 12px;
   box-shadow: 0 1px 2px var(--mantine-color-blue-light-color);
@@ -27,7 +67,7 @@
 
 /* If screen enought large, use 2 columns */
 @media (min-width: 900px) {
-  .wide {
+  .wideItem {
     grid-column: span 2;
   }
 }

@@ -119,7 +119,7 @@ class YButton extends Component<WidgetProps, ButtonState> {
   }
 
   private async loadLastState() {
-    if (!this.configuration) return;
+    if (!this.configuration?.keywordId) return;
     const lastState =
       ((await keywordsApi.getLatestAcquisition(this.configuration.keywordId))
         ?.value as number) === 1;
@@ -352,6 +352,7 @@ class YButton extends Component<WidgetProps, ButtonState> {
         onSettingsClick={this.handleSettingsClick}
         renderSettings={this.renderSettings}
         size={this.props.size ?? 'small'}
+        editMode={this.props.editMode}
       >
         <div style={{ margin: '10px', height: '100%', width: '100%' }}>
           <h2>{this.displayedTitle}</h2>

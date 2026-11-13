@@ -79,7 +79,7 @@ class KeywordLog extends Component<WidgetProps, KeywordLogState> {
         this.configuration
       );
       this.setState({ title: widget.title });
-      await this.applyKeywords(this.configuration.keywordIds);
+      await this.applyKeywords(this.configuration.keywordIds ?? []);
     } catch (error) {
       console.error('Failed to load configuration:', error);
       // Handle error, e.g., set default state or show error UI
@@ -127,6 +127,11 @@ class KeywordLog extends Component<WidgetProps, KeywordLogState> {
       this.acquisitionListener
     );
     void this.loadKeywordFriendlyNames(keywordIds);
+
+    if (keywordIds.length === 0) {
+      this.setState({ myAcquisitions: [] });
+      return;
+    }
 
     const acquisitionsResponse = await keywordsApi.getLatestAcquisitions(
       keywordIds,
@@ -204,6 +209,7 @@ class KeywordLog extends Component<WidgetProps, KeywordLogState> {
         onSettingsClick={this.handleSettingsClick}
         onSettingsChanged={this.handleSettingsChanged}
         size={this.props.size ?? 'wide'}
+        editMode={this.props.editMode}
       >
         <div style={{ margin: '10px', height: '100%', width: '100%' }}>
           <h2>{this.displayedTitle}</h2>

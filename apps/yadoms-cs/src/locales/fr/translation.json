@@ -52,7 +52,23 @@
   "connection": {
     "lost": "Connexion perdue"
   },
+  "home": {
+    "edit": "Modifier la page",
+    "editDone": "Terminer",
+    "addWidget": "Ajouter un widget",
+    "widgetType": "Type de widget",
+    "create": "Créer",
+    "cancel": "Annuler",
+    "dragToReorder": "Glisser pour réordonner",
+    "loadError": "Impossible de charger les widgets",
+    "addWidgetError": "Impossible d'ajouter le widget",
+    "saveOrderError": "Impossible d'enregistrer l'ordre des widgets"
+  },
   "widgets": {
+    "types": {
+      "switch": "Interrupteur",
+      "keywordLog": "Journal de valeurs"
+    },
     "button": {
       "push": "Envoyer",
       "sent": "Envoyé !",

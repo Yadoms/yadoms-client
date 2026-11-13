@@ -48,6 +48,7 @@ export interface WidgetProps {
   ) => React.ReactNode;
   children?: React.ReactNode;
   size?: 'small' | 'wide';
+  editMode?: boolean;
 }
 
 type SettingsButtonProps = {
@@ -440,7 +441,9 @@ export class Widget extends Component<WidgetProps, WidgetState> {
                 size={20}
               />
             )}
-            <SettingsButton onClick={this.handleSettingsClick} />
+            {this.props.editMode && (
+              <SettingsButton onClick={this.handleSettingsClick} />
+            )}
           </div>
         </div>
         {this.props.children}

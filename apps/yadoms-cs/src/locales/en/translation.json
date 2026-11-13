@@ -52,7 +52,23 @@
   "connection": {
     "lost": "Connection lost"
   },
+  "home": {
+    "edit": "Edit page",
+    "editDone": "Done",
+    "addWidget": "Add a widget",
+    "widgetType": "Widget type",
+    "create": "Create",
+    "cancel": "Cancel",
+    "dragToReorder": "Drag to reorder",
+    "loadError": "Failed to load widgets",
+    "addWidgetError": "Failed to add the widget",
+    "saveOrderError": "Failed to save widgets order"
+  },
   "widgets": {
+    "types": {
+      "switch": "Switch",
+      "keywordLog": "Keyword log"
+    },
     "button": {
       "push": "Send",
       "sent": "Sent!",
