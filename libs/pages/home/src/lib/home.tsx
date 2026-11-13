@@ -1,5 +1,6 @@
 import { DragEvent, useCallback, useEffect, useState } from 'react';
 import { Button, Group, Text, UnstyledButton } from '@mantine/core';
+import { openConfirmModal } from '@mantine/modals';
 import { notifications } from '@mantine/notifications';
 import {
   IconCheck,
@@ -88,6 +89,32 @@ export function Home({ pageId = 0 }: PagesHomeProps) {
     });
     setNewWidgetType(null);
     await loadWidgets();
+  };
+
+  const deleteWidget = async (widgetId: number) => {
+    try {
+      await widgetsApi.deleteWidget(widgetId);
+      setWidgets((previous) =>
+        previous.filter((widget) => widget.id !== widgetId)
+      );
+    } catch (err) {
+      console.error('Failed to delete widget', err);
+      notifications.show({ color: 'red', message: t('home.deleteError') });
+    }
+  };
+
+  const confirmDeleteWidget = (widget: WidgetEntity) => {
+    const name = widget.title || t(`widgets.types.${widget.type}`);
+    openConfirmModal({
+      title: t('home.deleteWidget'),
+      centered: true,
+      children: (
+        <Text size="sm">{t('home.confirmDeleteWidget', { name })}</Text>
+      ),
+      labels: { confirm: t('home.delete'), cancel: t('home.cancel') },
+      confirmProps: { color: 'red' },
+      onConfirm: () => void deleteWidget(widget.id),
+    });
   };
 
   const renderNewWidget = (type: string) => {
@@ -186,6 +213,7 @@ export function Home({ pageId = 0 }: PagesHomeProps) {
                 id={widget.id}
                 size={widgetType.size}
                 editMode={editMode}
+                onDelete={() => confirmDeleteWidget(widget)}
               />
             </div>
           );

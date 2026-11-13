@@ -60,6 +60,10 @@
     "next": "Next",
     "cancel": "Cancel",
     "dragToReorder": "Drag to reorder",
+    "deleteWidget": "Delete widget",
+    "confirmDeleteWidget": "Delete the widget \"{{name}}\"?",
+    "delete": "Delete",
+    "deleteError": "Failed to delete the widget",
     "loadError": "Failed to load widgets",
     "saveOrderError": "Failed to save widgets order"
   },

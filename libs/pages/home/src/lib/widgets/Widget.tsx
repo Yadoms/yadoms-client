@@ -25,6 +25,7 @@ import {
   YadomsConnectionContext,
 } from '@yadoms/shared';
 import { WidgetDetails, widgetsApi } from '@yadoms/domain/widgets';
+import { getI18n } from 'react-i18next';
 import { v4 as uuidv4 } from 'uuid';
 import { DeviceStatusIcons } from './DeviceStatusIcons';
 
@@ -58,6 +59,7 @@ export interface WidgetProps {
   children?: React.ReactNode;
   size?: 'small' | 'wide';
   editMode?: boolean;
+  onDelete?: () => void;
 }
 
 export function loadWidget<T>({
@@ -477,6 +479,22 @@ export class Widget extends Component<WidgetProps, WidgetState> {
             )}
             {this.props.editMode && (
               <SettingsButton onClick={this.handleSettingsClick} />
+            )}
+            {this.props.editMode && this.props.onDelete && (
+              <ActionIcon
+                variant="subtle"
+                color="red"
+                size={20}
+                aria-label={
+                  getI18n()?.t('home.deleteWidget') ?? 'Supprimer le widget'
+                }
+                title={
+                  getI18n()?.t('home.deleteWidget') ?? 'Supprimer le widget'
+                }
+                onClick={this.props.onDelete}
+              >
+                <IconTrash size={20} stroke={2} />
+              </ActionIcon>
             )}
           </div>
         </div>

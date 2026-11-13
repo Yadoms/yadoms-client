@@ -350,6 +350,7 @@ class YButton extends Component<WidgetProps, ButtonState> {
         size={this.props.size ?? 'small'}
         editMode={this.props.editMode}
         creation={this.props.creation}
+        onDelete={this.props.onDelete}
       >
         <div style={{ margin: '10px', height: '100%', width: '100%' }}>
           <h2>{this.displayedTitle}</h2>

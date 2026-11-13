@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { MantineProvider } from '@mantine/core';
 import { widgetsApi } from '@yadoms/domain/widgets';
 import { Widget, WidgetCreation, saveWidget } from './Widget';
@@ -55,6 +55,33 @@ describe('Widget', () => {
   it('should open settings of a widget being created on mount', async () => {
     renderWidget(makeCreation());
     expect(await screen.findByText('Widget settings')).toBeTruthy();
+  });
+
+  it('should show the delete button only in edit mode', () => {
+    const { rerender } = render(
+      <MantineProvider>
+        <Widget id={1} onDelete={vi.fn()} />
+      </MantineProvider>
+    );
+    expect(screen.queryByRole('button', { name: /supprimer/i })).toBeNull();
+
+    rerender(
+      <MantineProvider>
+        <Widget id={1} editMode onDelete={vi.fn()} />
+      </MantineProvider>
+    );
+    expect(screen.getByRole('button', { name: /supprimer/i })).toBeTruthy();
+  });
+
+  it('should call onDelete when the delete button is clicked', () => {
+    const onDelete = vi.fn();
+    render(
+      <MantineProvider>
+        <Widget id={1} editMode onDelete={onDelete} />
+      </MantineProvider>
+    );
+    fireEvent.click(screen.getByRole('button', { name: /supprimer/i }));
+    expect(onDelete).toHaveBeenCalled();
   });
 });
 

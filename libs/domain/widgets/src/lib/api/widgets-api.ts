@@ -73,6 +73,10 @@ class WidgetsApi {
   async updateWidgetPosition(widgetId: number, position: number) {
     await axiosInstance.patch(`/widgets/${widgetId}`, { position });
   }
+
+  async deleteWidget(widgetId: number) {
+    await axiosInstance.delete(`/widgets/${widgetId}`);
+  }
 }
 
 export const widgetsApi = new WidgetsApi();
