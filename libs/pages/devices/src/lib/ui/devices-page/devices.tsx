@@ -1,11 +1,9 @@
 import {
   ActionIcon,
   Badge,
-  Box,
   Checkbox,
   Flex,
   Group,
-  Image,
   Skeleton,
   Stack,
   Switch,
@@ -27,25 +25,33 @@ import {
   MRT_Icons,
   useMantineReactTable,
 } from 'mantine-react-table';
-import { useMemo, useState } from 'react';
+import { MouseEvent, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { axiosInstance, BreadCrumbs, Logo } from '@yadoms/shared';
+import { BreadCrumbs } from '@yadoms/shared';
 import { DeviceEntity, devicesApi } from '@yadoms/domain/keywords';
-import { PluginsInstancesEntity, pluginsApi } from '@yadoms/domain/plugins';
+import {
+  PluginsInstancesEntity,
+  pluginsApi,
+  PuginsInstancesState,
+} from '@yadoms/domain/plugins';
+import { DeviceModal } from '../device-modal/device-modal';
+import {
+  PluginIcon,
+  SYSTEM_PLUGIN_INSTANCE_ID,
+} from '../plugin-icon/plugin-icon';
 import classes from './devices.module.css';
 
 const DEVICES_QUERY_KEY = 'devices';
-const SYSTEM_PLUGIN_INSTANCE_ID = 1;
+const PLUGIN_STATE_DEVICE_MODEL = 'Plugin state';
 
-function pluginIconUrl(pluginType: string) {
-  return `${axiosInstance.defaults.baseURL}/plugins?byType=${pluginType}&prop=icon`;
-}
+const stopPropagation = (event: MouseEvent) => event.stopPropagation();
 
 export function Devices() {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
   const [showBlacklisted, setShowBlacklisted] = useState(false);
+  const [selectedDeviceId, setSelectedDeviceId] = useState<number>();
 
   const devicesQuery = useQuery({
     queryKey: [DEVICES_QUERY_KEY, showBlacklisted],
@@ -107,19 +113,7 @@ export function Devices() {
           if (!instance && !isSystem) return null;
           return (
             <Group gap="xs" wrap="nowrap">
-              {isSystem || !instance ? (
-                <Box w={32} h={32}>
-                  <Logo />
-                </Box>
-              ) : (
-                <Image
-                  w={32}
-                  h={32}
-                  fit="contain"
-                  src={pluginIconUrl(instance.type)}
-                  alt={instance.type}
-                />
-              )}
+              <PluginIcon instance={isSystem ? undefined : instance} />
               <Text size="sm">{instance?.displayName ?? 'System'}</Text>
             </Group>
           );
@@ -213,6 +207,36 @@ export function Devices() {
     console.debug('Configure device', device.id);
   };
 
+  const openDevice = async (device: DeviceEntity) => {
+    if (device.blacklisted || device.model === PLUGIN_STATE_DEVICE_MODEL) {
+      notifications.show({
+        color: 'orange',
+        message: t('devices.home.deviceDeleted'),
+      });
+      return;
+    }
+
+    if (device.pluginInstance !== SYSTEM_PLUGIN_INSTANCE_ID) {
+      const { data: instances } = await pluginsInstancesQuery.refetch();
+      const instance = instances?.find(
+        (pluginInstance) => pluginInstance.id === device.pluginInstance
+      );
+      if (instance?.state !== PuginsInstancesState.Running) {
+        notifications.show({
+          color: 'orange',
+          message: t('devices.home.pluginStopped'),
+        });
+        return;
+      }
+    }
+
+    setSelectedDeviceId(device.id);
+  };
+
+  const selectedDevice = devicesQuery.data?.find(
+    (device) => device.id === selectedDeviceId
+  );
+
   const breadcrumbsItem = [
     { title: 'home', href: '#' },
     { title: 'devices', href: '#' },
@@ -234,9 +258,18 @@ export function Devices() {
       showGlobalFilter: true,
     },
     icons,
+    mantineTableBodyRowProps: ({ row }) => ({
+      onClick: () => void openDevice(row.original),
+      style: { cursor: 'pointer' },
+    }),
     renderRowActions: ({ row }) =>
       row.original.blacklisted ? (
-        <Group gap={3} justify="center" wrap="nowrap">
+        <Group
+          gap={3}
+          justify="center"
+          wrap="nowrap"
+          onClick={stopPropagation}
+        >
           <ActionIcon
             variant="subtle"
             aria-label={t('devices.home.restore')}
@@ -255,7 +288,12 @@ export function Devices() {
           </ActionIcon>
         </Group>
       ) : (
-        <Group gap={3} justify="center" wrap="nowrap">
+        <Group
+          gap={3}
+          justify="center"
+          wrap="nowrap"
+          onClick={stopPropagation}
+        >
           <ActionIcon
             variant="subtle"
             aria-label={t('devices.home.configure')}
@@ -301,6 +339,19 @@ export function Devices() {
       <Skeleton visible={devicesQuery.isLoading}>
         <MantineReactTable table={table} />
       </Skeleton>
+
+      {selectedDevice && (
+        <DeviceModal
+          key={selectedDevice.id}
+          device={selectedDevice}
+          pluginInstance={pluginsInstances.get(selectedDevice.pluginInstance)}
+          onClose={() => setSelectedDeviceId(undefined)}
+          onConfigure={configureDevice}
+          onDeviceChanged={() =>
+            queryClient.invalidateQueries({ queryKey: [DEVICES_QUERY_KEY] })
+          }
+        />
+      )}
     </Flex>
   );
 }

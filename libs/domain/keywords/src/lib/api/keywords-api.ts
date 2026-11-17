@@ -49,7 +49,7 @@ class KeywordsApi {
   async sendCommand(keywordId: number, command: string) {
     try {
       await axiosInstance.post(
-        '/keywords/' + keywordId + '/command/' + command
+        '/keywords/' + keywordId + '/command/' + encodeURIComponent(command)
       );
     } catch (error) {
       console.error('Error starting/stoping plugin instance : ', error);
@@ -85,6 +85,12 @@ class KeywordsApi {
     });
     if (response.status === 204) return [];
     return response.data.keywords;
+  }
+
+  async renameKeyword(keywordId: number, friendlyName: string) {
+    await axiosInstance.patch(`/keywords/${keywordId}`, {
+      'friendly-name': friendlyName,
+    });
   }
 
   async getFriendlyNames(keywordIds: number[]): Promise<Map<number, string>> {

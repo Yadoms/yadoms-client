@@ -52,6 +52,13 @@ class DevicesApi {
     });
   }
 
+  async updateDevice(
+    deviceId: number,
+    changes: Partial<Pick<DeviceEntity, 'friendlyName' | 'model'>>
+  ) {
+    await axiosInstance.patch(`/devices/${deviceId}`, changes);
+  }
+
   async deleteDevice(deviceId: number) {
     await axiosInstance.delete(`/devices/${deviceId}`);
   }

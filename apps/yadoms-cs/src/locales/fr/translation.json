@@ -66,7 +66,27 @@
       "restore": "Restaurer",
       "restoreError": "Impossible de restaurer l'équipement",
       "blacklisted": "Supprimé",
-      "showBlacklisted": "Afficher les équipements supprimés"
+      "showBlacklisted": "Afficher les équipements supprimés",
+      "deviceDeleted": "Equipement supprimé",
+      "pluginStopped": "Le plugin associé est à l'arrêt. Démarrer le plugin et réessayer"
+    },
+    "modal": {
+      "rename": "Renommer",
+      "attachedToPlugin": "attaché au plugin {{plugin}}",
+      "keyword": "Donnée",
+      "value": "Valeur",
+      "editValue": "Modifier la valeur",
+      "send": "Envoyer",
+      "save": "Valider",
+      "cancel": "Annuler",
+      "on": "Marche",
+      "off": "Arrêt",
+      "emptyName": "Le nom ne peut pas être vide",
+      "renameError": "Impossible de renommer l'équipement",
+      "saveModelError": "Impossible d'enregistrer le modèle",
+      "renameKeywordError": "Impossible de renommer la donnée",
+      "commandError": "Impossible d'envoyer la commande",
+      "loadKeywordsError": "Impossible de charger les données de l'équipement"
     }
   },
   "connection": {
