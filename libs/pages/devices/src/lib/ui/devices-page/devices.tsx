@@ -1,6 +1,7 @@
 import {
   ActionIcon,
   Badge,
+  Box,
   Checkbox,
   Flex,
   Group,
@@ -29,13 +30,13 @@ import {
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { axiosInstance, BreadCrumbs } from '@yadoms/shared';
+import { axiosInstance, BreadCrumbs, Logo } from '@yadoms/shared';
 import { DeviceEntity, devicesApi } from '@yadoms/domain/keywords';
 import { PluginsInstancesEntity, pluginsApi } from '@yadoms/domain/plugins';
 import classes from './devices.module.css';
 
 const DEVICES_QUERY_KEY = 'devices';
-const SYSTEM_DEVICE_ID = 1;
+const SYSTEM_PLUGIN_INSTANCE_ID = 1;
 
 function pluginIconUrl(pluginType: string) {
   return `${axiosInstance.defaults.baseURL}/plugins?byType=${pluginType}&prop=icon`;
@@ -101,17 +102,25 @@ export function Devices() {
           pluginsInstances.get(device.pluginInstance)?.displayName ?? '',
         Cell: ({ row }) => {
           const instance = pluginsInstances.get(row.original.pluginInstance);
-          if (!instance) return null;
+          const isSystem =
+            row.original.pluginInstance === SYSTEM_PLUGIN_INSTANCE_ID;
+          if (!instance && !isSystem) return null;
           return (
             <Group gap="xs" wrap="nowrap">
-              <Image
-                w={32}
-                h={32}
-                fit="contain"
-                src={pluginIconUrl(instance.type)}
-                alt={instance.type}
-              />
-              <Text size="sm">{instance.displayName}</Text>
+              {isSystem || !instance ? (
+                <Box w={32} h={32}>
+                  <Logo />
+                </Box>
+              ) : (
+                <Image
+                  w={32}
+                  h={32}
+                  fit="contain"
+                  src={pluginIconUrl(instance.type)}
+                  alt={instance.type}
+                />
+              )}
+              <Text size="sm">{instance?.displayName ?? 'System'}</Text>
             </Group>
           );
         },
@@ -239,6 +248,7 @@ export function Devices() {
             variant="subtle"
             color="red"
             aria-label={t('devices.home.deletePermanently')}
+            disabled={!row.original.deletable}
             onClick={() => confirmDeleteBlacklistedDevice(row.original)}
           >
             <IconTrash size={30} stroke={1.5} />
@@ -257,7 +267,7 @@ export function Devices() {
             variant="subtle"
             color="red"
             aria-label={t('devices.home.delete')}
-            disabled={row.original.id === SYSTEM_DEVICE_ID}
+            disabled={!row.original.deletable}
             onClick={() => confirmDeleteDevice(row.original)}
           >
             <IconTrash size={30} stroke={1.5} />

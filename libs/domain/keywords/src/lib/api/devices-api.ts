@@ -12,6 +12,7 @@ export interface DeviceEntity {
   model: string;
   type: string;
   blacklisted: boolean;
+  deletable: boolean;
 }
 
 class DevicesApi {
@@ -20,7 +21,7 @@ class DevicesApi {
       '/devices',
       {
         params: {
-          prop: 'id|pluginInstance|friendlyName|model|type|blacklisted',
+          prop: 'id|pluginInstance|friendlyName|model|type|blacklisted|deletable',
           withBlacklisted: withBlacklisted ? true : undefined,
         },
       }
