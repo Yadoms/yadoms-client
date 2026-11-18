@@ -33,7 +33,7 @@
       "type": "Type",
       "name": "Nom",
       "description": "Gérer, ajouter et supprimer des plugins",
-      "create-new-plugin-btn": "Créer un plugin",
+      "create-new-plugin-btn": "Ajouter un plugin",
       "start-automatically": "Démarrer automatiquement"
     },
     "modal": {
