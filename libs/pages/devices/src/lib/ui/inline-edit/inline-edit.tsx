@@ -6,10 +6,7 @@ import { useTranslation } from 'react-i18next';
 export interface InlineEditProps {
   display: ReactNode;
   initialValue: string;
-  renderInput: (
-    value: string,
-    onChange: (value: string) => void
-  ) => ReactNode;
+  renderInput: (value: string, onChange: (value: string) => void) => ReactNode;
   /** Must reject to keep the editor open */
   onSave: (value: string) => Promise<void>;
   editLabel: string;

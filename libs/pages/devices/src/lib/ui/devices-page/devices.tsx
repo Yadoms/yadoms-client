@@ -264,12 +264,7 @@ export function Devices() {
     }),
     renderRowActions: ({ row }) =>
       row.original.blacklisted ? (
-        <Group
-          gap={3}
-          justify="center"
-          wrap="nowrap"
-          onClick={stopPropagation}
-        >
+        <Group gap={3} justify="center" wrap="nowrap" onClick={stopPropagation}>
           <ActionIcon
             variant="subtle"
             aria-label={t('devices.home.restore')}
@@ -288,12 +283,7 @@ export function Devices() {
           </ActionIcon>
         </Group>
       ) : (
-        <Group
-          gap={3}
-          justify="center"
-          wrap="nowrap"
-          onClick={stopPropagation}
-        >
+        <Group gap={3} justify="center" wrap="nowrap" onClick={stopPropagation}>
           <ActionIcon
             variant="subtle"
             aria-label={t('devices.home.configure')}
