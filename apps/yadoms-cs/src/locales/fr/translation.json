@@ -32,6 +32,7 @@
       "state": "Etat",
       "type": "Type",
       "name": "Nom",
+      "plugin": "Plugin",
       "description": "Gérer, ajouter et supprimer des plugins",
       "create-new-plugin-btn": "Ajouter un plugin",
       "start-automatically": "Démarrer automatiquement"
@@ -46,6 +47,23 @@
         "title": "Remplissez votre configuration",
         "back": "Retour",
         "create": "Créer"
+      },
+      "instance": {
+        "rename": "Renommer",
+        "emptyName": "Le nom ne peut pas être vide",
+        "renameError": "Impossible de renommer le plugin",
+        "start": "Démarrer",
+        "stop": "Arrêter",
+        "startError": "Impossible de démarrer le plugin",
+        "stopError": "Impossible d'arrêter le plugin",
+        "saveError": "Impossible d'enregistrer le plugin",
+        "attachedDevices": "Equipements attachés à ce plugin",
+        "delete": "Supprimer",
+        "confirmDelete": "Le plugin {{name}} et tous ses équipements vont être supprimés définitivement.",
+        "deleteError": "Impossible de supprimer le plugin",
+        "state": "Etat",
+        "configuration": "Configuration",
+        "configurationSaved": "Configuration enregistrée"
       }
     }
   },
@@ -67,6 +85,8 @@
       "restoreError": "Impossible de restaurer l'équipement",
       "blacklisted": "Supprimé",
       "showBlacklisted": "Afficher les équipements supprimés",
+      "pluginFilter": "Plugin : {{plugin}}",
+      "clearPluginFilter": "Afficher les équipements de tous les plugins",
       "deviceDeleted": "Equipement supprimé",
       "pluginStopped": "Le plugin associé est à l'arrêt. Démarrer le plugin et réessayer"
     },
@@ -88,6 +108,10 @@
       "commandError": "Impossible d'envoyer la commande",
       "loadKeywordsError": "Impossible de charger les données de l'équipement"
     }
+  },
+  "common": {
+    "save": "Valider",
+    "cancel": "Annuler"
   },
   "connection": {
     "lost": "Connexion perdue"

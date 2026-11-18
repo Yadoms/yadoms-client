@@ -32,6 +32,7 @@
       "state": "State",
       "type": "Type",
       "name": "Name",
+      "plugin": "Plugin",
       "description": "Manage, add and remove plugins",
       "create-new-plugin-btn": "Add a plugin",
       "start-automatically": "Start automatically"
@@ -46,6 +47,23 @@
         "title": "Fill your configuration",
         "back": "Back",
         "create": "Create"
+      },
+      "instance": {
+        "rename": "Rename",
+        "emptyName": "The name can't be empty",
+        "renameError": "Failed to rename the plugin",
+        "start": "Start",
+        "stop": "Stop",
+        "startError": "Failed to start the plugin",
+        "stopError": "Failed to stop the plugin",
+        "saveError": "Failed to save the plugin",
+        "attachedDevices": "Devices attached to this plugin",
+        "delete": "Delete",
+        "confirmDelete": "The plugin {{name}} and all its devices will be permanently deleted.",
+        "deleteError": "Failed to delete the plugin",
+        "state": "State",
+        "configuration": "Configuration",
+        "configurationSaved": "Configuration saved"
       }
     }
   },
@@ -67,6 +85,8 @@
       "restoreError": "Failed to restore the device",
       "blacklisted": "Deleted",
       "showBlacklisted": "Show deleted devices",
+      "pluginFilter": "Plugin: {{plugin}}",
+      "clearPluginFilter": "Show devices of all plugins",
       "deviceDeleted": "Deleted device",
       "pluginStopped": "The associated plugin is stopped. Start the plugin and try again"
     },
@@ -88,6 +108,10 @@
       "commandError": "Failed to send the command",
       "loadKeywordsError": "Failed to load the device keywords"
     }
+  },
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel"
   },
   "connection": {
     "lost": "Connection lost"

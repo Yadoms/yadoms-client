@@ -26,7 +26,7 @@ import {
   IconSun,
 } from '@tabler/icons-react';
 import { Link, Route, Routes, useLocation } from 'react-router-dom';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Logo,
@@ -101,6 +101,13 @@ function MainAppShell() {
   const activeIndex = linksData.findIndex((link) => link.route === pathname);
 
   const [active, setActive] = useState(activeIndex);
+
+  // Several links share the same route, keep the clicked one if it matches
+  useEffect(() => {
+    setActive((current) =>
+      linksData[current]?.route === pathname ? current : activeIndex
+    );
+  }, [pathname, activeIndex]);
 
   const links = linksData.map((link, index) => (
     <NavbarLink

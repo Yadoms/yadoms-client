@@ -14,6 +14,7 @@ import {
 import { RootState } from '@yadoms/store';
 
 export const PLUGINS_INSTANCES_FEATURE_KEY = 'pluginsInstances';
+export const SYSTEM_PLUGIN_INSTANCE_ID = 1;
 export enum PuginsInstancesState {
   Unknown = 'Unknown',
   Error = 'Error',
@@ -30,7 +31,8 @@ export interface PluginsInstancesEntity {
   autoStart: boolean;
   category: string;
   state: PuginsInstancesState;
-  fullState: { state: string; messageId: string; messageData: string };
+  /** Translated state message, empty if none */
+  fullState: string;
   configuration: object;
 }
 

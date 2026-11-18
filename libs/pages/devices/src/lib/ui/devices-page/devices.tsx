@@ -2,6 +2,7 @@ import {
   ActionIcon,
   Badge,
   Checkbox,
+  CloseButton,
   Flex,
   Group,
   Skeleton,
@@ -27,23 +28,22 @@ import {
 } from 'mantine-react-table';
 import { MouseEvent, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useSearchParams } from 'react-router-dom';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { BreadCrumbs } from '@yadoms/shared';
+import { BreadCrumbs, PluginIcon } from '@yadoms/shared';
 import { DeviceEntity, devicesApi } from '@yadoms/domain/keywords';
 import {
   PluginsInstancesEntity,
   pluginsApi,
   PuginsInstancesState,
+  SYSTEM_PLUGIN_INSTANCE_ID,
 } from '@yadoms/domain/plugins';
 import { DeviceModal } from '../device-modal/device-modal';
-import {
-  PluginIcon,
-  SYSTEM_PLUGIN_INSTANCE_ID,
-} from '../plugin-icon/plugin-icon';
 import classes from './devices.module.css';
 
 const DEVICES_QUERY_KEY = 'devices';
 const PLUGIN_STATE_DEVICE_MODEL = 'Plugin state';
+const PLUGIN_INSTANCE_FILTER_PARAM = 'pluginInstance';
 
 const stopPropagation = (event: MouseEvent) => event.stopPropagation();
 
@@ -52,6 +52,10 @@ export function Devices() {
   const queryClient = useQueryClient();
   const [showBlacklisted, setShowBlacklisted] = useState(false);
   const [selectedDeviceId, setSelectedDeviceId] = useState<number>();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const pluginInstanceParam = searchParams.get(PLUGIN_INSTANCE_FILTER_PARAM);
+  const pluginInstanceFilter =
+    pluginInstanceParam === null ? undefined : Number(pluginInstanceParam);
 
   const devicesQuery = useQuery({
     queryKey: [DEVICES_QUERY_KEY, showBlacklisted],
@@ -73,6 +77,22 @@ export function Devices() {
       ),
     [pluginsInstancesQuery.data]
   );
+
+  const filteredDevices = useMemo(
+    () =>
+      (devicesQuery.data ?? []).filter(
+        (device) =>
+          pluginInstanceFilter === undefined ||
+          device.pluginInstance === pluginInstanceFilter
+      ),
+    [devicesQuery.data, pluginInstanceFilter]
+  );
+
+  const clearPluginInstanceFilter = () =>
+    setSearchParams((params) => {
+      params.delete(PLUGIN_INSTANCE_FILTER_PARAM);
+      return params;
+    });
 
   const columns = useMemo<MRT_ColumnDef<DeviceEntity>[]>(
     () => [
@@ -113,7 +133,7 @@ export function Devices() {
           if (!instance && !isSystem) return null;
           return (
             <Group gap="xs" wrap="nowrap">
-              <PluginIcon instance={isSystem ? undefined : instance} />
+              <PluginIcon pluginType={isSystem ? undefined : instance?.type} />
               <Text size="sm">{instance?.displayName ?? 'System'}</Text>
             </Group>
           );
@@ -248,7 +268,7 @@ export function Devices() {
 
   const table = useMantineReactTable({
     columns,
-    data: devicesQuery.data ?? [],
+    data: filteredDevices,
     enableRowActions: true,
     enableColumnOrdering: true,
     positionActionsColumn: 'last',
@@ -313,6 +333,26 @@ export function Devices() {
               setShowBlacklisted(event.currentTarget.checked)
             }
           />
+          {pluginInstanceFilter !== undefined && (
+            <Badge
+              size="lg"
+              variant="light"
+              rightSection={
+                <CloseButton
+                  size="xs"
+                  variant="transparent"
+                  aria-label={t('devices.home.clearPluginFilter')}
+                  onClick={clearPluginInstanceFilter}
+                />
+              }
+            >
+              {t('devices.home.pluginFilter', {
+                plugin:
+                  pluginsInstances.get(pluginInstanceFilter)?.displayName ??
+                  pluginInstanceFilter,
+              })}
+            </Badge>
+          )}
         </Group>
       </Flex>
     ),

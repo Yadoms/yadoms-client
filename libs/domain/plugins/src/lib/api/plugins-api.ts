@@ -2,6 +2,7 @@ import { axiosInstance } from '@yadoms/shared';
 import { PluginsInstancesResponse } from '../model/PluginsInstancesResponse';
 import { AvailablePluginsResponse } from '../model/AvailablePluginsResponse';
 import type { PluginsInstancesEntity } from '../slices/plugins-instances.slice';
+import type { AvailablePluginsEntity } from '../slices/available-plugins.slice';
 
 class PluginsApi {
   async loadPluginsInstances(
@@ -41,6 +42,19 @@ class PluginsApi {
     }>(`/plugins-instances`);
     if (response.status === 204) return [];
     return response.data.instances;
+  }
+
+  async getAvailablePlugins(): Promise<AvailablePluginsEntity[]> {
+    const response = await axiosInstance.get<AvailablePluginsResponse>(
+      `/plugins`,
+      { params: { prop: 'type|name|description' } }
+    );
+    if (response.status === 204) return [];
+    return response.data.plugins;
+  }
+
+  async deletePluginsInstance(instanceId: number) {
+    await axiosInstance.delete('/plugins-instances/' + instanceId);
   }
 
   async loadAvailablePlugins(): Promise<AvailablePluginsResponse> {

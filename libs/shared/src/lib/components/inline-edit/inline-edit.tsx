@@ -11,6 +11,8 @@ export interface InlineEditProps {
   onSave: (value: string) => Promise<void>;
   editLabel: string;
   saveUnchanged?: boolean;
+  /** Displayed after the edit button, hidden while editing */
+  actions?: ReactNode;
 }
 
 export function InlineEdit({
@@ -20,6 +22,7 @@ export function InlineEdit({
   onSave,
   editLabel,
   saveUnchanged = false,
+  actions,
 }: InlineEditProps) {
   const { t } = useTranslation();
   const [editing, setEditing] = useState(false);
@@ -71,6 +74,7 @@ export function InlineEdit({
         >
           <IconPencil size={16} stroke={1.5} />
         </ActionIcon>
+        {actions}
       </Group>
     );
   }
@@ -82,7 +86,7 @@ export function InlineEdit({
         variant="subtle"
         color="green"
         size="sm"
-        aria-label={t('devices.modal.save')}
+        aria-label={t('common.save')}
         loading={saving}
         onClick={() => void submit()}
       >
@@ -92,7 +96,7 @@ export function InlineEdit({
         variant="subtle"
         color="gray"
         size="sm"
-        aria-label={t('devices.modal.cancel')}
+        aria-label={t('common.cancel')}
         disabled={saving}
         onClick={() => setEditing(false)}
       >

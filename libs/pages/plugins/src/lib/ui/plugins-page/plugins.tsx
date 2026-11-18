@@ -1,250 +1,117 @@
-import {
-  ActionIcon,
-  Badge,
-  Box,
-  Button,
-  Checkbox,
-  Flex,
-  Group,
-  Image,
-  Skeleton,
-  Title,
-  useMantineTheme
-} from '@mantine/core';
-import { IconHomePlus, IconHomeSearch, IconPencil, IconPower, IconTrash } from '@tabler/icons-react';
+import { Box, Button, Flex, Group, Skeleton, Text, Title } from '@mantine/core';
+import { IconHomePlus, IconHomeSearch } from '@tabler/icons-react';
 import {
   MantineReactTable,
   MRT_ColumnDef,
   MRT_GlobalFilterTextInput,
   MRT_Icons,
-  MRT_Row,
-  MRT_TableInstance,
-  MRT_VisibilityState,
-  useMantineReactTable
+  useMantineReactTable,
 } from 'mantine-react-table';
-import React, { useCallback, useEffect, useMemo, useReducer, useRef, useState } from 'react';
-import CreateNewPlugin from '../create-new-plugin/create-new-plugin';
-import { BreadCrumbs, openDeleteModal } from '@yadoms/shared';
+import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { BreadCrumbs, PluginIcon } from '@yadoms/shared';
 import {
-  fetchPluginsInstances,
-  getPluginsInstancesLoadingStatus,
-  getPluginsInstancesPaging,
+  AvailablePluginsEntity,
+  pluginsApi,
   PluginsInstancesEntity,
-  PuginsInstancesState,
-  selectAllPluginsInstances,
-  startStopPluginsInstance,
-  updatePluginsInstance
 } from '@yadoms/domain/plugins';
-import { useAppDispatch, useAppSelector } from '@yadoms/store';
+import CreateNewPlugin from '../create-new-plugin/create-new-plugin';
+import { PluginInstanceModal } from '../plugin-instance-modal/plugin-instance-modal';
+import { PluginStateBadge } from './plugin-state';
 import classes from './plugins.module.css';
 
-/* eslint-disable-next-line */
-export interface PluginsProps {}
+const PLUGINS_INSTANCES_QUERY_KEY = ['plugins-instances', 'all'];
+const AVAILABLE_PLUGINS_QUERY_KEY = ['plugins', 'all'];
 
-export const stateColors: Record<string, string> = {
-  unknown: 'yellow',
-  error: 'red',
-  stopped: 'blue',
-  running: 'green',
-  custom: 'yellow',
-  waitdebugger: 'yellow',
-};
-
-export type Plugin = {
-  id: string;
-  avatar: string;
-  name: string;
-  automaticStartup: boolean;
-  state: 'stopped';
-};
-
-export function Plugins(props: PluginsProps) {
-  const dispatch = useAppDispatch();
-  const pluginsInstancesEntities = useAppSelector(selectAllPluginsInstances);
-  const loadingStatus = useAppSelector(getPluginsInstancesLoadingStatus);
-  const paging = useAppSelector(getPluginsInstancesPaging);
-
-  //we need a table instance ref to pass as a prop to the MRT Toolbar buttons
-  const tableInstanceRef =
-    useRef<MRT_TableInstance<PluginsInstancesEntity> | null>(null);
-
-  //we will also need some weird re-render hacks to force the MRT_ components to re-render since ref changes do not trigger a re-render
-  const rerender = useReducer(() => ({}), {})[1];
-
-  //we need to manage the state that should trigger the MRT_ components in our custom toolbar to re-render
-  const [columnVisibility, setColumnVisibility] = useState<MRT_VisibilityState>(
-    {}
-  );
-
+export function Plugins() {
   const { t } = useTranslation();
+  const queryClient = useQueryClient();
+  const [selectedInstanceId, setSelectedInstanceId] = useState<number>();
+  const [isCreatePluginModalOpened, setCreatePluginModalOpened] =
+    useState(false);
 
-  //optionally, you can manage the row selection state yourself
-  const [data, setData] = useState<PluginsInstancesEntity[]>(
-    () => pluginsInstancesEntities
+  const pluginsInstancesQuery = useQuery({
+    queryKey: PLUGINS_INSTANCES_QUERY_KEY,
+    queryFn: () => pluginsApi.getAllPluginsInstances(),
+  });
+
+  const availablePluginsQuery = useQuery({
+    queryKey: AVAILABLE_PLUGINS_QUERY_KEY,
+    queryFn: () => pluginsApi.getAvailablePlugins(),
+  });
+
+  const availablePlugins = useMemo(
+    () =>
+      new Map<string, AvailablePluginsEntity>(
+        (availablePluginsQuery.data ?? []).map((plugin) => [
+          plugin.type,
+          plugin,
+        ])
+      ),
+    [availablePluginsQuery.data]
   );
-
-  const setTableDataMemoized = useCallback(setData, [setData]);
-
-  useEffect(() => {
-    dispatch(fetchPluginsInstances({ page: 0, pageSize: 10 }));
-  }, [dispatch, setTableDataMemoized]);
-
-  useEffect(() => {
-    setTableDataMemoized(pluginsInstancesEntities);
-  }, [pluginsInstancesEntities, setTableDataMemoized]);
-
-  const handleAutostartCheckboxChange = useCallback(
-    async (
-      row: MRT_Row<PluginsInstancesEntity>,
-      event: React.ChangeEvent<HTMLInputElement>
-    ) => {
-      dispatch(
-        updatePluginsInstance({
-          id: row.original.id,
-          data: { autoStart: event.target.checked },
-        })
-      );
-    },
-    [dispatch]
-  );
-
-  const handleTogglePowerRow = useCallback(
-    async (row: MRT_Row<PluginsInstancesEntity>) => {
-      dispatch(
-        startStopPluginsInstance({
-          id: row.original.id,
-          start:
-            row.original.state === PuginsInstancesState.Stopped ||
-            row.original.state === PuginsInstancesState.Error,
-        })
-      );
-    },
-    [dispatch]
-  );
-
-  const theme = useMantineTheme();
 
   const columns = useMemo<MRT_ColumnDef<PluginsInstancesEntity>[]>(
     () => [
-      {
-        accessorKey: 'type',
-        header: t('plugins.home.type'),
-        enableColumnOrdering: true, //but you can turn back any of those features on if you want like this
-        Cell: ({ row }) => (
-          <Image
-            width={120}
-            height={50}
-            fit="contain"
-            src={
-              'http://localhost:8080/rest/v2/plugins?byType=' +
-              row.original.type +
-              '&prop=icon'
-            }
-            alt="With default placeholder"
-            withPlaceholder
-          />
-        ),
-      },
       {
         accessorKey: 'displayName',
         header: t('plugins.home.name'),
       },
       {
-        accessorKey: 'autoStart',
-        header: t('plugins.home.start-automatically'),
-        //columnDefType: 'display', //turns off data column features like sorting, filtering, etc.
-        enableColumnOrdering: true, //but you can turn back any of those features on if you want like this
+        id: 'plugin',
+        header: t('plugins.home.plugin'),
+        accessorFn: (instance) =>
+          availablePlugins.get(instance.type)?.name ?? instance.type,
         Cell: ({ row }) => (
-          <Checkbox
-            size="sm"
-            color="dimmed"
-            defaultChecked={row.original.autoStart}
-            onChange={(event) => handleAutostartCheckboxChange(row, event)}
-          />
+          <Group gap="xs" wrap="nowrap">
+            <PluginIcon pluginType={row.original.type} />
+            <Text size="sm">
+              {availablePlugins.get(row.original.type)?.name ??
+                row.original.type}
+            </Text>
+          </Group>
         ),
       },
       {
         accessorKey: 'state',
         header: t('plugins.home.state'),
-        // columnDefType: 'display', //turns off data column features like sorting, filtering, etc.
-        // enableColumnOrdering: false, //but you can turn back any of those features on if you want like this
-        Cell: ({ row }) => (
-          <Badge
-            color={stateColors[row.original.state.toLowerCase()]}
-            variant={theme.colorScheme === 'dark' ? 'light' : 'dot'}
-          >
-            {row.original.state}
-          </Badge>
-        ),
+        Cell: ({ row }) => <PluginStateBadge state={row.original.state} />,
       },
     ],
-    [handleAutostartCheckboxChange, t, theme.colorScheme] //end
+    [availablePlugins, t]
   );
-
-  const handleDeleteRow = useCallback(
-    async (row: MRT_Row<PluginsInstancesEntity>) => {
-      const confirmed = await openDeleteModal();
-      if (!confirmed) {
-        return;
-      }
-      //send api delete request here, then refetch or update local table data for re-render
-      data.splice(row.index, 1);
-      setData([...data]);
-    },
-    [data]
-  );
-
-  const [isCreatePluginModelOpened, setCreatePluginModelOpened] =
-    useState(false);
-
-  function handleModalClose() {
-    setCreatePluginModelOpened(false);
-    // Vous pouvez faire ce que vous voulez après la fermeture de la modal
-  }
 
   const breadcrumbsItem = [
     { title: 'home', href: '#' },
     { title: 'plugins', href: '#' },
   ];
 
-  const faIcons: Partial<MRT_Icons> = {
-    //change sort icon, connect internal props so that it gets styled correctly
+  const icons: Partial<MRT_Icons> = {
     IconSearch: () => <IconHomeSearch />,
   };
+
   const table = useMantineReactTable({
-    columns: columns,
-    data,
-    enableEditing: true,
+    columns,
+    data: pluginsInstancesQuery.data ?? [],
     enableColumnOrdering: true,
-    positionActionsColumn: 'last',
     enableTopToolbar: true,
     enableToolbarInternalActions: false,
     initialState: {
-      showGlobalFilter: true, //show the global filter by default
+      showGlobalFilter: true,
     },
-    icons: faIcons,
-
-    renderRowActions: ({ table, row }) => (
-      <Group spacing={3} position="center">
-        <ActionIcon onClick={() => handleTogglePowerRow(row)}>
-          <IconPower size={30} stroke={1.5} />
-        </ActionIcon>
-        <ActionIcon onClick={() => table.setEditingRow(row)}>
-          <IconPencil size={30} stroke={1.5} />
-        </ActionIcon>
-        <ActionIcon color="red" onClick={() => handleDeleteRow(row)}>
-          <IconTrash size={30} stroke={1.5} />
-        </ActionIcon>
-      </Group>
-    ),
+    icons,
+    mantineTableBodyRowProps: ({ row }) => ({
+      onClick: () => setSelectedInstanceId(row.original.id),
+      style: { cursor: 'pointer' },
+    }),
     renderTopToolbar: ({ table }) => (
       <Flex className={classes.flex}>
         <MRT_GlobalFilterTextInput table={table} />
         <Box>
           <Button
             leftSection={<IconHomePlus />}
-            onClick={() => setCreatePluginModelOpened(true)}
+            onClick={() => setCreatePluginModalOpened(true)}
           >
             {t('plugins.home.create-new-plugin-btn')}
           </Button>
@@ -252,6 +119,10 @@ export function Plugins(props: PluginsProps) {
       </Flex>
     ),
   });
+
+  const selectedInstance = pluginsInstancesQuery.data?.find(
+    (instance) => instance.id === selectedInstanceId
+  );
 
   return (
     <Flex direction="column">
@@ -261,16 +132,30 @@ export function Plugins(props: PluginsProps) {
         {t('plugins.home.description')}
       </Title>
 
-      {isCreatePluginModelOpened && (
+      {isCreatePluginModalOpened && (
         <CreateNewPlugin
-          opened={isCreatePluginModelOpened}
-          onClose={handleModalClose}
+          opened={isCreatePluginModalOpened}
+          onClose={() => setCreatePluginModalOpened(false)}
         />
       )}
 
-      <Skeleton visible={loadingStatus === 'loading'}>
+      <Skeleton visible={pluginsInstancesQuery.isLoading}>
         <MantineReactTable table={table} />
       </Skeleton>
+
+      {selectedInstance && (
+        <PluginInstanceModal
+          key={selectedInstance.id}
+          instance={selectedInstance}
+          plugin={availablePlugins.get(selectedInstance.type)}
+          onClose={() => setSelectedInstanceId(undefined)}
+          onInstanceChanged={() =>
+            queryClient.invalidateQueries({
+              queryKey: PLUGINS_INSTANCES_QUERY_KEY,
+            })
+          }
+        />
+      )}
     </Flex>
   );
 }

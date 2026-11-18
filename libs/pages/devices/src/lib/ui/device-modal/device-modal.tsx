@@ -18,7 +18,11 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { v4 as uuidv4 } from 'uuid';
-import { YadomsConnectionContext } from '@yadoms/shared';
+import {
+  InlineEdit,
+  PluginIcon,
+  YadomsConnectionContext,
+} from '@yadoms/shared';
 import {
   AccessMode,
   DeviceEntity,
@@ -27,8 +31,6 @@ import {
   keywordsApi,
 } from '@yadoms/domain/keywords';
 import { PluginsInstancesEntity } from '@yadoms/domain/plugins';
-import { InlineEdit } from '../inline-edit/inline-edit';
-import { PluginIcon } from '../plugin-icon/plugin-icon';
 import {
   formatElapsedTime,
   isTrueValue,
@@ -176,7 +178,7 @@ export function DeviceModal({
     >
       <Stack>
         <Group gap="xs" wrap="nowrap">
-          <PluginIcon instance={pluginInstance} />
+          <PluginIcon pluginType={pluginInstance?.type} />
           <Text size="sm">
             {t('devices.modal.attachedToPlugin', {
               plugin: pluginInstance?.displayName ?? 'System',

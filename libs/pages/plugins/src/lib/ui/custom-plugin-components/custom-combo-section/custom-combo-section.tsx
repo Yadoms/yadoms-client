@@ -45,24 +45,19 @@ function SelectOption({ label, description }: Item) {
 
 export function CustomComboSection(props: CustomComboSectionProps) {
   const comboSectionData = getComboSectionData(props.field);
-  const [selectedComboSection, setSelectedComboSection] = useState(() => {
-    const data = comboSectionData;
-    return data.length > 0 ? data[0].value : '';
-  });
+  const [selectedComboSection, setSelectedComboSection] = useState(() =>
+    getInitialActiveSection(props.field.activeSection, comboSectionData)
+  );
   // TODO : to be removed when seb added empty content to Linky plugin
   const selectedComboSectionContent =
-    props.field.content[selectedComboSection].content;
+    props.field.content[selectedComboSection]?.content;
 
   const combobox = useCombobox({
     onDropdownClose: () => combobox.resetSelectedOption(),
   });
 
-  const [value, setValue] = useState<string>(() => {
-    const data = comboSectionData;
-    return data.length > 0 ? data[0].value : '';
-  });
   const selectedOption = comboSectionData.find((item) => {
-    return item.value === value;
+    return item.value === selectedComboSection;
   });
   const options = comboSectionData.map((item) => (
     <Combobox.Option value={item.value} key={item.value}>
@@ -77,7 +72,6 @@ export function CustomComboSection(props: CustomComboSectionProps) {
         withinPortal={false}
         onOptionSubmit={(val) => {
           setSelectedComboSection(val);
-          setValue(val);
           props.form.setFieldValue(`${props.path}.activeSection`, val);
           combobox.closeDropdown();
         }}
@@ -126,6 +120,11 @@ export function CustomComboSection(props: CustomComboSectionProps) {
       )}
     </Box>
   );
+}
+
+function getInitialActiveSection(activeSection: string, data: Item[]) {
+  if (data.some((item) => item.value === activeSection)) return activeSection;
+  return data.length > 0 ? data[0].value : '';
 }
 
 function getComboSectionData(field: ComboSectionField) {

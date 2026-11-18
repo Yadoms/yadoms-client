@@ -22,6 +22,11 @@ export function CustomRadioSection(props: CustomRadioSectionProps) {
 
   useEffect(() => {
     const data = getRadioSectionData(props.field);
+    const activeSection = props.field.activeSection;
+    if (data.some((item) => item.value === activeSection)) {
+      setSelectedOption(activeSection);
+      return;
+    }
     const defaultValue = data.length > 0 ? data[0].value : '';
     setSelectedOption(defaultValue);
   }, [props.field]);

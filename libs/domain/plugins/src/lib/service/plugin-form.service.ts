@@ -153,99 +153,24 @@ export const getNestedSectionFields = (
   path: string;
   field: PluginConfigurationSchemaField;
 }> => {
-  const newInitialValues: Array<{
-    key: string;
-    path: string;
-    field: PluginConfigurationSchemaField;
-  }> = [];
-  for (const [key, field] of Object.entries(configurationSchema)) {
+  const basePath = selectedKey
+    ? `${parentKey}.${selectedKey}.content`
+    : `${parentKey}.content`;
+  return Object.entries(configurationSchema).map(([key, field]) => {
+    const fieldPath = `${basePath}.${key}`;
     switch (field?.type) {
-      case PluginConfigurationSchemaType.CheckboxSection:
-        newInitialValues.push({
-          key: key,
-          path: `${parentKey}.content.${key}`,
-          field: field,
-        });
-        break;
-      case PluginConfigurationSchemaType.ComboSection:
-        newInitialValues.push({
-          key: key,
-          path: `${parentKey}.${selectedKey}.content.${key}.content`,
-          field: field,
-        });
-        break;
-      case PluginConfigurationSchemaType.RadioSection:
-        newInitialValues.push({
-          key: key,
-          path: `${parentKey}.${selectedKey}.content.${key}.content`,
-          field: field,
-        });
-        break;
       case PluginConfigurationSchemaType.Section:
-        newInitialValues.push({
-          key: key,
-          path: `${parentKey}.content.${selectedKey}.content`,
-          field: field,
-        });
-        break;
-      case PluginConfigurationSchemaType.Boolean:
-        newInitialValues.push({
-          key: key,
-          path: `${parentKey}.content.${key}.value`,
-          field: field,
-        });
-        break;
-      case PluginConfigurationSchemaType.Enum:
-        if (selectedKey === '') {
-          newInitialValues.push({
-            key: key,
-            path: `${parentKey}.content.${key}.value`,
-            field: field,
-          });
-        } else {
-          newInitialValues.push({
-            key: key,
-            path: `${parentKey}.${selectedKey}.content.${key}.value`,
-            field: field,
-          });
-        }
-
-        break;
-      case PluginConfigurationSchemaType.String:
-        newInitialValues.push({
-          key: key,
-          path: `${parentKey}.content.${key}.value`,
-          field: field,
-        });
-        break;
-      case PluginConfigurationSchemaType.Decimal:
-        newInitialValues.push({
-          key: key,
-          path: `${parentKey}.content.${key}.value`,
-          field: field,
-        });
-        break;
-      case PluginConfigurationSchemaType.Integer:
-        newInitialValues.push({
-          key: key,
-          path: `${parentKey}.content.${key}.value`,
-          field: field,
-        });
-        break;
-      case PluginConfigurationSchemaType.CustomTime:
-        newInitialValues.push({
-          key: key,
-          path: `${parentKey}.content.${key}.value`,
-          field: field,
-        });
-        break;
+      case PluginConfigurationSchemaType.ComboSection:
+      case PluginConfigurationSchemaType.RadioSection:
+      case PluginConfigurationSchemaType.CheckboxSection:
+      case PluginConfigurationSchemaType.MultiSelectSection:
+        return { key, path: fieldPath, field };
       default:
-        newInitialValues.push({
-          key: key,
-          path: `${parentKey}.${selectedKey}.content.${key}.value`,
-          field: field,
-        });
+        return {
+          key,
+          path: `${fieldPath}.value`,
+          field: field as PluginConfigurationSchemaField,
+        };
     }
-  }
-  return newInitialValues;
+  });
 };

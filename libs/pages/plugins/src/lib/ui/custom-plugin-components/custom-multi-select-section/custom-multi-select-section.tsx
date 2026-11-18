@@ -63,15 +63,10 @@ function getMultiSelectData(field: MultiSelectSectionField) {
 }
 
 function getMultiSelectDefaultValue(field: MultiSelectSectionField) {
-  const data: string[] = [];
-  if (field.content) {
-    data.push(
-      ...Object.values(field.content)
-        .filter((value) => value.defaultValue)
-        .map((value) => value.name)
-    );
-  }
-  return data;
+  if (!field.content) return [];
+  return Object.entries(field.content)
+    .filter(([, value]) => value.value ?? value.defaultValue)
+    .map(([key]) => key);
 }
 
 export default CustomMultiSelectSection;
