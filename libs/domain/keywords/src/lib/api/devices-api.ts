@@ -15,6 +15,12 @@ export interface DeviceEntity {
   deletable: boolean;
 }
 
+export interface DeviceConfiguration {
+  /** Configuration schema merged with the current values, empty if the device is not configurable */
+  content?: Record<string, unknown>;
+  error?: string;
+}
+
 class DevicesApi {
   private async fetchDevices(withBlacklisted: boolean) {
     const response = await axiosInstance.get<{ devices: DeviceEntity[] }>(
@@ -57,6 +63,21 @@ class DevicesApi {
     changes: Partial<Pick<DeviceEntity, 'friendlyName' | 'model'>>
   ) {
     await axiosInstance.patch(`/devices/${deviceId}`, changes);
+  }
+
+  async getConfiguration(deviceId: number): Promise<DeviceConfiguration> {
+    const response = await axiosInstance.get<{
+      configuration?: DeviceConfiguration;
+    }>(`/devices/${deviceId}`, { params: { prop: 'id|configuration' } });
+    if (response.status === 204) return {};
+    return response.data.configuration ?? {};
+  }
+
+  async updateConfiguration(
+    deviceId: number,
+    configuration: Record<string, unknown>
+  ) {
+    await axiosInstance.patch(`/devices/${deviceId}`, { configuration });
   }
 
   async deleteDevice(deviceId: number) {

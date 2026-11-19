@@ -1,4 +1,6 @@
 import {
+  DecimalField,
+  IntegerField,
   PluginConfigurationSchema,
   PluginConfigurationSchemaField,
   PluginConfigurationSchemaType,
@@ -89,6 +91,78 @@ export const getFromInitialValues = (
     }
   }
   return newInitialValues;
+};
+
+export const numberLimits = (
+  field: IntegerField | DecimalField
+): { min?: number; max?: number } =>
+  field.disableCheck
+    ? {}
+    : { min: field.minimumValue, max: field.maximumValue };
+
+/**
+ * Fills the values missing from a configuration schema merged with the
+ * current values, the same way the server does when merging
+ */
+export const withDefaultValues = <T extends object>(
+  configurationSchema: T
+): T => {
+  if (!configurationSchema || typeof configurationSchema !== 'object')
+    return configurationSchema;
+
+  const result: Record<string, unknown> = {};
+  for (const [key, field] of Object.entries(
+    configurationSchema as Record<string, PluginConfigurationSchemaField>
+  )) {
+    switch (field?.type) {
+      case PluginConfigurationSchemaType.String:
+      case PluginConfigurationSchemaType.CustomTime:
+        result[key] = {
+          ...field,
+          value: field.value ?? field.defaultValue ?? '',
+        };
+        break;
+      case PluginConfigurationSchemaType.Boolean:
+        result[key] = {
+          ...field,
+          value: field.value ?? field.defaultValue ?? false,
+        };
+        break;
+      case PluginConfigurationSchemaType.Integer:
+      case PluginConfigurationSchemaType.Decimal:
+        result[key] = {
+          ...field,
+          value: field.value ?? field.defaultValue ?? '',
+        };
+        break;
+      case PluginConfigurationSchemaType.Enum:
+        result[key] = {
+          ...field,
+          value:
+            field.value ??
+            field.defaultValue ??
+            Object.keys(field.values ?? {})[0] ??
+            '',
+        };
+        break;
+      case PluginConfigurationSchemaType.Section:
+      case PluginConfigurationSchemaType.ComboSection:
+      case PluginConfigurationSchemaType.RadioSection:
+        result[key] = { ...field, content: withDefaultValues(field.content) };
+        break;
+      case PluginConfigurationSchemaType.CheckboxSection:
+        result[key] = {
+          ...field,
+          content: withDefaultValues(field.content),
+          checkbox: field.checkbox ?? field.defaultValue ?? false,
+        };
+        break;
+      default:
+        result[key] = field;
+        break;
+    }
+  }
+  return result as T;
 };
 
 export const getFromInitialValuesTest = (

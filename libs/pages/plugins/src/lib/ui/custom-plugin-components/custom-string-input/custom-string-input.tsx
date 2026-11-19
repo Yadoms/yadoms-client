@@ -22,6 +22,7 @@ export function CustomStringInput(props: CustomTextInputProps) {
       inputWrapperOrder={['label', 'error', 'input', 'description']}
       withAsterisk={!!props.field.required}
       required={props.field.required}
+      maxLength={props.field.maximumLength}
     />
   );
 }

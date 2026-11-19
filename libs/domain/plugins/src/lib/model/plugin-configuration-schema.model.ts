@@ -27,11 +27,19 @@ export interface StringField extends BaseField {
   type: PluginConfigurationSchemaType.String;
   regex?: string;
   regexErrorMessage?: string;
+  maximumLength?: number;
 }
 
-export interface IntegerField extends BaseField {
-  type: PluginConfigurationSchemaType.Integer;
+interface NumberConstraints {
+  minimumValue?: number;
+  maximumValue?: number;
+  /** Bypasses the minimum and maximum checks */
+  disableCheck?: boolean;
   step?: number;
+}
+
+export interface IntegerField extends BaseField, NumberConstraints {
+  type: PluginConfigurationSchemaType.Integer;
 }
 
 export interface BooleanField extends BaseField {
@@ -58,6 +66,7 @@ export interface RadioSectionField extends BaseField {
 export interface CheckboxSectionField extends BaseField {
   type: PluginConfigurationSchemaType.CheckboxSection;
   content: PluginSectionConfigurationSchema;
+  checkbox?: boolean;
 }
 
 export interface CustomTimeField extends BaseField {
@@ -70,10 +79,9 @@ export interface EnumField extends BaseField {
   nothingFound?: string;
 }
 
-export interface DecimalField extends BaseField {
+export interface DecimalField extends BaseField, NumberConstraints {
   type: PluginConfigurationSchemaType.Decimal;
   precision?: number;
-  step?: number;
 }
 
 export interface MultiSelectSectionField extends BaseField {

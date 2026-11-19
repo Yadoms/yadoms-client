@@ -149,15 +149,20 @@ export function Devices() {
   ) => {
     try {
       await action();
+      return true;
     } catch (err) {
       console.error('Device action failed', err);
       notifications.show({ color: 'red', message: t(errorMessageKey) });
+      return false;
     } finally {
       await queryClient.invalidateQueries({ queryKey: [DEVICES_QUERY_KEY] });
     }
   };
 
-  const confirmDeleteDevice = (device: DeviceEntity) => {
+  const confirmDeleteDevice = (
+    device: DeviceEntity,
+    onDeleted?: () => void
+  ) => {
     let permanently = false;
     openConfirmModal({
       title: t('devices.home.deleteDevice'),
@@ -189,7 +194,7 @@ export function Devices() {
               ? devicesApi.deleteDevice(device.id)
               : devicesApi.setBlacklisted(device.id, true),
           'devices.home.deleteError'
-        ),
+        ).then((deleted) => deleted && onDeleted?.()),
     });
   };
 
@@ -376,7 +381,9 @@ export function Devices() {
           device={selectedDevice}
           pluginInstance={pluginsInstances.get(selectedDevice.pluginInstance)}
           onClose={() => setSelectedDeviceId(undefined)}
-          onConfigure={configureDevice}
+          onDelete={(device) =>
+            confirmDeleteDevice(device, () => setSelectedDeviceId(undefined))
+          }
           onDeviceChanged={() =>
             queryClient.invalidateQueries({ queryKey: [DEVICES_QUERY_KEY] })
           }

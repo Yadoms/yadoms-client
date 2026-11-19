@@ -98,7 +98,9 @@
     },
     "modal": {
       "rename": "Rename",
-      "attachedToPlugin": "attached to plugin {{plugin}}",
+      "attachedToPluginInstance": "attached to {{instance}}",
+      "configure": "Configure",
+      "delete": "Delete",
       "keyword": "Keyword",
       "value": "Value",
       "editValue": "Edit value",
@@ -113,6 +115,11 @@
       "renameKeywordError": "Failed to rename the keyword",
       "commandError": "Failed to send the command",
       "loadKeywordsError": "Failed to load the device keywords"
+    },
+    "configuration": {
+      "title": "{{name}} configuration",
+      "saved": "Configuration saved",
+      "saveError": "Failed to save the configuration"
     }
   },
   "common": {

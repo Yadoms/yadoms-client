@@ -1,6 +1,6 @@
 import { NumberInput } from '@mantine/core';
 import React from 'react';
-import { IntegerField } from '@yadoms/domain/plugins';
+import { IntegerField, numberLimits } from '@yadoms/domain/plugins';
 import LinkifyText from '../../linkify-text/linkify-text';
 import { FormReturnType } from '../../FormReturnType';
 
@@ -21,7 +21,9 @@ export function CustomIntegerInput(props: CustomTextInputProps) {
       placeholder={props.field.name}
       inputWrapperOrder={['label', 'error', 'input', 'description']}
       withAsterisk={!!props.field.required}
-      min={0}
+      allowDecimal={false}
+      step={props.field.step}
+      {...numberLimits(props.field)}
     />
   );
 }

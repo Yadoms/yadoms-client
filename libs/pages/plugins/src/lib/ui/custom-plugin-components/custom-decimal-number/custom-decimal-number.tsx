@@ -1,6 +1,6 @@
 import { NumberInput } from '@mantine/core';
 import React from 'react';
-import { DecimalField } from '@yadoms/domain/plugins';
+import { DecimalField, numberLimits } from '@yadoms/domain/plugins';
 import LinkifyText from '../../linkify-text/linkify-text';
 import { FormReturnType } from '../../FormReturnType';
 
@@ -20,6 +20,7 @@ export function CustomDecimalNumber(props: CustomDecimalNumberProps) {
       description={<LinkifyText text={props.field.description} />}
       decimalScale={props.field.precision}
       step={props.field.step}
+      {...numberLimits(props.field)}
       inputWrapperOrder={['label', 'error', 'input', 'description']}
       withAsterisk={!!props.field.required}
     />

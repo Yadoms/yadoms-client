@@ -1,5 +1,7 @@
 import {
+  ActionIcon,
   Button,
+  Flex,
   Group,
   Modal,
   NumberInput,
@@ -13,7 +15,7 @@ import {
   TextInput,
 } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
-import { IconSend, IconSettings } from '@tabler/icons-react';
+import { IconSend, IconSettings, IconTrash } from '@tabler/icons-react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -30,7 +32,12 @@ import {
   KeywordEntity,
   keywordsApi,
 } from '@yadoms/domain/keywords';
-import { PluginsInstancesEntity } from '@yadoms/domain/plugins';
+import {
+  PluginConfigurationSchema,
+  PluginsInstancesEntity,
+  SYSTEM_PLUGIN_INSTANCE_ID,
+} from '@yadoms/domain/plugins';
+import { DeviceConfigurationModal } from '../device-configuration-modal/device-configuration-modal';
 import {
   formatElapsedTime,
   isTrueValue,
@@ -41,6 +48,7 @@ import {
 import classes from './device-modal.module.css';
 
 const DEVICE_KEYWORDS_QUERY_KEY = 'device-keywords';
+const DEVICE_CONFIGURATION_QUERY_KEY = 'device-configuration';
 const ELAPSED_TIME_REFRESH_MS = 30000;
 
 interface LiveAcquisition {
@@ -65,7 +73,7 @@ export interface DeviceModalProps {
   /** Undefined for system devices */
   pluginInstance?: PluginsInstancesEntity;
   onClose: () => void;
-  onConfigure: (device: DeviceEntity) => void;
+  onDelete: (device: DeviceEntity) => void;
   onDeviceChanged: () => Promise<void>;
 }
 
@@ -73,19 +81,33 @@ export function DeviceModal({
   device,
   pluginInstance,
   onClose,
-  onConfigure,
+  onDelete,
   onDeviceChanged,
 }: DeviceModalProps) {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
   const [model, setModel] = useState(device.model);
+  const [configuring, setConfiguring] = useState(false);
 
   useEffect(() => setModel(device.model), [device.model]);
+
+  const isSystemDevice = device.pluginInstance === SYSTEM_PLUGIN_INSTANCE_ID;
 
   const keywordsQuery = useQuery({
     queryKey: [DEVICE_KEYWORDS_QUERY_KEY, device.id],
     queryFn: () => keywordsApi.getDeviceKeywords(device.id, []),
   });
+
+  const configurationQuery = useQuery({
+    queryKey: [DEVICE_CONFIGURATION_QUERY_KEY, device.id],
+    queryFn: () => devicesApi.getConfiguration(device.id),
+    enabled: !isSystemDevice,
+  });
+  const configuration = configurationQuery.data?.content as
+    | PluginConfigurationSchema
+    | undefined;
+  const configurable =
+    configuration !== undefined && Object.keys(configuration).length > 0;
 
   const liveAcquisitions = useLiveAcquisitions(keywordsQuery.data);
   const now = useNow(ELAPSED_TIME_REFRESH_MS);
@@ -151,90 +173,137 @@ export function DeviceModal({
       'devices.modal.commandError'
     );
 
+  const headerActions = (configurable || device.deletable) && (
+    <>
+      {configurable && (
+        <ActionIcon
+          variant="subtle"
+          size="sm"
+          aria-label={t('devices.modal.configure')}
+          title={t('devices.modal.configure')}
+          onClick={() => setConfiguring(true)}
+        >
+          <IconSettings size={16} stroke={1.5} />
+        </ActionIcon>
+      )}
+      {device.deletable && (
+        <ActionIcon
+          variant="subtle"
+          color="red"
+          size="sm"
+          aria-label={t('devices.modal.delete')}
+          title={t('devices.modal.delete')}
+          onClick={() => onDelete(device)}
+        >
+          <IconTrash size={16} stroke={1.5} />
+        </ActionIcon>
+      )}
+    </>
+  );
+
+  const attachedInstanceName = isSystemDevice
+    ? 'System'
+    : pluginInstance?.displayName ?? '';
+
   return (
-    <Modal
-      opened
-      onClose={onClose}
-      size="xl"
-      title={
-        <InlineEdit
-          display={
-            <Text fw={600} size="lg">
-              {device.friendlyName}
-            </Text>
-          }
-          initialValue={device.friendlyName}
-          editLabel={t('devices.modal.rename')}
-          onSave={renameDevice}
-          renderInput={(value, onChange) => (
-            <TextInput
-              autoFocus
-              value={value}
-              onChange={(event) => onChange(event.currentTarget.value)}
-            />
-          )}
-        />
-      }
-    >
-      <Stack>
-        <Group gap="xs" wrap="nowrap">
-          <PluginIcon pluginType={pluginInstance?.type} />
-          <Text size="sm">
-            {t('devices.modal.attachedToPlugin', {
-              plugin: pluginInstance?.displayName ?? 'System',
-            })}
-          </Text>
-        </Group>
-
-        <Textarea
-          label={t('devices.home.model')}
-          autosize
-          minRows={2}
-          value={model}
-          onChange={(event) => setModel(event.currentTarget.value)}
-          onBlur={() => void saveModel()}
-        />
-
-        <Group>
-          <Button
-            variant="light"
-            leftSection={<IconSettings size={18} stroke={1.5} />}
-            onClick={() => onConfigure(device)}
+    <>
+      <Modal
+        opened
+        onClose={onClose}
+        size="xl"
+        title={
+          <InlineEdit
+            display={
+              <Text fw={600} size="lg">
+                {device.friendlyName}
+              </Text>
+            }
+            initialValue={device.friendlyName}
+            editLabel={t('devices.modal.rename')}
+            onSave={renameDevice}
+            renderInput={(value, onChange) => (
+              <TextInput
+                autoFocus
+                value={value}
+                onChange={(event) => onChange(event.currentTarget.value)}
+              />
+            )}
+            actions={headerActions}
+          />
+        }
+      >
+        <Stack>
+          <Flex
+            direction={{ base: 'column-reverse', sm: 'row' }}
+            align={{ base: 'stretch', sm: 'center' }}
+            gap="md"
           >
-            {t('devices.home.configure')}
-          </Button>
-        </Group>
+            <Textarea
+              className={classes.model}
+              label={t('devices.home.model')}
+              autosize
+              minRows={2}
+              value={model}
+              onChange={(event) => setModel(event.currentTarget.value)}
+              onBlur={() => void saveModel()}
+            />
+            <Group gap="xs" wrap="nowrap">
+              <PluginIcon
+                pluginType={isSystemDevice ? undefined : pluginInstance?.type}
+              />
+              <Text size="sm">
+                {t('devices.modal.attachedToPluginInstance', {
+                  instance: attachedInstanceName,
+                })}
+              </Text>
+            </Group>
+          </Flex>
 
-        <Skeleton visible={keywordsQuery.isLoading}>
-          {keywordsQuery.isError ? (
-            <Text c="red" size="sm">
-              {t('devices.modal.loadKeywordsError')}
-            </Text>
-          ) : (
-            <Table>
-              <Table.Thead>
-                <Table.Tr>
-                  <Table.Th>{t('devices.modal.keyword')}</Table.Th>
-                  <Table.Th>{t('devices.modal.value')}</Table.Th>
-                </Table.Tr>
-              </Table.Thead>
-              <Table.Tbody>
-                {(keywordsQuery.data ?? []).map((keyword) => (
-                  <KeywordRow
-                    key={keyword.id}
-                    keyword={keyword}
-                    liveAcquisition={liveAcquisitions.get(keyword.id)}
-                    now={now}
-                    onRename={(name) => renameKeyword(keyword, name)}
-                    onCommand={(command) => sendCommand(keyword, command)}
-                  />
-                ))}
-              </Table.Tbody>
-            </Table>
-          )}
-        </Skeleton>
-      </Stack>
-    </Modal>
+          <Skeleton visible={keywordsQuery.isLoading}>
+            {keywordsQuery.isError ? (
+              <Text c="red" size="sm">
+                {t('devices.modal.loadKeywordsError')}
+              </Text>
+            ) : (
+              <Table>
+                <Table.Thead>
+                  <Table.Tr>
+                    <Table.Th>{t('devices.modal.keyword')}</Table.Th>
+                    <Table.Th>{t('devices.modal.value')}</Table.Th>
+                  </Table.Tr>
+                </Table.Thead>
+                <Table.Tbody>
+                  {(keywordsQuery.data ?? []).map((keyword) => (
+                    <KeywordRow
+                      key={keyword.id}
+                      keyword={keyword}
+                      liveAcquisition={liveAcquisitions.get(keyword.id)}
+                      now={now}
+                      onRename={(name) => renameKeyword(keyword, name)}
+                      onCommand={(command) => sendCommand(keyword, command)}
+                    />
+                  ))}
+                </Table.Tbody>
+              </Table>
+            )}
+          </Skeleton>
+        </Stack>
+      </Modal>
+
+      {/* Rendered outside the device modal so that Escape only closes this one */}
+      {configuring && configurable && (
+        <DeviceConfigurationModal
+          device={device}
+          configuration={configuration}
+          onClose={() => setConfiguring(false)}
+          onConfigurationChanged={() =>
+            queryClient.invalidateQueries({
+              queryKey: [DEVICE_CONFIGURATION_QUERY_KEY, device.id],
+            })
+          }
+        />
+      )}
+    </>
   );
 }
 

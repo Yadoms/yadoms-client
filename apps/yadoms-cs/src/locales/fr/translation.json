@@ -98,7 +98,9 @@
     },
     "modal": {
       "rename": "Renommer",
-      "attachedToPlugin": "attaché au plugin {{plugin}}",
+      "attachedToPluginInstance": "attaché à {{instance}}",
+      "configure": "Configurer",
+      "delete": "Supprimer",
       "keyword": "Donnée",
       "value": "Valeur",
       "editValue": "Modifier la valeur",
@@ -113,6 +115,11 @@
       "renameKeywordError": "Impossible de renommer la donnée",
       "commandError": "Impossible d'envoyer la commande",
       "loadKeywordsError": "Impossible de charger les données de l'équipement"
+    },
+    "configuration": {
+      "title": "Configuration de {{name}}",
+      "saved": "Configuration enregistrée",
+      "saveError": "Impossible d'enregistrer la configuration"
     }
   },
   "common": {

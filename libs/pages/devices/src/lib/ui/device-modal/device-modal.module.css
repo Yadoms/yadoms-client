@@ -2,3 +2,8 @@
   white-space: pre-line;
   word-break: break-word;
 }
+
+.model {
+  flex: 1;
+  min-width: 0;
+}
