@@ -23,8 +23,8 @@ export function CustomEnumSelect(props: CustomEnumSelectProps) {
       inputWrapperOrder={['label', 'error', 'input', 'description']}
       data={getEnumValuesData(props.field)}
       description={<LinkifyText text={props.field.description} />}
-      withAsterisk
-      allowDeselect={false}
+      withAsterisk={!!props.field.required}
+      allowDeselect={!props.field.required}
     />
   );
 }

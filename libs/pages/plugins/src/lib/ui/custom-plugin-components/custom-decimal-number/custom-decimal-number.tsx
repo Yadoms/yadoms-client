@@ -21,7 +21,7 @@ export function CustomDecimalNumber(props: CustomDecimalNumberProps) {
       decimalScale={props.field.precision}
       step={props.field.step}
       inputWrapperOrder={['label', 'error', 'input', 'description']}
-      withAsterisk
+      withAsterisk={!!props.field.required}
     />
   );
 }

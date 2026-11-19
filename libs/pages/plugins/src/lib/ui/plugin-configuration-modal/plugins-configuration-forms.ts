@@ -42,10 +42,12 @@ export const validateForm: (
           break;
 
         case PluginConfigurationSchemaType.Decimal:
+        case PluginConfigurationSchemaType.Enum:
           if (
-            field.value === null ||
-            field.value === undefined ||
-            field.value === ''
+            field.required &&
+            (field.value === null ||
+              field.value === undefined ||
+              field.value === '')
           ) {
             errors[`${currentPath}.value`] = `${field.name} is required`;
           }
