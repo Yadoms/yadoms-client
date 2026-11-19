@@ -12,17 +12,19 @@ export interface CustomEnumSelectProps {
 }
 
 export function CustomEnumSelect(props: CustomEnumSelectProps) {
+  const inputProps = props.form.getInputProps(props.path);
   return (
     <Select
+      {...inputProps}
+      key={props.form.key(props.path)}
+      value={toSelectValue(inputProps.value)}
       comboboxProps={{ zIndex: 1000 }}
       label={props.field.name}
       inputWrapperOrder={['label', 'error', 'input', 'description']}
       data={getEnumValuesData(props.field)}
-      defaultValue={getDefaultValue(props.field)}
       description={<LinkifyText text={props.field.description} />}
       withAsterisk
       allowDeselect={false}
-      onChange={(event) => props.form.setFieldValue(`${props.path}`, event)}
     />
   );
 }
@@ -30,18 +32,14 @@ export function CustomEnumSelect(props: CustomEnumSelectProps) {
 function getEnumValuesData(
   field: EnumField
 ): { value: string; label: string }[] {
-  return Object.entries(field.values).map(([key, value]) => ({
+  return Object.entries(field.values ?? {}).map(([key, value]) => ({
     value: key,
-    label: value.toString(),
+    label: String(value ?? key),
   }));
 }
 
-function getDefaultValue(field: EnumField): string {
-  const defaultValue = field.defaultValue?.toString();
-  if (defaultValue === undefined) {
-    return field.value.toString();
-  }
-  return defaultValue;
+function toSelectValue(value: unknown): string | null {
+  return value === undefined || value === null ? null : String(value);
 }
 
 export default CustomEnumSelect;

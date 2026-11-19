@@ -44,9 +44,15 @@
         "resilienceMsg": "No plugins available. Please contact your Yadoms administrator"
       },
       "plugin-configuration": {
-        "title": "Fill your configuration",
+        "title": "Add {{name}}",
+        "name": "Name",
+        "name-description": "Plugin instance name",
+        "configuration": "Configuration",
         "back": "Back",
-        "create": "Create"
+        "create": "Add plugin",
+        "created": "Plugin {{name}} added",
+        "createError": "Failed to add the plugin",
+        "validationError": "Please fix the errors in the form"
       },
       "instance": {
         "rename": "Rename",

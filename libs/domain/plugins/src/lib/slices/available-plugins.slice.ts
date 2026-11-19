@@ -21,7 +21,7 @@ export interface AvailablePluginsEntity {
   url: string;
   supportManuallyCreatedDevice: boolean;
   supportDeviceRemovedNotification: boolean;
-  configurationSchema: PluginConfigurationSchema;
+  configuration: PluginConfigurationSchema;
 }
 
 export interface AvailablePluginsState
@@ -181,7 +181,7 @@ export const getAvailablePluginConfigurationSchema = (pluginType: string) => {
   return createSelector(
     selectAvailablePluginEntityByType(pluginType),
     (availablePluginEntity) => {
-      return availablePluginEntity?.configurationSchema || {};
+      return availablePluginEntity?.configuration || {};
     }
   );
 };

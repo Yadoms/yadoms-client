@@ -54,18 +54,21 @@ export function ChoosePluginModal(props: ChoosePluginModalProps) {
     return filteredPlugins.map((availablePluginsEntity) => (
       <Grid.Col span={3} key={`col-${availablePluginsEntity.type}`}>
         <Card
-          style={{ display: 'flex', flexDirection: 'column' }}
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            cursor: 'pointer',
+          }}
           shadow="sm"
           p="xl"
           withBorder
           h={'100%'}
+          onClick={() => props.onPluginSelect(availablePluginsEntity.type)}
         >
           <Card.Section>
             <Image
-              style={{ cursor: 'pointer' }}
               src={`http://localhost:8080/rest/v2/plugins?byType=${availablePluginsEntity.type}&prop=icon`}
               height={160}
-              onClick={() => props.onPluginSelect(availablePluginsEntity.type)}
               fit="contain"
               alt={availablePluginsEntity.type}
             />

@@ -76,14 +76,14 @@ class PluginsApi {
 
   async createPluginsInstance(
     type: string,
-    name: string,
+    displayName: string,
     configuration: object
   ) {
     try {
-      await axiosInstance.post('/plugins-instances/', {
-        type: { type },
-        displayName: { name },
-        configuration: { configuration },
+      await axiosInstance.post('/plugins-instances', {
+        type,
+        displayName,
+        configuration,
       });
     } catch (error) {
       console.error('Error creating plugin instance : ', error);

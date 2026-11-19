@@ -25,7 +25,14 @@ export function LinkifyText(props: LinkifyTextProps) {
     }
 
     parts.push(
-      <Anchor key={index} href={url} target="_blank" underline="hover" fz="xs">
+      <Anchor
+        key={index}
+        href={url}
+        target="_blank"
+        underline="hover"
+        fz="xs"
+        onClick={(event) => event.stopPropagation()}
+      >
         {title}
       </Anchor>
     );

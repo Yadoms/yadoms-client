@@ -19,6 +19,7 @@ import {
 import CreateNewPlugin from '../create-new-plugin/create-new-plugin';
 import { PluginInstanceModal } from '../plugin-instance-modal/plugin-instance-modal';
 import { PluginStateBadge } from './plugin-state';
+import { usePluginsStateChanges } from './use-plugins-state-changes';
 import classes from './plugins.module.css';
 
 const PLUGINS_INSTANCES_QUERY_KEY = ['plugins-instances', 'all'];
@@ -35,6 +36,14 @@ export function Plugins() {
     queryKey: PLUGINS_INSTANCES_QUERY_KEY,
     queryFn: () => pluginsApi.getAllPluginsInstances(),
   });
+
+  usePluginsStateChanges(
+    (pluginsInstancesQuery.data ?? []).map((instance) => instance.id),
+    () =>
+      void queryClient.invalidateQueries({
+        queryKey: PLUGINS_INSTANCES_QUERY_KEY,
+      })
+  );
 
   const availablePluginsQuery = useQuery({
     queryKey: AVAILABLE_PLUGINS_QUERY_KEY,
@@ -136,6 +145,11 @@ export function Plugins() {
         <CreateNewPlugin
           opened={isCreatePluginModalOpened}
           onClose={() => setCreatePluginModalOpened(false)}
+          onPluginCreated={() =>
+            void queryClient.invalidateQueries({
+              queryKey: PLUGINS_INSTANCES_QUERY_KEY,
+            })
+          }
         />
       )}
 
