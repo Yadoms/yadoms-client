@@ -441,8 +441,7 @@ function KeywordRow({
                 i18n.language,
                 t('devices.modal.justNow')
               )}{' '}
-              (
-              {date.toLocaleString(i18n.language)})
+              ({date.toLocaleString(i18n.language)})
             </Text>
           )}
         </Group>

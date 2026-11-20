@@ -20,9 +20,9 @@ import {
   MRT_Icons,
   useMantineReactTable,
 } from 'mantine-react-table';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSearchParams } from 'react-router-dom';
+import { useLocation, useSearchParams } from 'react-router-dom';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { BreadCrumbs, PluginIcon } from '@yadoms/shared';
 import { DeviceEntity, devicesApi } from '@yadoms/domain/keywords';
@@ -48,6 +48,12 @@ export function Devices() {
   const pluginInstanceParam = searchParams.get(PLUGIN_INSTANCE_FILTER_PARAM);
   const pluginInstanceFilter =
     pluginInstanceParam === null ? undefined : Number(pluginInstanceParam);
+
+  // Navigating to the current URL still creates a new location key
+  const { key: locationKey } = useLocation();
+  useEffect(() => {
+    setSelectedDeviceId(undefined);
+  }, [locationKey]);
 
   const devicesQuery = useQuery({
     queryKey: [DEVICES_QUERY_KEY, showBlacklisted],
