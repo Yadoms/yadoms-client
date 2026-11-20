@@ -55,7 +55,7 @@ const DEVICE_KEYWORDS_QUERY_KEY = 'device-keywords';
 const DEVICE_CONFIGURATION_QUERY_KEY = 'device-configuration';
 const PLUGINS_INSTANCES_QUERY_KEY = ['plugins-instances', 'all'];
 const AVAILABLE_PLUGINS_QUERY_KEY = ['plugins', 'all'];
-const ELAPSED_TIME_REFRESH_MS = 30000;
+const ELAPSED_TIME_REFRESH_MS = 1000;
 
 interface LiveAcquisition {
   value: string;
@@ -435,7 +435,13 @@ function KeywordRow({
           {renderValue()}
           {date && (
             <Text size="xs" c="dimmed">
-              {formatElapsedTime(date, now, i18n.language)} (
+              {formatElapsedTime(
+                date,
+                now,
+                i18n.language,
+                t('devices.modal.justNow')
+              )}{' '}
+              (
               {date.toLocaleString(i18n.language)})
             </Text>
           )}

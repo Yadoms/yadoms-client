@@ -115,7 +115,8 @@
       "saveModelError": "Impossible d'enregistrer le modèle",
       "renameKeywordError": "Impossible de renommer la donnée",
       "commandError": "Impossible d'envoyer la commande",
-      "loadKeywordsError": "Impossible de charger les données de l'équipement"
+      "loadKeywordsError": "Impossible de charger les données de l'équipement",
+      "justNow": "à l'instant"
     },
     "configuration": {
       "title": "Configuration de {{name}}",

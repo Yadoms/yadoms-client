@@ -115,7 +115,8 @@
       "saveModelError": "Failed to save the model",
       "renameKeywordError": "Failed to rename the keyword",
       "commandError": "Failed to send the command",
-      "loadKeywordsError": "Failed to load the device keywords"
+      "loadKeywordsError": "Failed to load the device keywords",
+      "justNow": "just now"
     },
     "configuration": {
       "title": "{{name}} configuration",

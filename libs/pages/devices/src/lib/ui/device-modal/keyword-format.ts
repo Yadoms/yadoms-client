@@ -65,10 +65,14 @@ export function parseAcquisitionDate(
 export function formatElapsedTime(
   date: Date,
   now: number,
-  locale: string
+  locale: string,
+  justNowLabel: string
 ): string {
   const format = new Intl.RelativeTimeFormat(locale, { numeric: 'always' });
-  const minutes = Math.max(0, Math.floor((now - date.getTime()) / 60000));
+  const seconds = Math.max(0, Math.floor((now - date.getTime()) / 1000));
+  if (seconds === 0) return justNowLabel;
+  if (seconds < 60) return format.format(-seconds, 'second');
+  const minutes = Math.floor(seconds / 60);
   if (minutes < 60) return format.format(-minutes, 'minute');
   const hours = Math.floor(minutes / 60);
   if (hours < 24) return format.format(-hours, 'hour');
