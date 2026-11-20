@@ -1,5 +1,4 @@
 import {
-  ActionIcon,
   Badge,
   Checkbox,
   CloseButton,
@@ -13,12 +12,7 @@ import {
 } from '@mantine/core';
 import { openConfirmModal } from '@mantine/modals';
 import { notifications } from '@mantine/notifications';
-import {
-  IconHomeSearch,
-  IconRestore,
-  IconSettings,
-  IconTrash,
-} from '@tabler/icons-react';
+import { IconHomeSearch } from '@tabler/icons-react';
 import {
   MantineReactTable,
   MRT_ColumnDef,
@@ -26,7 +20,7 @@ import {
   MRT_Icons,
   useMantineReactTable,
 } from 'mantine-react-table';
-import { MouseEvent, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router-dom';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
@@ -44,8 +38,6 @@ import classes from './devices.module.css';
 const DEVICES_QUERY_KEY = 'devices';
 const PLUGIN_STATE_DEVICE_MODEL = 'Plugin state';
 const PLUGIN_INSTANCE_FILTER_PARAM = 'pluginInstance';
-
-const stopPropagation = (event: MouseEvent) => event.stopPropagation();
 
 export function Devices() {
   const { t } = useTranslation();
@@ -198,40 +190,6 @@ export function Devices() {
     });
   };
 
-  const confirmDeleteBlacklistedDevice = (device: DeviceEntity) => {
-    openConfirmModal({
-      title: t('devices.home.deletePermanently'),
-      centered: true,
-      children: (
-        <Text size="sm">
-          {t('devices.home.confirmDeletePermanently', {
-            name: device.friendlyName,
-          })}
-        </Text>
-      ),
-      labels: {
-        confirm: t('devices.home.delete'),
-        cancel: t('devices.home.cancel'),
-      },
-      confirmProps: { color: 'red' },
-      onConfirm: () =>
-        void runDeviceAction(
-          () => devicesApi.deleteDevice(device.id),
-          'devices.home.deleteError'
-        ),
-    });
-  };
-
-  const restoreDevice = (device: DeviceEntity) =>
-    runDeviceAction(
-      () => devicesApi.setBlacklisted(device.id, false),
-      'devices.home.restoreError'
-    );
-
-  const configureDevice = (device: DeviceEntity) => {
-    console.debug('Configure device', device.id);
-  };
-
   const openDevice = async (device: DeviceEntity) => {
     if (device.blacklisted || device.model === PLUGIN_STATE_DEVICE_MODEL) {
       notifications.show({
@@ -274,9 +232,7 @@ export function Devices() {
   const table = useMantineReactTable({
     columns,
     data: filteredDevices,
-    enableRowActions: true,
     enableColumnOrdering: true,
-    positionActionsColumn: 'last',
     enableTopToolbar: true,
     enableToolbarInternalActions: false,
     initialState: {
@@ -287,46 +243,6 @@ export function Devices() {
       onClick: () => void openDevice(row.original),
       style: { cursor: 'pointer' },
     }),
-    renderRowActions: ({ row }) =>
-      row.original.blacklisted ? (
-        <Group gap={3} justify="center" wrap="nowrap" onClick={stopPropagation}>
-          <ActionIcon
-            variant="subtle"
-            aria-label={t('devices.home.restore')}
-            onClick={() => void restoreDevice(row.original)}
-          >
-            <IconRestore size={30} stroke={1.5} />
-          </ActionIcon>
-          <ActionIcon
-            variant="subtle"
-            color="red"
-            aria-label={t('devices.home.deletePermanently')}
-            disabled={!row.original.deletable}
-            onClick={() => confirmDeleteBlacklistedDevice(row.original)}
-          >
-            <IconTrash size={30} stroke={1.5} />
-          </ActionIcon>
-        </Group>
-      ) : (
-        <Group gap={3} justify="center" wrap="nowrap" onClick={stopPropagation}>
-          <ActionIcon
-            variant="subtle"
-            aria-label={t('devices.home.configure')}
-            onClick={() => configureDevice(row.original)}
-          >
-            <IconSettings size={30} stroke={1.5} />
-          </ActionIcon>
-          <ActionIcon
-            variant="subtle"
-            color="red"
-            aria-label={t('devices.home.delete')}
-            disabled={!row.original.deletable}
-            onClick={() => confirmDeleteDevice(row.original)}
-          >
-            <IconTrash size={30} stroke={1.5} />
-          </ActionIcon>
-        </Group>
-      ),
     renderTopToolbar: ({ table }) => (
       <Flex className={classes.flex}>
         <Group>
