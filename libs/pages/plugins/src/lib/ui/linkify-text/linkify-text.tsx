@@ -44,7 +44,7 @@ export function LinkifyText(props: LinkifyTextProps) {
     parts.push(props.text.substring(lastIndex));
   }
 
-  return <>{parts}</>;
+  return <span style={{ whiteSpace: 'pre-line' }}>{parts}</span>;
 }
 
 export default LinkifyText;
