@@ -98,7 +98,8 @@
     },
     "modal": {
       "rename": "Rename",
-      "attachedToPluginInstance": "attached to {{instance}}",
+      "editModel": "Edit model",
+      "editPluginInstance": "Edit plugin instance {{instance}}",
       "configure": "Configure",
       "delete": "Delete",
       "keyword": "Keyword",

@@ -1,5 +1,6 @@
 import {
   ActionIcon,
+  Box,
   Button,
   Flex,
   Group,
@@ -13,6 +14,7 @@ import {
   Text,
   Textarea,
   TextInput,
+  UnstyledButton,
 } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { IconSend, IconSettings, IconTrash } from '@tabler/icons-react';
@@ -34,9 +36,11 @@ import {
 } from '@yadoms/domain/keywords';
 import {
   PluginConfigurationSchema,
+  pluginsApi,
   PluginsInstancesEntity,
   SYSTEM_PLUGIN_INSTANCE_ID,
 } from '@yadoms/domain/plugins';
+import { PluginInstanceModal } from '@yadoms/pages/plugins';
 import { DeviceConfigurationModal } from '../device-configuration-modal/device-configuration-modal';
 import {
   formatElapsedTime,
@@ -49,6 +53,8 @@ import classes from './device-modal.module.css';
 
 const DEVICE_KEYWORDS_QUERY_KEY = 'device-keywords';
 const DEVICE_CONFIGURATION_QUERY_KEY = 'device-configuration';
+const PLUGINS_INSTANCES_QUERY_KEY = ['plugins-instances', 'all'];
+const AVAILABLE_PLUGINS_QUERY_KEY = ['plugins', 'all'];
 const ELAPSED_TIME_REFRESH_MS = 30000;
 
 interface LiveAcquisition {
@@ -86,12 +92,19 @@ export function DeviceModal({
 }: DeviceModalProps) {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
-  const [model, setModel] = useState(device.model);
   const [configuring, setConfiguring] = useState(false);
-
-  useEffect(() => setModel(device.model), [device.model]);
+  const [editingPluginInstance, setEditingPluginInstance] = useState(false);
 
   const isSystemDevice = device.pluginInstance === SYSTEM_PLUGIN_INSTANCE_ID;
+
+  const availablePluginsQuery = useQuery({
+    queryKey: AVAILABLE_PLUGINS_QUERY_KEY,
+    queryFn: () => pluginsApi.getAvailablePlugins(),
+    enabled: !isSystemDevice,
+  });
+  const plugin = availablePluginsQuery.data?.find(
+    (availablePlugin) => availablePlugin.type === pluginInstance?.type
+  );
 
   const keywordsQuery = useQuery({
     queryKey: [DEVICE_KEYWORDS_QUERY_KEY, device.id],
@@ -137,17 +150,12 @@ export function DeviceModal({
     await onDeviceChanged();
   };
 
-  const saveModel = async () => {
-    if (model === device.model) return;
-    try {
-      await runAction(
-        () => devicesApi.updateDevice(device.id, { model }),
-        'devices.modal.saveModelError'
-      );
-      await onDeviceChanged();
-    } catch {
-      setModel(device.model);
-    }
+  const saveModel = async (model: string) => {
+    await runAction(
+      () => devicesApi.updateDevice(device.id, { model }),
+      'devices.modal.saveModelError'
+    );
+    await onDeviceChanged();
   };
 
   const renameKeyword = async (keyword: KeywordEntity, name: string) => {
@@ -201,10 +209,6 @@ export function DeviceModal({
     </>
   );
 
-  const attachedInstanceName = isSystemDevice
-    ? 'System'
-    : pluginInstance?.displayName ?? '';
-
   return (
     <>
       <Modal
@@ -238,25 +242,43 @@ export function DeviceModal({
             align={{ base: 'stretch', sm: 'center' }}
             gap="md"
           >
-            <Textarea
-              className={classes.model}
-              label={t('devices.home.model')}
-              autosize
-              minRows={2}
-              value={model}
-              onChange={(event) => setModel(event.currentTarget.value)}
-              onBlur={() => void saveModel()}
-            />
-            <Group gap="xs" wrap="nowrap">
-              <PluginIcon
-                pluginType={isSystemDevice ? undefined : pluginInstance?.type}
+            <Box className={classes.model}>
+              <InlineEdit
+                display={
+                  <Text size="sm" className={classes.value}>
+                    {device.model || '-'}
+                  </Text>
+                }
+                initialValue={device.model}
+                editLabel={t('devices.modal.editModel')}
+                onSave={saveModel}
+                renderInput={(value, onChange) => (
+                  <Textarea
+                    className={classes.modelInput}
+                    autoFocus
+                    autosize
+                    minRows={2}
+                    value={value}
+                    onChange={(event) => onChange(event.currentTarget.value)}
+                  />
+                )}
               />
-              <Text size="sm">
-                {t('devices.modal.attachedToPluginInstance', {
-                  instance: attachedInstanceName,
+            </Box>
+            {pluginInstance && !isSystemDevice ? (
+              <UnstyledButton
+                aria-label={t('devices.modal.editPluginInstance', {
+                  instance: pluginInstance.displayName,
                 })}
-              </Text>
-            </Group>
+                title={t('devices.modal.editPluginInstance', {
+                  instance: pluginInstance.displayName,
+                })}
+                onClick={() => setEditingPluginInstance(true)}
+              >
+                <PluginIcon pluginType={pluginInstance.type} size={128} />
+              </UnstyledButton>
+            ) : (
+              <PluginIcon size={128} />
+            )}
           </Flex>
 
           <Skeleton visible={keywordsQuery.isLoading}>
@@ -299,6 +321,19 @@ export function DeviceModal({
           onConfigurationChanged={() =>
             queryClient.invalidateQueries({
               queryKey: [DEVICE_CONFIGURATION_QUERY_KEY, device.id],
+            })
+          }
+        />
+      )}
+
+      {editingPluginInstance && pluginInstance && (
+        <PluginInstanceModal
+          instance={pluginInstance}
+          plugin={plugin}
+          onClose={() => setEditingPluginInstance(false)}
+          onInstanceChanged={() =>
+            queryClient.invalidateQueries({
+              queryKey: PLUGINS_INSTANCES_QUERY_KEY,
             })
           }
         />

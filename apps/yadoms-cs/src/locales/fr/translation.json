@@ -98,7 +98,8 @@
     },
     "modal": {
       "rename": "Renommer",
-      "attachedToPluginInstance": "attaché à {{instance}}",
+      "editModel": "Modifier le modèle",
+      "editPluginInstance": "Modifier l'instance de plugin {{instance}}",
       "configure": "Configurer",
       "delete": "Supprimer",
       "keyword": "Donnée",
